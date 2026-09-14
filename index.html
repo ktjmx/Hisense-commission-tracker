@@ -77,6 +77,12 @@ input:focus,select:focus{border-color:var(--accent)}
 </style>
 </head>
 <body>
+<div id="private-commission-note" style="margin:14px 16px 0;padding:14px 16px;border-radius:18px;background:linear-gradient(145deg,#151b2b,#202a43);border:1px solid rgba(255,255,255,.10);">
+  <div style="font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;opacity:.7;">SHOP FLOOR MODE</div>
+  <div style="font-size:18px;font-weight:900;margin-top:3px;">Sales Hub first</div>
+  <div style="font-size:13px;opacity:.75;margin-top:4px;">Your commission is kept in the separate 💷 Commission tab.</div>
+</div>
+
 
 
 <div class="app">
@@ -716,6 +722,47 @@ init();
   }
   if($("sawGo")) $("sawGo").addEventListener("click",recommend);
 })();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Put the customer-facing Sales Hub/home view first.
+  const commissionSelectors = [
+    '[data-tab="commission"]',
+    '[data-page="commission"]',
+    '#commissionTab',
+    '#tabCommission'
+  ];
+  const homeSelectors = [
+    '[data-tab="home"]',
+    '[data-page="home"]',
+    '#homeTab',
+    '#tabHome',
+    '[data-tab="sales"]',
+    '[data-page="sales"]',
+    '#salesHubTab',
+    '#salesTab'
+  ];
+  function first(selectors){
+    for(const s of selectors){
+      const el=document.querySelector(s);
+      if(el) return el;
+    }
+    return null;
+  }
+  const home=first(homeSelectors);
+  if(home) setTimeout(()=>home.click(), 0);
+
+  // If a separate commission panel exists, add an explicit privacy label.
+  const commission=first(['#commission','#commissionSection','#commission-page','.commission-section']);
+  if(commission && !commission.querySelector('.private-label')){
+    const n=document.createElement('div');
+    n.className='private-label';
+    n.textContent='🔒 Private — commission';
+    n.style.cssText='display:inline-block;margin:0 0 10px;padding:6px 10px;border-radius:999px;background:rgba(255,193,7,.12);font-size:11px;font-weight:800;';
+    commission.prepend(n);
+  }
+});
 </script>
 </body>
 </html>
