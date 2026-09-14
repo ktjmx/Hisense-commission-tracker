@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#005b61">
+<title>Hisense Commission Tracker</title>
+<style>
+:root{--t:#005a61;--t2:#087b80;--a:#25c9c8;--bg:#f1f6f6;--ink:#102326;--muted:#6c7c7e;--line:#dfe9e9;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+header{background:linear-gradient(145deg,#003d43,#087a7d);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 22px;border-radius:0 0 28px 28px}
+.brand{font-size:22px;font-weight:900;letter-spacing:.6px}.scheme{font-size:11px;opacity:.82;margin-top:3px}.heroLabel{font-size:12px;opacity:.85;margin-top:18px}.hero{font-size:42px;font-weight:900;line-height:1.05;margin-top:2px}.heroSub{font-size:12px;opacity:.82;margin-top:5px}
+main{max-width:720px;margin:auto;padding:14px 14px 104px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:var(--white);border-radius:19px;padding:15px;box-shadow:0 5px 20px #003b4210}.metric b{display:block;font-size:22px}.metric span{font-size:11px;color:var(--muted)}
+.section{margin-top:14px}.head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.head h2{font-size:18px;margin:0}.head button{border:0;background:none;color:var(--t2);font-weight:800}
+.grid{display:grid;grid-template-columns:1fr 82px;gap:9px}label{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}input,select{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-size:16px}input:focus,select:focus{outline:none;border-color:var(--a)}
+.full{grid-column:1/-1}.preview{padding:11px 12px;border-radius:12px;background:#e8f7f6;color:var(--t);font-size:13px;font-weight:800}.primary{width:100%;border:0;border-radius:13px;background:var(--t);color:#fff;font-size:16px;font-weight:850;padding:14px}
+.sale,.pay,.rate{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.sale:last-child,.pay:last-child,.rate:last-child{border-bottom:0}.sale b,.rate b{font-size:14px}.small{font-size:11px;color:var(--muted);margin-top:3px}.amount{font-weight:900;color:var(--t);white-space:nowrap}.delete{border:0;background:#fff0f0;color:#a33;border-radius:8px;padding:5px 7px;font-size:11px;margin-top:5px}
+.barRow{display:grid;grid-template-columns:48px 1fr 66px;align-items:center;gap:8px;margin:9px 0}.barBg{height:12px;background:#e7eeee;border-radius:99px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,var(--t),var(--a));border-radius:99px}.weekLab{font-size:11px;color:var(--muted)}.barVal{font-size:11px;text-align:right;font-weight:800;color:var(--t)}
+.target{display:flex;align-items:center;gap:9px;margin-bottom:8px}.target input{max-width:100px}.progress{height:10px;background:#e5eeee;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--t2);border-radius:99px}
+.note{font-size:11px;color:var(--muted);line-height:1.45}.empty{text-align:center;color:var(--muted);padding:22px 8px;font-size:13px}.hidden{display:none!important}
+.nav{position:fixed;z-index:10;left:0;right:0;bottom:0;background:#fffffff2;backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}.nav button{border:0;background:none;color:var(--muted);font-weight:750;font-size:11px;border-radius:12px;padding:7px 13px}.nav button.active{background:#e4f6f5;color:var(--t)}
+@media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}.grid{grid-template-columns:1fr 110px 100px}.grid .full{grid-column:auto}.grid .preview{grid-column:1/-1}.primary{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">HISENSE COMMISSION</div><div class="scheme">Bigger Moments • Brighter Rewards • WK38 live 13/09/2026</div>
+ <div class="heroLabel" id="heroLabel">Current payday</div><div class="hero" id="hero">£0.00</div><div class="heroSub" id="heroSub"></div>
+</header>
+<main>
+<div class="stats">
+ <div class="card metric"><b id="units">0</b><span>Units this payday</span></div>
+ <div class="card metric"><b id="salesCount">0</b><span>Sales this payday</span></div>
+ <div class="card metric"><b id="logged">£0.00</b><span>Total commission logged</span></div>
+ <div class="card metric"><b id="average">£0.00</b><span>Average per unit</span></div>
+</div>
+
+<section id="home">
+ <div class="card section">
+  <div class="head"><h2>➕ Add a sale</h2><span class="small">Auto-calculates</span></div>
+  <div class="grid">
+   <div><label>Date</label><input id="date" type="date"></div>
+   <div><label>Qty</label><input id="qty" type="number" min="1" value="1"></div>
+   <div class="full"><label>Model</label><select id="model"></select></div>
+   <div class="preview full" id="preview">Commission: £0.00</div>
+   <button class="primary full" onclick="addSale()">ADD SALE</button>
+  </div>
+ </div>
+
+ <div class="card section">
+  <div class="head"><h2>📈 Weekly progress</h2></div>
+  <div class="target"><span class="small">Weekly unit target</span><input id="target" type="number" min="1" value="10" onchange="saveTarget()"></div>
+  <div id="progressText" class="small"></div><div class="progress"><div id="progressBar" style="width:0%"></div></div>
+  <div id="chart" style="margin-top:12px"></div>
+ </div>
+
+ <div class="card section">
+  <div class="head"><h2>🧾 Sales history</h2><button onclick="clearSales()">Clear all</button></div>
+  <div id="salesList"></div>
+ </div>
+</section>
+
+<section id="pay" class="hidden">
+ <div class="card section"><div class="head"><h2>📅 Payday dashboard</h2></div><div id="payList"></div><p class="note">The payday calendar follows the scheme supplied: commissions are grouped by the listed weeks.</p></div>
+</section>
+
+<section id="rates" class="hidden">
+ <div class="card section"><div class="head"><h2>📺 Commission rates</h2></div><input id="search" placeholder="Search model or category..." oninput="renderRates()"><div id="rateList" style="margin-top:8px"></div></div>
+</section>
+</main>
+<nav class="nav"><button id="nHome" class="active" onclick="tab('home')">🏠<br>Home</button><button id="nPay" onclick="tab('pay')">📅<br>Paydays</button><button id="nRates" onclick="tab('rates')">📺<br>Rates</button></nav>
+
+<script>
+const R=[
+["RGB Mini LED + Super Screen Size","100UR8STUK",150],["RGB Mini LED + Super Screen Size","85UR8STUK",80],["RGB Mini LED + Super Screen Size","75UR8STUK",60],["RGB Mini LED + Super Screen Size","65UR8STUK",45],["RGB Mini LED + Super Screen Size","55UR8STUK",35],
+["RGB Mini LED + Super Screen Size","65UR9STUK",60],["RGB Mini LED + Super Screen Size","75UR9STUK",80],["RGB Mini LED + Super Screen Size","85UR9STUK",120],["RGB Mini LED + Super Screen Size","116XUTUK",500],["RGB Mini LED + Super Screen Size","110UXNTUK",200],["RGB Mini LED + Super Screen Size","100UXTUK",175],
+["Mini LED Pro","55U7STUK PRO",25],["Mini LED Pro","65U7STUK PRO",30],["Mini LED Pro","75U7STUK PRO",40],["Mini LED Pro","85U7STUK PRO",50],["Mini LED Pro","100U7STUK PRO",75],
+["Mini LED","50U7STUK",15],["Mini LED","55U7STUK",20],["Mini LED","65U7STUK",25],["Mini LED","75U7STUK",30],["Mini LED","85U7STUK",40],["Mini LED","100U7STUK",70],
+["Canvas","55S7STUK",20],["Canvas","65S7STUK",30],["QLED","85Q7STUK",25],["QLED","75Q7STUK",20],["QLED","65Q7STUK",15],["QLED","55Q7STUK",10],["QLED","50Q7STUK",5],["QLED","43Q7STUK",5],
+["QLED Pro","100E7STUK PRO",40],["QLED Pro","85E7STUK PRO",30],["QLED Pro","75E7STUK PRO",25],["QLED Pro","65E7STUK PRO",20],["QLED Pro","55E7STUK PRO",15],["QLED Pro","50E7STUK PRO",10],["QLED Pro","43E7STUK PRO",10],
+["Laser","C2TUK",75],["Laser","M2TUK PRO",50],["Laser","PX3TUK",75],["Laser","PL2TUK",50],["Laser","C2TUK-ULTRA",100],
+["Soundbars","HS214",2],["Soundbars","HS2000",2],["Soundbars","HS2100",2],["Soundbars","HS3100",2],["Soundbars","AX3120Q",10],["Soundbars","AX5125H",5],["Soundbars","AX5100Q",5],["Soundbars","AX5140Q",15],["Soundbars","S5120GQ",10],["Soundbars","S5120Q",10],["Soundbars","HT SATURN",30],
+["2025 TVs","43E7Q",5],["2025 TVs","50E7Q",5],["2025 TVs","55E7Q",5],["2025 TVs","65E7Q",10],["2025 TVs","75E7Q",10],["2025 TVs","85E7Q",10],["2025 TVs","43E7Q PRO",5],["2025 TVs","50E7Q PRO",5],["2025 TVs","55E7Q PRO",5],["2025 TVs","65E7Q PRO",10],["2025 TVs","75E7Q PRO",10],["2025 TVs","85E7Q PRO",15],["2025 TVs","100E7Q PRO",20],
+["2025 TVs","50U7QTUK",5],["2025 TVs","55U7QTUK",5],["2025 TVs","65U7QTUK",10],["2025 TVs","75U7QTUK",10],["2025 TVs","85U7QTUK",10],["2025 TVs","100U7QTUK",20],["2025 TVs","55U7Q PRO",10],["2025 TVs","65U7Q PRO",10],["2025 TVs","75U7Q PRO",10],["2025 TVs","85U7Q PRO",20],["2025 TVs","100U7Q PRO",30],["2025 TVs","55A85Q",10],["2025 TVs","65A85Q",10],["2025 TVs",'55" Canvas',10],["2025 TVs",'65" Canvas',10],["2025 TVs","55U8Q",10],["2025 TVs","65U8Q",10],["2025 TVs","75U8Q",10],["2025 TVs","85U8Q",20],["2025 TVs","100U8Q",30]
+];
+const P=[["25/05/2026","16 | 17",16,17],["25/06/2026","18 | 19 | 20 | 21 | 22",18,22],["24/07/2026","23 | 24 | 25 | 26",23,26],["25/08/2026","27 | 28 | 29 | 30 | 31",27,31],["25/09/2026","32 | 33 | 34 | 35",32,35],["23/10/2026","36 | 37 | 38 | 39",36,39],["25/11/2026","40 | 41 | 42 | 43 | 44",40,44],["TBC","45 | 46 | 47 | 48",45,48],["25/01/2027","49 | 50 | 51 | 52",49,52]];
+const M=Object.fromEntries(R.map(x=>[x[1],x[2]]));
+let sales=JSON.parse(localStorage.getItem("hisenseCommissionSales")||"[]");
+let target=+(localStorage.getItem("hisenseWeeklyTarget")||10);
+document.getElementById("target").value=target;
+document.getElementById("date").value=new Date().toISOString().slice(0,10);
+model.innerHTML=R.map(x=>`<option value="${x[1]}">${x[1]} — £${x[2]}</option>`).join("");
+
+function week(s){let d=new Date(s+"T12:00:00"),day=d.getDay()||7;d.setDate(d.getDate()+4-day);let y=d.getFullYear(),st=new Date(y,0,1);return Math.ceil((((d-st)/864e5)+1)/7)}
+function payFor(s){let w=week(s);return P.find(p=>w>=p[2]&&w<=p[3])}
+function £(n){return "£"+Number(n).toFixed(2)}
+function updatePreview(){let q=Math.max(1,+qty.value||1),rate=M[model.value]||0;preview.textContent=`Commission: ${£(rate*q)} • ${£(rate)} each`}
+model.onchange=updatePreview;qty.oninput=updatePreview;
+function addSale(){let d=date.value,q=Math.max(1,+qty.value||1),m=model.value;let rate=M[m]||0;if(!d)return;sales.push({id:Date.now(),date:d,model:m,qty:q,rate,total:rate*q});localStorage.setItem("hisenseCommissionSales",JSON.stringify(sales));render()}
+function del(id){sales=sales.filter(x=>x.id!==id);localStorage.setItem("hisenseCommissionSales",JSON.stringify(sales));render()}
+function clearSales(){if(confirm("Delete all logged sales?")){sales=[];localStorage.removeItem("hisenseCommissionSales");render()}}
+function saveTarget(){target=Math.max(1,+document.getElementById("target").value||10);localStorage.setItem("hisenseWeeklyTarget",target);render()}
+function render(){let today=new Date().toISOString().slice(0,10),p=payFor(today),cur=p?sales.filter(s=>{let w=week(s.date);return w>=p[2]&&w<=p[3]}):[],tot=cur.reduce((a,s)=>a+s.total,0),u=cur.reduce((a,s)=>a+s.qty,0),all=sales.reduce((a,s)=>a+s.total,0),au=sales.reduce((a,s)=>a+s.qty,0);hero.textContent=£(tot);heroLabel.textContent=p?`Payday ${p[0]} • Weeks ${p[1]}`:"Current payday";heroSub.textContent=`${u} units in this pay period`;units.textContent=u;salesCount.textContent=cur.length;logged.textContent=£(all);average.textContent=£(au?all/au:0);
+let list=[...sales].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);salesList.innerHTML=list.length?list.map(s=>`<div class="sale"><div><b>${s.model}</b><div class="small">${s.date} • ×${s.qty} • ${£(s.rate)} each</div></div><div style="text-align:right"><div class="amount">${£(s.total)}</div><button class="delete" onclick="del(${s.id})">Delete</button></div></div>`).join(""):`<div class="empty">No sales logged.</div>`;renderChart();renderPay();renderRates()}
+function renderChart(){let now=new Date().toISOString().slice(0,10),cw=week(now),data=[];for(let w=cw-5;w<=cw;w++){let ss=sales.filter(s=>week(s.date)===w),u=ss.reduce((a,s)=>a+s.qty,0),c=ss.reduce((a,s)=>a+s.total,0);data.push({w,u,c})}let max=Math.max(target,...data.map(x=>x.u),1);chart.innerHTML=data.map(x=>`<div class="barRow"><div class="weekLab">WK${x.w}</div><div class="barBg"><div class="bar" style="width:${Math.min(100,x.u/max*100)}%"></div></div><div class="barVal">${x.u} • ${£(x.c)}</div></div>`).join("");let thisW=sales.filter(s=>week(s.date)===cw).reduce((a,s)=>a+s.qty,0);progressText.textContent=`This week: ${thisW} / ${target} units (${Math.min(100,Math.round(thisW/target*100))}%)`;progressBar.style.width=Math.min(100,thisW/target*100)+"%"}
+function renderPay(){payList.innerHTML=P.map(p=>{let ss=sales.filter(s=>{let w=week(s.date);return w>=p[2]&&w<=p[3]}),t=ss.reduce((a,s)=>a+s.total,0),u=ss.reduce((a,s)=>a+s.qty,0);return `<div class="pay"><div><b>${p[0]}</b><div class="small">Weeks ${p[1]} • ${u} units logged</div></div><b style="color:var(--t)">${£(t)}</b></div>`}).join("")}
+function renderRates(){let q=(search.value||"").toLowerCase(),a=R.filter(x=>(x[0]+" "+x[1]).toLowerCase().includes(q));rateList.innerHTML=a.map(x=>`<div class="rate"><div><b>${x[1]}</b><div class="small">${x[0]}</div></div><b style="color:var(--t)">${£(x[2])}</b></div>`).join("")||`<div class="empty">No model found.</div>`}
+function tab(id){["home","pay","rates"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id));nHome.classList.toggle("active",id==="home");nPay.classList.toggle("active",id==="pay");nRates.classList.toggle("active",id==="rates")}
+updatePreview();render();
+</script>
+<script>if(!localStorage.getItem('hisenseCommissionSeeded')){localStorage.setItem('hisenseCommissionSales',[{"id": 1, "date": "2026-09-03", "model": "50E7Q", "qty": 1, "rate": 5.0, "total": 5}, {"id": 2, "date": "2026-09-03", "model": "75UR8S", "qty": 1, "rate": 80.0, "total": 80}, {"id": 3, "date": "2026-09-04", "model": "43A6Q", "qty": 3, "rate": 0.0, "total": 0}, {"id": 4, "date": "2026-09-04", "model": "43E7Q", "qty": 3, "rate": 1.6666666666666667, "total": 5}, {"id": 5, "date": "2026-09-04", "model": "50U7S", "qty": 2, "rate": 10.0, "total": 20}, {"id": 6, "date": "2026-09-04", "model": "55UR8S", "qty": 1, "rate": 50.0, "total": 50}, {"id": 7, "date": "2026-09-04", "model": "65E7Q PRO", "qty": 1, "rate": 10.0, "total": 10}, {"id": 8, "date": "2026-09-04", "model": "65UR9S", "qty": 1, "rate": 80.0, "total": 80}, {"id": 9, "date": "2026-09-04", "model": "85E7Q PRO", "qty": 2, "rate": 10.0, "total": 20}, {"id": 10, "date": "2026-09-05", "model": "100U7Q PRO", "qty": 1, "rate": 35.0, "total": 35}, {"id": 11, "date": "2026-09-05", "model": "HT SATURN", "qty": 1, "rate": 40.0, "total": 40}, {"id": 12, "date": "2026-09-06", "model": "43E7Q", "qty": 1, "rate": 5.0, "total": 5}, {"id": 13, "date": "2026-09-06", "model": "50U7Q", "qty": 1, "rate": 5.0, "total": 5}, {"id": 14, "date": "2026-09-06", "model": "55A6Q", "qty": 1, "rate": 0.0, "total": 0}, {"id": 15, "date": "2026-09-06", "model": "55E7Q PRO", "qty": 1, "rate": 5.0, "total": 5}, {"id": 16, "date": "2026-09-06", "model": "55UR8S", "qty": 1, "rate": 50.0, "total": 50}, {"id": 17, "date": "2026-09-06", "model": "65E7Q PRO", "qty": 1, "rate": 10.0, "total": 10}, {"id": 18, "date": "2026-09-06", "model": "65UR9S", "qty": 1, "rate": 80.0, "total": 80}, {"id": 19, "date": "2026-09-12", "model": "55UR8STUK", "qty": 1, "rate": 50.0, "total": 50}]);localStorage.setItem('hisenseCommissionSeeded','1');location.reload()}</script></body>
+</html>
