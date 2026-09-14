@@ -113,13 +113,17 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .coach-tab.active{background:#e51b23;color:#fff}
 .coach-tab-panel{margin-top:4px}
 .stat-card{background:#101d20;border:1px solid #20383b;border-radius:14px;padding:12px;margin-bottom:10px}.stat-label{font-size:12px;color:#9eb0b2;font-weight:800}.stat-value{font-size:25px;font-weight:900;margin-top:3px}.stat-sub{font-size:11px;color:#789092;margin-top:2px}
+.coach-select{width:100%;padding:13px 14px;border-radius:12px;border:1px solid #294246;background:#0d1719;color:#fff;font:inherit;font-weight:700;margin-top:8px}.soundbar-card{background:#101d20;border:1px solid #20383b;border-radius:14px;padding:14px}.soundbar-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.soundbar-meta{color:#9eb0b2;font-size:13px;line-height:1.5;margin-top:7px}.soundbar-pitch{margin-top:7px;line-height:1.5;color:#e8eeee}
+.home-total-val{background:#101d20;border:1px solid #20383b;border-radius:14px;padding:14px}.home-total-val .stat-label{font-size:12px;color:#9eb0b2;font-weight:800}.home-total-val .stat-value{font-size:30px;font-weight:900;margin-top:3px}.home-total-val .stat-sub{font-size:11px;color:#789092;margin-top:2px}
+.weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
+.weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
 </style>
 </head>
 <body>
 <div class="app">
 <header><div class="brandline"><div class="logoMark">H</div><div class="brand">HISENSE • SALES PRO</div></div><div class="title" id="pageTitle">Home</div></header>
 
-<section class="screen active" id="home">
+<section class="screen active" id="home" class="screen">
   <div class="hero">
     <h1>Welcome back 👋</h1>
     <p id="todayText"></p>
@@ -129,13 +133,21 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   <div class="card weekly-summary">
     <div class="section-title">This week</div>
     <div class="weekly-dates" id="weeklyDates"></div>
-    <div class="weekly-total"><strong id="weeklyUnits">0</strong><span>units sold</span></div>
-    <div class="mix-grid">
+    <div class="weekly-top-stats">
+      <div class="weekly-top-stat"><span>Total units sold</span><strong id="weeklyUnits">0</strong></div>
+      <div class="weekly-top-stat"><span>Total value</span><strong id="homeTotalVAL">£0.00</strong></div>
+    </div>
+    <div class="mix-grid weekly-sales-breakdown">
+      <div class="mix-item"><b id="weeklyTVUnits">0</b><span>Total TV units</span></div>
+      <div class="mix-item"><b id="weeklySoundbarUnits">0</b><span>Total soundbar units</span></div>
+      <div class="mix-item"><b id="weeklyTVValue">£0</b><span>TV value</span></div>
+      <div class="mix-item"><b id="weeklySoundbarValue">£0</b><span>Soundbar value</span></div>
+    </div>
+    <div class="mix-grid weekly-percentages">
       <div class="mix-item"><b id="weeklyLED">0%</b><span>LED</span></div>
       <div class="mix-item"><b id="weeklyQLED">0%</b><span>QLED</span></div>
       <div class="mix-item"><b id="weeklyMiniLED">0%</b><span>Mini LED</span></div>
       <div class="mix-item"><b id="weeklyRGB">0%</b><span>RGB</span></div>
-      <div class="mix-item soundbar-tile"><b id="weeklySoundbars">0</b><span>Soundbars sold</span></div>
     </div>
   </div>
   <div class="section-title">Your shortcuts</div>
@@ -154,12 +166,13 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="field">
 <label>Model</label>
 <div class="autocomplete-wrap">
-<input id="saleModel" autocomplete="off" placeholder="Start typing a model…">
+<input id="saleModel" list="salesModelList" autocomplete="off" placeholder="Start typing a model…">
 <div id="saleModelPopup" class="autocomplete-popup"></div>
 </div>
 <div class="field"><label>Sale value (£)</label><input id="salePrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Enter selling price"></div>
 </div>
 <div id="saleRate" class="sale-rate-pop"></div>
+<datalist id="salesModelList"><option value="43A6STUK"></option><option value="50A6STUK"></option><option value="55A6STUK"></option><option value="65A6STUK"></option><option value="43Q7STUK"></option><option value="50Q7STUK"></option><option value="55Q7STUK"></option><option value="65Q7STUK"></option><option value="75Q7STUK"></option><option value="85Q7STUK"></option><option value="43E7STUK PRO"></option><option value="50E7STUK PRO"></option><option value="55E7STUK PRO"></option><option value="65E7STUK PRO"></option><option value="75E7STUK PRO"></option><option value="85E7STUK PRO"></option><option value="100E7STUK PRO"></option><option value="50U7STUK"></option><option value="55U7STUK"></option><option value="65U7STUK"></option><option value="75U7STUK"></option><option value="85U7STUK"></option><option value="100U7STUK"></option><option value="55U7STUK PRO"></option><option value="65U7STUK PRO"></option><option value="75U7STUK PRO"></option><option value="85U7STUK PRO"></option><option value="100U7STUK PRO"></option><option value="55U8QTUK"></option><option value="65U8QTUK"></option><option value="75U8QTUK"></option><option value="85U8QTUK"></option><option value="100U8QTUK"></option><option value="55UR8STUK"></option><option value="65UR8STUK"></option><option value="75UR8STUK"></option><option value="85UR8STUK"></option><option value="100UR8STUK"></option><option value="65UR9STUK"></option><option value="75UR9STUK"></option><option value="85UR9STUK"></option></datalist>
 <datalist id="modelList"></datalist>
     <div class="field"><label>Quantity</label><select id="saleQty"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
     <button class="primary" id="addSale">Add Sale</button>
@@ -233,12 +246,13 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
       <button id="soundbarCoachTab" class="coach-tab" onclick="showCoachTab('soundbars')">Soundbars</button>
     </div>
     <div id="soundbarCoachPanel" class="coach-tab-panel" style="display:none;">
-      <div class="card soundbar-catalogue">
-        <div class="section-title">Hisense Soundbars</div>
-        <div class="muted" style="margin-top:-7px;margin-bottom:10px">Key specs and an easy customer pitch for each model.</div>
-        <div id="soundbarList"></div>
-      </div>
-    </div>
+  <div class="section-title">Soundbar Coach</div>
+  <div class="section-subtitle">Choose a soundbar to see the key information and an easy customer pitch.</div>
+  <select id="soundbarSelect" class="coach-select" onchange="renderSoundbarDetail()">
+    <option value="">Select a soundbar…</option>
+  </select>
+  <div id="soundbarDetail" style="margin-top:12px;"></div>
+</div>
     
 </div>
 </section>
@@ -368,39 +382,32 @@ renderStats();
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
 function renderHome(){
- const now=new Date();
- const day=now.getDay(); // Sunday = 0
- const startDate=new Date(now);
- startDate.setHours(12,0,0,0);
- startDate.setDate(now.getDate()-day);
- const endDate=new Date(startDate);
- endDate.setDate(startDate.getDate()+6);
+ const now=new Date(), day=now.getDay();
+ const st=new Date(now); st.setHours(12,0,0,0); st.setDate(now.getDate()-day);
+ const en=new Date(st); en.setDate(st.getDate()+6);
  const iso=d=>d.toISOString().slice(0,10);
- const inWeek=sales.filter(x=>x[0]>=iso(startDate)&&x[0]<=iso(endDate));
- const units=inWeek.reduce((a,x)=>a+Number(x[2]||0),0);
- let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0;
+ const list=sales.filter(s=>s[0]>=iso(st)&&s[0]<=iso(en));
  const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"];
- const isSoundbar=m=>soundbarModels.some(x=>norm(x)===norm(m));
- inWeek.forEach(x=>{
-   const m=String(x[1]||"").toUpperCase(), q=Number(x[2]||0);
-   if(isSoundbar(m)){soundbars+=q;return}
-   tvUnits+=q;
-   if(/UR8|UR9|UXT|UXQ/.test(m)) rgb+=q;
-   else if(/U7|U8/.test(m)) mini+=q;
-   else if(/Q7|Q8|E7/.test(m)) qled+=q;
-   else led+=q;
- });
- const pct=n=>tvUnits?Math.round(n/tvUnits*100):0;
+ const isSB=m=>soundbarModels.some(x=>String(x).toUpperCase()===String(m).toUpperCase());
+ const tv=list.filter(s=>!isSB(s[1])), sb=list.filter(s=>isSB(s[1]));
+ const tvUnits=tv.reduce((n,s)=>n+Number(s[2]||0),0);
+ const sbUnits=sb.reduce((n,s)=>n+Number(s[2]||0),0);
+ const tvValue=tv.reduce((n,s)=>n+(Number(s[4])||0)*Number(s[2]||0),0);
+ const sbValue=sb.reduce((n,s)=>n+(Number(s[4])||0)*Number(s[2]||0),0);
+ const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
  const fmt=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"short"});
- document.getElementById("todayText").textContent=now.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})+" • Your sales control centre";
- document.getElementById("weeklyDates").textContent=fmt(startDate)+" – "+fmt(endDate)+" • Sunday to Saturday";
- document.getElementById("weeklyUnits").textContent=tvUnits;
-  document.getElementById("weeklySoundbars").textContent=soundbars;
- document.getElementById("weeklyLED").textContent=pct(led)+"%";
- document.getElementById("weeklyQLED").textContent=pct(qled)+"%";
- document.getElementById("weeklyMiniLED").textContent=pct(mini)+"%";
- document.getElementById("weeklyRGB").textContent=pct(rgb)+"%";
- updateHomeSalesValue();
+ set("weeklyDates",fmt(st)+" – "+fmt(en));
+ set("weeklyUnits",tvUnits+sbUnits);
+ set("weeklyTVUnits",tvUnits);
+ set("weeklySoundbarUnits",sbUnits);
+ set("weeklyTVValue",money(tvValue));
+ set("weeklySoundbarValue",money(sbValue));
+ const mix=getSalesMix(list);
+ set("weeklyLED",mix.p(mix.led)+"%");
+ set("weeklyQLED",mix.p(mix.qled)+"%");
+ set("weeklyMiniLED",mix.p(mix.mini)+"%");
+ set("weeklyRGB",mix.p(mix.rgb)+"%");
+ if(typeof updateHomeTotalVAL==="function") updateHomeTotalVAL();
 }
 
 function fillModels(){
@@ -459,10 +466,12 @@ saleModelInput.addEventListener("blur",()=>setTimeout(hideSaleModelPopup,180));
 document.getElementById("addSale").onclick=()=>{
  const price=Number(document.getElementById("salePrice").value||0);
  let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rate(model);
- if(!model||r==null){alert("Please enter a model with a commission rate.");return}
+ if(!model){alert("Please enter a model.");return}
  if(price<=0){alert("Please enter the sale value (£).");return}
  sales.push([date,model,qty,r*qty,price]);save();document.getElementById("saleModel").value="";
  document.getElementById("salePrice").value="";document.getElementById("saleRate").textContent="";document.getElementById("saleRate").classList.remove("show");hideSaleModelPopup();renderCalendar();renderHome();renderStats();alert("Sale added.");
+
+ updateHomeTotalVAL();
 };
 function findTV(){
  let q=norm(document.getElementById("tvSearch").value),b=document.getElementById("budget").value,s=document.getElementById("size").value,n=document.getElementById("need").value,t=document.getElementById("tech").value;
@@ -605,22 +614,40 @@ function showCoachTab(tab){
 function renderCoach(){
  const el=document.getElementById("coachContent");
  if(!el) return;
- const key=document.getElementById("coachTopic")?.value || Object.keys(COACH)[0];
+ const sel=document.getElementById("coachModel");
+ const key=sel?.value || Object.keys(COACH)[0];
  const c=COACH[key];
- if(!c) return;
+ if(key==="SOUNDBAR"){showCoachTab("soundbars");return;} 
+ if(!c){el.innerHTML="<div class='muted'>No sales-coach information is available for this model yet.</div>";return;}
+ const label=sel?.selectedOptions?.[0]?.textContent || key;
+ const points=Array.isArray(c.points)?c.points:[];
  el.innerHTML=`
- <div class="coach-hero"><div class="eyebrow">SALES COACH</div><h2>${c.title||key}</h2><p>${c.passion||c.pitch||""}</p></div>
+ <div class="coach-hero"><div class="eyebrow">SALES COACH</div><h2>${label}</h2><p>${c.pitch||c.passion||""}</p></div>
  <div class="coach-grid">
   <div class="coach-card"><div class="coach-card-title">Explain the technology</div><div>${c.tech||""}</div></div>
-  <div class="coach-card"><div class="coach-card-title">Translate it for the customer</div><div>${c.customer||""}</div></div>
-  <div class="coach-card"><div class="coach-card-title">Key points</div><ul>${(c.points||[]).map(x=>`<li>${x}</li>`).join("")}</ul></div>
-  <div class="coach-card"><div class="coach-card-title">Shop-floor tip</div><div>${c.tip||""}</div></div>
+  <div class="coach-card"><div class="coach-card-title">Why it matters to the customer</div><div>${c.why||c.customer||""}</div></div>
+  <div class="coach-card"><div class="coach-card-title">Key selling points</div><ul>${points.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+  <div class="coach-card"><div class="coach-card-title">Shop-floor demo tip</div><div>${c.tip||""}</div></div>
  </div>`;
 }
 function renderSoundbars(){
- const el=document.getElementById("soundbarCatalogue");
- if(!el) return;
- el.innerHTML=SOUNDBARS.map(s=>`<div class="soundbar-card"><div class="soundbar-top"><strong>${s.m}</strong><span class="badge">Soundbar</span></div><div class="soundbar-meta">${s.meta}</div><div class="soundbar-pitch">${String(s.pitch||"").replace(/^“|”$/g,"")}</div></div>`).join("");
+ const sel=document.getElementById("soundbarSelect");
+ if(!sel) return;
+ sel.innerHTML='<option value="">Select a soundbar…</option>'+SOUNDBARS.map((s,i)=>`<option value="${i}">${s.m}</option>`).join("");
+ renderSoundbarDetail();
+}
+function renderSoundbarDetail(){
+ const sel=document.getElementById("soundbarSelect"),el=document.getElementById("soundbarDetail");
+ if(!sel||!el)return;
+ const s=SOUNDBARS[Number(sel.value)];
+ if(!s){el.innerHTML="";return;}
+ const pitch=String(s.pitch||"").replace(/^“|”$/g,"");
+ el.innerHTML=`<div class="soundbar-card">
+   <div class="soundbar-top"><strong>${s.m}</strong><span class="badge">Soundbar</span></div>
+   <div class="soundbar-meta">${s.meta}</div>
+   <div class="coach-card-title" style="margin-top:12px">Customer pitch</div>
+   <div class="soundbar-pitch">${pitch}</div>
+ </div>`;
 }
 
 
@@ -654,6 +681,11 @@ function payPeriodCommission(a,b){
 function updateHomeSalesValue(){
  const total=sales.reduce((sum,s)=>sum+(Number(s[4])||0)*(Number(s[2])||0),0);
  const el=document.getElementById("homeSalesValue");
+ if(el) el.textContent=money(total);
+}
+function updateHomeTotalVAL(){
+ const total=sales.reduce((sum,s)=>sum+(Number(s[4])||0)*(Number(s[2])||0),0);
+ const el=document.getElementById("homeTotalVAL");
  if(el) el.textContent=money(total);
 }
 function renderStats(){
@@ -696,5 +728,7 @@ function renderStats(){
 }renderCoach();
 renderSoundbars();
 renderStats();
+
+updateHomeTotalVAL();
 </script>
 </body></html>
