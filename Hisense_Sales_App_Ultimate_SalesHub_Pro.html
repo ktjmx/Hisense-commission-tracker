@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071014">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hisense Sales">
+<title>Hisense Sales</title>
+<style>
+:root{
+  --bg:#071014;--panel:#0e191e;--panel2:#132229;--line:#20343c;
+  --text:#f5fbfc;--muted:#91a5ad;--accent:#16d6c4;--accent2:#0fb4a5;
+  --good:#63e6be;--warn:#ffd166;--danger:#ff6b7a;
+  --radius:24px;--shadow:0 18px 50px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Arial,sans-serif}
+body{min-height:100vh}
+button,input,select{font:inherit}
+button{border:0;color:inherit}
+.app{max-width:620px;margin:auto;min-height:100vh;padding-bottom:100px}
+.top{padding:calc(20px + env(safe-area-inset-top)) 20px 16px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:13px;letter-spacing:.16em;font-weight:800;color:var(--accent)}
+.title{font-size:30px;font-weight:800;letter-spacing:-.04em;margin-top:4px}
+.iconbtn{width:42px;height:42px;border-radius:15px;background:var(--panel);border:1px solid var(--line);font-size:20px}
+.screen{display:none;padding:0 16px}.screen.active{display:block}
+.hero{background:linear-gradient(145deg,#123039,#0b1b21 58%,#0a151a);border:1px solid #21434b;border-radius:30px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(22,214,196,.09);right:-70px;top:-70px}
+.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.13em;color:#9bb4ba;font-weight:700}
+.money{font-size:48px;line-height:1;margin:8px 0 15px;font-weight:850;letter-spacing:-.055em}
+.heroRow{display:flex;justify-content:space-between;gap:12px;align-items:end}
+.next{font-weight:750}.sub{font-size:12px;color:var(--muted);margin-top:4px}
+.pill{background:rgba(22,214,196,.12);color:var(--accent);padding:8px 11px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px}
+.cardTitle{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.big{font-size:25px;font-weight:800;margin-top:8px;letter-spacing:-.03em}
+.target{margin-top:12px}.bar{height:10px;background:#1b2a30;border-radius:99px;overflow:hidden;margin:10px 0 6px}.fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;width:0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sectionHead{display:flex;justify-content:space-between;align-items:end;margin:24px 4px 10px}.sectionHead h2{font-size:19px;margin:0;letter-spacing:-.025em}.link{color:var(--accent);font-size:13px;font-weight:700}
+.sale{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px 15px;margin-bottom:9px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.saleModel{font-weight:750}.saleMeta{color:var(--muted);font-size:12px;margin-top:4px}.saleMoney{font-weight:850;color:var(--good);white-space:nowrap}
+.cta{width:100%;margin-top:15px;padding:17px;border-radius:18px;background:var(--accent);color:#03100f;font-weight:850;font-size:16px;box-shadow:0 10px 25px rgba(22,214,196,.18)}
+.empty{padding:28px;text-align:center;color:var(--muted);background:var(--panel);border:1px dashed var(--line);border-radius:20px}
+.formCard{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:18px}
+label{display:block;color:var(--muted);font-size:12px;font-weight:700;margin:13px 2px 7px;text-transform:uppercase;letter-spacing:.07em}
+input,select{width:100%;background:#091318;color:var(--text);border:1px solid #28404a;border-radius:15px;padding:14px;outline:none}
+input:focus,select:focus{border-color:var(--accent)}
+.preview{margin-top:14px;background:#0b2628;border:1px solid #1b5656;border-radius:18px;padding:17px}.preview .p{font-size:30px;font-weight:850;color:var(--accent);margin-top:4px}
+.stepper{display:flex;align-items:center;gap:12px}.stepper button{width:46px;height:46px;border-radius:15px;background:var(--panel2);font-size:25px}.qty{font-size:22px;font-weight:800;min-width:30px;text-align:center}
+.search{margin-bottom:12px}
+.chips{display:flex;gap:7px;overflow:auto;padding-bottom:3px}.chip{white-space:nowrap;padding:9px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700}.chip.on{background:rgba(22,214,196,.13);border-color:#246d70;color:var(--accent)}
+.payday{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:17px;margin-bottom:12px}.payday.current{border-color:#2b6f70;box-shadow:0 10px 35px rgba(22,214,196,.08)}
+.paydayTotal{font-size:28px;font-weight:850;margin-top:6px}.tiny{font-size:12px;color:var(--muted)}
+.details{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.payday.open .details{display:block}
+.statGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px}.stat b{display:block;font-size:24px;margin-top:6px}
+.rate{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.rate b{color:var(--accent)}.rate small{color:var(--muted)}
+.achievement{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:18px;margin-bottom:9px}.badge{width:40px;height:40px;border-radius:14px;background:#18343a;display:grid;place-items:center;font-size:20px}
+.nav{position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:0;width:min(620px,100%);padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(7,16,20,.92);backdrop-filter:blur(18px);border-top:1px solid #1a2c32;display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.nav button{background:transparent;color:#71868e;font-size:10px;font-weight:750;padding:7px 2px}.nav button span{display:block;font-size:20px;margin-bottom:3px}.nav button.on{color:var(--accent)}
+.toast{position:fixed;z-index:20;left:50%;bottom:95px;transform:translateX(-50%) translateY(20px);background:#f4ffff;color:#061012;padding:12px 16px;border-radius:14px;font-weight:750;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.pop{animation:pop .35s ease-out}@keyframes pop{0%{transform:scale(.94)}70%{transform:scale(1.03)}100%{transform:scale(1)}}
+.danger{color:var(--danger)}
+@media(min-width:621px){.nav{border-radius:24px;bottom:15px;border:1px solid #1a2c32}.app{padding-bottom:120px}}
+</style>
+
+<style>
+.sales-assistant-workflow{margin:16px;padding:18px;border-radius:22px;background:linear-gradient(145deg,#121827,#1b2538);border:1px solid rgba(255,255,255,.09);box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.sales-assistant-workflow h3{margin:0 0 5px;font-size:21px}.sales-assistant-workflow .sub{opacity:.7;font-size:13px;margin-bottom:14px}
+.saw-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.saw-grid label{font-size:11px;opacity:.7;display:block;margin-bottom:4px}
+.saw-grid select,.saw-grid input{width:100%;box-sizing:border-box;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0d1320;color:inherit}
+.saw-full{grid-column:1/-1}.saw-btn{margin-top:12px;width:100%;padding:13px;border:0;border-radius:14px;font-weight:900;font-size:15px;cursor:pointer}
+.saw-result{margin-top:14px;padding:14px;border-radius:16px;background:rgba(255,255,255,.055);display:none}.saw-result.show{display:block}
+.saw-pills{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.saw-pill{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px}
+.saw-pitch{padding:11px;border-left:3px solid currentColor;background:rgba(255,255,255,.035);border-radius:8px;font-size:14px;line-height:1.4}
+</style>
+</head>
+<body>
+<div id="private-commission-note" style="margin:14px 16px 0;padding:14px 16px;border-radius:18px;background:linear-gradient(145deg,#151b2b,#202a43);border:1px solid rgba(255,255,255,.10);">
+  <div style="font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;opacity:.7;">SHOP FLOOR MODE</div>
+  <div style="font-size:18px;font-weight:900;margin-top:3px;">Sales Hub first</div>
+  <div style="font-size:13px;opacity:.75;margin-top:4px;">Your commission is kept in the separate 💷 Commission tab.</div>
+</div>
+
+
+
+<div class="app">
+  <header class="top">
+    <div><div class="brand">HISENSE • SALES</div><div class="title" id="pageTitle">Today</div></div>
+    <button class="iconbtn" id="backupBtn" aria-label="Backup">↥</button>
+  </header>
+
+  <main>
+    <section id="home" class="screen active">
+      <div class="hero">
+        <div class="kicker">Total commission</div>
+        <div class="money" id="totalCommission">£0</div>
+        <div class="heroRow"><div><div class="next" id="nextPayday">Next payday</div><div class="sub" id="nextPaydaySub"></div></div><div class="pill" id="unitsPill">0 units</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><div class="cardTitle">This payday</div><div class="big" id="paydayTotal">£0</div><div class="sub" id="paydayWeeks"></div></div>
+        <div class="card"><div class="cardTitle">This week</div><div class="big" id="weekTotal">£0</div><div class="sub" id="weekUnits">0 units</div></div>
+      </div>
+      <div class="card target">
+        <div class="row"><div><div class="cardTitle">Weekly target</div><div class="big" id="targetText">0 / 10</div></div><div class="pill" id="targetPct">0%</div></div>
+        <div class="bar"><div class="fill" id="targetFill"></div></div><div class="sub" id="targetHint"></div>
+      </div>
+      <div class="sectionHead"><h2>Highlights</h2></div>
+      <div class="grid2">
+        <div class="card"><div class="cardTitle">Top model</div><div class="big" id="topModel">—</div><div class="sub" id="topModelMeta"></div></div>
+        <div class="card"><div class="cardTitle">Best sale</div><div class="big" id="bestSale">£0</div><div class="sub" id="bestSaleMeta"></div></div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="row"><div><div class="cardTitle">Projected commission</div><div class="big" id="projectedCommission">£0</div></div><div class="pill" id="projectionPill">On track</div></div>
+        <div class="sub" id="projectionText">Based on your current pace this week</div>
+      </div>
+      <div class="card" style="margin-top:12px;border-color:#275b60;background:linear-gradient(145deg,#10292e,#0d191e)">
+        <div class="row"><div><div class="kicker">Commission Coach</div><div class="big" style="font-size:22px">Your next move</div></div><div style="font-size:26px">🧠</div></div>
+        <div id="coachText" style="margin-top:10px;line-height:1.45"></div>
+        <div id="coachPace" class="sub" style="margin-top:9px"></div>
+        <div id="coachPayday" class="sub" style="margin-top:7px"></div>
+        <div id="coachOpportunity" class="sub" style="margin-top:10px"></div>
+      </div>
+      <div class="sectionHead"><h2>Commission by week</h2></div>
+      <div class="card"><div id="commissionChart"></div></div>
+      <button class="cta" id="homeAdd">＋ Add a sale</button>
+      <div class="sectionHead"><h2>Recent sales</h2><span class="link" data-go="sales">See all</span></div>
+      <div id="recent"></div>
+    </section>
+
+    <section id="sales" class="screen">
+      <div class="formCard">
+        <div class="kicker">Quick entry</div>
+        <h2 style="margin:5px 0 0">Add a sale</h2>
+        <label>Date</label><input type="date" id="saleDate">
+        <label>Model</label><input list="modelList" id="model" placeholder="Start typing a model…"><datalist id="modelList"></datalist>
+        <label>Quantity</label><div class="stepper"><button id="minus">−</button><div class="qty" id="qty">1</div><button id="plus">＋</button></div>
+        <div class="preview"><div class="kicker">Commission preview</div><div class="p" id="preview">£0</div><div class="sub" id="previewMeta">Select a model</div></div>
+        <button class="cta" id="saveSale">Save sale</button>
+      </div>
+      <div class="sectionHead"><h2>Sales history</h2><span class="link" id="clearAll">Clear</span></div>
+      <div id="history"></div>
+    </section>
+
+    <section id="paydays" class="screen"><div id="paydayList"></div></section>
+
+    <section id="stats" class="screen">
+      <div class="card" style="margin-bottom:12px">
+        <div class="row"><div><div class="cardTitle">Weekly unit target</div><div class="big" id="targetSettingValue">10</div></div><button class="pill" id="changeTarget">Change</button></div>
+        <div class="sub">Set the number of units you want to sell each week.</div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="row"><div><div class="cardTitle">Payday commission target</div><div class="big" id="paydayTargetSetting">£0</div></div><button class="pill" id="changePaydayTarget">Change</button></div>
+        <div class="sub">Optional — the Coach will calculate what you need per day.</div>
+      </div>
+      <div class="statGrid">
+        <div class="stat"><small class="cardTitle">TVs</small><b id="tvUnits">0</b></div>
+        <div class="stat"><small class="cardTitle">Soundbars</small><b id="barUnits">0</b></div>
+        <div class="stat"><small class="cardTitle">Units</small><b id="allUnits">0</b></div>
+        <div class="stat"><small class="cardTitle">Avg commission</small><b id="avgCommission">£0</b></div>
+      </div>
+      <div class="sectionHead"><h2>Weekly performance</h2></div><div id="weeklyStats"></div>
+      <div class="sectionHead"><h2>Achievements</h2></div><div id="achievements"></div>
+    </section>
+
+    <section id="records" class="screen">
+      <div class="hero">
+        <div class="kicker">Your records</div>
+        <div class="money" id="recordBest">£0</div>
+        <div class="sub">Best single sale</div>
+      </div>
+      <div class="sectionHead"><h2>Personal bests</h2></div>
+      <div class="statGrid">
+        <div class="stat"><small class="cardTitle">Best day</small><b id="recordDay">£0</b><div class="tiny" id="recordDayMeta"></div></div>
+        <div class="stat"><small class="cardTitle">Best week</small><b id="recordWeek">£0</b><div class="tiny" id="recordWeekMeta"></div></div>
+        <div class="stat"><small class="cardTitle">Best payday</small><b id="recordPayday">£0</b><div class="tiny" id="recordPaydayMeta"></div></div>
+        <div class="stat"><small class="cardTitle">Most units/day</small><b id="recordUnits">0</b><div class="tiny" id="recordUnitsMeta"></div></div>
+      </div>
+      <div class="sectionHead"><h2>Commission calendar</h2></div>
+      <div class="card"><div id="calendar"></div></div>
+    </section>
+
+    <section id="hub" class="screen">
+      <div class="hero">
+        <div class="kicker">Shop-floor toolkit</div>
+        <div class="money" style="font-size:36px">Find the right TV</div>
+        <div class="sub">Choose the customer's size and budget. Then use the pitch, demo and key features.</div>
+      </div>
+
+      <div class="sectionHead"><h2>1. Screen size</h2></div>
+      <div class="chips" id="sizeChips"></div>
+
+      <div class="sectionHead"><h2>2. Customer budget</h2></div>
+      <div class="chips" id="budgetChips"></div>
+
+      <div class="sectionHead"><h2>3. What matters?</h2></div>
+      <div class="chips" id="needChips"></div>
+      <div class="chips" style="margin-top:10px">
+        <button class="chip" id="promoOnly">🎁 Cashback only</button>
+      </div>
+
+      <div class="card" style="margin-top:14px;border-color:#6d5930;background:linear-gradient(145deg,#292315,#171611)">
+        <div class="row"><div><div class="kicker" style="color:#ffd166">CURRENT PROMOTION</div><b style="font-size:17px">Hisense Cashback</b><div class="tiny" style="margin-top:4px">Valid 9 Sep 2026 – 27 Oct 2026 • use the exact qualifying model shown below</div></div><div style="font-size:27px">🎁</div></div>
+      </div>
+      <div class="sectionHead"><h2>Best matches</h2><span class="tiny" id="hubCount"></span></div>
+      <div id="hubResults"></div>
+
+      <div class="sectionHead"><h2>Why choose Hisense?</h2></div>
+<div class="tip-card" style="margin-top:10px;">
+  <strong>💳 RGB finance:</strong> Any qualifying Hisense RGB TV can be purchased on <strong>24 months interest free</strong> — a useful way to make the monthly cost easier to discuss with customers.
+</div>
+
+      <div id="whyHisense"></div>
+
+      <div class="sectionHead"><h2>Handling other-brand questions</h2></div>
+      <div id="brandObjections"></div>
+
+      <div class="sectionHead">
+<div class="tip-card" style="margin-top:10px;">
+  <strong>💳 Customer pitch — RGB finance:</strong>
+  “Another big advantage is that any qualifying Hisense RGB TV can be purchased on <strong>24 months interest free</strong>, so you can spread the cost rather than paying for the TV all at once.”
+  <div style="font-size:11px;margin-top:6px;opacity:.6;">Subject to finance approval and applicable terms.</div>
+</div>
+<h2>Quick sales tips</h2></div>
+      <div id="tips"></div>
+    </section>
+
+    <section id="rates" class="screen">
+      <input class="search" id="rateSearch" placeholder="🔎  Search models or categories…">
+      <div class="chips" id="chips"></div>
+      <div class="sectionHead"><h2>Commission rates</h2><span class="tiny" id="rateCount"></span></div>
+      <div id="rateList"></div>
+    </section>
+  </main>
+
+  <nav class="nav">
+    <button class="on" data-screen="home"><span>⌂</span>Home</button>
+    <button data-screen="sales"><span>＋</span>Add Sale</button>
+    <button data-screen="paydays"><span>◷</span>Paydays</button>
+    <button data-screen="stats"><span>▥</span>Stats</button>
+    <button data-screen="records"><span>★</span>Records</button>
+    <button data-screen="hub"><span>📺</span>Sales Hub</button>
+    <button data-screen="rates"><span>£</span>Rates</button>
+  </nav>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const CURRENT_RATES = {
+"100UR8STUK":150,"85UR8STUK":80,"75UR8STUK":60,"65UR8STUK":45,"55UR8STUK":35,
+"65UR9STUK":60,"75UR9STUK":80,"85UR9STUK":120,"116UXTUK":500,"110UXNTUK":200,"100UXTUK":175,
+"55U7STUK PRO":25,"65U7STUK PRO":30,"75U7STUK PRO":40,"85U7STUK PRO":50,"100U7STUK PRO":75,
+"50U7STUK":15,"55U7STUK":20,"65U7STUK":25,"75U7STUK":30,"85U7STUK":40,"100U7STUK":70,
+"55S7STUK":20,"65S7STUK":30,
+"85Q7STUK":25,"75Q7STUK":20,"65Q7STUK":15,"55Q7STUK":10,"50Q7STUK":5,"43Q7STUK":5,
+"100E7STUK PRO":40,"85E7STUK PRO":30,"75E7STUK PRO":25,"65E7STUK PRO":20,"55E7STUK PRO":15,"50E7STUK PRO":10,"43E7STUK PRO":10,
+"C2TUK":75,"M2TUK PRO":50,"PX3TUK":75,"PL2TUK":50,"C2TUK-ULTRA":100,
+"HS214":2,"HS2000":2,"HS2100":2,"HS3100":2,"AX3120Q":10,"AX5125H":5,"AX5100Q":5,"AX5140Q":15,"S5120GQ":10,"S5120Q":10,"HT SATURN":30,
+"43E7Q":5,"50E7Q":5,"55E7Q":5,"65E7Q":10,"75E7Q":10,"85E7Q":10,"43E7Q PRO":5,"50E7Q PRO":5,"55E7Q PRO":5,"65E7Q PRO":10,"75E7Q PRO":10,"85E7Q PRO":15,"100E7Q PRO":20,
+"50U7QTUK":5,"55U7QTUK":5,"65U7QTUK":10,"75U7QTUK":10,"85U7QTUK":10,"100U7QTUK":20,
+"55U7Q PRO":10,"65U7Q PRO":10,"75U7Q PRO":10,"85U7Q PRO":20,"100U7Q PRO":30,
+"55A85Q":10,"65A85Q":10,"55 Canvas":10,"65 Canvas":10,"55U8Q":10,"65U8Q":10,"75U8Q":10,"85U8Q":20,"100U8Q":30
+};
+const CATEGORY = {};
+["100UR8STUK","85UR8STUK","75UR8STUK","65UR8STUK","55UR8STUK","65UR9STUK","75UR9STUK","85UR9STUK","116UXTUK","110UXNTUK","100UXTUK"].forEach(x=>CATEGORY[x]="RGB / Super Screen");
+["55U7STUK PRO","65U7STUK PRO","75U7STUK PRO","85U7STUK PRO","100U7STUK PRO"].forEach(x=>CATEGORY[x]="Mini LED Pro");
+["50U7STUK","55U7STUK","65U7STUK","75U7STUK","85U7STUK","100U7STUK"].forEach(x=>CATEGORY[x]="Mini LED");
+["55S7STUK","65S7STUK"].forEach(x=>CATEGORY[x]="Canvas");
+["85Q7STUK","75Q7STUK","65Q7STUK","55Q7STUK","50Q7STUK","43Q7STUK"].forEach(x=>CATEGORY[x]="QLED");
+["100E7STUK PRO","85E7STUK PRO","75E7STUK PRO","65E7STUK PRO","55E7STUK PRO","50E7STUK PRO","43E7STUK PRO"].forEach(x=>CATEGORY[x]="QLED Pro");
+["C2TUK","M2TUK PRO","PX3TUK","PL2TUK","C2TUK-ULTRA"].forEach(x=>CATEGORY[x]="Laser");
+["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"].forEach(x=>CATEGORY[x]="Soundbars");
+Object.keys(CURRENT_RATES).forEach(x=>{if(!CATEGORY[x])CATEGORY[x]="2025 TVs";});
+
+const PAYDAYS=[
+["WK16–17","25/05/2026"],["WK18–22","25/06/2026"],["WK23–26","24/07/2026"],["WK27–31","25/08/2026"],
+["WK32–35","25/09/2026"],["WK36–39","23/10/2026"],["WK40–44","25/11/2026"],["WK45–48","TBC"],["WK49–52","25/01/2027"]
+];
+const HIST=[
+["2026-09-03","50E7Q",1,5],["2026-09-03","75UR8S",1,80],["2026-09-04","43A6Q",3,0],["2026-09-04","43E7Q",3,15],
+["2026-09-04","50U7S",2,40],["2026-09-04","55UR8S",1,50],["2026-09-04","65E7Q PRO",1,10],["2026-09-04","65UR9S",1,80],
+["2026-09-04","85E7Q PRO",2,40],["2026-09-05","100U7Q PRO",1,35],["2026-09-05","HT SATURN",1,40],["2026-09-06","43E7Q",1,5],
+["2026-09-06","50U7Q",1,5],["2026-09-06","55A6Q",1,0],["2026-09-06","55E7Q PRO",1,5],["2026-09-06","55UR8S",1,50],
+["2026-09-06","65E7Q PRO",1,10],["2026-09-06","65UR9S",1,80],["2026-09-12","55UR8STUK",1,50],
+["2026-09-12","100E7STUK PRO",1,60],["2026-09-12","HT SATURN",1,40],["2026-09-12","43E7Q",1,5],
+["2026-09-13","55UR8STUK",1,50],["2026-09-11","65Q7STUK",1,15],["2026-09-13","43E7Q",1,5],["2026-09-13","50U7STUK",1,20],["2026-09-12","55UR8STUK",1,50]
+];
+
+let sales=loadSales(), qty=1, categoryFilter="All";
+function loadSales(){
+  try{
+    const raw=localStorage.getItem("hisenseCommissionSales");
+    if(raw){const a=JSON.parse(raw); if(Array.isArray(a)&&a.length)return a;}
+  }catch(e){}
+  const a=HIST.map(x=>({date:x[0],model:x[1],qty:x[2],total:x[3],rate:x[2]?x[3]/x[2]:0}));
+  localStorage.setItem("hisenseCommissionSales",JSON.stringify(a)); return a;
+}
+function save(){localStorage.setItem("hisenseCommissionSales",JSON.stringify(sales))}
+function money(n){return "£"+Number(n||0).toFixed(2).replace(".00","")}
+function fmtDate(s){return new Date(s+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"})}
+function key(s){return s.date+"|"+s.model+"|"+s.qty+"|"+s.total}
+function rateFor(model,date){
+  const m=model.trim().toUpperCase();
+  if(date>="2026-09-13" && CURRENT_RATES[m]!=null)return CURRENT_RATES[m];
+  const found=sales.find(s=>s.model.toUpperCase()===m && s.date<"2026-09-13" && s.rate!=null);
+  return found?Number(found.rate):CURRENT_RATES[m]??null;
+}
+function weekNum(date){const d=new Date(date+"T12:00:00"), start=new Date("2026-08-31T12:00:00");return Math.floor((d-start)/604800000)+36}
+function total(){return sales.reduce((a,s)=>a+Number(s.total||0),0)}
+function units(){return sales.reduce((a,s)=>a+Number(s.qty||0),0)}
+function currentWeek(){const now=new Date();return now.getDay()===0?weekNum(now.toISOString().slice(0,10)):weekNum(now.toISOString().slice(0,10))}
+function paydayFor(date){
+  const w=weekNum(date);
+  return PAYDAYS.find(p=>{const r=p[0].replace("WK","").split("–").map(Number);return w>=r[0]&&w<=r[1]})||PAYDAYS[5];
+}
+function go(screen){
+  document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===screen));
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.screen===screen));
+  const titles={home:"Today",sales:"Sales",paydays:"Paydays",stats:"Stats",records:"Records",rates:"Commission Rates"};
+  document.getElementById("pageTitle").textContent=titles[screen];
+  if(screen==="home")renderHome(); if(screen==="sales")renderHistory(); if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="records")renderRecords(); if(screen==="hub")renderHub(); if(screen==="rates")renderRates();
+}
+function renderHome(){
+  const allTotal=total(), allUnits=units();
+  document.getElementById("totalCommission").textContent=money(allTotal);
+  document.getElementById("unitsPill").textContent=allUnits+" units";
+  const latest=new Date().toISOString().slice(0,10), p=paydayFor(latest);
+  const paydaySales=sales.filter(s=>paydayFor(s.date)[1]===p[1]);
+  document.getElementById("paydayTotal").textContent=money(paydaySales.reduce((a,s)=>a+s.total,0));
+  document.getElementById("paydayWeeks").textContent=p[0]+" • pays "+p[1];
+  const wk=weekNum(latest), ws=sales.filter(s=>weekNum(s.date)===wk);
+  const weekUnits=ws.reduce((a,s)=>a+s.qty,0), weekMoney=ws.reduce((a,s)=>a+s.total,0);
+  document.getElementById("weekTotal").textContent=money(weekMoney);
+  document.getElementById("weekUnits").textContent=weekUnits+" units • WK"+wk;
+  document.getElementById("nextPayday").textContent="Next payday "+p[1];
+  const payDate=(p[1]&&p[1]!=="TBC")?new Date(p[1].split("/").reverse().join("-")+"T12:00:00"):null;
+  const daysToPay=payDate?Math.max(0,Math.ceil((payDate-new Date())/86400000)):null;
+  document.getElementById("nextPaydaySub").textContent=payDate
+    ?"Current commission period "+p[0]+" • "+(daysToPay===0?"payday is today":"in "+daysToPay+" day"+(daysToPay===1?"":"s"))
+    :"Current commission period "+p[0];
+
+  const target=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
+  const pct=Math.min(100,Math.round(weekUnits/target*100));
+  document.getElementById("targetText").textContent=weekUnits+" / "+target;
+  document.getElementById("targetPct").textContent=pct+"%";
+  document.getElementById("targetFill").style.width=pct+"%";
+  document.getElementById("targetHint").textContent=pct>=100?"Target smashed! 🎉":(target-weekUnits)+" more unit"+(target-weekUnits===1?"":"s")+" to hit target";
+
+  const counts={}; sales.forEach(s=>counts[s.model]=(counts[s.model]||0)+s.qty);
+  const tm=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById("topModel").textContent=tm?tm[0]:"—";
+  document.getElementById("topModelMeta").textContent=tm?tm[1]+" units sold":"No sales yet";
+
+  const best=[...sales].sort((a,b)=>b.total-a.total)[0];
+  document.getElementById("bestSale").textContent=best?money(best.total):"£0";
+  document.getElementById("bestSaleMeta").textContent=best?best.model:"No sales yet";
+
+  // Project the current week's commission to the end of the week.
+  const today=new Date();
+  const day=today.getDay()===0?7:today.getDay();
+  const daysElapsed=Math.max(1,day);
+  const daysLeft=7-daysElapsed;
+  const projection=weekMoney/daysElapsed*7;
+  document.getElementById("projectedCommission").textContent=money(projection);
+  const projectionPill=document.getElementById("projectionPill");
+  projectionPill.textContent=daysLeft===0?"Week complete":"On track";
+  document.getElementById("projectionText").textContent=daysLeft===0
+    ?"Final figure for the current week"
+    :"Based on your current pace • "+daysLeft+" day"+(daysLeft===1?"":"s")+" left";
+
+  // Commission Coach
+  const todayKey=new Date().toISOString().slice(0,10);
+  const todaySales=sales.filter(s=>s.date===todayKey);
+  const todayMoney=todaySales.reduce((a,s)=>a+Number(s.total||0),0);
+  const remaining=Math.max(0,target-weekUnits);
+  let coach="";
+  if(remaining===0) coach="🎉 You've hit your weekly unit target. Now chase commission — focus on the higher-paying models.";
+  else if(weekUnits===0) coach="Start with one sale today. Your target is "+target+" units this week.";
+  else coach="You've sold "+weekUnits+" unit"+(weekUnits===1?"":"s")+" so far. You need "+remaining+" more to hit your target.";
+  document.getElementById("coachText").textContent=(todaySales.length
+    ? "Today: "+money(todayMoney)+" from "+todaySales.reduce((a,s)=>a+s.qty,0)+" unit"+(todaySales.reduce((a,s)=>a+s.qty,0)===1?"":"s")+". "
+    : "Today: no sales recorded yet. ") + coach;
+
+  // Compare this week's pace with the user's previous completed weeks.
+  const completedWeeks={};
+  sales.forEach(s=>{
+    const w=weekNum(s.date);
+    if(w!==wk) completedWeeks[w]=(completedWeeks[w]||0)+Number(s.total||0);
+  });
+  const past=Object.values(completedWeeks);
+  const avgPast=past.length?past.reduce((a,b)=>a+b,0)/past.length:0;
+  const paceText=document.getElementById("coachPace");
+  if(avgPast>0){
+    const diff=weekMoney-avgPast;
+    paceText.textContent=(diff>=0?"📈 ":"📉 ")+money(Math.abs(diff))+" "+(diff>=0?"ahead of":"behind")+" your average completed week ("+money(avgPast)+").";
+  }else{
+    paceText.textContent="📊 Keep adding sales to build your personal pace history.";
+  }
+
+  // Work out how much is needed per remaining day to hit a user-set payday target.
+  const paydayTarget=Number(localStorage.getItem("hisensePaydayTarget")||0);
+  const paydayEarned=paydaySales.reduce((a,s)=>a+Number(s.total||0),0);
+  const paydayText=document.getElementById("coachPayday");
+  if(paydayTarget>0){
+    const need=Math.max(0,paydayTarget-paydayEarned);
+    const pdDate=(p[1]&&p[1]!=="TBC")?new Date(p[1].split("/").reverse().join("-")+"T12:00:00"):null;
+    const remainingDays=pdDate?Math.max(1,Math.ceil((pdDate-new Date())/86400000)):1;
+    paydayText.textContent=need===0?"💷 Payday target reached!": "💷 "+money(need)+" needed to hit your £"+paydayTarget+" payday target • about "+money(need/remainingDays)+" per day.";
+  }else{
+    paydayText.textContent="💷 Set a payday commission target in Stats to get a daily target.";
+  }
+
+  const opportunities=Object.entries(CURRENT_RATES).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const op=opportunities[0];
+  document.getElementById("coachOpportunity").textContent=op?"💡 Highest current commission: "+op[0]+" • "+money(op[1])+" per unit":"";
+
+  const targetSetting=document.getElementById("targetSettingValue");
+  if(targetSetting) targetSetting.textContent=target;
+
+  // Elegant weekly commission bars.
+  const weeks={}; sales.forEach(s=>{const w=weekNum(s.date);weeks[w]=(weeks[w]||0)+Number(s.total||0)});
+  const entries=Object.entries(weeks).sort((a,b)=>Number(a[0])-Number(b[0])).slice(-6);
+  const max=Math.max(1,...entries.map(x=>x[1]));
+  document.getElementById("commissionChart").innerHTML=entries.length?entries.map(([w,v])=>{
+    const width=Math.max(4,Math.round(v/max*100));
+    return `<div style="display:grid;grid-template-columns:45px 1fr 58px;gap:8px;align-items:center;margin:10px 0">
+      <small style="color:var(--muted);font-weight:700">WK${w}</small>
+      <div class="bar" style="margin:0"><div class="fill" style="width:${width}%"></div></div>
+      <small style="text-align:right;font-weight:800">${money(v)}</small>
+    </div>`;
+  }).join(""):'<div class="tiny">Your weekly commission will appear here.</div>';
+
+  document.getElementById("recent").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(saleHTML).join("")||'<div class="empty">No sales yet</div>';
+}
+function renderHistory(){
+ document.getElementById("history").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).map((s,i)=>`<div class="sale"><div><div class="saleModel">${escapeHtml(s.model)}</div><div class="saleMeta">${fmtDate(s.date)} • ×${s.qty}</div></div><div style="text-align:right"><div class="saleMoney">${money(s.total)}</div><button class="tiny danger del" data-i="${sales.indexOf(s)}">Delete</button></div></div>`).join("")||'<div class="empty">No sales yet</div>';
+}
+function renderPaydays(){
+ const groups=PAYDAYS.map(p=>({p,s:sales.filter(s=>paydayFor(s.date)[1]===p[1])})).filter(g=>g.s.length||g.p[1]!=="TBC");
+ document.getElementById("paydayList").innerHTML=groups.map((g,i)=>{
+   const sum=g.s.reduce((a,s)=>a+s.total,0), u=g.s.reduce((a,s)=>a+s.qty,0), curr=g.p[0].includes("36");
+   return `<div class="payday ${curr?"current":""}" data-open="${i}"><div class="row"><div><div class="kicker">${curr?"CURRENT • ":""}${g.p[0]}</div><div class="paydayTotal">${money(sum)}</div><div class="tiny">${u} units • pays ${g.p[1]}</div></div><div class="pill">${g.s.length} sales</div></div><div class="details">${g.s.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(s=>saleHTML(s)).join("")||'<div class="tiny">No sales recorded</div>'}</div></div>`
+ }).join("");
+ document.querySelectorAll(".payday").forEach(x=>x.onclick=()=>x.classList.toggle("open"));
+}
+function renderStats(){
+ const targetSetting=document.getElementById("targetSettingValue");
+ if(targetSetting) targetSetting.textContent=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
+ const paydayTargetSetting=document.getElementById("paydayTargetSetting");
+ if(paydayTargetSetting) paydayTargetSetting.textContent=money(Number(localStorage.getItem("hisensePaydayTarget")||0));
+ const tv=sales.filter(s=>(CATEGORY[s.model]||"").toLowerCase()!=="soundbars").reduce((a,s)=>a+s.qty,0);
+ const sb=sales.filter(s=>CATEGORY[s.model]==="Soundbars").reduce((a,s)=>a+s.qty,0);
+ document.getElementById("tvUnits").textContent=tv;document.getElementById("barUnits").textContent=sb;document.getElementById("allUnits").textContent=units();document.getElementById("avgCommission").textContent=money(sales.length?total()/sales.length:0);
+ const weeks={};sales.forEach(s=>{const w=weekNum(s.date);weeks[w]=(weeks[w]||0)+s.qty});
+ document.getElementById("weeklyStats").innerHTML=Object.entries(weeks).sort((a,b)=>a[0]-b[0]).map(([w,u])=>`<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK${w}</b><div class="tiny">${u} units</div></div><div style="width:55%"><div class="bar"><div class="fill" style="width:${Math.min(100,u/Number(localStorage.getItem("hisenseWeeklyTarget")||10)*100)}%"></div></div></div></div></div>`).join("")||'<div class="empty">No weekly data yet</div>';
+ const t=Number(localStorage.getItem("hisenseWeeklyTarget")||10), bestWeek=Math.max(0,...Object.values(weeks));
+ const ach=[["🏁","10-unit week",bestWeek>=10],["💷","£100 commission",total()>=100],["💎","£250 commission",total()>=250],["👑","£500 commission",total()>=500],["📺","25 TVs sold",tv>=25]];
+ document.getElementById("achievements").innerHTML=ach.map(a=>`<div class="achievement" style="opacity:${a[2]?1:.45}"><div class="badge">${a[0]}</div><div><b>${a[1]}</b><div class="tiny">${a[2]?"Unlocked":"Keep selling to unlock"}</div></div></div>`).join("");
+}
+function renderRecords(){
+  const best=[...sales].sort((a,b)=>Number(b.total)-Number(a.total))[0];
+  document.getElementById("recordBest").textContent=best?money(best.total):"£0";
+
+  const days={}; const weeks={};
+  sales.forEach(s=>{
+    days[s.date]=(days[s.date]||0)+Number(s.total||0);
+    const w=weekNum(s.date); weeks[w]=(weeks[w]||0)+Number(s.total||0);
+  });
+  const bd=Object.entries(days).sort((a,b)=>b[1]-a[1])[0];
+  const bw=Object.entries(weeks).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById("recordDay").textContent=bd?money(bd[1]):"£0";
+  document.getElementById("recordDayMeta").textContent=bd?fmtDate(bd[0]):"";
+  document.getElementById("recordWeek").textContent=bw?money(bw[1]):"£0";
+  document.getElementById("recordWeekMeta").textContent=bw?"WK"+bw[0]:"";
+
+  const pays={}; sales.forEach(s=>{const p=paydayFor(s.date);pays[p[1]]=(pays[p[1]]||0)+Number(s.total||0)});
+  const bp=Object.entries(pays).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById("recordPayday").textContent=bp?money(bp[1]):"£0";
+  document.getElementById("recordPaydayMeta").textContent=bp?"Pays "+bp[0]:"";
+
+  const unitsByDay={};sales.forEach(s=>unitsByDay[s.date]=(unitsByDay[s.date]||0)+Number(s.qty||0));
+  const bu=Object.entries(unitsByDay).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById("recordUnits").textContent=bu?bu[1]:0;
+  document.getElementById("recordUnitsMeta").textContent=bu?fmtDate(bu[0]):"";
+
+  // A compact rolling calendar covering the current month.
+  const now=new Date(), y=now.getFullYear(), m=now.getMonth();
+  const first=new Date(y,m,1), last=new Date(y,m+1,0);
+  const dayTotals={}; sales.forEach(s=>{if(s.date.startsWith(y+"-"+String(m+1).padStart(2,"0")))dayTotals[s.date]=(dayTotals[s.date]||0)+Number(s.total||0)});
+  let cal='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;font-size:11px">';
+  ["M","T","W","T","F","S","S"].forEach(d=>cal+=`<div class="tiny" style="font-weight:800">${d}</div>`);
+  let offset=(first.getDay()+6)%7; for(let i=0;i<offset;i++)cal+="<div></div>";
+  for(let d=1;d<=last.getDate();d++){
+    const keyDate=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`, val=dayTotals[keyDate]||0;
+    cal+=`<div style="min-height:48px;border:1px solid ${val?"#2a6263":"#20343c"};border-radius:12px;padding:6px 2px;background:${val?"#102a2d":"#0e191e"}"><div style="font-weight:800">${d}</div><div style="font-size:9px;color:${val?"var(--accent)":"var(--muted)"};margin-top:5px">${val?money(val):"—"}</div></div>`;
+  }
+  cal+="</div>"; document.getElementById("calendar").innerHTML=cal;
+}
+
+const HUB_MODELS=[
+ {m:"43E7QTUK",base:"43E7Q",size:43,price:269,type:"QLED",refresh:"60 Hz",features:["Quantum Dot 1 billion colours","Hi-View Engine","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"A great compact 4K QLED option if the customer wants strong colour and smart features without spending a fortune.",demo:"Show colourful HDR content and point out the Quantum Dot colour and easy smart TV features."},
+ {m:"55E7QTUK",base:"55E7Q",size:55,price:329,type:"QLED",refresh:"60 Hz",features:["Quantum Dot 1 billion colours","Hi-View Engine","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"This is the sweet spot for a customer who wants a 55-inch QLED picture without jumping into premium pricing.",demo:"Use a colourful movie scene and explain that Quantum Dot gives you a wide range of bright, detailed colours."},
+ {m:"43E7QTUK PRO",base:"43E7Q PRO",size:43,price:499,type:"QLED Pro",refresh:"120 Hz (up to 144 Hz)",features:["Quantum Dot","Dolby Atmos","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["gaming","films","everyday"],pitch:"If the customer wants a small screen but still wants a more serious gaming and sound specification, this is the step-up.",demo:"Show a fast game and point out the higher refresh capability and HDMI 2.1."},
+ {m:"50U7STUK",base:"50U7STUK",size:50,price:null,type:"Mini LED",refresh:"120 Hz (up to 144 Hz)",features:["Mini LED","Hi-View Engine","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","sport","bright"],pitch:"For a customer wanting a compact TV with Mini LED contrast and a high refresh rate, this is a strong upgrade from basic LED.",demo:"Show bright sport or gaming footage and point out the Mini LED backlight and 144 Hz capability."},
+ {m:"65U7STUK",base:"65U7STUK",size:65,price:1199,type:"Mini LED",refresh:"120 Hz (up to 144 Hz)",features:["Mini LED","Hi-View Engine","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","sport","bright"],pitch:"This is the one I'd show a customer who wants a big 65-inch screen, Mini LED contrast and strong gaming performance without moving all the way to RGB.",demo:"Put on football or a game with fast movement. Highlight Mini LED, 144 Hz and four HDMI 2.1 connections."},
+ {m:"55UR8STUK",base:"55UR8STUK",size:55,price:1299,type:"RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","sport","bright","films"],pitch:"If the customer wants a 55-inch TV where colour, brightness and fast action are all priorities, this is a serious step up.",demo:"Show sport and bright HDR content. Explain that RGB Mini LED creates colour at the backlight rather than relying on a conventional colour filter."},
+ {m:"65UR8STUK",base:"65UR8STUK",size:65,price:1699,type:"RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","sport","bright","films"],pitch:"For a customer wanting premium 65-inch performance, this gives you RGB Mini LED, very high refresh and a strong gaming connection set.",demo:"Use football first, then gaming. Point out the 180 Hz capability, RGB colour and four HDMI 2.1 ports."},
+ {m:"75UR8STUK",base:"75UR8STUK",size:75,price:2299,type:"RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","sport","bright","films"],pitch:"If they have the room and want a huge screen without giving up premium colour, brightness or gaming performance, this is the one to demo.",demo:"Show a full-screen football or nature scene. Let the size sell itself, then demonstrate RGB colour and motion."},
+ {m:"65UR9STUK",base:"65UR9STUK",size:65,price:1999,type:"RGB Mini LED",refresh:"120 Hz (up to 170 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","HDMI 2.1 x 3","Freely","5 year guarantee"],needs:["gaming","sport","bright","films"],pitch:"This is the premium 65-inch choice when the customer wants maximum impact from brightness, colour and a high-end picture.",demo:"Start with a bright sports scene, then show a dark cinematic scene so they can see the range of the picture."},
+ {m:"75UR9STUK",base:"75UR9STUK",size:75,price:2799,type:"RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","HDMI 2.1 x 3","Freely","5 year guarantee"],needs:["gaming","sport","bright","films"],pitch:"If the customer wants a premium 75-inch statement TV, this combines the size with RGB Mini LED colour and high refresh.",demo:"Use a cinematic scene with bright highlights and then fast sport. Keep the conversation about what they can see, not just the spec sheet."},
+ {m:"85UR9STUK",base:"85UR9STUK",size:85,price:null,type:"RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","HDMI 2.1 x 3","Freely","5 year guarantee"],needs:["gaming","sport","bright","films"],pitch:"The big-screen premium option: for customers who want an enormous picture but still care about colour, brightness and motion.",demo:"Put on a full-screen sports clip and stand the customer at a normal viewing distance. Let the scale do the work."}
+];
+
+const CASHBACK = {'116UXQTUK': 1000, '100UXQTUK': 500, '85UR9STUK': 300, '75UR9STUK': 300, '65UR9STUK': 200, '100UR8STUK': 500, '85UR8STUK': 300, '75UR8STUK': 200, '65UR8STUK': 200, '55UR8STUK': 200, '100U7STUK': 500, '85U7STUK': 300, '75U7STUK': 200, '65U7STUK': 200, '55U7STUK': 100, '50U7STUK': 50, '85Q8STUK': 300, '75Q8STUK': 200, '65Q8STUK': 200, '55Q8STUK': 100, '50Q8STUK': 50, '100E7STUK PRO': 300, '85E7STUK PRO': 300, '75E7STUK PRO': 100, '65E7STUK PRO': 100, '55E7STUK PRO': 50, '50E7STUK PRO': 50, '43E7STUK PRO': 50, '85Q7STUK': 100, '75Q7STUK': 50, '65Q7STUK': 50, '55Q7STUK': 25, '50Q7STUK': 25, '43Q7STUK': 25, 'L9QTUK PRO': 200, 'L9QTUK': 200, 'XR10TUK': 200, 'PX4TUK PRO': 100, 'P1TUK': 50, 'C3TUK ULTRA MAX': 200, 'C3TUK ULTRA': 100, 'C3TUK PRO': 100};
+const CASHBACK_PERIOD = '9 Sep 2026 – 27 Oct 2026';
+const XBOX_PROMO_PERIOD = '5 Aug 2026 – 3 Nov 2026';
+function hasXboxBundle(x){ return /U/i.test(x.base) && /Mini LED/i.test(x.type); }
+
+const WHY_HISENSE=[
+ ["💷","Value for the specification","When the customer is comparing brands, put the picture technology, gaming features, connectivity and current promotion side-by-side. Focus on what they actually get for their money rather than claiming one brand is universally better."],
+ ["🌈","RGB Mini LED","On UR8/UR9 models, Currys describes RGB Mini LED as using individual red, green and blue LEDs to create colour at the source. That gives you a clear demonstration story: show bright colours and explain the technology in simple terms."],
+ ["🎮","Gaming","Selected Hisense models offer high-refresh panels and HDMI 2.1. For example, Currys lists the 65UR8STUK at up to 180 Hz and the 65UR9STUK at up to 170 Hz, alongside HDMI 2.1. Ask what console they use, then demo fast action."],
+ ["🎁","Free Xbox bundle","The U-series Mini LED TVs in the Sales Hub — including UR8 and UR9 — come with a free personalised Xbox Design Lab controller plus a 1-month Xbox Game Pass Premium trial, subject to the promotion terms and stock. The current qualifying purchase window shown by Currys is 5 Aug–3 Nov 2026."],
+ ["⚽","Sport","Brightness, colour and motion are easy benefits to demonstrate. Currys specifically highlights the 65UR8STUK as strong for sport because of its 180 Hz panel and RGB Mini LED."],
+ ["🛡️","Guarantee","Where the specific model carries a 5-year guarantee, make that part of the reassurance conversation. Always check the exact model because guarantees can differ between products."],
+ ["📺","Freely + smart features","Currys lists Freely and major streaming/catch-up services on the current Hisense models. Ask what the customer watches, then show the services that matter to them."],
+ ["🎁","Current promotions","Cashback, trade-in, soundbar offers and other promotions can change the value equation. Show the exact qualifying model and current promotion rather than relying on a generic 'Hisense is cheaper' message."]
+];
+const BRAND_OBJECTIONS=[
+ ["Samsung / LG OLED","“OLED is great. The question I'd ask is whether you prioritise OLED's strengths or a very bright, colourful Mini LED picture. Let's put the two pictures side-by-side and see which you prefer.”"],
+ ["Sony","“Sony is a strong choice, especially for processing. I'd compare the things that matter to you — picture, gaming, brightness, sound and price — rather than choosing by badge alone.”"],
+ ["“I've always bought Samsung.”","“That's fair. What do you like about your Samsung? If you tell me that, I can show you the Hisense feature that matches it and where this model gives you something different.”"],
+ ["“Is Hisense as good?”","“The best way to answer that is to compare the exact models. Let's look at the picture and features you actually care about rather than just the logo.”"],
+ ["“Why is this one more expensive?”","“Let's break down what you're paying for — panel technology, brightness, refresh rate, processing, sound and the current promotion. If those upgrades matter to you, the extra spend makes sense.”"]
+];
+const HUB_TIPS=[
+ ["🎯","Ask before you pitch","Find out what they watch, their room brightness, screen size and budget. Then show two or three TVs, not ten."],
+ ["⚽","Selling sport","Ask whether they watch football. Demo fast movement and bright pitch footage, then talk about refresh rate, brightness and colour."],
+ ["🎮","Selling gaming","Ask what console they use. Show the gaming picture and explain refresh rate and HDMI 2.1 in customer-friendly language."],
+ ["🎬","Selling films","Use a cinematic clip with dark scenes and bright highlights. Talk about contrast, HDR and colour rather than throwing specs at them."],
+ ["☀️","Bright room","If sunlight is a problem, make brightness a benefit. Demo a bright daytime scene and compare it against a dimmer display."],
+ ["💷","Budget customer","Start with their budget and show the best option inside it. Then show one step up and explain exactly what the extra money buys."]
+];
+let hubSize="Any",hubBudget="Any",hubNeed="Any",hubPromoOnly=false;
+function hubBudgetMax(){
+ if(hubBudget==="Under £500")return 500;if(hubBudget==="£500–£1,000")return 1000;if(hubBudget==="£1,000–£1,500")return 1500;
+ if(hubBudget==="£1,500–£2,000")return 2000;if(hubBudget==="£2,000+")return Infinity;return Infinity;
+}
+function renderHub(){
+ const sizes=["Any","43\"","50\"","55\"","65\"","75\"","85\"","100\"+"];
+ const budgets=["Any","Under £500","£500–£1,000","£1,000–£1,500","£1,500–£2,000","£2,000+"];
+ const needs=["Any","⚽ Sport","🎮 Gaming","🎬 Films","☀️ Bright room","👨‍👩‍👧 Everyday"];
+ const make=(arr,id,cur)=>document.getElementById(id).innerHTML=arr.map(x=>`<button class="chip ${x===cur?"on":""}" data-val="${escapeHtml(x)}">${escapeHtml(x)}</button>`).join("");
+ make(sizes,"sizeChips",hubSize);make(budgets,"budgetChips",hubBudget);make(needs,"needChips",hubNeed);
+ const size=hubSize==="Any"?null:Number(hubSize.replace('"','').replace('+',''));
+ const max=hubBudgetMax();
+ const needMap={"⚽ Sport":"sport","🎮 Gaming":"gaming","🎬 Films":"films","☀️ Bright room":"bright","👨‍👩‍👧 Everyday":"everyday"};
+ const need=needMap[hubNeed]||null;
+ let arr=HUB_MODELS.filter(x=>(!size||(hubSize==='100"+'?x.size>=100:x.size===size)) && (x.price==null || x.price<=max) && (!need||x.needs.includes(need)));
+ arr=arr.filter(x=>!hubPromoOnly || CASHBACK[x.base] != null);
+ // Prefer products with a known current price and stronger match; premium order by commission.
+ arr.sort((a,b)=>{
+   const am=CURRENT_RATES[a.base]??0,bm=CURRENT_RATES[b.base]??0;
+   const av=(a.price==null?999999:a.price),bv=(b.price==null?999999:b.price);
+   return (bm-am) || (av-bv);
+ });
+ document.getElementById("hubCount").textContent=arr.length+" matches"+(hubPromoOnly?" • cashback":"");
+ document.getElementById("hubResults").innerHTML=arr.length?arr.map((x,i)=>{
+   const comm=CURRENT_RATES[x.base]??0;
+   const best=i===0?"<span class='pill'>BEST MATCH</span>":"";
+   return `<div class="card" style="margin-bottom:10px">
+     <div class="row"><div><div class="kicker">${escapeHtml(x.type)} • ${x.size}"</div><div class="big" style="font-size:22px">${escapeHtml(x.base)}</div></div><div style="text-align:right">${best}<div class="saleMoney" style="margin-top:8px">${x.price==null?"Price check":money(x.price)}</div><div class="tiny">${money(comm)} commission</div></div></div>
+     <div class="sub" style="margin-top:9px">${escapeHtml(x.refresh)} • ${escapeHtml(x.features.slice(0,2).join(" • "))}</div>
+     ${CASHBACK[x.base]!=null?`<div style="margin-top:12px;padding:11px 12px;border-radius:14px;background:#292315;border:1px solid #6d5930"><div class="row"><div><b style="color:#ffd166">🎁 Cashback</b><div class="tiny">Promo ends 27 Oct 2026</div></div><b style="color:#ffd166;font-size:20px">${money(CASHBACK[x.base])}</b></div></div>`:""}
+     ${hasXboxBundle(x)?`<div style="margin-top:10px;padding:11px 12px;border-radius:14px;background:#102c20;border:1px solid #2d7b55"><div style="font-weight:900;color:#8ff0b8">🎮 FREE XBOX BUNDLE</div><div class="tiny" style="margin-top:4px;color:#d7f7e4">Personalised Xbox Design Lab controller + 1 month Xbox Game Pass Premium trial</div><div class="tiny" style="margin-top:4px;color:#9bd4b4">Qualifying purchase window: ${XBOX_PROMO_PERIOD} • while stocks last</div></div>`:""}
+     <details style="margin-top:12px"><summary style="cursor:pointer;color:var(--accent);font-weight:800">Open sales cheat sheet</summary>
+       <div style="margin-top:12px"><b>🗣️ Pitch</b><div class="sub" style="margin-top:5px;color:var(--text)">${escapeHtml(x.pitch)}</div>
+       <div style="margin-top:12px"><b>📺 Demo</b><div class="sub" style="margin-top:5px;color:var(--text)">${escapeHtml(x.demo)}</div>
+       <div style="margin-top:12px"><b>⭐ Key features</b><div class="chips" style="margin-top:7px">${x.features.map(f=>`<span class="chip" style="cursor:default">${escapeHtml(f)}</span>`).join("")}</div>
+       ${x.price==null?'<div class="tiny" style="margin-top:9px">Currys price not captured in this research pass — check live listing before quoting.</div>':""}
+       </div></div>
+     </details>
+   </div>`;
+ }).join(""):'<div class="empty">No exact match. Try a wider budget or another size.</div>';
+ document.getElementById("whyHisense").innerHTML=WHY_HISENSE.map(t=>`<div class="achievement"><div class="badge">${t[0]}</div><div><b>${t[1]}</b><div class="tiny" style="margin-top:4px">${t[2]}</div></div></div>`).join("");
+ document.getElementById("brandObjections").innerHTML=BRAND_OBJECTIONS.map(t=>`<details class="card" style="margin-bottom:9px"><summary style="cursor:pointer;font-weight:800">${escapeHtml(t[0])}</summary><div class="sub" style="margin-top:9px;color:var(--text);line-height:1.45">${escapeHtml(t[1])}</div></details>`).join("");
+ document.getElementById("tips").innerHTML=HUB_TIPS.map(t=>`<div class="achievement"><div class="badge">${t[0]}</div><div><b>${t[1]}</b><div class="tiny" style="margin-top:4px">${t[2]}</div></div></div>`).join("");
+}
+function renderRates(){
+ const q=document.getElementById("rateSearch").value.toLowerCase(), arr=Object.entries(CURRENT_RATES).filter(([m])=>(m+" "+CATEGORY[m]).toLowerCase().includes(q)&&(categoryFilter==="All"||CATEGORY[m]===categoryFilter)).sort((a,b)=>b[1]-a[1]);
+ document.getElementById("rateCount").textContent=arr.length+" models";
+ document.getElementById("rateList").innerHTML=arr.map(([m,r])=>`<div class="rate"><div><b>${escapeHtml(m)}</b><br><small>${CATEGORY[m]}</small></div><b>${money(r)}</b></div>`).join("");
+}
+function init(){
+ document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
+ document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+ document.getElementById("homeAdd").onclick=()=>go("sales");
+ document.getElementById("saleDate").value=new Date().toISOString().slice(0,10);
+ document.getElementById("minus").onclick=()=>{qty=Math.max(1,qty-1);document.getElementById("qty").textContent=qty;preview()};
+ document.getElementById("plus").onclick=()=>{qty++;document.getElementById("qty").textContent=qty;preview()};
+ document.getElementById("model").oninput=preview;document.getElementById("saleDate").onchange=preview;
+ document.getElementById("saveSale").onclick=addSale;
+ document.getElementById("history").onclick=e=>{const b=e.target.closest(".del");if(!b)return;if(confirm("Delete this sale?")){sales.splice(Number(b.dataset.i),1);save();renderHistory();renderHome();toast("Sale deleted")}};
+ document.getElementById("clearAll").onclick=()=>{if(confirm("Clear all sales from this device?")){sales=[];save();renderHome();renderHistory();toast("Sales cleared")}};
+ document.getElementById("rateSearch").oninput=renderRates;
+ document.getElementById("promoOnly").onclick=()=>{
+   hubPromoOnly=!hubPromoOnly;
+   document.getElementById("promoOnly").classList.toggle("on",hubPromoOnly);
+   renderHub();
+ };
+ ["sizeChips","budgetChips","needChips"].forEach(id=>document.getElementById(id).onclick=e=>{
+   const b=e.target.closest(".chip"); if(!b)return;
+   if(id==="sizeChips")hubSize=b.dataset.val;
+   if(id==="budgetChips")hubBudget=b.dataset.val;
+   if(id==="needChips")hubNeed=b.dataset.val;
+   renderHub();
+ });
+ const cats=["All",...new Set(Object.values(CATEGORY))];document.getElementById("chips").innerHTML=cats.map(c=>`<button class="chip ${c==="All"?"on":""}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("");
+ document.getElementById("chips").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;categoryFilter=b.dataset.cat;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));renderRates()};
+ document.getElementById("backupBtn").onclick=backup;
+ document.getElementById("changeTarget").onclick=()=>{
+   const current=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
+   const next=prompt("What is your weekly unit target?",current);
+   if(next!==null && Number(next)>0){
+     localStorage.setItem("hisenseWeeklyTarget",Math.round(Number(next)));
+     renderHome(); renderStats(); toast("Target updated ✓");
+   }
+ };
+ document.getElementById("changePaydayTarget").onclick=()=>{
+   const current=Number(localStorage.getItem("hisensePaydayTarget")||0);
+   const next=prompt("What payday commission target do you want?",current||"1000");
+   if(next!==null && Number(next)>=0){
+     localStorage.setItem("hisensePaydayTarget",Math.round(Number(next)));
+     renderHome(); renderStats(); toast("Payday target updated ✓");
+   }
+ };
+ document.getElementById("modelList").innerHTML=Object.keys(CURRENT_RATES).sort().map(m=>`<option value="${escapeHtml(m)}"></option>`).join("");
+ renderHome();renderHistory();renderRecords();renderHub();renderRates();
+}
+function preview(){const m=document.getElementById("model").value.trim(),d=document.getElementById("saleDate").value,r=rateFor(m,d);document.getElementById("preview").textContent=r==null?"—":money(r*qty);document.getElementById("previewMeta").textContent=r==null?"Unknown rate — check Rates":"£"+r+" per unit × "+qty}
+function addSale(){
+ const d=document.getElementById("saleDate").value,m=document.getElementById("model").value.trim(),r=rateFor(m,d);
+ if(!d||!m)return toast("Choose a date and model");
+ if(r==null)return toast("I can't find a rate for that model");
+ sales.push({date:d,model:m,qty,total:r*qty,rate:r});save();document.getElementById("model").value="";qty=1;document.getElementById("qty").textContent="1";preview();renderHistory();renderHome();toast("✓ Sale added");go("home");
+}
+function backup(){
+ const blob=new Blob([JSON.stringify(sales,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="hisense-sales-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("Backup created");
+}
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+init();
+</script>
+
+<section id="sales-assistant-workflow" class="sales-assistant-workflow">
+  <h3>🎯 Close the Sale</h3>
+  <div class="sub">Customer → needs → recommendation → offers → pitch</div>
+  <div class="saw-grid">
+    <div>
+      <label>Screen size</label>
+      <select id="sawSize"><option value="43">43"</option><option value="50">50"</option><option value="55">55"</option><option value="65" selected>65"</option><option value="75">75"</option><option value="85">85"</option><option value="100">100"</option></select>
+    </div>
+    <div>
+      <label>Budget</label>
+      <select id="sawBudget"><option value="500">Up to £500</option><option value="1000">Up to £1,000</option><option value="1500" selected>Up to £1,500</option><option value="2500">Up to £2,500</option><option value="99999">Flexible</option></select>
+    </div>
+    <div class="saw-full">
+      <label>What matters most?</label>
+      <select id="sawNeed">
+        <option value="sport">⚽ Sport</option><option value="gaming">🎮 Gaming</option><option value="films">🎬 Films & picture quality</option><option value="bright">☀️ Bright room</option><option value="everyday">📺 Everyday TV</option>
+      </select>
+    </div>
+  </div>
+  <button class="saw-btn" id="sawGo">Find my best recommendation</button>
+  <div class="saw-result" id="sawResult"></div>
+</section>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const cb={
+    "65UR8STUK":200,"75UR8STUK":200,"85UR8STUK":300,"55UR8STUK":200,
+    "65UR9STUK":200,"75UR9STUK":300,"85UR9STUK":300,
+    "65U7STUK":200,"75U7STUK":200,"85U7STUK":300,"55U7STUK":100,"50U7STUK":50,
+    "65Q7STUK":50,"75Q7STUK":50,"85Q7STUK":100,"55Q7STUK":25,"50Q7STUK":25,"43Q7STUK":25,
+    "100E7STUK PRO":300,"85E7STUK PRO":300,"75E7STUK PRO":100,"65E7STUK PRO":100,"55E7STUK PRO":50
+  };
+  const commission={
+    "50U7STUK":15,"55U7STUK":20,"65U7STUK":25,"75U7STUK":30,"85U7STUK":40,
+    "55UR8STUK":35,"65UR8STUK":45,"75UR8STUK":60,"85UR8STUK":80,
+    "65UR9STUK":60,"75UR9STUK":80,"85UR9STUK":120,
+    "43Q7STUK":5,"50Q7STUK":5,"55Q7STUK":10,"65Q7STUK":15,"75Q7STUK":20,"85Q7STUK":25,
+    "43E7Q PRO":10,"50E7STUK PRO":10,"55E7STUK PRO":15,"65E7STUK PRO":20,"75E7STUK PRO":25,"85E7STUK PRO":30,"100E7STUK PRO":40
+  };
+  const models=[
+    {m:"43E7QTUK",base:"43E7Q",s:43,p:269,t:"QLED",needs:["everyday"]},
+    {m:"55E7QTUK",base:"55E7Q",s:55,p:329,t:"QLED",needs:["everyday"]},
+    {m:"50U7STUK",base:"50U7STUK",s:50,p:null,t:"Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"65U7STUK",base:"65U7STUK",s:65,p:1199,t:"Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"55UR8STUK",base:"55UR8STUK",s:55,p:1299,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"65UR8STUK",base:"65UR8STUK",s:65,p:1699,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"75UR8STUK",base:"75UR8STUK",s:75,p:2299,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"65UR9STUK",base:"65UR9STUK",s:65,p:1999,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"75UR9STUK",base:"75UR9STUK",s:75,p:2799,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"85UR9STUK",base:"85UR9STUK",s:85,p:null,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]}
+  ];
+  function recommend(){
+    const size=+$("sawSize").value,budget=+$("sawBudget").value,need=$("sawNeed").value;
+    let candidates=models.filter(x=>x.s===size && x.needs.includes(need) && (x.p===null || x.p<=budget));
+    if(!candidates.length) candidates=models.filter(x=>x.s===size && (x.p===null || x.p<=budget));
+    if(!candidates.length) candidates=models.filter(x=>x.p!==null && x.p<=budget);
+    if(!candidates.length){$("sawResult").innerHTML="<strong>Try widening the budget or screen size.</strong>";$("sawResult").classList.add("show");return;}
+    candidates.sort((a,b)=>(b.t==="RGB Mini LED")-(a.t==="RGB Mini LED") || (b.p||0)-(a.p||0));
+    const x=candidates[0], c=commission[x.base]||0, cash=cb[x.base]||0;
+    const xbox=/U7|UR8|UR9/.test(x.base);
+    const pitch=x.t==="RGB Mini LED"
+      ? `“If picture quality and sport are important, I'd show you this ${x.s}-inch RGB Mini LED. It gives you a really bright, colourful picture and strong motion performance. And you've got ${cash?"£"+cash+" cashback, ":""}${xbox?"the free personalised Xbox controller and 1-month Game Pass offer, ":""}plus 24 months interest free on qualifying RGB TVs.”`
+      : `“For what you've told me, this ${x.s}-inch ${x.t} is a strong fit. It gives you the features you need without pushing you beyond your budget.”`;
+    $("sawResult").innerHTML=`<div style="font-size:12px;opacity:.7">BEST FIT</div><div style="font-size:22px;font-weight:900;margin:3px 0">${x.m}</div><div>${x.t}${x.p?" · £"+x.p:""}</div><div class="saw-pills"><span class="saw-pill">💷 Commission £${c}</span>${cash?`<span class="saw-pill">💰 Cashback £${cash}</span>`:""}${xbox?'<span class="saw-pill">🎮 Xbox bundle</span>':''}${x.t==="RGB Mini LED"?'<span class="saw-pill">💳 24 months interest free</span>':''}</div><div class="saw-pitch"><strong>🗣️ Say this:</strong><br>${pitch}</div>`;
+    $("sawResult").classList.add("show");
+  }
+  if($("sawGo")) $("sawGo").addEventListener("click",recommend);
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Put the customer-facing Sales Hub/home view first.
+  const commissionSelectors = [
+    '[data-tab="commission"]',
+    '[data-page="commission"]',
+    '#commissionTab',
+    '#tabCommission'
+  ];
+  const homeSelectors = [
+    '[data-tab="home"]',
+    '[data-page="home"]',
+    '#homeTab',
+    '#tabHome',
+    '[data-tab="sales"]',
+    '[data-page="sales"]',
+    '#salesHubTab',
+    '#salesTab'
+  ];
+  function first(selectors){
+    for(const s of selectors){
+      const el=document.querySelector(s);
+      if(el) return el;
+    }
+    return null;
+  }
+  const home=first(homeSelectors);
+  if(home) setTimeout(()=>home.click(), 0);
+
+  // If a separate commission panel exists, add an explicit privacy label.
+  const commission=first(['#commission','#commissionSection','#commission-page','.commission-section']);
+  if(commission && !commission.querySelector('.private-label')){
+    const n=document.createElement('div');
+    n.className='private-label';
+    n.textContent='🔒 Private — commission';
+    n.style.cssText='display:inline-block;margin:0 0 10px;padding:6px 10px;border-radius:999px;background:rgba(255,193,7,.12);font-size:11px;font-weight:800;';
+    commission.prepend(n);
+  }
+});
+</script>
+</body>
+</html>
