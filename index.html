@@ -3,1076 +3,284 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#071014">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Hisense Sales">
-<title>Hisense Sales</title>
+<meta name="theme-color" content="#111111">
+<title>Hisense Sales Pro</title>
 <style>
-:root{
-  --bg:#071014;--panel:#0e191e;--panel2:#132229;--line:#20343c;
-  --text:#f5fbfc;--muted:#91a5ad;--accent:#16d6c4;--accent2:#0fb4a5;
-  --good:#63e6be;--warn:#ffd166;--danger:#ff6b7a;
-  --radius:24px;--shadow:0 18px 50px rgba(0,0,0,.28);
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Arial,sans-serif}
-body{min-height:100vh}
-button,input,select{font:inherit}
-button{border:0;color:inherit}
-.app{max-width:620px;margin:auto;min-height:100vh;padding-bottom:100px}
-.top{padding:calc(20px + env(safe-area-inset-top)) 20px 16px;display:flex;justify-content:space-between;align-items:center}
-.brand{font-size:13px;letter-spacing:.16em;font-weight:800;color:var(--accent)}
-.title{font-size:30px;font-weight:800;letter-spacing:-.04em;margin-top:4px}
-.iconbtn{width:42px;height:42px;border-radius:15px;background:var(--panel);border:1px solid var(--line);font-size:20px}
-.screen{display:none;padding:0 16px}.screen.active{display:block}
-.hero{background:linear-gradient(145deg,#123039,#0b1b21 58%,#0a151a);border:1px solid #21434b;border-radius:30px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(22,214,196,.09);right:-70px;top:-70px}
-.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.13em;color:#9bb4ba;font-weight:700}
-.money{font-size:48px;line-height:1;margin:8px 0 15px;font-weight:850;letter-spacing:-.055em}
-.heroRow{display:flex;justify-content:space-between;gap:12px;align-items:end}
-.next{font-weight:750}.sub{font-size:12px;color:var(--muted);margin-top:4px}
-.pill{background:rgba(22,214,196,.12);color:var(--accent);padding:8px 11px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px}
-.cardTitle{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
-.big{font-size:25px;font-weight:800;margin-top:8px;letter-spacing:-.03em}
-.target{margin-top:12px}.bar{height:10px;background:#1b2a30;border-radius:99px;overflow:hidden;margin:10px 0 6px}.fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;width:0}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.sectionHead{display:flex;justify-content:space-between;align-items:end;margin:24px 4px 10px}.sectionHead h2{font-size:19px;margin:0;letter-spacing:-.025em}.link{color:var(--accent);font-size:13px;font-weight:700}
-.sale{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px 15px;margin-bottom:9px;display:flex;justify-content:space-between;gap:10px;align-items:center}
-.saleModel{font-weight:750}.saleMeta{color:var(--muted);font-size:12px;margin-top:4px}.saleMoney{font-weight:850;color:var(--good);white-space:nowrap}
-.cta{width:100%;margin-top:15px;padding:17px;border-radius:18px;background:var(--accent);color:#03100f;font-weight:850;font-size:16px;box-shadow:0 10px 25px rgba(22,214,196,.18)}
-.empty{padding:28px;text-align:center;color:var(--muted);background:var(--panel);border:1px dashed var(--line);border-radius:20px}
-.formCard{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:18px}
-label{display:block;color:var(--muted);font-size:12px;font-weight:700;margin:13px 2px 7px;text-transform:uppercase;letter-spacing:.07em}
-input,select{width:100%;background:#091318;color:var(--text);border:1px solid #28404a;border-radius:15px;padding:14px;outline:none}
-input:focus,select:focus{border-color:var(--accent)}
-.preview{margin-top:14px;background:#0b2628;border:1px solid #1b5656;border-radius:18px;padding:17px}.preview .p{font-size:30px;font-weight:850;color:var(--accent);margin-top:4px}
-.stepper{display:flex;align-items:center;gap:12px}.stepper button{width:46px;height:46px;border-radius:15px;background:var(--panel2);font-size:25px}.qty{font-size:22px;font-weight:800;min-width:30px;text-align:center}
-.search{margin-bottom:12px}
-.chips{display:flex;gap:7px;overflow:auto;padding-bottom:3px}.chip{white-space:nowrap;padding:9px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700}.chip.on{background:rgba(22,214,196,.13);border-color:#246d70;color:var(--accent)}
-.payday{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:17px;margin-bottom:12px}.payday.current{border-color:#2b6f70;box-shadow:0 10px 35px rgba(22,214,196,.08)}
-.paydayTotal{font-size:28px;font-weight:850;margin-top:6px}.tiny{font-size:12px;color:var(--muted)}
-.details{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.payday.open .details{display:block}
-.statGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px}.stat b{display:block;font-size:24px;margin-top:6px}
-.rate{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.rate b{color:var(--accent)}.rate small{color:var(--muted)}
-.achievement{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:18px;margin-bottom:9px}.badge{width:40px;height:40px;border-radius:14px;background:#18343a;display:grid;place-items:center;font-size:20px}
-.nav{position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:0;width:min(620px,100%);padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(7,16,20,.92);backdrop-filter:blur(18px);border-top:1px solid #1a2c32;display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
-.nav button{background:transparent;color:#71868e;font-size:10px;font-weight:750;padding:7px 2px}.nav button span{display:block;font-size:20px;margin-bottom:3px}.nav button.on{color:var(--accent)}
-.toast{position:fixed;z-index:20;left:50%;bottom:95px;transform:translateX(-50%) translateY(20px);background:#f4ffff;color:#061012;padding:12px 16px;border-radius:14px;font-weight:750;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.pop{animation:pop .35s ease-out}@keyframes pop{0%{transform:scale(.94)}70%{transform:scale(1.03)}100%{transform:scale(1)}}
-.danger{color:var(--danger)}
-@media(min-width:621px){.nav{border-radius:24px;bottom:15px;border:1px solid #1a2c32}.app{padding-bottom:120px}}
-
-.modelSuggest{position:relative;margin-top:6px}.modelSuggestList{position:absolute;z-index:50;left:0;right:0;top:100%;background:#17191d;border:1px solid #3b3f46;border-radius:12px;max-height:260px;overflow:auto;box-shadow:0 14px 35px rgba(0,0,0,.45)}.modelSuggestItem{display:block;width:100%;padding:12px 14px;background:transparent;border:0;border-bottom:1px solid #292c31;color:#fff;text-align:left;font:inherit}.modelSuggestItem:last-child{border-bottom:0}.modelSuggestItem b{display:block}.modelSuggestItem span{display:block;color:#9aa0aa;font-size:12px;margin-top:3px}.modelSuggestEmpty{padding:12px 14px;color:#9aa0aa;font-size:13px}
-
-.calendarWrap{width:100%}.calendarTop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.calendarMonth{font-size:18px;font-weight:900;text-align:center;flex:1}.calendarNav{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#101c21;color:var(--text);font-size:20px;font-weight:900}.calendarWeek{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center;margin-bottom:5px}.calendarGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.calendarDay{min-height:52px;border:1px solid #20343c;border-radius:11px;padding:5px 2px;background:#0e191e;color:var(--text);font:inherit;cursor:pointer}.calendarDay.hasSales{border-color:#2a6263;background:#102a2d}.calendarDay.selected{outline:2px solid var(--accent);outline-offset:1px}.calendarDay.today{box-shadow:inset 0 0 0 1px var(--accent)}.calendarDayNum{font-weight:900;font-size:13px}.calendarDayMoney{font-size:9px;color:var(--accent);margin-top:4px;font-weight:800;white-space:nowrap}.calendarSelected{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#101c21}.calendarSale{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #20343c}.calendarSale:last-child{border-bottom:0}.calendarSaleModel{font-weight:850;font-size:13px}.calendarSaleMeta{font-size:11px;color:var(--muted);margin-top:2px}.calendarSaleMoney{font-weight:900;white-space:nowrap}@media(max-width:380px){.calendarDay{min-height:48px}.calendarDayMoney{font-size:8px}}
-
-/* Refined shop-floor internal navigation */
-.innerTabBar{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:7px;margin:10px 0 14px;position:sticky;top:0;z-index:5;background:var(--bg);padding:5px 0}
-.innerTab{border:1px solid var(--line);background:#101c21;color:var(--muted);border-radius:12px;padding:10px 8px;font-weight:850;font-size:12px;min-height:42px;cursor:pointer}
-.innerTab.active{background:var(--accent);color:#071315;border-color:var(--accent)}
-.innerPane{display:none}
-.innerPane.active{display:block}
-.innerIntro{margin-bottom:8px}
-@media(max-width:430px){.innerTabBar{grid-template-columns:repeat(2,1fr)}.innerTab{font-size:11px;padding:9px 6px}}
-</style>
-
-<style>
-.compactSearch{width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:#11161b;color:var(--text);font-size:16px;outline:none;box-sizing:border-box;margin:8px 0 10px}
-.compactSearch:focus{border-color:#5f8cff}
-.fold{border:1px solid var(--line);border-radius:16px;margin:8px 0;overflow:hidden;background:linear-gradient(145deg,#151b20,#101418)}
-.foldBtn{width:100%;display:flex;justify-content:space-between;align-items:center;border:0;background:transparent;color:var(--text);padding:15px;text-align:left;font-size:15px;font-weight:850}
-.foldBody{display:none;padding:0 12px 12px}.fold.open .foldBody{display:block}.fold.open .chev{transform:rotate(180deg)}
-.quickResult{padding:12px;border:1px solid var(--line);border-radius:13px;background:#0e1317;margin:7px 0}
-.smallGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-</style>
-
-<style>
-/* Refined internal navigation */
-.internalTabs{display:flex;gap:7px;overflow-x:auto;padding:3px 1px 10px;margin:4px 0 12px;scrollbar-width:none;position:sticky;top:0;z-index:5;background:linear-gradient(var(--bg) 75%,transparent);}
-.internalTabs::-webkit-scrollbar{display:none}
-.internalTab{flex:0 0 auto;padding:10px 13px;border-radius:13px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:800;white-space:nowrap}
-.internalTab.on{background:rgba(22,214,196,.14);border-color:#2b7776;color:var(--accent)}
-.internalPanel{display:none}.internalPanel.on{display:block;animation:panelIn .18s ease-out}
-@keyframes panelIn{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
-.internalPanel>.sectionHead:first-child{margin-top:4px}
-.screen.refined{padding-bottom:18px}
-.noPanelScroll{overflow:visible}
-@media(max-width:420px){.internalTab{padding:9px 11px;font-size:11px}}
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+:root{--bg:#090a0c;--panel:#121417;--panel2:#181a1e;--text:#f7f7f5;--muted:#9a9da3;--line:#292c31;--red:#e5232b;--gold:#d2ad68;--gold2:#f0d59f}
+*{box-sizing:border-box}html,body{background:var(--bg)}
+body{margin:0;color:var(--text);font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:98px;background:linear-gradient(180deg,#0b0c0e 0,#090a0c 100%)}
+header{background:rgba(10,11,13,.93);backdrop-filter:blur(18px);color:#fff;padding:14px 18px 17px;position:sticky;top:0;z-index:5;border-bottom:1px solid #ffffff0b}
+.brandline{display:flex;align-items:center;gap:10px}
+.logoMark{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,#f4f4f2,#b8b8b8);display:grid;place-items:center;color:#0b0c0e;font-family:Manrope,sans-serif;font-weight:800;font-size:16px;box-shadow:0 5px 16px #0008}
+.brand{font-family:Manrope,sans-serif;font-size:10px;letter-spacing:2.2px;font-weight:800;color:#d7d8da}.title{font-family:Manrope,sans-serif;font-size:26px;font-weight:800;letter-spacing:-.8px;margin-top:7px}
+.screen{display:none;padding:17px}.screen.active{display:block}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#15171a 0,#0b0c0e 65%);border:1px solid #292c30;color:#fff;border-radius:27px;padding:24px 20px;margin-bottom:15px;box-shadow:0 20px 45px #0009}
+.hero:before{content:"";position:absolute;right:-85px;top:-100px;width:245px;height:245px;border-radius:50%;background:radial-gradient(circle,#e5232b38 0,#e5232b00 68%)}
+.hero:after{content:"";position:absolute;right:35px;bottom:-80px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,#d2ad6820 0,#d2ad6800 70%)}
+.hero h1,.hero p,.quote{position:relative;z-index:1}.hero h1{font-family:Manrope,sans-serif;margin:0 0 7px;font-size:30px;letter-spacing:-1.2px}.hero p{margin:0;color:#aeb1b6;line-height:1.4;font-size:13px}.quote{font-family:Manrope,sans-serif;font-size:16px;font-weight:700;line-height:1.38;margin-top:19px;max-width:540px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.action{color:#f5f5f4;border:1px solid #292c30;background:linear-gradient(145deg,#17191c,#111316);border-radius:19px;padding:18px 14px;text-align:left;font-size:15px;font-weight:750;box-shadow:0 10px 25px #0006;transition:.15s}
+.action:active{transform:scale(.98);border-color:#d2ad68}.action span{display:block;font-size:22px;margin-bottom:12px}
+.card{background:linear-gradient(145deg,#15171a,#111316);border:1px solid #292c30;border-radius:21px;padding:16px;margin-bottom:13px;box-shadow:0 10px 28px #0007}
+.stat{background:linear-gradient(145deg,#17191c,#111316);border:1px solid #292c30;border-radius:17px;padding:13px 11px}.stat b{display:block;font-family:Manrope,sans-serif;font-size:21px;margin-top:4px;letter-spacing:-.5px}.muted{color:var(--muted);font-size:12px}
+.section-title{font-family:Manrope,sans-serif;font-size:17px;font-weight:800;letter-spacing:-.25px;margin:5px 0 12px}
+label{display:block;font-size:11px;letter-spacing:.35px;font-weight:800;margin:0 0 6px;color:#aeb0b5}.field{margin-bottom:11px}
+input,select{width:100%;padding:13px 12px;border:1px solid #33363b;border-radius:13px;background:#0d0f11;color:#f5f5f3;font-size:16px;outline:none;box-shadow:inset 0 1px 3px #0008}
+input::placeholder{color:#6f7278}input:focus,select:focus{border-color:#b99759;box-shadow:0 0 0 3px #d2ad681b}
+button.primary{width:100%;border:0;border-radius:14px;background:linear-gradient(135deg,#e5232b,#bd151c);color:#fff;padding:14px;font-size:15px;font-weight:850;box-shadow:0 9px 20px #e5232b30}
+button.secondary{border:1px solid #383b40;border-radius:12px;background:#17191c;padding:10px 13px;font-weight:800;color:#f1f1ef}
+.result{border:1px solid #51462f;border-radius:20px;padding:16px;background:linear-gradient(145deg,#191a1b,#111316);box-shadow:0 12px 30px #0008}
+.result h3{margin:0 0 4px;font-family:Manrope,sans-serif;font-size:21px;letter-spacing:-.4px}.price{font-family:Manrope,sans-serif;font-size:27px;font-weight:850;margin:8px 0;color:#f5d898}
+.pills{display:flex;flex-wrap:wrap;gap:6px}.pill{background:#22252a;border:1px solid #303339;border-radius:99px;padding:6px 9px;font-size:11px;font-weight:800}.good{background:#16301f;color:#9fe0ad}.saving{font-weight:900;color:#f0d59f}
+.offer{padding:13px;border-radius:15px;background:#181a1d;margin-top:9px;border:1px solid #2c2f34}.offer b{display:block;margin-bottom:4px;color:#f4f4f1}
+.calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.month{font-family:Manrope,sans-serif;font-weight:850}.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.dow{font-size:9px;text-align:center;color:#777a80;padding:4px 0;font-weight:850}
+.day{min-height:42px;border:1px solid #292c30;background:#101214;color:#f1f1ef;border-radius:9px;padding:5px;font-size:12px;text-align:left}.day b{display:block}.day.has{border-color:#a78b54}.day.sel{background:#e5232b;color:#fff;border-color:#e5232b}.day small{font-size:9px;opacity:.75}
+.sale-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #292c30}.sale-row:last-child{border:0}
+.coach-answer{font-size:16px;line-height:1.45;font-weight:650}
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(12,13,15,.94);backdrop-filter:blur(20px);border-top:1px solid #292c30;display:grid;grid-template-columns:repeat(6,1fr);padding:7px 4px calc(7px + env(safe-area-inset-bottom));z-index:20;box-shadow:0 -10px 30px #0009}
+.nav button{border:0;background:none;font-size:10px;color:#73767c;font-weight:800;padding:5px 1px}.nav button span{display:block;font-size:18px;margin-bottom:2px}.nav button.on{color:#fff}.nav button.on span{filter:drop-shadow(0 2px 6px #e5232b88)}
+@media(max-width:380px){.grid3{grid-template-columns:1fr 1fr}.hero h1{font-size:27px}}
 </style>
 </head>
 <body>
 <div class="app">
-  <header class="top">
-    <div><div class="brand">HISENSE • SALES</div><div class="title" id="pageTitle">Today</div><div class="tiny" id="liveDateTime" style="margin-top:3px">Loading date…</div></div>
-    <button class="iconbtn" id="backupBtn" aria-label="Backup">↥</button>
-  </header>
+<header><div class="brandline"><div class="logoMark">H</div><div class="brand">HISENSE • SALES PRO</div></div><div class="title" id="pageTitle">Home</div></header>
 
-  <main>
-    <section id="commission" class="screen">
-      <div class="hero">
-        <div class="kicker">Total commission</div>
-        <div class="money" id="totalCommission">£0</div>
-        <div class="heroRow"><div><div class="next" id="nextPayday">Next payday</div><div class="sub" id="nextPaydaySub"></div></div><div class="pill" id="unitsPill">0 units</div></div>
-      </div>
-      <div class="grid2">
-        <div class="card"><div class="cardTitle">This payday</div><div class="big" id="paydayTotal">£0</div><div class="sub" id="paydayWeeks"></div></div>
-        <div class="card"><div class="cardTitle">This week</div><div class="big" id="weekTotal">£0</div><div class="sub" id="weekUnits">0 units</div></div>
-      </div>
-      <div class="card target">
-        <div class="row"><div><div class="cardTitle">Weekly target</div><div class="big" id="targetText">0 / 10</div></div><div class="pill" id="targetPct">0%</div></div>
-        <div class="bar"><div class="fill" id="targetFill"></div></div><div class="sub" id="targetHint"></div>
-      </div>
-      <div class="sectionHead"><h2>Highlights</h2></div>
-      <div class="grid2">
-        <div class="card"><div class="cardTitle">Top model</div><div class="big" id="topModel">—</div><div class="sub" id="topModelMeta"></div></div>
-        <div class="card"><div class="cardTitle">Best sale</div><div class="big" id="bestSale">£0</div><div class="sub" id="bestSaleMeta"></div></div>
-      </div>
-      <div class="card" style="margin-top:12px">
-        <div class="row"><div><div class="cardTitle">Projected commission</div><div class="big" id="projectedCommission">£0</div></div><div class="pill" id="projectionPill">On track</div></div>
-        <div class="sub" id="projectionText">Based on your current pace this week</div>
-      </div>
-      <div class="card" style="margin-top:12px;border-color:#275b60;background:linear-gradient(145deg,#10292e,#0d191e)">
-        <div class="row"><div><div class="kicker">Commission Coach</div><div class="big" style="font-size:22px">Your next move</div></div><div style="font-size:26px">🧠</div></div>
-        <div id="coachText" style="margin-top:10px;line-height:1.45"></div>
-        <div id="coachPace" class="sub" style="margin-top:9px"></div>
-        <div id="coachPayday" class="sub" style="margin-top:7px"></div>
-        <div id="coachOpportunity" class="sub" style="margin-top:10px"></div>
-      </div>
-      <div class="sectionHead"><h2>Commission by week</h2></div>
-      <div class="card"><div id="commissionChart"></div></div>
-      <button class="cta" id="homeAdd">＋ Add a sale</button>
-      <div class="sectionHead"><h2>Recent sales</h2><span class="link" data-go="sales">See all</span></div>
-      <div id="recent"></div>
-    </section>
-
-    <section id="home" class="screen active"><div class="hero"><div class="kicker">HISENSE • SALES ASSISTANT</div><div style="font-size:29px;font-weight:900;margin-top:7px">Sell with confidence.</div><div class="sub" style="margin-top:7px">Your shop-floor assistant for recommendations, offers, objections and product knowledge.</div></div><div class="sectionHead"><h2>What do you need?</h2></div><div class="grid2"><button class="card" data-go="hub" style="text-align:left"><b>📺 Sell a TV</b><div class="sub">Find the right model</div></button><button class="card" data-go="coach" style="text-align:left"><b>⚔️ Handle an objection</b><div class="sub">Quick responses</div></button><button class="card" data-go="offers" style="text-align:left"><b>🎁 Offers & bundles</b><div class="sub">Cashback • Xbox • finance</div></button><button class="card" data-go="hub" style="text-align:left"><b>🔎 Price Match</b><div class="sub">UK retailer check</div></button><button class="card" data-go="coach" style="text-align:left"><b>🎤 Demo Mode</b><div class="sub">Follow a winning demo</div></button><button class="card" data-go="coach" style="text-align:left"><b>✨ Why Hisense?</b><div class="sub">Customer talking points</div></button></div><div class="card" style="margin-top:12px"><div class="kicker">☀️ TODAY'S MINDSET</div><div style="font-weight:850;margin-top:7px">“Ask better questions. Demonstrate the difference. Make the value clear.”</div><div class="sub" style="margin-top:9px">Your working week: <b style="color:var(--text)">Thursday – Sunday</b></div></div><div class="card" style="margin-top:12px"><div class="row"><div><div class="cardTitle">Private area</div><div class="big" style="font-size:20px">My commission & stats</div></div><span class="pill">🔒 PRIVATE</span></div><button class="cta" data-go="commission">Open private area</button></div></section>
-
-<section id="sales" class="screen">
-      <div class="formCard">
-        <div class="kicker">Quick entry</div>
-        <h2 style="margin:5px 0 0">Add a sale</h2>
-        <label>Date</label><input type="date" id="saleDate"><div class="tiny" style="margin-top:6px">📅 Automatically set to today. The app uses your phone’s local date and time.</div>
-        <label>Model</label><div class="modelSuggest"><input id="model" autocomplete="off" placeholder="Search model or size…"><datalist id="modelList"></datalist><div id="modelSuggestions" class="modelSuggestList" style="display:none"></div></div>
-        <label>Quantity</label><div class="stepper"><button id="minus">−</button><div class="qty" id="qty">1</div><button id="plus">＋</button></div>
-        <div class="preview"><div class="kicker">Commission preview</div><div class="p" id="preview">£0</div><div class="sub" id="previewMeta">Select a model</div></div>
-        <button class="cta" id="saveSale">Save sale</button>
-      </div>
-      <div class="sectionHead"><h2>Sales history</h2><span class="link" id="clearAll">Clear</span></div>
-      <div id="history"></div>
-    </section>
-
-    <section id="paydays" class="screen">
-<div class="hero" style="margin-bottom:12px"><div class="kicker">PAYDAY TRACKER</div><div class="money" style="font-size:38px">£845</div><div class="sub">Current recorded commission • WK36–39 • pays 23 Oct 2026</div><div class="pill" style="display:inline-block;margin-top:12px">CURRENT PAY PERIOD</div></div>
-<div id="paydayList">
-<div class="sectionHead"><div><div class="eyebrow">PAY CALENDAR</div><h2>Commission paydays</h2><p class="sub">Your sales are grouped into the correct payday automatically.</p></div></div>
-<div class="card payday current" style="margin-bottom:10px"><div class="row"><div><div class="kicker">CURRENT PAY PERIOD</div><div class="paydayTotal">£845</div><div class="tiny">WK36–39 • 33 units • pays 23/10/2026</div></div><div class="pill">27 sales</div></div><div class="sub" style="margin-top:10px">Recorded sales currently falling into this payday: 3 Sep – 13 Sep 2026.</div></div>
-<div class="card payday" style="margin-bottom:10px"><div class="row"><div><div class="kicker">NEXT</div><div class="paydayTotal">£0</div><div class="tiny">WK40–44 • pays 25/11/2026</div></div><div class="pill">0 sales</div></div></div>
-<div class="card payday" style="margin-bottom:10px"><div class="row"><div><div class="kicker">UPCOMING</div><div class="paydayTotal">£0</div><div class="tiny">WK45–48 • payday TBC</div></div><div class="pill">0 sales</div></div></div>
-<div class="card payday" style="margin-bottom:10px"><div class="row"><div><div class="kicker">UPCOMING</div><div class="paydayTotal">£0</div><div class="tiny">WK49–52 • pays 25/01/2027</div></div><div class="pill">0 sales</div></div></div>
-<div class="sectionHead"><h2>Previous paydays</h2></div>
-<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK32–35</b><div class="tiny">Pays 25/09/2026</div></div><b>£0</b></div></div>
-<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK27–31</b><div class="tiny">Pays 25/08/2026</div></div><b>£0</b></div></div>
-<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK23–26</b><div class="tiny">Pays 24/07/2026</div></div><b>£0</b></div></div>
-<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK18–22</b><div class="tiny">Pays 25/06/2026</div></div><b>£0</b></div></div>
-<div class="card"><div class="row"><div><b>WK16–17</b><div class="tiny">Pays 25/05/2026</div></div><b>£0</b></div></div>
-</div></section>
-
-    <section id="stats" class="screen">
-<div class="hero"><div class="kicker">YOUR NUMBERS</div><div class="money" style="font-size:36px">Stats</div><div class="sub">Everything important, without the long scroll.</div></div>
-<div class="statGrid"><div class="stat"><small class="cardTitle">TVs</small><b id="tvUnits">0</b></div><div class="stat"><small class="cardTitle">Soundbars</small><b id="barUnits">0</b></div><div class="stat"><small class="cardTitle">Units</small><b id="allUnits">0</b></div><div class="stat"><small class="cardTitle">Avg commission</small><b id="avgCommission">£0</b></div></div>
-<div class="fold open"><button class="foldBtn" data-fold="performanceFold"><span>🎯 Targets & performance</span><span class="chev">⌄</span></button><div class="foldBody" id="performanceFold"><div class="card"><div class="row"><div><div class="cardTitle">Weekly unit target</div><div class="big" id="targetSettingValue">10</div></div><button class="pill" id="changeTarget">Change</button></div></div><div class="card"><div class="row"><div><div class="cardTitle">Payday commission target</div><div class="big" id="paydayTargetSetting">£0</div></div><button class="pill" id="changePaydayTarget">Change</button></div></div><div id="weeklyStats"></div><div id="achievements"></div></div></div>
-<div class="fold"><button class="foldBtn" data-fold="paydayFold"><span>📅 Paydays</span><span class="chev">⌄</span></button><div class="foldBody" id="paydayFold"><div class="card"><b>Current: WK36–39</b><div class="big">£845</div><div class="sub">Pays 23 October 2026</div></div><div id="paydayCompact"></div></div></div>
-<div class="fold"><button class="foldBtn" data-fold="recordsFold"><span>🏆 Personal records</span><span class="chev">⌄</span></button><div class="foldBody" id="recordsFold"><div id="recordSummary"></div></div></div>
-<div class="fold"><button class="foldBtn" data-fold="ratesFold"><span>💷 Commission rates</span><span class="chev">⌄</span></button><div class="foldBody" id="ratesFold"><input class="compactSearch" id="statsRateSearch" placeholder="Search model or range…"><div id="statsRateResults"></div></div></div>
-</section>
-<section id="records" class="screen">
-      <div class="hero">
-        <div class="kicker">Your records</div>
-        <div class="money" id="recordBest">£0</div>
-        <div class="sub">Best single sale</div>
-      </div>
-      <div class="sectionHead"><h2>Personal bests</h2></div>
-      <div class="statGrid">
-        <div class="stat"><small class="cardTitle">Best day</small><b id="recordDay">£0</b><div class="tiny" id="recordDayMeta"></div></div>
-        <div class="stat"><small class="cardTitle">Best week</small><b id="recordWeek">£0</b><div class="tiny" id="recordWeekMeta"></div></div>
-        <div class="stat"><small class="cardTitle">Best payday</small><b id="recordPayday">£0</b><div class="tiny" id="recordPaydayMeta"></div></div>
-        <div class="stat"><small class="cardTitle">Most units/day</small><b id="recordUnits">0</b><div class="tiny" id="recordUnitsMeta"></div></div>
-      </div>
-      <div class="sectionHead"><h2>Commission calendar</h2></div>
-      <div class="card"><div id="calendar"></div></div>
-    </section>
-
-    <section id="hub" class="screen">
-      <div class="hero">
-        <div class="kicker">Shop-floor toolkit</div>
-        <div class="money" style="font-size:36px">Find the right TV</div>
-        <div class="sub">Choose the customer's size, budget and what matters to them. Every TV below is from the Hisense ranges you sell in store.</div>
-      </div>
-
-      <div class="sectionHead"><h2>1. Screen size</h2></div>
-      <div class="chips" id="sizeChips"></div>
-
-      <div class="sectionHead"><h2>2. Customer budget</h2></div>
-      <div class="chips" id="budgetChips"></div>
-
-      <div class="sectionHead"><h2>3. What matters?</h2></div>
-      <div class="chips" id="needChips"></div>
-      <div class="chips" style="margin-top:10px">
-        <button class="chip" id="promoOnly">🎁 Cashback only</button>
-      </div>
-
-      <div class="card" style="margin-top:14px;border-color:#6d5930;background:linear-gradient(145deg,#292315,#171611)">
-        <div class="row"><div><div class="kicker" style="color:#ffd166">CURRENT PROMOTION</div><b style="font-size:17px">Hisense Cashback</b><div class="tiny" style="margin-top:4px">Cashback 9 Sep 2026 – 27 Oct 2026 • Trade-in 19 Aug 2026 – 29 Sep 2026 • use the exact qualifying model shown below</div></div><div style="font-size:27px">🎁</div></div>
-      </div>
-      <div class="sectionHead"><h2>Best matches</h2><span class="tiny" id="hubCount"></span></div>
-      <div id="hubResults"></div>
-
-      <div class="sectionHead"><h2>Quick sales tips</h2></div>
-      <div id="tips"></div>
-    </section>
-
-    <section id="offers" class="screen">
-<div class="hero"><div class="kicker">OFFERS & DEALS</div><div class="money" style="font-size:36px">Find the saving fast</div><div class="sub">Search a model or open the offer you need. No long scrolling.</div></div>
-<input class="compactSearch" id="offerSearch" placeholder="🔎 Search model… e.g. 65UR8" autocomplete="off">
-<div id="offerSearchResults"></div>
-<div class="fold open"><button class="foldBtn" data-fold="cashbackFold"><span>💰 Cashback <small class="sub">All qualifying models</small></span><span class="chev">⌄</span></button><div class="foldBody" id="cashbackFold"><input class="compactSearch" id="cashbackSearch" placeholder="Search cashback models…"><div id="offerList"></div></div></div>
-<div class="fold"><button class="foldBtn" data-fold="tradeFold"><span>♻️ Trade-in <small class="sub">7 current offers</small></span><span class="chev">⌄</span></button><div class="foldBody" id="tradeFold"><div id="tradeInList"></div></div></div>
-<div class="fold"><button class="foldBtn" data-fold="xboxFold"><span>🎮 Xbox bundle <small class="sub">Qualifying Mini LED TVs</small></span><span class="chev">⌄</span></button><div class="foldBody" id="xboxFold"><div class="card"><b>Free personalised Xbox controller + 1 month Game Pass</b><div class="sub" style="margin-top:6px">Qualifying Mini LED TVs with a U in the model, including UR8. Check exact model eligibility and promotion dates.</div></div></div></div>
-<div class="fold"><button class="foldBtn" data-fold="dealFold"><span>🧮 Deal calculator <small class="sub">Price • cashback • trade-in</small></span><span class="chev">⌄</span></button><div class="foldBody" id="dealFold"><div class="sub">Use the TV Finder model card for the quickest customer-price calculation.</div><button class="secondary" data-go="hub" style="margin-top:9px;width:100%">📺 Open TV Finder</button></div></div>
-<div class="fold"><button class="foldBtn" data-fold="financeFold"><span>💳 Finance <small class="sub">Quick reminder</small></span><span class="chev">⌄</span></button><div class="foldBody" id="financeFold"><div class="card"><b>24 months interest free where applicable</b><div class="sub" style="margin-top:6px">Subject to finance approval and current terms.</div></div></div></div>
-</section>
-<section id="price" class="screen"><div class="hero"><div class="kicker">LIVE UK PRICE CHECK</div><div class="money" style="font-size:36px">Price Match</div><div class="sub">Check the exact model across UK retailers before quoting a price. Live retailer data is opened from the comparison service so it can refresh when prices change.</div></div><label>Model</label><select id="pmModel"></select><div id="pmResult" class="card" style="margin-top:10px"></div><button class="cta" id="pmSearch">🔎 See live UK retailer prices</button><div class="card" style="margin-top:10px"><b>🏪 What you'll see</b><div class="sub" style="margin-top:7px">The live comparison can show Currys, AO, Argos, Marks Electrical, Very, Hughes, Peter Tyson, Appliance City and other UK retailers where that exact model is listed.</div></div><div class="card" style="margin-top:10px"><b>⚠️ Price-match check</b><div class="sub" style="margin-top:7px">Currys says the competitor must have the identical make, size, colour, specification and model number in stock and ready for delivery. Their price promise also has exclusions.</div></div></section><section id="objections" class="screen"><div class="hero"><div class="kicker">Sales Coach</div><div style="font-size:29px;font-weight:900">Objection Buster</div><div class="sub">Keep it positive, ask a question, then demonstrate.</div></div><div id="objectionList"></div><div id="objectionAnswer" class="card" style="margin-top:10px;display:none"></div></section><section id="demo" class="screen"><div class="hero"><div class="kicker">Demo Mode</div><div style="font-size:29px;font-weight:900">A simple winning demo</div><div class="sub">Open → Picture → Sport → Gaming → Sound → Close.</div></div><div id="demoSteps"></div></section><section id="hisense" class="screen"><div class="hero"><div class="kicker">Customer-friendly</div><div style="font-size:29px;font-weight:900">Why Hisense?</div><div class="sub">Compare exact models and focus on what matters to the customer.</div></div><div id="whyList"></div></section>
-
-
-<section id="coach" class="screen">
-  <div class="hero"><div class="kicker">SHOP-FLOOR SALES COACH</div><div class="money" style="font-size:34px">Sell smarter</div><div class="sub">Customer finder • deal calculator • upselling • objections • demos • pitches • commission goals</div></div>
-
-  <div class="sectionHead"><h2>🎯 Customer Needs Finder</h2></div>
-  <div class="card">
-    <label>Screen size</label><select id="cfSize"><option>Any</option><option>43</option><option>50</option><option>55</option><option>65</option><option>75</option><option>85</option><option>100</option></select>
-    <label style="margin-top:10px">Budget</label><select id="cfBudget"><option>Any</option><option>Under £500</option><option>£500–£1,000</option><option>£1,000–£1,500</option><option>£1,500–£2,000</option><option>£2,000+</option></select>
-    <label style="margin-top:10px">Main use</label><select id="cfNeed"><option>Any</option><option value="sport">Football / sport</option><option value="gaming">Gaming</option><option value="films">Films</option><option value="bright">Bright room</option><option value="everyday">Everyday TV</option></select>
-    <button class="cta" id="findCustomer">🎯 Find my best TV</button>
+<section class="screen active" id="home">
+  <div class="hero">
+    <h1>Welcome back 👋</h1>
+    <p id="todayText"></p>
+    <div class="quote">“Don’t sell the TV. Sell what the TV does for their life.”</div>
   </div>
-  <div id="customerMatches"></div>
-
-  <div class="sectionHead"><h2>💷 Deal Calculator</h2></div>
-  <div class="card">
-    <label>Choose TV</label><select id="dealModel"></select>
-    <div id="dealBreakdown" style="margin-top:12px"></div>
+  <div class="grid3" id="homeStats"></div>
+  <div class="section-title">Your shortcuts</div>
+  <div class="grid">
+    <button class="action" data-go="sales"><span>＋</span>Log a Sale</button>
+    <button class="action" data-go="hub"><span>📺</span>Find a TV</button>
+    <button class="action" data-go="offers"><span>🎁</span>Check Offers</button>
+    <button class="action" data-go="coach"><span>🧠</span>Sales Coach</button>
   </div>
-
-  <div class="sectionHead"><h2>⬆️ Upselling</h2></div>
-  <div class="card"><div class="sub">Start with the customer's chosen TV, then show one step up and explain exactly what the extra money buys.</div><div id="upsellResult" style="margin-top:10px"></div></div>
-
-  <div class="sectionHead"><h2>💰 Commission Opportunity</h2></div>
-  <div id="commissionOpportunity"></div>
-
-  <div class="sectionHead"><h2>🔥 Daily Sales Target</h2></div>
-  <div class="card" id="dailyTargetCard"></div>
-
-  <div class="sectionHead"><h2>🗣️ 10 / 30 / 60 Second Pitches</h2></div>
-  <div class="card"><label>Model</label><select id="pitchModel"></select><div class="chips" style="margin-top:10px"><button class="chip pitchBtn on" data-sec="10">10 sec</button><button class="chip pitchBtn" data-sec="30">30 sec</button><button class="chip pitchBtn" data-sec="60">60 sec</button></div><div id="pitchOutput" class="sub" style="margin-top:12px;color:var(--text)"></div></div>
 </section>
-<section id="rates" class="screen">
-      <input class="search" id="rateSearch" placeholder="🔎  Search models or categories…">
-      <div class="chips" id="chips"></div>
-      <div class="sectionHead"><h2>Commission rates</h2><span class="tiny" id="rateCount"></span></div>
-      <div id="rateList"></div>
-    </section>
-  </main>
 
-  <nav class="nav"><button class="on" data-screen="home"><span>⌂</span>Home</button><button data-screen="sales"><span>＋</span>Sell</button><button data-screen="hub"><span>📺</span>TV Finder</button><button data-screen="offers"><span>🎁</span>Offers</button><button data-screen="coach"><span>🧠</span>Sales Coach</button><button data-screen="stats"><span>★</span>Stats</button></nav>
+<section class="screen" id="sales">
+  <div class="card">
+    <div class="section-title">Log a sale</div>
+    <div class="field"><label>Date</label><input type="date" id="saleDate"></div>
+    <div class="field"><label>Model</label><input id="saleModel" list="modelList" placeholder="e.g. 65UR8STUK"><datalist id="modelList"></datalist></div>
+    <div class="field"><label>Quantity</label><select id="saleQty"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    <div class="rate-result" id="saleRate">Commission: —</div>
+    <button class="primary" id="addSale">Add Sale</button>
+  </div>
+  <div class="card">
+    <div class="calendar-head"><button class="secondary" id="prevMonth">‹</button><div class="month" id="calMonth"></div><button class="secondary" id="nextMonth">›</button></div>
+    <div class="cal" id="calendar"></div>
+    <div class="muted" style="margin-top:9px">Tap a day to see the sales logged on that date.</div>
+    <div id="daySales"></div>
+  </div>
+</section>
+
+<section class="screen" id="hub">
+  <div class="card">
+    <div class="section-title">Find the right TV</div>
+    <div class="field"><label>Search model (optional)</label><input id="tvSearch" placeholder="Search model or range"></div>
+    <div class="grid">
+      <div class="field"><label>Budget</label><select id="budget"><option value="">Any budget</option><option value="500">Up to £500</option><option value="750">Up to £750</option><option value="1000">Up to £1,000</option><option value="1500">Up to £1,500</option><option value="2000">Up to £2,000</option><option value="3000">Up to £3,000</option><option value="5000">Up to £5,000</option><option value="99999">Any</option></select></div>
+      <div class="field"><label>Screen size</label><select id="size"><option value="">Any size</option><option value="43">43"</option><option value="50">50"</option><option value="55">55"</option><option value="65">65"</option><option value="75">75"</option><option value="85">85"</option><option value="100">100"</option></select></div>
+    </div>
+    <div class="grid">
+      <div class="field"><label>Main need</label><select id="need"><option value="">Any</option><option value="gaming">Gaming</option><option value="sport">Sport</option><option value="picture">Picture quality</option><option value="brightness">Brightness</option><option value="value">Best value</option></select></div>
+      <div class="field"><label>Technology</label><select id="tech"><option value="">Any</option><option value="RGB">RGB</option><option value="Mini LED">Mini LED</option><option value="QLED">QLED</option></select></div>
+    </div>
+    <button class="primary" id="findTv">Find my TV</button>
+  </div>
+  <div id="tvResult"></div>
+</section>
+
+<section class="screen" id="offers">
+  <div class="card">
+    <div class="section-title">Current offers</div>
+    <div class="offer"><b>💷 Cashback</b><span class="muted">9 Sep 2026 – 27 Oct 2026. Search a model below for the exact cashback.</span></div>
+    <div class="offer"><b>🔄 Trade-in</b><span class="muted">19 Aug 2026 – 29 Sep 2026. Eligible TVs can receive up to £300 off.</span></div>
+    <div class="offer"><b>🎮 Xbox bundle</b><span class="muted">Selected Mini LED TVs include a free personalised Xbox controller + 1 month Game Pass.</span></div>
+  </div>
+  <div class="card">
+    <div class="section-title">Check a model's deal</div>
+    <div class="field"><label>Model</label><input id="offerModel" list="modelList" placeholder="e.g. 65UR8STUK"></div>
+    <div id="offerResult"></div>
+  </div>
+</section>
+
+<section class="screen" id="coach">
+  <div class="card">
+    <div class="section-title">Sales Coach</div>
+    <div class="field"><label>What do you need?</label><select id="coachTopic">
+      <option value="opening">Opening the conversation</option><option value="oled">Customer comparing OLED</option><option value="price">“It's too expensive”</option><option value="brightness">Why brightness matters</option><option value="gaming">Gaming pitch</option><option value="sport">Sport pitch</option><option value="upsell">Upsell to a better model</option><option value="hisense">Why Hisense?</option>
+    </select></div>
+    <div class="result coach-answer" id="coachAnswer"></div>
+  </div>
+</section>
+
+<section class="screen" id="stats">
+  <div class="grid3" id="statCards"></div>
+  <div class="card" style="margin-top:12px">
+    <div class="section-title">Payday</div><div id="payday"></div>
+  </div>
+  <div class="card">
+    <div class="section-title">Commission rate lookup</div>
+    <div class="field"><input id="rateSearch" list="modelList" placeholder="Type a model"></div>
+    <div id="rateAnswer" class="muted">Enter a model to see the current rate.</div>
+  </div>
+  <div class="card">
+    <div class="section-title">Backup</div>
+    <button class="secondary" id="backup">Download my sales backup</button>
+  </div>
+</section>
+
+<nav class="nav">
+<button class="on" data-screen="home"><span>⌂</span>Home</button>
+<button data-screen="sales"><span>＋</span>Sell</button>
+<button data-screen="hub"><span>📺</span>TV Finder</button>
+<button data-screen="offers"><span>🎁</span>Offers</button>
+<button data-screen="coach"><span>🧠</span>Sales Coach</button>
+<button data-screen="stats"><span>★</span>Stats</button>
+</nav>
 </div>
-<div class="toast" id="toast"></div>
 
 <script>
-const CURRENT_RATES = {
+const R={
 "100UR8STUK":150,"85UR8STUK":80,"75UR8STUK":60,"65UR8STUK":45,"55UR8STUK":35,
 "65UR9STUK":60,"75UR9STUK":80,"85UR9STUK":120,"116UXTUK":500,"110UXNTUK":200,"100UXTUK":175,
 "55U7STUK PRO":25,"65U7STUK PRO":30,"75U7STUK PRO":40,"85U7STUK PRO":50,"100U7STUK PRO":75,
 "50U7STUK":15,"55U7STUK":20,"65U7STUK":25,"75U7STUK":30,"85U7STUK":40,"100U7STUK":70,
-"55S7STUK":20,"65S7STUK":30,
-"85Q7STUK":25,"75Q7STUK":20,"65Q7STUK":15,"55Q7STUK":10,"50Q7STUK":5,"43Q7STUK":5,
+"55S7STUK":20,"65S7STUK":30,"85Q7STUK":25,"75Q7STUK":20,"65Q7STUK":15,"55Q7STUK":10,"50Q7STUK":5,"43Q7STUK":5,
 "100E7STUK PRO":40,"85E7STUK PRO":30,"75E7STUK PRO":25,"65E7STUK PRO":20,"55E7STUK PRO":15,"50E7STUK PRO":10,"43E7STUK PRO":10,
 "C2TUK":75,"M2TUK PRO":50,"PX3TUK":75,"PL2TUK":50,"C2TUK-ULTRA":100,
 "HS214":2,"HS2000":2,"HS2100":2,"HS3100":2,"AX3120Q":10,"AX5125H":5,"AX5100Q":5,"AX5140Q":15,"S5120GQ":10,"S5120Q":10,"HT SATURN":30,
 "43E7Q":5,"50E7Q":5,"55E7Q":5,"65E7Q":10,"75E7Q":10,"85E7Q":10,"43E7Q PRO":5,"50E7Q PRO":5,"55E7Q PRO":5,"65E7Q PRO":10,"75E7Q PRO":10,"85E7Q PRO":15,"100E7Q PRO":20,
-"50U7QTUK":5,"55U7QTUK":5,"65U7QTUK":10,"75U7QTUK":10,"85U7QTUK":10,"100U7QTUK":20,
-"55U7Q PRO":10,"65U7Q PRO":10,"75U7Q PRO":10,"85U7Q PRO":20,"100U7Q PRO":30,
+"50U7QTUK":5,"55U7QTUK":5,"65U7QTUK":10,"75U7QTUK":10,"85U7QTUK":10,"100U7QTUK":20,"55U7Q PRO":10,"65U7Q PRO":10,"75U7Q PRO":10,"85U7Q PRO":20,"100U7Q PRO":30,
 "55A85Q":10,"65A85Q":10,"55 Canvas":10,"65 Canvas":10,"55U8Q":10,"65U8Q":10,"75U8Q":10,"85U8Q":20,"100U8Q":30
 };
-const CATEGORY = {};
-["100UR8STUK","85UR8STUK","75UR8STUK","65UR8STUK","55UR8STUK","65UR9STUK","75UR9STUK","85UR9STUK","116UXTUK","110UXNTUK","100UXTUK"].forEach(x=>CATEGORY[x]="RGB / Super Screen");
-["55U7STUK PRO","65U7STUK PRO","75U7STUK PRO","85U7STUK PRO","100U7STUK PRO"].forEach(x=>CATEGORY[x]="Mini LED Pro");
-["50U7STUK","55U7STUK","65U7STUK","75U7STUK","85U7STUK","100U7STUK"].forEach(x=>CATEGORY[x]="Mini LED");
-["55S7STUK","65S7STUK"].forEach(x=>CATEGORY[x]="Canvas");
-["85Q7STUK","75Q7STUK","65Q7STUK","55Q7STUK","50Q7STUK","43Q7STUK"].forEach(x=>CATEGORY[x]="QLED");
-["100E7STUK PRO","85E7STUK PRO","75E7STUK PRO","65E7STUK PRO","55E7STUK PRO","50E7STUK PRO","43E7STUK PRO"].forEach(x=>CATEGORY[x]="QLED Pro");
-["C2TUK","M2TUK PRO","PX3TUK","PL2TUK","C2TUK-ULTRA"].forEach(x=>CATEGORY[x]="Laser");
-["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"].forEach(x=>CATEGORY[x]="Soundbars");
-Object.keys(CURRENT_RATES).forEach(x=>{if(!CATEGORY[x])CATEGORY[x]="2025 TVs";});
-
-const PAYDAYS=[
-["WK16–17","25/05/2026"],["WK18–22","25/06/2026"],["WK23–26","24/07/2026"],["WK27–31","25/08/2026"],
-["WK32–35","25/09/2026"],["WK36–39","23/10/2026"],["WK40–44","25/11/2026"],["WK45–48","TBC"],["WK49–52","25/01/2027"]
+const CB={"116UXQTUK":1000,"100UXQTUK":500,"85UR9STUK":300,"75UR9STUK":300,"65UR9STUK":200,"100UR8STUK":500,"85UR8STUK":300,"75UR8STUK":200,"65UR8STUK":200,"55UR8STUK":200,"100U7STUK":500,"85U7STUK":300,"75U7STUK":200,"65U7STUK":200,"55U7STUK":100,"50U7STUK":50,"85Q8STUK":300,"75Q8STUK":200,"65Q8STUK":200,"55Q8STUK":100,"50Q8STUK":50,"100E7STUK PRO":300,"85E7STUK PRO":300,"75E7STUK PRO":100,"65E7STUK PRO":100,"55E7STUK PRO":50,"50E7STUK PRO":50,"43E7STUK PRO":50,"85Q7STUK":100,"75Q7STUK":50,"65Q7STUK":50,"55Q7STUK":25,"50Q7STUK":25,"43Q7STUK":25,"L9QTUK PRO":200,"L9QTUK":200,"XR10TUK":200,"PX4TUK PRO":100,"P1TUK":50,"C3TUK ULTRA MAX":200,"C3TUK ULTRA":100,"C3TUK PRO":100};
+const TRADE=[
+{x:1999,off:300,code:"TRADERGB300",rgb:1},{x:1499,off:200,code:"TRADERGB200",rgb:1},{x:999,off:150,code:"TRADERGB150",rgb:1},
+{x:1999,off:250,code:"TRADETV250"},{x:1499,off:150,code:"TRADETV150"},{x:999,off:100,code:"TRADETV100"},{x:649,off:50,code:"TRADETV50"}];
+const TVs=[
+["43A6STUK",279,"QLED"],["50A6STUK",329,"QLED"],["55A6STUK",399,"QLED"],["65A6STUK",499,"QLED"],
+["43Q7STUK",349,"QLED"],["50Q7STUK",429,"QLED"],["55Q7STUK",499,"QLED"],["65Q7STUK",649,"QLED"],["75Q7STUK",899,"QLED"],["85Q7STUK",1299,"QLED"],
+["43E7STUK PRO",499,"QLED"],["50E7STUK PRO",599,"QLED"],["55E7STUK PRO",699,"QLED"],["65E7STUK PRO",899,"QLED"],["75E7STUK PRO",1299,"QLED"],["85E7STUK PRO",1599,"QLED"],["100E7STUK PRO",2499,"QLED"],
+["50U7STUK",699,"Mini LED"],["55U7STUK",999,"Mini LED"],["65U7STUK",1199,"Mini LED"],["75U7STUK",1499,"Mini LED"],["85U7STUK",1999,"Mini LED"],["100U7STUK",3499,"Mini LED"],
+["55U7STUK PRO",999,"Mini LED"],["65U7STUK PRO",1299,"Mini LED"],["75U7STUK PRO",1499,"Mini LED"],["85U7STUK PRO",1999,"Mini LED"],["100U7STUK PRO",null,"Mini LED"],
+["55U8QTUK",1199,"Mini LED"],["65U8QTUK",1299,"Mini LED"],["75U8QTUK",1999,"Mini LED"],["85U8QTUK",2799,"Mini LED"],["100U8QTUK",3495,"Mini LED"],
+["55UR8STUK",1299,"RGB"],["65UR8STUK",1699,"RGB"],["75UR8STUK",2299,"RGB"],["85UR8STUK",2999,"RGB"],["100UR8STUK",7999,"RGB"],
+["65UR9STUK",1999,"RGB"],["75UR9STUK",2799,"RGB"],["85UR9STUK",3499,"RGB"]];
+let sales=JSON.parse(localStorage.getItem("hisenseSalesV2")||"null")||[
+["2026-09-03","50E7Q",1,5],["2026-09-03","75UR8S",1,80],["2026-09-04","43A6Q",3,0],["2026-09-04","43E7Q",3,15],["2026-09-04","50U7S",2,40],["2026-09-04","55UR8S",1,50],["2026-09-04","65E7Q PRO",1,10],["2026-09-04","65UR9S",1,80],["2026-09-04","85E7Q PRO",2,40],["2026-09-05","100U7Q PRO",1,35],["2026-09-05","HT SATURN",1,40],["2026-09-06","43E7Q",1,5],["2026-09-06","50U7Q",1,5],["2026-09-06","55A6Q",1,0],["2026-09-06","55E7Q PRO",1,5],["2026-09-06","55UR8S",1,50],["2026-09-06","65E7Q PRO",1,10],["2026-09-06","65UR9S",1,80],
+["2026-09-11","65Q7STUK",1,15],["2026-09-12","100E7STUK PRO",1,60],["2026-09-12","HT SATURN",1,40],["2026-09-12","43E7Q",1,5],["2026-09-12","55UR8STUK",1,50],["2026-09-12","55UR8STUK",1,50],["2026-09-13","55UR8STUK",1,50],["2026-09-13","43E7Q",1,5],["2026-09-13","50U7STUK",1,20]
 ];
-const HIST=[
-["2026-09-03","50E7Q",1,5],["2026-09-03","75UR8S",1,80],["2026-09-04","43A6Q",3,0],["2026-09-04","43E7Q",3,15],
-["2026-09-04","50U7S",2,40],["2026-09-04","55UR8S",1,50],["2026-09-04","65E7Q PRO",1,10],["2026-09-04","65UR9S",1,80],
-["2026-09-04","85E7Q PRO",2,40],["2026-09-05","100U7Q PRO",1,35],["2026-09-05","HT SATURN",1,40],["2026-09-06","43E7Q",1,5],
-["2026-09-06","50U7Q",1,5],["2026-09-06","55A6Q",1,0],["2026-09-06","55E7Q PRO",1,5],["2026-09-06","55UR8S",1,50],
-["2026-09-06","65E7Q PRO",1,10],["2026-09-06","65UR9S",1,80],["2026-09-12","55UR8STUK",1,50],
-["2026-09-12","100E7STUK PRO",1,60],["2026-09-12","HT SATURN",1,40],["2026-09-12","43E7Q",1,5],
-["2026-09-13","55UR8STUK",1,50],["2026-09-11","65Q7STUK",1,15],["2026-09-13","43E7Q",1,5],["2026-09-13","50U7STUK",1,20],["2026-09-12","55UR8STUK",1,50]
-];
-
-let sales=loadSales(), qty=1, categoryFilter="All";
-function loadSales(){
-  try{
-    const raw=localStorage.getItem("hisenseCommissionSales");
-    if(raw){const a=JSON.parse(raw); if(Array.isArray(a)&&a.length)return a;}
-  }catch(e){}
-  const a=HIST.map(x=>({date:x[0],model:x[1],qty:x[2],total:x[3],rate:x[2]?x[3]/x[2]:0}));
-  localStorage.setItem("hisenseCommissionSales",JSON.stringify(a)); return a;
+function norm(s){return String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"")}
+function rate(model){
+ let n=norm(model),k=Object.keys(R).find(x=>norm(x)===n)||Object.keys(R).find(x=>norm(x).startsWith(n)||n.startsWith(norm(x)));
+ return k?R[k]:null
 }
-function save(){localStorage.setItem("hisenseCommissionSales",JSON.stringify(sales))}
-function money(n){return "£"+Number(n||0).toFixed(2).replace(".00","")}
-function localDateKey(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
-function localDateTime(d=new Date()){return d.toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"})}
-function fmtDate(s){return new Date(s+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"})}
-function key(s){return s.date+"|"+s.model+"|"+s.qty+"|"+s.total}
-function rateFor(model,date){
-  const entered=model.trim().toUpperCase();
-  const norm=v=>String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-  let hub=HUB_MODELS.find(x=>[x.m,x.base].filter(Boolean).some(v=>norm(v)===norm(entered)));
-  if(!hub){
-    const e=norm(entered);
-    hub=HUB_MODELS.find(x=>{const a=[x.m,x.base].filter(Boolean).map(norm);return a.some(v=>v===e || v.startsWith(e) || e.startsWith(v));});
-  }
-  const m=(hub?hub.base:entered).toUpperCase();
-  if(date>="2026-09-13" && CURRENT_RATES[m]!=null)return CURRENT_RATES[m];
-  const found=sales.find(s=>s.model.toUpperCase()===entered && s.date<"2026-09-13" && s.rate!=null);
-  return found?Number(found.rate):CURRENT_RATES[m]??null;
+function priceOf(model){let n=norm(model);let x=TVs.find(t=>norm(t[0])===n);return x?x[1]:null}
+function trade(model,price){
+ let rgb=/UR8|UR9|UXT|UXQ/i.test(model);
+ let list=TRADE.filter(x=>!!x.rgb===rgb).sort((a,b)=>b.x-a.x);
+ return list.find(x=>price>=x.x)||null
 }
-function weekNum(date){const d=new Date(date+"T12:00:00"), start=new Date("2026-08-31T12:00:00");return Math.floor((d-start)/604800000)+36}
-function total(){return sales.reduce((a,s)=>a+Number(s.total||0),0)}
-function units(){return sales.reduce((a,s)=>a+Number(s.qty||0),0)}
-function currentWeek(){return weekNum(localDateKey())}
-function paydayFor(date){
-  const w=weekNum(date);
-  return PAYDAYS.find(p=>{const r=p[0].replace("WK","").split("–").map(Number);return w>=r[0]&&w<=r[1]})||PAYDAYS[5];
+function deal(model,price){
+ let cb=CB[Object.keys(CB).find(x=>norm(x)===norm(model))]||0, t=trade(model,price);
+ return {cb,trade:t?t.off:0,code:t?t.code:"",effective:price!=null?Math.max(0,price-cb-(t?t.off:0)):null}
 }
-function go(screen){
-  document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===screen));
-  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.screen===screen));
-  const titles={home:"Today",sales:"Add a sale",stats:"My Stats",hub:"TV Finder",offers:"Offers",coach:"Sales Coach",commission:"My Commission"};
-  document.getElementById("pageTitle").textContent=titles[screen]||"Hisense Sales App";
-  if(screen==="home")renderHome();
-  if(screen==="commission")renderHome();
-  if(screen==="sales"){document.getElementById("saleDate").value=localDateKey();renderHistory();}
-  if(screen==="stats"){renderStats();renderPaydays();renderRecords();renderRates();}
-  if(screen==="hub"){renderHub();renderPrice();}
-  if(screen==="offers")renderOffers();
-  if(screen==="coach"){renderCoach();renderObjections();renderDemo();renderHisense();}
+function money(n){return n==null?"—":"£"+Number(n).toLocaleString("en-GB")}
+function today(){return new Date().toISOString().slice(0,10)}
+function totalComm(){return sales.reduce((a,s)=>a+Number(s[3]||0),0)}
+function totalUnits(){return sales.reduce((a,s)=>a+Number(s[2]||0),0)}
+function save(){localStorage.setItem("hisenseSalesV2",JSON.stringify(sales))}
+function go(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.screen===id));
+ const names={home:"Home",sales:"Sell",hub:"TV Finder",offers:"Offers",coach:"Sales Coach",stats:"Stats"};
+ document.getElementById("pageTitle").textContent=names[id];
+ if(id==="home")renderHome(); if(id==="sales")renderCalendar(); if(id==="stats")renderStats();
 }
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
 function renderHome(){
-  const allTotal=total(), allUnits=units();
-  document.getElementById("totalCommission").textContent=money(allTotal);
-  document.getElementById("unitsPill").textContent=allUnits+" units";
-  const latest=localDateKey(), p=paydayFor(latest);
-  const paydaySales=sales.filter(s=>paydayFor(s.date)[1]===p[1]);
-  document.getElementById("paydayTotal").textContent=money(paydaySales.reduce((a,s)=>a+s.total,0));
-  document.getElementById("paydayWeeks").textContent=p[0]+" • pays "+p[1];
-  const wk=weekNum(latest), ws=sales.filter(s=>weekNum(s.date)===wk);
-  const weekUnits=ws.reduce((a,s)=>a+s.qty,0), weekMoney=ws.reduce((a,s)=>a+s.total,0);
-  document.getElementById("weekTotal").textContent=money(weekMoney);
-  document.getElementById("weekUnits").textContent=weekUnits+" units • WK"+wk;
-  document.getElementById("nextPayday").textContent="Next payday "+p[1];
-  const payDate=(p[1]&&p[1]!=="TBC")?new Date(p[1].split("/").reverse().join("-")+"T12:00:00"):null;
-  const daysToPay=payDate?Math.max(0,Math.ceil((payDate-new Date())/86400000)):null;
-  document.getElementById("nextPaydaySub").textContent=payDate
-    ?"Current commission period "+p[0]+" • "+(daysToPay===0?"payday is today":"in "+daysToPay+" day"+(daysToPay===1?"":"s"))
-    :"Current commission period "+p[0];
-
-  const target=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
-  const pct=Math.min(100,Math.round(weekUnits/target*100));
-  document.getElementById("targetText").textContent=weekUnits+" / "+target;
-  document.getElementById("targetPct").textContent=pct+"%";
-  document.getElementById("targetFill").style.width=pct+"%";
-  document.getElementById("targetHint").textContent=pct>=100?"Target smashed! 🎉":(target-weekUnits)+" more unit"+(target-weekUnits===1?"":"s")+" to hit target";
-
-  const counts={}; sales.forEach(s=>counts[s.model]=(counts[s.model]||0)+s.qty);
-  const tm=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
-  document.getElementById("topModel").textContent=tm?tm[0]:"—";
-  document.getElementById("topModelMeta").textContent=tm?tm[1]+" units sold":"No sales yet";
-
-  const best=[...sales].sort((a,b)=>b.total-a.total)[0];
-  document.getElementById("bestSale").textContent=best?money(best.total):"£0";
-  document.getElementById("bestSaleMeta").textContent=best?best.model:"No sales yet";
-
-  // Project the current week's commission to the end of the week.
-  const today=new Date();
-  const day=today.getDay()===0?7:today.getDay();
-  const daysElapsed=Math.max(1,day);
-  const daysLeft=7-daysElapsed;
-  const projection=weekMoney/daysElapsed*7;
-  document.getElementById("projectedCommission").textContent=money(projection);
-  const projectionPill=document.getElementById("projectionPill");
-  projectionPill.textContent=daysLeft===0?"Week complete":"On track";
-  document.getElementById("projectionText").textContent=daysLeft===0
-    ?"Final figure for the current week"
-    :"Based on your current pace • "+daysLeft+" day"+(daysLeft===1?"":"s")+" left";
-
-  // Commission Coach
-  const todayKey=new Date().toISOString().slice(0,10);
-  const todaySales=sales.filter(s=>s.date===todayKey);
-  const todayMoney=todaySales.reduce((a,s)=>a+Number(s.total||0),0);
-  const remaining=Math.max(0,target-weekUnits);
-  let coach="";
-  if(remaining===0) coach="🎉 You've hit your weekly unit target. Now chase commission — focus on the higher-paying models.";
-  else if(weekUnits===0) coach="Start with one sale today. Your target is "+target+" units this week.";
-  else coach="You've sold "+weekUnits+" unit"+(weekUnits===1?"":"s")+" so far. You need "+remaining+" more to hit your target.";
-  document.getElementById("coachText").textContent=(todaySales.length
-    ? "Today: "+money(todayMoney)+" from "+todaySales.reduce((a,s)=>a+s.qty,0)+" unit"+(todaySales.reduce((a,s)=>a+s.qty,0)===1?"":"s")+". "
-    : "Today: no sales recorded yet. ") + coach;
-
-  // Compare this week's pace with the user's previous completed weeks.
-  const completedWeeks={};
-  sales.forEach(s=>{
-    const w=weekNum(s.date);
-    if(w!==wk) completedWeeks[w]=(completedWeeks[w]||0)+Number(s.total||0);
-  });
-  const past=Object.values(completedWeeks);
-  const avgPast=past.length?past.reduce((a,b)=>a+b,0)/past.length:0;
-  const paceText=document.getElementById("coachPace");
-  if(avgPast>0){
-    const diff=weekMoney-avgPast;
-    paceText.textContent=(diff>=0?"📈 ":"📉 ")+money(Math.abs(diff))+" "+(diff>=0?"ahead of":"behind")+" your average completed week ("+money(avgPast)+").";
-  }else{
-    paceText.textContent="📊 Keep adding sales to build your personal pace history.";
-  }
-
-  // Work out how much is needed per remaining day to hit a user-set payday target.
-  const paydayTarget=Number(localStorage.getItem("hisensePaydayTarget")||0);
-  const paydayEarned=paydaySales.reduce((a,s)=>a+Number(s.total||0),0);
-  const paydayText=document.getElementById("coachPayday");
-  if(paydayTarget>0){
-    const need=Math.max(0,paydayTarget-paydayEarned);
-    const pdDate=(p[1]&&p[1]!=="TBC")?new Date(p[1].split("/").reverse().join("-")+"T12:00:00"):null;
-    const remainingDays=pdDate?Math.max(1,Math.ceil((pdDate-new Date())/86400000)):1;
-    paydayText.textContent=need===0?"💷 Payday target reached!": "💷 "+money(need)+" needed to hit your £"+paydayTarget+" payday target • about "+money(need/remainingDays)+" per day.";
-  }else{
-    paydayText.textContent="💷 Set a payday commission target in Stats to get a daily target.";
-  }
-
-  const opportunities=Object.entries(CURRENT_RATES).sort((a,b)=>b[1]-a[1]).slice(0,3);
-  const op=opportunities[0];
-  document.getElementById("coachOpportunity").textContent=op?"💡 Highest current commission: "+op[0]+" • "+money(op[1])+" per unit":"";
-
-  const targetSetting=document.getElementById("targetSettingValue");
-  if(targetSetting) targetSetting.textContent=target;
-
-  // Elegant weekly commission bars.
-  const weeks={}; sales.forEach(s=>{const w=weekNum(s.date);weeks[w]=(weeks[w]||0)+Number(s.total||0)});
-  const entries=Object.entries(weeks).sort((a,b)=>Number(a[0])-Number(b[0])).slice(-6);
-  const max=Math.max(1,...entries.map(x=>x[1]));
-  document.getElementById("commissionChart").innerHTML=entries.length?entries.map(([w,v])=>{
-    const width=Math.max(4,Math.round(v/max*100));
-    return `<div style="display:grid;grid-template-columns:45px 1fr 58px;gap:8px;align-items:center;margin:10px 0">
-      <small style="color:var(--muted);font-weight:700">WK${w}</small>
-      <div class="bar" style="margin:0"><div class="fill" style="width:${width}%"></div></div>
-      <small style="text-align:right;font-weight:800">${money(v)}</small>
-    </div>`;
-  }).join(""):'<div class="tiny">Your weekly commission will appear here.</div>';
-
-  document.getElementById("recent").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(saleHTML).join("")||'<div class="empty">No sales yet</div>';
+ document.getElementById("todayText").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})+" • Your sales control centre";
+ document.getElementById("homeStats").innerHTML=`<div class="stat"><span class="muted">Commission</span><b>${money(totalComm())}</b></div><div class="stat"><span class="muted">Units</span><b>${totalUnits()}</b></div><div class="stat"><span class="muted">Sales</span><b>${sales.length}</b></div>`;
 }
-function renderHistory(){
- document.getElementById("history").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).map((s,i)=>`<div class="sale"><div><div class="saleModel">${escapeHtml(s.model)}</div><div class="saleMeta">${fmtDate(s.date)} • ×${s.qty}${s.loggedAt?" • logged "+new Date(s.loggedAt).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):""}</div></div><div style="text-align:right"><div class="saleMoney">${money(s.total)}</div><button class="tiny danger del" data-i="${sales.indexOf(s)}">Delete</button></div></div>`).join("")||'<div class="empty">No sales yet</div>';
+function fillModels(){
+ let vals=[...new Set([...Object.keys(R),...TVs.map(x=>x[0])])].sort();
+ document.getElementById("modelList").innerHTML=vals.map(x=>`<option value="${x}">`).join("");
 }
-function renderPaydays(){
- const el=document.getElementById("paydayList");
- if(!el)return;
- const now=new Date();
- const today=localDateKey(now);
- const w=weekNum(today);
- const current=PAYDAYS.findIndex(p=>{const m=p[0].match(/(\d+)[–-](\d+)/);return m && w>=Number(m[1]) && w<=Number(m[2]);});
- el.innerHTML=`<div class="sectionHead"><div><div class="kicker">PAY CALENDAR</div><h2>Commission paydays</h2><p class="sub">Sales are grouped into the correct payday automatically.</p></div></div>` + PAYDAYS.map((p,i)=>{
-   const rows=sales.filter(x=>paydayFor(x.date)[1]===p[1]).sort((a,b)=>b.date.localeCompare(a.date));
-   const sum=rows.reduce((a,x)=>a+Number(x.total||0),0);
-   const u=rows.reduce((a,x)=>a+Number(x.qty||0),0);
-   const isCurrent=i===current;
-   return `<details class="card payday ${isCurrent?"current":""}" ${isCurrent?"open":""} style="margin-bottom:10px">
-    <summary style="list-style:none;cursor:pointer"><div class="row"><div><div class="kicker">${isCurrent?"CURRENT PAY PERIOD • ":""}${escapeHtml(p[0])}</div><div class="paydayTotal">${money(sum)}</div><div class="tiny">${u} units • pays ${escapeHtml(p[1])}</div></div><div class="pill">${rows.length} sale${rows.length===1?"":"s"}</div></div></summary>
-    <div style="margin-top:12px">${rows.length?rows.map(saleHTML).join(""):"<div class=\"empty\">No sales recorded for this payday yet.</div>"}</div>
-   </details>`;
- }).join("");
+function renderCalendar(){
+ let d=document.getElementById("saleDate"); if(!d.value)d.value=today();
+ let cur=window.calDate||new Date(d.value+"T12:00:00"); window.calDate=cur;
+ document.getElementById("calMonth").textContent=cur.toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+ let y=cur.getFullYear(),m=cur.getMonth(),first=new Date(y,m,1),start=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate();
+ let h=["Mo","Tu","We","Th","Fr","Sa","Su"].map(x=>`<div class="dow">${x}</div>`).join("");
+ for(let i=0;i<start;i++)h+="<div></div>";
+ for(let day=1;day<=days;day++){let key=`${y}-${String(m+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`,ss=sales.filter(s=>s[0]===key),c=ss.reduce((a,s)=>a+Number(s[3]||0),0);h+=`<button class="day ${ss.length?"has":""}" data-day="${key}"><b>${day}</b>${ss.length?`<small>${money(c)}</small>`:""}</button>`}
+ document.getElementById("calendar").innerHTML=h;
+ document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>showDay(b.dataset.day));
 }
-
-function renderStats(){
- const targetSetting=document.getElementById("targetSettingValue");
- if(targetSetting) targetSetting.textContent=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
- const paydayTargetSetting=document.getElementById("paydayTargetSetting");
- if(paydayTargetSetting) paydayTargetSetting.textContent=money(Number(localStorage.getItem("hisensePaydayTarget")||0));
- const tv=sales.filter(s=>(CATEGORY[s.model]||"").toLowerCase()!=="soundbars").reduce((a,s)=>a+s.qty,0);
- const sb=sales.filter(s=>CATEGORY[s.model]==="Soundbars").reduce((a,s)=>a+s.qty,0);
- document.getElementById("tvUnits").textContent=tv;document.getElementById("barUnits").textContent=sb;document.getElementById("allUnits").textContent=units();document.getElementById("avgCommission").textContent=money(sales.length?total()/sales.length:0);
- const weeks={};sales.forEach(s=>{const w=weekNum(s.date);weeks[w]=(weeks[w]||0)+s.qty});
- document.getElementById("weeklyStats").innerHTML=Object.entries(weeks).sort((a,b)=>a[0]-b[0]).map(([w,u])=>`<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK${w}</b><div class="tiny">${u} units</div></div><div style="width:55%"><div class="bar"><div class="fill" style="width:${Math.min(100,u/Number(localStorage.getItem("hisenseWeeklyTarget")||10)*100)}%"></div></div></div></div></div>`).join("")||'<div class="empty">No weekly data yet</div>';
- const t=Number(localStorage.getItem("hisenseWeeklyTarget")||10), bestWeek=Math.max(0,...Object.values(weeks));
- const ach=[["🏁","10-unit week",bestWeek>=10],["💷","£100 commission",total()>=100],["💎","£250 commission",total()>=250],["👑","£500 commission",total()>=500],["📺","25 TVs sold",tv>=25]];
- document.getElementById("achievements").innerHTML=ach.map(a=>`<div class="achievement" style="opacity:${a[2]?1:.45}"><div class="badge">${a[0]}</div><div><b>${a[1]}</b><div class="tiny">${a[2]?"Unlocked":"Keep selling to unlock"}</div></div></div>`).join("");
+function showDay(key){
+ let ss=sales.filter(s=>s[0]===key);document.getElementById("daySales").innerHTML=`<div class="section-title" style="margin-top:12px">${new Date(key+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</div>`+(ss.length?ss.map(s=>`<div class="sale-row"><span>${s[1]} ×${s[2]}</span><b>${money(s[3])}</b></div>`).join(""):`<div class="muted">No sales logged.</div>`);
 }
-let calendarCursor = new Date();
-
-function renderRecords(){
-  if(!document.getElementById("recordBest")) return;
-  const best=[...sales].sort((a,b)=>Number(b.total)-Number(a.total))[0];
-  document.getElementById("recordBest").textContent=best?money(best.total):"£0";
-
-  const days={},weeks={};
-  sales.forEach(s=>{days[s.date]=(days[s.date]||0)+Number(s.total||0);const w=weekNum(s.date);weeks[w]=(weeks[w]||0)+Number(s.total||0)});
-  const bd=Object.entries(days).sort((a,b)=>b[1]-a[1])[0],bw=Object.entries(weeks).sort((a,b)=>b[1]-a[1])[0];
-  document.getElementById("recordDay").textContent=bd?money(bd[1]):"£0";
-  document.getElementById("recordDayMeta").textContent=bd?fmtDate(bd[0]):"";
-  document.getElementById("recordWeek").textContent=bw?money(bw[1]):"£0";
-  document.getElementById("recordWeekMeta").textContent=bw?"WK"+bw[0]:"";
-
-  const pays={};sales.forEach(s=>{const p=paydayFor(s.date);pays[p[1]]=(pays[p[1]]||0)+Number(s.total||0)});
-  const bp=Object.entries(pays).sort((a,b)=>b[1]-a[1])[0];
-  document.getElementById("recordPayday").textContent=bp?money(bp[1]):"£0";
-  document.getElementById("recordPaydayMeta").textContent=bp?"Pays "+bp[0]:"";
-
-  const unitsByDay={};sales.forEach(s=>unitsByDay[s.date]=(unitsByDay[s.date]||0)+Number(s.qty||0));
-  const bu=Object.entries(unitsByDay).sort((a,b)=>b[1]-a[1])[0];
-  document.getElementById("recordUnits").textContent=bu?bu[1]:0;
-  document.getElementById("recordUnitsMeta").textContent=bu?fmtDate(bu[0]):"";
-
-  const y=calendarCursor.getFullYear(),m=calendarCursor.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0);
-  const monthKey=`${y}-${String(m+1).padStart(2,"0")}`,dayTotals={};
-  sales.forEach(s=>{if(s.date.startsWith(monthKey))dayTotals[s.date]=(dayTotals[s.date]||0)+Number(s.total||0)});
-  const monthLabel=calendarCursor.toLocaleDateString("en-GB",{month:"long",year:"numeric"}),todayKey=localDateKey();
-  const selectedKey=calendarCursor._selectedDate||(dayTotals[todayKey]&&todayKey.startsWith(monthKey)?todayKey:null);
-
-  let cal=`<div class="calendarWrap"><div class="calendarTop"><button class="calendarNav" id="calendarPrev" aria-label="Previous month">‹</button><div class="calendarMonth">${monthLabel}</div><button class="calendarNav" id="calendarNext" aria-label="Next month">›</button></div><div class="calendarWeek">${["M","T","W","T","F","S","S"].map(d=>`<div class="tiny" style="font-weight:900">${d}</div>`).join("")}</div><div class="calendarGrid">`;
-  const offset=(first.getDay()+6)%7;
-  for(let i=0;i<offset;i++)cal+="<div></div>";
-  for(let d=1;d<=last.getDate();d++){
-    const keyDate=`${monthKey}-${String(d).padStart(2,"0")}`,val=dayTotals[keyDate]||0;
-    cal+=`<button class="calendarDay ${val?"hasSales":""} ${keyDate===selectedKey?"selected":""} ${keyDate===todayKey?"today":""}" data-calendar-date="${keyDate}"><div class="calendarDayNum">${d}</div><div class="calendarDayMoney">${val?money(val):"—"}</div></button>`;
-  }
-  cal+=`</div><div id="calendarSelected" class="calendarSelected"></div></div>`;
-  document.getElementById("calendar").innerHTML=cal;
-
-  const renderSelected=(date)=>{
-    const box=document.getElementById("calendarSelected");if(!box)return;
-    const rows=sales.filter(s=>s.date===date).sort((a,b)=>(b.loggedAt||"").localeCompare(a.loggedAt||""));
-    if(!date){box.innerHTML='<div class="tiny">Tap a date to see the sales logged that day.</div>';return}
-    const label=new Date(date+"T12:00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
-    const totalDay=rows.reduce((a,s)=>a+Number(s.total||0),0),unitDay=rows.reduce((a,s)=>a+Number(s.qty||0),0);
-    box.innerHTML=`<div class="row" style="margin-bottom:8px"><div><b>${label}</b><div class="tiny">${rows.length} sale${rows.length===1?"":"s"} • ${unitDay} unit${unitDay===1?"":"s"}</div></div><b>${money(totalDay)}</b></div>${rows.length?rows.map(s=>`<div class="calendarSale"><div><div class="calendarSaleModel">${escapeHtml(s.model)}</div><div class="calendarSaleMeta">×${s.qty}${s.loggedAt?" • "+new Date(s.loggedAt).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):""}</div></div><div class="calendarSaleMoney">${money(s.total)}</div></div>`).join(""):'<div class="tiny">No sales recorded on this date.</div>'}`;
-  };
-
-  document.querySelectorAll("[data-calendar-date]").forEach(btn=>btn.addEventListener("click",()=>{calendarCursor._selectedDate=btn.dataset.calendarDate;renderRecords()}));
-  document.getElementById("calendarPrev")?.addEventListener("click",()=>{calendarCursor=new Date(y,m-1,1);calendarCursor._selectedDate=null;renderRecords()});
-  document.getElementById("calendarNext")?.addEventListener("click",()=>{calendarCursor=new Date(y,m+1,1);calendarCursor._selectedDate=null;renderRecords()});
-  renderSelected(selectedKey);
-}
-
-const HUB_PRICE_CHECKED = "14 Sep 2026"; const HUB_MODELS=[
- // A6S — entry LED
- {m:"43A6STUK",base:"43A6STUK",size:43,price:279,type:"A6S • LED",refresh:"60 Hz",features:["AI 4K Upscaler","Dolby Vision / HDR10 / HLG","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"The simple-value option: 4K HDR, Dolby Vision and Freely without paying for premium panel technology.",demo:"Show a normal TV scene and then HDR content. Point out Dolby Vision and the AI upscaling rather than overwhelming them with specs.",url:"https://www.currys.co.uk/products/hisense-a6s-43-led-4k-hdr-smart-tv-with-freely-43a6stuk-10300737.html"},
- {m:"50A6STUK",base:"50A6STUK",size:50,price:329,type:"A6S • LED",refresh:"60 Hz",features:["AI 4K Upscaler","Dolby Vision / HDR10 / HLG","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"A strong budget 50-inch choice for customers who mainly want a straightforward 4K smart TV with HDR.",demo:"Show a familiar TV programme, then an HDR film scene and explain how Dolby Vision adds more depth.",url:"https://www.currys.co.uk/products/hisense-a6s-50-led-4k-hdr-smart-tv-with-freely-50a6stuk-10300898.html"},
- {m:"55A6STUK",base:"55A6STUK",size:55,price:399,type:"A6S • LED",refresh:"60 Hz",features:["AI 4K Upscaler","Dolby Vision / HDR10 / HLG","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"The affordable 55-inch route: big screen, 4K HDR and Freely without stepping into Mini LED pricing.",demo:"Use a colorful film scene and point out the 55-inch size, HDR and easy smart-TV features.",url:"https://www.currys.co.uk/products/hisense-a6s-55-led-4k-hdr-smart-tv-with-freely-55a6stuk-10300740.html"},
- {m:"65A6STUK",base:"65A6STUK",size:65,price:499,type:"A6S • LED",refresh:"60 Hz",features:["AI 4K Upscaler","Dolby Vision / HDR10 / HLG","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"For customers who want a large 65-inch screen for everyday viewing but don't need Mini LED or high-refresh gaming.",demo:"Show a normal broadcast and then HDR content. Sell the size and simplicity first.",url:"https://www.currys.co.uk/products/hisense-a6s-65-led-4k-hdr-smart-tv-with-freely-65a6stuk-10300904.html"},
-
- // Q7S — QLED
- {m:"43Q7STUK",base:"43Q7STUK",size:43,price:349,type:"Q7S • QLED",refresh:"60 Hz",features:["Quantum Dot / Hi-QLED","4K AI Upscaler","Dolby Vision","Dolby Atmos","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"A compact QLED option with richer colour than basic LED — ideal when the customer wants a premium-looking picture without a big screen.",demo:"Use colorful HDR footage and ask the customer to look at skin tones and bright colours.",url:"https://www.currys.co.uk/products/hisense-q7s-43-qled-4k-smart-ai-tv-with-freely-43q7stuk-10300955.html"},
- {m:"50Q7STUK",base:"50Q7STUK",size:50,price:429,type:"Q7S • QLED",refresh:"60 Hz",features:["Quantum Dot / Hi-QLED","4K AI Upscaler","Dolby Vision","Dolby Atmos","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"A step up from A6S for customers who want more vivid Quantum Dot colour while keeping the price sensible.",demo:"Show a colorful film scene and explain that Quantum Dot expands the range of visible colours.",url:"https://www.currys.co.uk/products/hisense-q7s-50-qled-4k-smart-ai-tv-with-freely-50q7stuk-10301002.html"},
- {m:"55Q7STUK",base:"55Q7STUK",size:55,price:499,type:"Q7S • QLED",refresh:"60 Hz",features:["Quantum Dot / Hi-QLED","4K AI Upscaler","Dolby Vision","Dolby Atmos","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"The popular 55-inch QLED choice: richer colour and a more premium picture without jumping to Mini LED.",demo:"Use colorful HDR content and then a normal TV channel to show how AI upscaling helps everyday viewing.",url:"https://www.currys.co.uk/products/hisense-q7s-55-qled-4k-smart-ai-tv-with-freely-55q7stuk-10301042.html"},
- {m:"65Q7STUK",base:"65Q7STUK",size:65,price:649,type:"Q7S • QLED",refresh:"60 Hz",features:["Quantum Dot / Hi-QLED","4K AI Upscaler","Dolby Vision","Dolby Atmos","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"A big 65-inch QLED for customers who want strong colour and a large screen without needing Mini LED.",demo:"Show football or a colorful movie. Focus on colour, size and value.",url:"https://www.currys.co.uk/products/hisense-q7s-65-qled-4k-smart-ai-tv-with-freely-65q7stuk-10301036.html"},
- {m:"75Q7STUK",base:"75Q7STUK",size:75,price:899,type:"Q7S • QLED",refresh:"60 Hz",features:["Quantum Dot / Hi-QLED","4K AI Upscaler","Dolby Vision","Dolby Atmos","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"A big-screen QLED value option when the customer wants 75 inches without moving into Mini LED money.",demo:"Stand the customer back and let the screen size sell it, then show a colorful HDR scene.",url:"https://www.currys.co.uk/products/hisense-q7s-75-qled-4k-smart-ai-tv-with-freely-75q7stuk-10301025.html"},
- {m:"85Q7STUK",base:"85Q7STUK",size:85,price:1299,type:"Q7S • QLED",refresh:"60 Hz",features:["Quantum Dot / Hi-QLED","4K AI Upscaler","Dolby Vision","Dolby Atmos","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["everyday","films"],pitch:"Huge 85-inch QLED value for customers who want maximum screen size without paying premium Mini LED prices.",demo:"Use a full-screen sports or movie clip and let the scale make the impact.",url:"https://www.currys.co.uk/products/hisense-q7s-85-qled-4k-smart-ai-tv-with-freely-85q7stuk-10301039.html"},
-
- // E7S PRO — Hi-QLED / gaming step-up
- {m:"43E7STUK PRO",base:"43E7STUK PRO",size:43,price:499,type:"E7S PRO • Hi-QLED",refresh:"120 Hz (up to 144 Hz)",features:["Quantum Dot / Hi-QLED","120 Hz, up to 144 Hz","Dolby Atmos","HDMI 2.1 x 3","Freely","2 year guarantee"],needs:["gaming","films","everyday"],pitch:"The small-screen performance option: QLED colour with a much faster panel for gaming and sport.",demo:"Show fast gameplay and point out the 120/144 Hz capability and HDMI 2.1.",url:"https://www.currys.co.uk/products/hisense-e7s-pro-43-qled-4k-hdr-smart-tv-with-freely--43e7stuk-pro-10301005.html"},
- {m:"50E7STUK PRO",base:"50E7STUK PRO",size:50,price:599,type:"E7S PRO • Hi-QLED",refresh:"120 Hz (up to 144 Hz)",features:["Quantum Dot / Hi-QLED","120 Hz, up to 144 Hz","Dolby Atmos","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","films","everyday"],pitch:"A compact performance TV with QLED colour, higher refresh and HDMI 2.1 for serious console gaming.",demo:"Show a game with fast movement and explain the difference between 60 Hz and the faster panel.",url:"https://www.currys.co.uk/products/hisense-e7s-pro-50-qled-4k-hdr-smart-tv-with-freely-50e7stuk-pro-10300870.html"},
- {m:"55E7STUK PRO",base:"55E7STUK PRO",size:55,price:699,type:"E7S PRO • Hi-QLED",refresh:"120 Hz (up to 144 Hz)",features:["Quantum Dot / Hi-QLED","120 Hz, up to 144 Hz","Dolby Atmos","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","films","sport","everyday"],pitch:"A strong all-round 55-inch step-up with QLED colour and a much faster gaming specification.",demo:"Start with sport or gaming, then show a movie scene to demonstrate versatility.",url:"https://www.currys.co.uk/products/hisense-e7s-pro-55-qled-4k-hdr-smart-tv-with-freely-55e7stuk-pro-10300869.html"},
- {m:"65E7STUK PRO",base:"65E7STUK PRO",size:65,price:899,type:"E7S PRO • Hi-QLED",refresh:"120 Hz (up to 144 Hz)",features:["Quantum Dot / Hi-QLED","120 Hz, up to 144 Hz","Pantone Validated","Dolby Atmos","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","films","sport","everyday"],pitch:"One of the best-value performance upgrades: 65-inch QLED, 144 Hz gaming and strong sound features.",demo:"Show football then gaming. Point out 144 Hz, HDMI 2.1 and the richer QLED colour.",url:"https://www.currys.co.uk/products/hisense-e7s-pro-65-qled-4k-hdr-smart-tv-with-freely-65e7stuk-pro-10300868.html"},
- {m:"75E7STUK PRO",base:"75E7STUK PRO",size:75,price:1299,type:"E7S PRO • Hi-QLED",refresh:"120 Hz (up to 144 Hz)",features:["Quantum Dot / Hi-QLED","120 Hz, up to 144 Hz","Pantone Validated","Dolby Atmos","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","films","sport","everyday"],pitch:"A big 75-inch performance screen for customers who want a premium-looking picture and serious gaming ability.",demo:"Use a big sports scene first, then a game. Let the size and refresh rate do the selling.",url:"https://www.currys.co.uk/products/hisense-e7s-pro-75-qled-4k-hdr-smart-tv-with-freely-75e7stuk-pro-10300872.html"},
- {m:"85E7STUK PRO",base:"85E7STUK PRO",size:85,price:1599,type:"E7S PRO • Hi-QLED",refresh:"120 Hz (up to 144 Hz)",features:["Quantum Dot / Hi-QLED","120 Hz, up to 144 Hz","Pantone Validated","Dolby Atmos","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","films","sport","everyday"],pitch:"A huge 85-inch QLED Pro option that combines scale with high refresh and strong gaming connections.",demo:"Show a cinematic scene and then fast sport. Ask the customer how far they sit from the screen.",url:"https://www.currys.co.uk/products/hisense-e7s-pro-85-qled-4k-hdr-smart-tv-with-freely-85e7stuk-pro-10300871.html"},
- {m:"100E7STUK PRO",base:"100E7STUK PRO",size:100,price:2499,type:"E7S PRO • Hi-QLED",refresh:"120 Hz (up to 144 Hz)",features:["Quantum Dot / Hi-QLED","Native 144 Hz Game Mode","Pantone Validated","Built-in subwoofer","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","films","sport","bright"],pitch:"The 100-inch value monster: huge screen, QLED colour, 144 Hz gaming and built-in bass for a home-cinema feel.",demo:"Use a cinematic clip, then gaming. Step back and let the 100-inch scale make the impact.",url:"https://www.currys.co.uk/products/hisense-e7s-pro-100-qled-4k-hdr-smart-tv-with-freely-100e7stuk-pro-10300874.html"},
-
- // U7S — Mini LED
- {m:"50U7STUK",base:"50U7STUK",size:50,price:699,type:"U7S • Mini LED",refresh:"120 Hz (up to 144 Hz)",features:["Mini LED","Hi-View Engine","Native 144 Hz Game Mode","HDMI 2.1 x 4","Freely","5 year guarantee"],needs:["gaming","sport","bright","films"],pitch:"The compact Mini LED upgrade: brighter highlights, deeper contrast and 144 Hz gaming in a 50-inch size.",demo:"Show bright sport and a game. Explain that Mini LED gives tighter light control than basic LED.",url:"https://www.currys.co.uk/products/hisense-u7s-50-mini-led-4k-144hz-smart-ai-tv-with-freely-50u7stuk-10300718.html"},
- {m:"55U7STUK",base:"55U7STUK",size:55,price:999,type:"U7S • Mini LED",refresh:"120 Hz (up to 144 Hz)",features:["Mini LED","Hi-View AI Engine","Native 144 Hz Game Mode","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"A brilliant all-rounder: Mini LED contrast, 144 Hz gaming, strong brightness and the current free Xbox bundle.",demo:"Football first, then a game. Highlight Mini LED, 144 Hz and the free Xbox controller/Game Pass offer.",url:"https://www.currys.co.uk/products/hisense-u7s-55-mini-led-4k-144hz-smart-ai-tv-with-freely-55u7stuk-10300452.html"},
- {m:"65U7STUK",base:"65U7STUK",size:65,price:1199,type:"U7S • Mini LED",refresh:"120 Hz (up to 144 Hz)",features:["Mini LED","Hi-View AI Engine","Native 144 Hz Game Mode","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"The sweet-spot 65-inch Mini LED: strong contrast, brightness, 144 Hz gaming and excellent connectivity.",demo:"Show football, then gaming. Explain Mini LED, 144 Hz and four HDMI 2.1 ports.",url:"https://www.currys.co.uk/products/hisense-u7s-65-mini-led-4k-144hz-smart-ai-tv-with-freely-65u7stuk-10300451.html"},
- {m:"75U7STUK",base:"75U7STUK",size:75,price:1499,type:"U7S • Mini LED",refresh:"120 Hz (up to 144 Hz)",features:["Mini LED","Hi-View AI Engine","Native 144 Hz Game Mode","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"A big-screen all-rounder with Mini LED, 144 Hz gaming and plenty of brightness for daytime viewing.",demo:"Show football on a full screen, then a game. Point out Mini LED and 144 Hz.",url:"https://www.currys.co.uk/products/hisense-u7s-75-mini-led-4k-144hz-smart-ai-tv-with-freely-75u7stuk-10300436.html"},
- {m:"85U7STUK",base:"85U7STUK",size:85,price:1999,type:"U7S • Mini LED",refresh:"120 Hz (up to 144 Hz)",features:["Mini LED","Hi-View AI Engine","Native 144 Hz Game Mode","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"Huge 85-inch Mini LED value: the customer gets the scale of a premium TV without stepping into RGB pricing.",demo:"Use sports footage from a normal viewing distance, then show gaming.",url:"https://www.currys.co.uk/products/hisense-u7s-85-mini-led-4k-144hz-smart-ai-tv-with-freely-85u7stuk-10300439.html"},
- {m:"100U7STUK",base:"100U7STUK",size:100,price:3499,type:"U7S • Mini LED",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED","Hi-View AI Engine","Native 144 Hz Game Mode","IMAX Enhanced","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"The giant-screen all-rounder: 100-inch Mini LED, strong brightness, cinematic sound and fast gaming.",demo:"Stand the customer at normal viewing distance, show sport and gaming, then explain the Mini LED control.",url:"https://www.currys.co.uk/products/hisense-u7s-100-mini-led-4k-144hz-smart-ai-tv-with-freely-100u7stuk-10300445.html"},
-
- // U7S PRO — Mini LED PRO
- {m:"55U7STUK PRO",base:"55U7STUK PRO",size:55,price:999,type:"U7S PRO • Mini LED PRO",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED PRO","Hi-View Engine PRO","Native 165 Hz Game Mode","HDMI 2.1 x 4","2.1.2 surround sound","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"For a gamer who wants more: Mini LED PRO, native 165 Hz and stronger built-in sound than the standard U7S.",demo:"Show a fast game and point out native 165 Hz, then switch to film/sport and demo the wider soundstage.",url:"https://www.currys.co.uk/products/hisense-u7s-pro-55-mini-led-4k-165-hz-smart-ai-tv-with-freely-55u7stuk-pro-10300905.html"},
- {m:"65U7STUK PRO",base:"65U7STUK PRO",size:65,price:1299,type:"U7S PRO • Mini LED PRO",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED PRO","Hi-View Engine PRO","Native 165 Hz Game Mode","Anti-Reflection / Glare-Free","HDMI 2.1 x 4","2.1.2 surround sound","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"A serious 65-inch gaming TV with native 165 Hz, Mini LED PRO, anti-reflection and a stronger audio system.",demo:"Show gaming first. Then point out the anti-reflection screen in a bright room and demo the sound.",url:"https://www.currys.co.uk/products/hisense-u7s-pro-65-mini-led-4k-165-hz-smart-ai-tv-with-freely-65u7stuk-pro-10300873.html"},
- {m:"75U7STUK PRO",base:"75U7STUK PRO",size:75,price:1499,type:"U7S PRO • Mini LED PRO",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED PRO","Hi-View Engine PRO","Native 165 Hz Game Mode","Anti-Reflection / Glare-Free","HDMI 2.1 x 4","2.1.2 surround sound","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"A large premium gaming screen with native 165 Hz and Mini LED PRO — ideal for customers who want the big-screen upgrade.",demo:"Use a fast game, then sport. Mention 165 Hz and anti-reflection for bright rooms.",url:"https://www.currys.co.uk/products/hisense-u7s-pro-75-mini-led-4k-165-hz-smart-ai-tv-with-freely-75u7stuk-pro-10300872.html"},
- {m:"85U7STUK PRO",base:"85U7STUK PRO",size:85,price:1999,type:"U7S PRO • Mini LED PRO",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED PRO","Hi-View Engine PRO","Native 165 Hz Game Mode","Anti-Reflection / Glare-Free","HDMI 2.1 x 4","2.1.2 surround sound","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"Huge 85-inch Mini LED PRO performance with native 165 Hz gaming and a more immersive sound system.",demo:"Show the biggest gaming/sport content you have and explain why 165 Hz matters.",url:"https://www.currys.co.uk/products/hisense-u7s-pro-85-mini-led-4k-165-hz-smart-ai-tv-with-freely-85u7stuk-pro-10300875.html"},
- {m:"100U7STUK PRO",base:"100U7STUK PRO",size:100,price:null,type:"U7S PRO • Mini LED PRO",refresh:"165 Hz",features:["Hi-QLED Mini LED PRO","Native 165 Hz Game Mode","2.1.2 multi-channel surround","Dolby Vision / Dolby Vision Gaming","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"The ultimate U7S Pro: 100 inches, Mini LED PRO, native 165 Hz and a proper multi-channel sound system.",demo:"Use gaming first, then a cinematic scene. Let the 100-inch size and 165 Hz spec do the heavy lifting.",url:"https://uk.hisense.com/products/tv/uled-miniled-tv/TV-SET-100U7STUK-PRO-HSN/p/000000000020019682"},
-
- // U8Q — premium Mini LED PRO
- {m:"55U8QTUK",base:"55U8Q",size:55,price:1199,type:"U8Q • Mini LED PRO",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED PRO","Hi-View Engine PRO","165 Hz","Game Mode Ultra","Anti-Reflection PRO","HDMI 2.1 x 3","4.1.2 sound + subwoofer","Freely"],needs:["gaming","sport","bright","films"],pitch:"A premium 55-inch Mini LED Pro TV with 165 Hz gaming, strong anti-reflection and a powerful built-in sound system.",demo:"Show a bright sports scene, then a dark movie scene, then gaming. Highlight 165 Hz and the sound.",url:"https://www.currys.co.uk/products/hisense-u8q-55-mini-led-4k-165hz-smart-ai-tv-with-freely-55u8qtuk-10284265.html"},
- {m:"65U8QTUK",base:"65U8Q",size:65,price:1299,type:"U8Q • Mini LED PRO",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED PRO","Hi-View Engine PRO","165 Hz","Game Mode Ultra","Anti-Reflection PRO","HDMI 2.1 x 3","4.1.2 sound + subwoofer","Freely"],needs:["gaming","sport","bright","films"],pitch:"The premium 65-inch sweet spot: Mini LED PRO, 165 Hz, strong HDR and immersive built-in sound.",demo:"Show dark and bright scenes back-to-back, then a game. Point out contrast, brightness and 165 Hz.",url:"https://www.currys.co.uk/products/hisense-u8q-65-mini-led-4k-165hz-smart-ai-tv-with-freely-65u8qtuk-10284266.html"},
- {m:"75U8QTUK",base:"75U8Q",size:75,price:1999,type:"U8Q • Mini LED PRO",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED PRO","Hi-View Engine PRO","165 Hz","Game Mode Ultra","Anti-Reflection PRO","HDMI 2.1 x 3","4.1.2 sound + subwoofer","Freely"],needs:["gaming","sport","bright","films"],pitch:"A premium 75-inch option when the customer wants bigger scale without sacrificing picture performance or gaming.",demo:"Use a cinematic scene with bright highlights, then fast sport or gaming.",url:"https://www.currys.co.uk/products/hisense-u8q-75-mini-led-4k-165hz-smart-ai-tv-with-freely-75u8qtuk-10284267.html"},
- {m:"85U8QTUK",base:"85U8Q",size:85,price:2799,type:"U8Q • Mini LED PRO",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED PRO","Hi-View Engine PRO","165 Hz","Game Mode Ultra","Anti-Reflection PRO","HDMI 2.1 x 3","4.1.2 sound + subwoofer","Freely"],needs:["gaming","sport","bright","films"],pitch:"A premium 85-inch Mini LED PRO with 165 Hz gaming and a big built-in sound system for a cinematic setup.",demo:"Use a full-screen film scene, then gaming. Talk about brightness, contrast and motion.",url:"https://www.currys.co.uk/products/hisense-u8q-85-mini-led-4k-165hz-smart-ai-tv-with-freely-85u8qtuk-10284268.html"},
- {m:"100U8QTUK",base:"100U8Q",size:100,price:3495,type:"U8Q • Mini LED PRO",refresh:"120 Hz (up to 165 Hz)",features:["Mini LED PRO","Hi-View Engine PRO","Peak brightness up to 5000 nits","165 Hz","Game Mode Ultra","Anti-Reflection PRO","HDMI 2.1 x 3","4.1.2 sound + subwoofer","Freely"],needs:["gaming","sport","bright","films"],pitch:"The premium 100-inch option: extremely bright Mini LED PRO, 165 Hz gaming and immersive 4.1.2 sound.",demo:"Start with a bright HDR scene, then a dark film scene and finally gaming. Let the 100-inch scale sell the experience.",url:"https://www.currys.co.uk/products/hisense-u8q-100-mini-led-4k-165hz-smart-ai-tv-with-freely-100u8qtuk-10291030.html"},
-
- // UR8 — RGB Mini LED
- {m:"55UR8STUK",base:"55UR8STUK",size:55,price:1299,type:"UR8 • RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","180 Hz","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"The RGB upgrade: stronger colour and brightness with 180 Hz motion, making it especially easy to sell for sport and gaming.",demo:"Football first, then HDR. Point out 180 Hz and explain RGB Mini LED in simple visual terms.",url:"https://www.currys.co.uk/products/hisense-ur8s-55-rgb-mini-led-4k-180hz-smart-ai-tv-with-freely-55ur8stuk-10303062.html"},
- {m:"65UR8STUK",base:"65UR8STUK",size:65,price:1699,type:"UR8 • RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","180 Hz","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"A premium 65-inch RGB Mini LED TV with 180 Hz motion — a great sport and gaming story with a serious picture upgrade.",demo:"Show football, then a colorful HDR scene. Explain the RGB backlight and 180 Hz.",url:"https://www.currys.co.uk/products/hisense-ur8s-65-rgb-mini-led-4k-180hz-smart-ai-tv-with-freely-65ur8stuk-10303058.html"},
- {m:"75UR8STUK",base:"75UR8STUK",size:75,price:2299,type:"UR8 • RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","180 Hz","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"A huge premium RGB screen with 180 Hz motion — ideal for customers who want sport, gaming and blockbuster picture quality.",demo:"Use a full-screen football scene, then bright HDR. Talk colour, brightness and motion.",url:"https://www.currys.co.uk/products/hisense-ur8s-75-rgb-mini-led-4k-180hz-smart-ai-tv-with-freely-75ur8stuk-10303059.html"},
- {m:"85UR8STUK",base:"85UR8STUK",size:85,price:2999,type:"UR8 • RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","180 Hz","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"The 85-inch RGB Mini LED step-up for customers who want huge scale but still care about premium colour, brightness and motion.",demo:"Show sport at a normal viewing distance, then an HDR film scene.",url:"https://www.currys.co.uk/products/hisense-ur8s-85-rgb-mini-led-4k-180hz-smart-ai-tv-with-freely-85ur8stuk-10303060.html"},
- {m:"100UR8STUK",base:"100UR8STUK",size:100,price:7999,type:"UR8 • RGB Mini LED",refresh:"180 Hz",features:["RGB Mini LED","Hi-View AI Engine RGB","180 Hz","HDMI 2.1 x 4","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"The ultimate UR8 size: 100-inch RGB Mini LED, 180 Hz and huge brightness/colour impact for a statement setup.",demo:"Stand back, show football and HDR, then explain RGB Mini LED and 180 Hz.",url:"https://www.currys.co.uk/products/hisense-ur8s-100-rgb-mini-led-4k-180hz-smart-ai-tv-with-freely-100ur8stuk-10303061.html"},
-
- // UR9 — premium RGB Mini LED
- {m:"65UR9STUK",base:"65UR9STUK",size:65,price:1999,type:"UR9 • RGB Mini LED",refresh:"120 Hz (up to 170 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","170 Hz","HDMI 2.1 x 3","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"The premium 65-inch RGB option: high brightness, rich RGB colour and 170 Hz motion for sport and gaming.",demo:"Start with bright sport, then switch to a dark cinematic scene to show the range.",url:"https://www.currys.co.uk/products/hisense-65ur9stuk-65-smart-4k-ultra-hd-hdr-rgb-mini-led-tv-10300466.html"},
- {m:"75UR9STUK",base:"75UR9STUK",size:75,price:2799,type:"UR9 • RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","180 Hz","HDMI 2.1 x 3","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"A premium 75-inch RGB Mini LED flagship-style choice for customers who want maximum impact from colour, brightness and motion.",demo:"Use a cinematic HDR scene, then football. Explain RGB colour and high refresh.",url:"https://www.currys.co.uk/products/hisense-75ur9stuk-75-smart-4k-ultra-hd-hdr-rgb-mini-led-tv-10300467.html"},
- {m:"85UR9STUK",base:"85UR9STUK",size:85,price:3499,type:"UR9 • RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","180 Hz","HDMI 2.1 x 3","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"The 85-inch premium RGB option: huge scale with RGB Mini LED colour, brightness and 180 Hz motion.",demo:"Show a full-screen sports scene, then a high-contrast movie scene and let the picture sell itself.",url:"https://www.currys.co.uk/products/hisense-85ur9stuk-85-smart-4k-ultra-hd-hdr-rgb-mini-led-tv-10300468.html"}
-];
-
-const TRADEIN_PERIOD = '19 Aug 2026 – 29 Sep 2026';
-const TRADEIN = {
-  rgb:[
-    {min:1999,max:Infinity,off:300,code:'TRADERGB300',label:'£300 off RGB TVs £1,999+'},
-    {min:1499,max:1998.99,off:200,code:'TRADERGB200',label:'£200 off RGB TVs £1,499–£1,998.99'},
-    {min:999,max:1498.99,off:150,code:'TRADERGB150',label:'£150 off RGB TVs £999–£1,498.99'}
-  ],
-  selected:[
-    {min:1999,max:Infinity,off:250,code:'TRADETV250',label:'£250 off selected TVs £1,999+'},
-    {min:1499,max:1998.99,off:150,code:'TRADETV150',label:'£150 off selected TVs £1,499–£1,998.99'},
-    {min:999,max:1498.99,off:100,code:'TRADETV100',label:'£100 off selected TVs £999–£1,498.99'},
-    {min:649,max:998.99,off:50,code:'TRADETV50',label:'£50 off selected TVs £649–£998.99'}
-  ]
+document.getElementById("prevMonth").onclick=()=>{window.calDate=new Date(window.calDate.getFullYear(),window.calDate.getMonth()-1,1);renderCalendar()}
+document.getElementById("nextMonth").onclick=()=>{window.calDate=new Date(window.calDate.getFullYear(),window.calDate.getMonth()+1,1);renderCalendar()}
+document.getElementById("saleModel").oninput=()=>document.getElementById("saleRate").textContent="Commission: "+money(rate(document.getElementById("saleModel").value));
+document.getElementById("addSale").onclick=()=>{
+ let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rate(model);
+ if(!model||r==null){alert("Please enter a model with a commission rate.");return}
+ sales.push([date,model,qty,r*qty]);save();document.getElementById("saleModel").value="";document.getElementById("saleRate").textContent="Commission: —";renderCalendar();renderHome();alert("Sale added.");
 };
-function tradeInOffer(x){
-  if(x.price==null)return null;
-  const isRGB=/RGB/i.test(x.type);
-  const pool=isRGB?TRADEIN.rgb:TRADEIN.selected;
-  return pool.find(o=>x.price>=o.min && x.price<=o.max)||null;
-}
-
-const CASHBACK = {'116UXQTUK': 1000, '100UXQTUK': 500, '85UR9STUK': 300, '75UR9STUK': 300, '65UR9STUK': 200, '100UR8STUK': 500, '85UR8STUK': 300, '75UR8STUK': 200, '65UR8STUK': 200, '55UR8STUK': 200, '100U7STUK': 500, '85U7STUK': 300, '75U7STUK': 200, '65U7STUK': 200, '55U7STUK': 100, '50U7STUK': 50, '85Q8STUK': 300, '75Q8STUK': 200, '65Q8STUK': 200, '55Q8STUK': 100, '50Q8STUK': 50, '100E7STUK PRO': 300, '85E7STUK PRO': 300, '75E7STUK PRO': 100, '65E7STUK PRO': 100, '55E7STUK PRO': 50, '50E7STUK PRO': 50, '43E7STUK PRO': 50, '85Q7STUK': 100, '75Q7STUK': 50, '65Q7STUK': 50, '55Q7STUK': 25, '50Q7STUK': 25, '43Q7STUK': 25, 'L9QTUK PRO': 200, 'L9QTUK': 200, 'XR10TUK': 200, 'PX4TUK PRO': 100, 'P1TUK': 50, 'C3TUK ULTRA MAX': 200, 'C3TUK ULTRA': 100, 'C3TUK PRO': 100};
-const CASHBACK_PERIOD = '9 Sep 2026 – 27 Oct 2026';
-const HUB_TIPS=[
- ["🎯","Ask before you pitch","Find out what they watch, their room brightness, screen size and budget. Then show two or three TVs, not ten."],
- ["⚽","Selling sport","Ask whether they watch football. Demo fast movement and bright pitch footage, then talk about refresh rate, brightness and colour."],
- ["🎮","Selling gaming","Ask what console they use. Show the gaming picture and explain refresh rate and HDMI 2.1 in customer-friendly language."],
- ["🎬","Selling films","Use a cinematic clip with dark scenes and bright highlights. Talk about contrast, HDR and colour rather than throwing specs at them."],
- ["☀️","Bright room","If sunlight is a problem, make brightness a benefit. Demo a bright daytime scene and compare it against a dimmer display."],
- ["💷","Budget customer","Start with their budget and show the best option inside it. Then show one step up and explain exactly what the extra money buys."]
-];
-let hubSize="Any",hubBudget="Any",hubNeed="Any",hubPromoOnly=false;
-function hubBudgetMax(){
- if(hubBudget==="Under £500")return 500;if(hubBudget==="£500–£1,000")return 1000;if(hubBudget==="£1,000–£1,500")return 1500;
- if(hubBudget==="£1,500–£2,000")return 2000;if(hubBudget==="£2,000+")return Infinity;return Infinity;
-}
-
-function customerDeal(x){
-  const price=Number(x.price);
-  const cashback=price>0 ? Number(CASHBACK[x.base]||0) : 0;
-  const trade=price>0 ? (tradeInOffer(x)?.off||0) : 0;
-  const saving=cashback+trade;
-  const effective=price>0 ? Math.max(0,price-saving) : null;
-  return {price,cashback,trade,saving,effective};
-}
-function dealBox(x){
-  if(x.price==null) return `<div style="margin-top:12px;padding:12px;border-radius:14px;background:#101c21;border:1px solid var(--line)"><div class="kicker">CUSTOMER PRICE</div><div class="tiny" style="margin-top:4px">Check the live price before quoting — the final customer price can't be calculated until a price is known.</div></div>`;
-  const d=customerDeal(x);
-  return `<div style="margin-top:12px;padding:13px;border-radius:15px;background:linear-gradient(145deg,#102a2d,#101c21);border:1px solid #2a6263">
-    <div class="kicker" style="color:var(--accent)">CUSTOMER DEAL</div>
-    <div class="row" style="margin-top:7px"><span>TV price</span><b>${money(d.price)}</b></div>
-    <div class="row" style="margin-top:5px"><span>♻️ Trade-in</span><b>${d.trade?'-'+money(d.trade):'—'}</b></div>
-    <div class="row" style="margin-top:5px"><span>🎁 Cashback</span><b>${d.cashback?'-'+money(d.cashback):'—'}</b></div>
-    <div style="height:1px;background:#2a6263;margin:9px 0"></div>
-    <div class="row"><b style="font-size:16px">Effective cost</b><b style="font-size:24px;color:var(--accent)">${money(d.effective)}</b></div>
-    ${d.saving?`<div class="tiny" style="margin-top:5px;text-align:right">£${Number(d.saving).toFixed(0)} total promo saving</div>`:'<div class="tiny" style="margin-top:5px">No current cashback/trade-in saving recorded for this model.</div>'}
-    <div class="tiny" style="margin-top:7px">Assumes the customer qualifies for the trade-in and successfully claims the cashback.</div>
-  </div>`;
-}
-
-function renderHub(){
- const sizes=["Any","43\"","50\"","55\"","65\"","75\"","85\"","100\"+"];
- const budgets=["Any","Under £500","£500–£1,000","£1,000–£1,500","£1,500–£2,000","£2,000+"];
- const needs=["Any","⚽ Sport","🎮 Gaming","🎬 Films","☀️ Bright room","👨‍👩‍👧 Everyday"];
- const make=(arr,id,cur)=>document.getElementById(id).innerHTML=arr.map(x=>`<button class="chip ${x===cur?"on":""}" data-val="${escapeHtml(x)}">${escapeHtml(x)}</button>`).join("");
- make(sizes,"sizeChips",hubSize);make(budgets,"budgetChips",hubBudget);make(needs,"needChips",hubNeed);
- const size=hubSize==="Any"?null:Number(hubSize.replace('"','').replace('+',''));
- const max=hubBudgetMax();
- const needMap={"⚽ Sport":"sport","🎮 Gaming":"gaming","🎬 Films":"films","☀️ Bright room":"bright","👨‍👩‍👧 Everyday":"everyday"};
- const need=needMap[hubNeed]||null;
- let arr=HUB_MODELS.filter(x=>(!size||(hubSize==='100"+'?x.size>=100:x.size===size)) && (x.price==null || x.price<=max) && (!need||x.needs.includes(need)));
- arr=arr.filter(x=>!hubPromoOnly || CASHBACK[x.base] != null);
- // Prefer products with a known current price and stronger match; premium order by commission.
- arr.sort((a,b)=>{
-   const am=CURRENT_RATES[a.base]??0,bm=CURRENT_RATES[b.base]??0;
-   const av=(a.price==null?999999:a.price),bv=(b.price==null?999999:b.price);
-   return (bm-am) || (av-bv);
+function findTV(){
+ let q=norm(document.getElementById("tvSearch").value),b=document.getElementById("budget").value,s=document.getElementById("size").value,n=document.getElementById("need").value,t=document.getElementById("tech").value;
+ let arr=TVs.filter(x=>{
+  let model=x[0],p=x[1],type=x[2],size=(model.match(/^(43|50|55|65|75|85|100)/)||[])[1];
+  if(q&&!norm(model).includes(q))return false;
+  if(b&&p!=null&&p>Number(b))return false;
+  if(s&&size!==s)return false;
+  if(t&&type!==t)return false;
+  return p!=null;
  });
- document.getElementById("hubCount").textContent=arr.length+" matches"+(hubPromoOnly?" • cashback":"");
- document.getElementById("hubResults").innerHTML=arr.length?arr.map((x,i)=>{
-   const comm=CURRENT_RATES[x.base]??0;
-   const best=i===0?"<span class='pill'>BEST MATCH</span>":"";
-   return `<div class="card" style="margin-bottom:10px">
-     <div class="row"><div><div class="kicker">${escapeHtml(x.type)} • ${x.size}"</div><div class="big" style="font-size:22px">${escapeHtml(x.base)}</div></div><div style="text-align:right">${best}<div class="saleMoney" style="margin-top:8px">${x.price==null?"Price check":money(x.price)}</div><div class="tiny">${money(comm)} commission</div></div></div>
-     ${dealBox(x)}
-     <div class="sub" style="margin-top:9px">${escapeHtml(x.refresh)} • ${escapeHtml(x.features.slice(0,2).join(" • "))}</div>
-     ${CASHBACK[x.base]!=null?`<div style="margin-top:12px;padding:11px 12px;border-radius:14px;background:#292315;border:1px solid #6d5930"><div class="row"><div><b style="color:#ffd166">🎁 Cashback</b><div class="tiny">Promo ends 27 Oct 2026</div></div><b style="color:#ffd166;font-size:20px">${money(CASHBACK[x.base])}</b></div></div>`:""}
-     ${tradeInOffer(x)?`<div style="margin-top:9px;padding:11px 12px;border-radius:14px;background:#20291f;border:1px solid #4d6b45"><div class="row"><div><b style="color:#9be27d">♻️ TRADE-IN</b><div class="tiny">${escapeHtml(tradeInOffer(x).label)} • ${escapeHtml(tradeInOffer(x).code)}</div></div><b style="color:#9be27d;font-size:20px">-${money(tradeInOffer(x).off)}</b></div></div>`:""}
-     <details style="margin-top:12px"><summary style="cursor:pointer;color:var(--accent);font-weight:800">Open sales cheat sheet</summary>
-       <div style="margin-top:12px"><b>🗣️ Pitch</b><div class="sub" style="margin-top:5px;color:var(--text)">${escapeHtml(x.pitch)}</div>
-       <div style="margin-top:12px"><b>📺 Demo</b><div class="sub" style="margin-top:5px;color:var(--text)">${escapeHtml(x.demo)}</div>
-       <div style="margin-top:12px"><b>⭐ Key features</b><div class="chips" style="margin-top:7px">${x.features.map(f=>`<span class="chip" style="cursor:default">${escapeHtml(f)}</span>`).join("")}</div>
-       ${x.price==null?'<div class="tiny" style="margin-top:9px">Currys price not captured in this research pass — check live listing before quoting.</div>':""}
-       ${x.url?`<a href="${x.url}" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;color:var(--accent);font-weight:800;text-decoration:none">Open Currys listing ↗</a>`:""}
-       </div></div>
-     </details>
-   </div>`;
- }).join(""):'<div class="empty">No exact match. Try a wider budget or another size.</div>';
- document.getElementById("tips").innerHTML=HUB_TIPS.map(t=>`<div class="achievement"><div class="badge">${t[0]}</div><div><b>${t[1]}</b><div class="tiny" style="margin-top:4px">${t[2]}</div></div></div>`).join("");
+ if(!arr.length){document.getElementById("tvResult").innerHTML=`<div class="card"><b>No exact match.</b><div class="muted" style="margin-top:5px">Try Any budget or Any size, then narrow it down from there.</div></div>`;return}
+ arr.sort((a,b)=>{let score=(x)=>n==="value"?x[1]:n==="gaming"?(/U7|U8|UR8|UR9/.test(x[0])?0:1):n==="sport"?(/UR8|UR9/.test(x[0])?0:1):n==="picture"||n==="brightness"?(/UR8|UR9|U8/.test(x[0])?0:1):0;return score(a)-score(b)||a[1]-b[1]});
+ let x=arr[0],d=deal(x[0],x[1]),r=rate(x[0]);
+ document.getElementById("tvResult").innerHTML=`<div class="result"><div class="muted">Best match</div><h3>${x[0]}</h3><div class="price">${money(x[1])}</div><div class="pills"><span class="pill">${x[2]}</span><span class="pill">${(x[0].match(/^(43|50|55|65|75|85|100)/)||[])[1]}" screen</span>${r!=null?`<span class="pill">£${r} commission</span>`:""}</div><div class="offer"><b>Customer deal</b><div>Trade-in: <strong>${money(d.trade)}</strong> ${d.code?`(${d.code})`:""}</div><div>Cashback: <strong>${money(d.cb)}</strong></div><div class="saving">Effective cost: ${money(d.effective)}</div></div></div>`;
 }
-function renderRates(){
- const q=document.getElementById("rateSearch").value.toLowerCase(), arr=Object.entries(CURRENT_RATES).filter(([m])=>(m+" "+CATEGORY[m]).toLowerCase().includes(q)&&(categoryFilter==="All"||CATEGORY[m]===categoryFilter)).sort((a,b)=>b[1]-a[1]);
- document.getElementById("rateCount").textContent=arr.length+" models";
- document.getElementById("rateList").innerHTML=arr.map(([m,r])=>{
-  const x=HUB_MODELS.find(v=>v.base===m||v.m===m), d=x?customerDeal(x):null;
-  return `<div class="rate" style="align-items:flex-start"><div><b>${escapeHtml(m)}</b><br><small>${CATEGORY[m]}</small>${d&&d.price!=null?`<div class="tiny" style="margin-top:4px">Effective customer cost: <b style="color:var(--accent)">${money(d.effective)}</b></div>`:""}</div><b>${money(r)}</b></div>`;
-}).join("");
+document.getElementById("findTv").onclick=findTV;
+["tvSearch","budget","size","need","tech"].forEach(id=>document.getElementById(id).addEventListener("change",findTV));
+document.getElementById("tvSearch").addEventListener("input",findTV);
+function renderOffer(){
+ let m=document.getElementById("offerModel").value.trim(),p=priceOf(m),d=deal(m,p);
+ if(!m){document.getElementById("offerResult").innerHTML="";return}
+ document.getElementById("offerResult").innerHTML=`<div class="offer"><b>${m}</b><div>TV price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div>Trade-in: ${money(d.trade)} ${d.code?"• "+d.code:""}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div></div>`;
 }
-
-function findModelsForCustomer(){
- const size=Number(document.getElementById('cfSize').value)||null, budget=document.getElementById('cfBudget').value, need=document.getElementById('cfNeed').value;
- const max=budget==='Under £500'?500:budget==='£500–£1,000'?1000:budget==='£1,000–£1,500'?1500:budget==='£1,500–£2,000'?2000:Infinity;
- let arr=HUB_MODELS.filter(x=>(!size||x.size===size)&&(x.price!=null&&x.price<=max)&&(!need||x.needs.includes(need)));
- if(!arr.length) arr=HUB_MODELS.filter(x=>(!size||x.size===size)&&(x.price!=null&&x.price<=max));
- arr.sort((a,b)=>((CURRENT_RATES[b.base]||0)-(CURRENT_RATES[a.base]||0))||((a.price||99999)-(b.price||99999)));
- const top=arr.slice(0,3); const el=document.getElementById('customerMatches');
- el.innerHTML=top.length?top.map((x,i)=>`<div class="card" style="margin-top:9px"><div class="row"><div><div class="kicker">${i===0?'🥇 BEST MATCH':i===1?'🥈 ALTERNATIVE':'🥉 BUDGET / OTHER OPTION'}</div><div class="big" style="font-size:21px">${escapeHtml(x.base)}</div></div><b class="saleMoney">${money(x.price)}</b></div><div class="sub" style="margin-top:7px">${escapeHtml(x.pitch)}</div><div class="tiny" style="margin-top:7px">${money(CURRENT_RATES[x.base]||0)} commission${CASHBACK[x.base]!=null?' • '+money(CASHBACK[x.base])+' cashback':''}</div></div>`).join(''):'<div class="empty">No exact match. Try a wider budget or another size.</div>';
+document.getElementById("offerModel").oninput=renderOffer;
+const COACH={
+opening:"“What are you mainly using the TV for — films, sport, gaming or a bit of everything?” Then build the recommendation around their answer.",
+oled:"“OLED is excellent, but don’t just compare the panel. Show them brightness, colour volume, motion, gaming and what they actually see in their room.”",
+price:"“I completely understand. Let’s look at what you’re getting for the extra money and whether the picture/features will actually matter to you.”",
+brightness:"“Brightness matters because it keeps HDR highlights, sport and daytime viewing looking punchy instead of washed out.”",
+gaming:"“If you game, look for high refresh, HDMI 2.1, low input lag and VRR. The U7/U8/UR ranges give you a strong gaming story.”",
+sport:"“For sport, motion and brightness are the big wins. The UR8/UR9 are especially easy to demo because of their high refresh and RGB colour.”",
+upsell:"“If we step up one level, the main question is whether the customer will notice the improvement every day. Show the picture difference, then explain the offer.”",
+hisense:"“Hisense gives you a lot of picture technology for the money, plus strong gaming features, big-screen options and current promotional value.”"
+};
+document.getElementById("coachTopic").onchange=()=>document.getElementById("coachAnswer").textContent=COACH[document.getElementById("coachTopic").value];
+function renderStats(){
+ document.getElementById("statCards").innerHTML=`<div class="stat"><span class="muted">Commission</span><b>${money(totalComm())}</b></div><div class="stat"><span class="muted">Units</span><b>${totalUnits()}</b></div><div class="stat"><span class="muted">Sales</span><b>${sales.length}</b></div>`;
+ let dates=[["WK32–35","25 Sep 2026"],["WK36–39","23 Oct 2026"],["WK40–44","25 Nov 2026"],["WK45–48","TBC"],["WK49–52","25 Jan 2027"]];
+ document.getElementById("payday").innerHTML=dates.map(x=>`<div class="sale-row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
 }
-function dealData(m){
- const x=HUB_MODELS.find(v=>v.base===m); if(!x)return null;
- const cb=CASHBACK[x.base]||0, tr=tradeInOffer(x), comm=CURRENT_RATES[x.base]||0;
- const effective=x.price!=null?Math.max(0,x.price-cb-(tr?tr.off:0)):null;
- return {x,cb,tr,comm,effective};
-}
-function renderDeal(){
- const d=dealData(document.getElementById('dealModel').value),el=document.getElementById('dealBreakdown'); if(!d){el.innerHTML='';return;}
- el.innerHTML=`<div class="row"><b>${escapeHtml(d.x.base)}</b><b class="saleMoney">${d.x.price!=null?money(d.x.price):'Price check'}</b></div><div class="rate"><span>Cashback</span><b>${d.cb?'-'+money(d.cb):'—'}</b></div><div class="rate"><span>Trade-in</span><b>${d.tr?'-'+money(d.tr.off):'—'}</b></div><div class="rate"><span>Effective cost*</span><b>${d.effective!=null?money(d.effective):'Check price'}</b></div><div class="rate"><span>Your commission</span><b>${money(d.comm)}</b></div>${/U/i.test(d.x.base)&&/Mini LED/i.test(d.x.type)?'<div class="card" style="margin-top:9px">🎮 <b>Free personalised Xbox controller + 1 month Game Pass*</b></div>':''}<div class="tiny" style="margin-top:8px">*Effective cost is a simple illustration using the currently listed promotion values; confirm eligibility and final checkout price.</div>`;
- renderUpsell(d.x);
-}
-function renderUpsell(x){
- const arr=HUB_MODELS.filter(v=>v.price!=null&&v.size===x.size&&v.price>x.price).sort((a,b)=>a.price-b.price);
- const up=arr[0],el=document.getElementById('upsellResult');
- if(!up){el.innerHTML='No higher-priced model found at this size.';return;}
- const diff=up.price-x.price; const commDiff=(CURRENT_RATES[up.base]||0)-(CURRENT_RATES[x.base]||0);
- el.innerHTML=`<div class="row"><div><b>Chosen: ${escapeHtml(x.base)}</b><div class="tiny">${money(x.price)}</div></div><div style="font-size:22px">⬆️</div><div><b>Show: ${escapeHtml(up.base)}</b><div class="tiny">${money(up.price)}</div></div></div><div class="card" style="margin-top:9px"><b>What the extra ${money(diff)} buys:</b><div class="sub" style="margin-top:6px">${escapeHtml(up.features.slice(0,4).join(' • '))}</div>${commDiff>0?`<div class="tiny" style="margin-top:7px">💰 You earn ${money(commDiff)} more commission on the upgrade.</div>`:''}</div>`;
-}
-function renderCommissionOpportunity(){
- const arr=HUB_MODELS.filter(x=>CURRENT_RATES[x.base]!=null).sort((a,b)=>(CURRENT_RATES[b.base]||0)-(CURRENT_RATES[a.base]||0)).slice(0,5);
- document.getElementById('commissionOpportunity').innerHTML=arr.map((x,i)=>`<div class="rate"><span><b>${i+1}. ${escapeHtml(x.base)}</b><small>${x.size}" • ${x.price!=null?money(x.price):'Price check'}</small></span><b>${money(CURRENT_RATES[x.base])}</b></div>`).join('');
-}
-function renderDailyTarget(){
- const today=localDateKey(), todayUnits=sales.filter(s=>s.date===today).reduce((a,s)=>a+Number(s.qty||0),0), target=Number(localStorage.getItem('hisenseDailyTarget')||3), pct=Math.min(100,Math.round(todayUnits/target*100));
- document.getElementById('dailyTargetCard').innerHTML=`<div class="row"><div><div class="kicker">TODAY • ${fmtDate(today)}</div><div class="big">${todayUnits} / ${target} TVs</div></div><b style="font-size:22px">${pct}%</b></div><div class="progress" style="margin-top:10px"><i style="width:${pct}%"></i></div><div class="sub" style="margin-top:8px">${todayUnits>=target?'🔥 Target hit — keep going.':(target-todayUnits)+' more sale'+(target-todayUnits===1?'':'s')+' to hit today’s target.'}</div><button class="chip" id="changeDailyTarget" style="margin-top:10px">Set daily target</button>`;
- document.getElementById('changeDailyTarget').onclick=()=>{const n=prompt('What is your daily TV target?',target);if(n!==null&&Number(n)>0){localStorage.setItem('hisenseDailyTarget',Math.round(Number(n)));renderDailyTarget();}};
-}
-let pitchSeconds=10;
-function renderPitch(){const m=document.getElementById('pitchModel').value,x=HUB_MODELS.find(v=>v.base===m),el=document.getElementById('pitchOutput');if(!x){el.textContent='';return;}const f=x.features.slice(0,3).join(', ');const t=pitchSeconds===10?`${x.base}: “If you want ${x.size}-inch picture with ${f}, this is one I’d show you. Let me demonstrate the difference.”`:pitchSeconds===30?`${x.base}: “I’d look at this one because you’re getting ${f}. For ${x.needs.includes('sport')?'sport and gaming':'everyday viewing'}, the picture and motion are really strong. Let me show you it running, then we can compare it with the cheaper option so you can see what you’re paying for.”`:`${x.base}: “Based on what you’ve told me, this is a strong fit. You’re getting ${f}, plus ${x.pitch.toLowerCase()} I wouldn’t just look at the ticket price — I’d compare the picture, motion, sound and the offers available today. Let me show you the key difference on the screen, and then we can decide whether the step up is actually worth it for you.”`;el.textContent=t;}
-function renderCoach(){
- const list=HUB_MODELS.filter(x=>x.price!=null).sort((a,b)=>(a.size-b.size)||a.price-b.price).map(x=>x.base);['dealModel','pitchModel'].forEach(id=>document.getElementById(id).innerHTML=list.map(m=>`<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join(''));
- ['dealModel','pitchModel'].forEach(id=>document.getElementById(id).onchange=id==='dealModel'?renderDeal:renderPitch);
- document.querySelectorAll('.pitchBtn').forEach(b=>b.onclick=()=>{pitchSeconds=Number(b.dataset.sec);document.querySelectorAll('.pitchBtn').forEach(x=>x.classList.toggle('on',x===b));renderPitch();});
- document.getElementById('findCustomer').onclick=findModelsForCustomer; renderDeal();renderCommissionOpportunity();renderDailyTarget();renderPitch();
-}
-function organiseSections(){
-  const move=(fromId,toId,title)=>{
-    const from=document.getElementById(fromId), to=document.getElementById(toId);
-    if(!from||!to)return;
-    const wrap=document.createElement("div"); wrap.className="combinedSection";
-    const h=document.createElement("div"); h.className="sectionHead"; h.innerHTML=`<h2>${title}</h2>`; wrap.appendChild(h);
-    while(from.firstChild) wrap.appendChild(from.firstChild);
-    to.appendChild(wrap); from.classList.remove("active"); from.style.display="none";
-  };
-  // Price Match lives inside TV Finder
-  move("price","hub","🔎 Price Match");
-  // Objections, demos and Why Hisense live inside Sales Coach
-  move("objections","coach","⚔️ Objection Buster");
-  move("demo","coach","🎤 Demo Coach");
-  move("hisense","coach","✨ Why Hisense?");
-  // Paydays, records and rates live inside Stats
-  move("paydays","stats","◷ Paydays");
-  move("records","stats","🏆 Personal Records");
-  move("rates","stats","▤ Commission Rates");
-}
-function addInternalTabs(screenId, labels, panelBuilders, active=0){
- const screen=document.getElementById(screenId); if(!screen)return;
- screen.classList.add('refined');
- const old=screen.querySelector('.internalTabs'); if(old)old.remove();
- const tabs=document.createElement('div'); tabs.className='internalTabs';
- labels.forEach((label,i)=>{const b=document.createElement('button');b.type='button';b.className='internalTab'+(i===active?' on':'');b.textContent=label;b.onclick=()=>{
-   tabs.querySelectorAll('.internalTab').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-   screen.querySelectorAll(':scope > .internalPanel').forEach((p,j)=>p.classList.toggle('on',j===i));
- };tabs.appendChild(b)});
- const anchor=screen.querySelector('.hero'); if(anchor)anchor.after(tabs); else screen.prepend(tabs);
- panelBuilders.forEach((builder,i)=>{const panel=document.createElement('div');panel.className='internalPanel'+(i===active?' on':'');panel.dataset.internalPanel=i;builder(panel);screen.appendChild(panel)});
-}
-function moveNodes(parent, nodes){nodes.filter(Boolean).forEach(n=>parent.appendChild(n));}
-function directChildrenAfter(screen, anchor){let out=[], n=anchor?anchor.nextElementSibling:null;while(n){let next=n.nextElementSibling;if(!n.classList.contains('internalTabs'))out.push(n);n=next;}return out;}
-function refineInternalNavigation(){
- // SALES: quick entry vs history
- const sales=document.getElementById('sales');
- if(sales){const form=sales.querySelector('.formCard'), sh=sales.querySelector('.sectionHead'), hist=document.getElementById('history');
-   addInternalTabs('sales',['＋ Log Sale','▤ Sales History'],[
-     p=>{moveNodes(p,[form]);},
-     p=>{moveNodes(p,[sh,hist]);}
-   ]);
- }
- // TV FINDER: finder vs price match. The price match block is already moved here by organiseSections().
- const hub=document.getElementById('hub');
- if(hub){const nodes=directChildrenAfter(hub,hub.querySelector('.hero')).filter(n=>!n.classList.contains('internalTabs'));const price=hub.querySelector('.combinedSection');
-   const finder=nodes.filter(n=>n!==price);
-   addInternalTabs('hub',['📺 Find a TV','🔎 Price Match'],[p=>moveNodes(p,finder),p=>moveNodes(p,[price])]);
- }
- // OFFERS: one focused offer category at a time.
- const offers=document.getElementById('offers');
- if(offers){const hero=offers.querySelector('.hero'), search=document.getElementById('offerSearch'), sr=document.getElementById('offerSearchResults');const folds=[...offers.querySelectorAll(':scope > .fold')];
-   addInternalTabs('offers',['💰 Cashback','♻️ Trade-In','🎮 Xbox','🧮 Deal','💳 Finance'],folds.map((fold,i)=>p=>{if(i===0)moveNodes(p,[search,sr]);moveNodes(p,[fold]);}));
- }
- // STATS: overview plus the four focused areas.
- const stats=document.getElementById('stats');
- if(stats){const hero=stats.querySelector('.hero'), grid=stats.querySelector('.statGrid'), folds=[...stats.querySelectorAll(':scope > .fold')];
-   addInternalTabs('stats',['★ Overview','🎯 Targets','📅 Paydays','🏆 Records','💷 Rates'],[
-     p=>moveNodes(p,[grid]),
-     p=>moveNodes(p,[folds[0]]),
-     p=>moveNodes(p,[folds[1]]),
-     p=>moveNodes(p,[folds[2]]),
-     p=>moveNodes(p,[folds[3]])
-   ]);
- }
- // SALES COACH: group the long coach into focused shop-floor tools.
- const coach=document.getElementById('coach');
- if(coach){
-   const direct=[...coach.children].filter(n=>!n.classList.contains('hero')&&!n.classList.contains('internalTabs'));
-   const heads=[...coach.querySelectorAll(':scope > .sectionHead')];
-   const groups=[]; heads.forEach((h,idx)=>{const arr=[h];let n=h.nextElementSibling;while(n && !n.classList.contains('sectionHead')){arr.push(n);n=n.nextElementSibling}groups.push({head:h,nodes:arr})});
-   const combined=[...coach.querySelectorAll(':scope > .combinedSection')];
-   const byText=t=>groups.find(g=>g.head.textContent.toLowerCase().includes(t));
-   const cust=byText('customer needs'), deal=byText('deal calculator'), ups=byText('upselling'), comm=byText('commission opportunity'), daily=byText('daily sales target'), pitch=byText('10 / 30 / 60');
-   const obj=combined.find(x=>x.textContent.toLowerCase().includes('objection buster'));
-   const demo=combined.find(x=>x.textContent.toLowerCase().includes('demo coach'));
-   const why=combined.find(x=>x.textContent.toLowerCase().includes('why hisense'));
-   const used=new Set(); [cust,deal,ups,comm,daily,pitch].forEach(g=>g?.nodes.forEach(n=>used.add(n))); [obj,demo,why].forEach(n=>n&&used.add(n));
-   const leftover=direct.filter(n=>!used.has(n));
-   addInternalTabs('coach',['🎯 Customer','💷 Deal & Upsell','🎤 Pitch','⚔️ Objections','📺 Demo','✨ Why Hisense'],[
-     p=>moveNodes(p,cust?.nodes||[]),
-     p=>moveNodes(p,[...(deal?.nodes||[]),...(ups?.nodes||[]),...(comm?.nodes||[])]),
-     p=>moveNodes(p,daily?[...(pitch?.nodes||[]),...daily.nodes]:[...(pitch?.nodes||[])]),
-     p=>moveNodes(p,obj?[obj]:[]),
-     p=>moveNodes(p,demo?[demo]:[]),
-     p=>moveNodes(p,why?[why]:[])
-   ]);
-   leftover.forEach(n=>n.style.display='none');
- }
-}
-
-function makeInnerTabs(id, items, opts={}){
-  const host=document.getElementById(id); if(!host) return;
-  const old=host.querySelector(':scope > .innerTabBar'); if(old) old.remove();
-  const bar=document.createElement('div'); bar.className='innerTabBar';
-  const panes=[];
-  items.forEach((item,i)=>{
-    const pane=document.createElement('div'); pane.className='innerPane'; pane.dataset.innerKey=item.key;
-    if(item.nodes){item.nodes.forEach(n=>{if(n) pane.appendChild(n)});}
-    if(item.html) pane.innerHTML=item.html;
-    panes.push(pane);
-    const b=document.createElement('button'); b.type='button'; b.className='innerTab'; b.textContent=item.label;
-    b.addEventListener('click',()=>{
-      panes.forEach(x=>x.classList.toggle('active',x===pane));
-      bar.querySelectorAll('.innerTab').forEach(x=>x.classList.toggle('active',x===b));
-      if(item.onOpen) item.onOpen();
-    });
-    bar.appendChild(b);
-  });
-  host.appendChild(bar);
-  panes.forEach(p=>host.appendChild(p));
-  const first=Math.max(0,Math.min(opts.start||0,panes.length-1));
-  panes[first]?.classList.add('active'); bar.querySelectorAll('.innerTab')[first]?.classList.add('active');
-}
-
-function setupInternalTabs(){
-  // SELL: Log sale vs calendar sales history.
-  const salesHost=document.getElementById('sales');
-  if(salesHost && !salesHost.dataset.tabsReady){
-    const form=salesHost.querySelector(':scope > .formCard');
-    const head=[...salesHost.querySelectorAll(':scope > .sectionHead')].find(x=>x.textContent.includes('Sales history'));
-    const hist=document.getElementById('history');
-    makeInnerTabs('sales',[
-      {key:'log',label:'＋ Log Sale',nodes:[form]},
-      {key:'history',label:'📅 Sales Calendar',nodes:[head,hist]}
-    ]);
-    salesHost.dataset.tabsReady='1';
-  }
-
-  // OFFERS: turn the long accordion list into true internal tabs.
-  const offers=document.getElementById('offers');
-  if(offers && !offers.dataset.tabsReady){
-    const folds=[...offers.querySelectorAll(':scope > .fold')];
-    const labels=['💰 Cashback','♻️ Trade-In','🎮 Xbox','🧮 Deal','💳 Finance'];
-    makeInnerTabs('offers',folds.map((n,i)=>({key:'o'+i,label:labels[i]||('Option '+(i+1)),nodes:[n]})));
-    offers.dataset.tabsReady='1';
-  }
-
-  // STATS: each large information block gets its own tab.
-  const stats=document.getElementById('stats');
-  if(stats && !stats.dataset.tabsReady){
-    const folds=[...stats.querySelectorAll(':scope > .fold')];
-    const labels=['🎯 Overview','📅 Paydays','🏆 Records','💷 Rates'];
-    makeInnerTabs('stats',folds.map((n,i)=>({key:'s'+i,label:labels[i],nodes:[n]})));
-    stats.dataset.tabsReady='1';
-  }
-
-  // TV FINDER: separate choosing a TV, results/tips, and price match.
-  const hub=document.getElementById('hub');
-  if(hub && !hub.dataset.tabsReady){
-    const children=[...hub.children].filter(n=>!n.classList.contains('innerTabBar'));
-    const price=document.getElementById('price');
-    const priceNodes=price?[...price.children]:[];
-    if(price) price.style.display='none';
-    const filterNodes=children.slice(0,9);
-    const resultNodes=children.slice(9);
-    makeInnerTabs('hub',[
-      {key:'find',label:'📺 Find a TV',nodes:filterNodes},
-      {key:'results',label:'✨ Results',nodes:resultNodes},
-      {key:'price',label:'🔎 Price Match',nodes:priceNodes,onOpen:()=>{if(typeof renderPrice==='function')renderPrice();}}
-    ]);
-    hub.dataset.tabsReady='1';
-  }
-
-  // SALES COACH: split the long toolkit into focused shop-floor tasks.
-  const coach=document.getElementById('coach');
-  if(coach && !coach.dataset.tabsReady){
-    const c=[...coach.children].filter(n=>!n.classList.contains('innerTabBar'));
-    const oldSections=['objections','demo','hisense'].map(id=>document.getElementById(id));
-    oldSections.forEach(s=>{if(s)s.style.display='none'});
-    const main=c.slice(1); // keep hero outside the panes
-    const groups=[
-      {label:'🎯 Customer',nodes:main.slice(0,3)},
-      {label:'💷 Deal & Upsell',nodes:main.slice(3,7)},
-      {label:'🗣️ Pitches',nodes:main.slice(11,13)},
-      {label:'⚔️ Objections',nodes:oldSections[0]?[...oldSections[0].children]:[]},
-      {label:'🎤 Demo',nodes:oldSections[1]?[...oldSections[1].children]:[]},
-      {label:'✨ Why Hisense',nodes:oldSections[2]?[...oldSections[2].children]:[]}
-    ];
-    makeInnerTabs('coach',groups.map((g,i)=>({key:'c'+i,label:g.label,nodes:g.nodes})));
-    coach.dataset.tabsReady='1';
-  }
-}
-
-function init(){
-  setupInternalTabs();
- organiseSections();
- refineInternalNavigation();
- document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
- document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
- document.getElementById("homeAdd").onclick=()=>go("sales");
- document.getElementById("saleDate").value=localDateKey();
- const updateLive=()=>{const el=document.getElementById("liveDateTime");if(el)el.textContent="Today • "+localDateTime()}; updateLive(); setInterval(updateLive,1000);
- document.getElementById("minus").onclick=()=>{qty=Math.max(1,qty-1);document.getElementById("qty").textContent=qty;preview()};
- document.getElementById("plus").onclick=()=>{qty++;document.getElementById("qty").textContent=qty;preview()};
- document.getElementById("saleDate").onchange=preview;
- document.getElementById("saveSale").onclick=addSale;
- document.getElementById("history").onclick=e=>{const b=e.target.closest(".del");if(!b)return;if(confirm("Delete this sale?")){sales.splice(Number(b.dataset.i),1);save();renderHistory();renderHome();toast("Sale deleted")}};
- document.getElementById("clearAll").onclick=()=>{if(confirm("Clear all sales from this device?")){sales=[];save();renderHome();renderHistory();toast("Sales cleared")}};
- document.getElementById("rateSearch").oninput=renderRates;
- document.getElementById("promoOnly").onclick=()=>{
-   hubPromoOnly=!hubPromoOnly;
-   document.getElementById("promoOnly").classList.toggle("on",hubPromoOnly);
-   renderHub();
- };
- ["sizeChips","budgetChips","needChips"].forEach(id=>document.getElementById(id).onclick=e=>{
-   const b=e.target.closest(".chip"); if(!b)return;
-   if(id==="sizeChips")hubSize=b.dataset.val;
-   if(id==="budgetChips")hubBudget=b.dataset.val;
-   if(id==="needChips")hubNeed=b.dataset.val;
-   renderHub();
- });
- const cats=["All",...new Set(Object.values(CATEGORY))];document.getElementById("chips").innerHTML=cats.map(c=>`<button class="chip ${c==="All"?"on":""}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("");
- document.getElementById("chips").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;categoryFilter=b.dataset.cat;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));renderRates()};
- document.getElementById("backupBtn").onclick=backup;
- document.getElementById("changeTarget").onclick=()=>{
-   const current=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
-   const next=prompt("What is your weekly unit target?",current);
-   if(next!==null && Number(next)>0){
-     localStorage.setItem("hisenseWeeklyTarget",Math.round(Number(next)));
-     renderHome(); renderStats(); toast("Target updated ✓");
-   }
- };
- document.getElementById("changePaydayTarget").onclick=()=>{
-   const current=Number(localStorage.getItem("hisensePaydayTarget")||0);
-   const next=prompt("What payday commission target do you want?",current||"1000");
-   if(next!==null && Number(next)>=0){
-     localStorage.setItem("hisensePaydayTarget",Math.round(Number(next)));
-     renderHome(); renderStats(); toast("Payday target updated ✓");
-   }
- };
- const saleModels=[...new Set([...HUB_MODELS.map(x=>x.m),...HUB_MODELS.map(x=>x.base),...Object.keys(CURRENT_RATES)])].filter(Boolean).sort((a,b)=>a.localeCompare(b));
-const modelInput=document.getElementById("model"), modelSuggestions=document.getElementById("modelSuggestions");
-document.getElementById("modelList").innerHTML=saleModels.map(m=>`<option value="${escapeHtml(m)}"></option>`).join("");
-function showModelSuggestions(){
- const q=modelInput.value.trim().toUpperCase();
- const matches=saleModels.filter(m=>!q || m.toUpperCase().includes(q)).slice(0,12);
- if(!matches.length){modelSuggestions.innerHTML='<div class="modelSuggestEmpty">No matching Hisense model found</div>';modelSuggestions.style.display='block';return;}
- modelSuggestions.innerHTML=matches.map(m=>{const x=HUB_MODELS.find(v=>v.m===m||v.base===m);return `<button type="button" class="modelSuggestItem" data-model="${escapeHtml(m)}"><b>${escapeHtml(m)}</b><span>${x?escapeHtml(x.type+' • '+x.size+' inch • '+x.refresh):'Commission model'}</span></button>`}).join('');
- modelSuggestions.style.display='block';
-}
-modelInput.onfocus=showModelSuggestions;
-modelInput.oninput=()=>{preview();showModelSuggestions()};
-modelSuggestions.onclick=e=>{const b=e.target.closest('[data-model]');if(!b)return;modelInput.value=b.dataset.model;modelSuggestions.style.display='none';preview();};
-document.addEventListener('click',e=>{if(!e.target.closest('.modelSuggest'))modelSuggestions.style.display='none'});
- renderHome();renderHistory();renderStats();renderPaydays();renderRecords();renderHub();renderOffers();renderPrice();renderObjections();renderDemo();renderHisense();renderCoach();
-}
-function preview(){const m=document.getElementById("model").value.trim(),d=document.getElementById("saleDate").value,r=rateFor(m,d);document.getElementById("preview").textContent=r==null?"—":money(r*qty);document.getElementById("previewMeta").textContent=r==null?"Unknown rate — check Rates":"£"+r+" per unit × "+qty}
-function addSale(){
- const d=document.getElementById("saleDate").value,m=document.getElementById("model").value.trim(),r=rateFor(m,d);
- if(!d||!m)return toast("Choose a date and model");
- if(r==null)return toast("I can't find a rate for that model");
- sales.push({date:d,model:m,qty,total:r*qty,rate:r,loggedAt:new Date().toISOString()});save();document.getElementById("model").value="";qty=1;document.getElementById("qty").textContent="1";preview();renderHistory();renderHome();toast("✓ Sale added");go("home");
-}
-function backup(){
- const blob=new Blob([JSON.stringify(sales,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="hisense-sales-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("Backup created");
-}
-function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function bindFolds(){document.querySelectorAll('.foldBtn').forEach(b=>{b.onclick=()=>{const f=b.closest('.fold');f.classList.toggle('open')}})}
-function renderOfferSearch(){const q=(document.getElementById('offerSearch')?.value||'').trim().toUpperCase();const el=document.getElementById('offerSearchResults');if(!el)return;if(!q){el.innerHTML='';return}const matches=HUB_MODELS.filter(x=>(x.m+' '+x.base+' '+x.size).toUpperCase().includes(q)).slice(0,8);el.innerHTML=matches.map(x=>{const cb=CASHBACK[x.base]||CASHBACK[x.m]||0;const price=x.price?money(x.price):'Price check';return `<div class="quickResult"><div class="row"><b>${escapeHtml(x.m)}</b><span class="pill">${escapeHtml(x.size)}"</span></div><div class="sub" style="margin-top:5px">${escapeHtml(x.type)} • ${escapeHtml(x.refresh)} • ${price}</div><div class="smallGrid" style="margin-top:8px"><div><small>Cashback</small><br><b>${cb?money(cb):'—'}</b></div><div><small>Commission</small><br><b>${x.base&&rateFor(x.base,'2026-09-14')!=null?money(rateFor(x.base,'2026-09-14')):'Check rate'}</b></div></div></div>`}).join('')||'<div class="sub">No matching model.</div>'}
-function filterCashback(){const q=(document.getElementById('cashbackSearch')?.value||'').trim().toUpperCase();document.querySelectorAll('#offerList .rate').forEach(r=>r.style.display=!q||r.textContent.toUpperCase().includes(q)?'flex':'none')}
-function renderCompactStats(){const pd=document.getElementById('paydayCompact');if(pd)pd.innerHTML=[['WK40–44','25 Nov 2026'],['WK45–48','TBC'],['WK49–52','25 Jan 2027'],['WK32–35','25 Sep 2026']].map(x=>`<div class="quickResult"><div class="row"><b>${x[0]}</b><span>${x[1]}</span></div></div>`).join('');const rs=document.getElementById('recordSummary');if(rs){const arr=[...sales];const best=arr.sort((a,b)=>b.total-a.total)[0];rs.innerHTML=best?`<div class="quickResult"><b>Best single sale</b><div class="big">${money(best.total)}</div><div class="sub">${escapeHtml(best.model)} • ${best.qty} unit${best.qty==1?'':'s'}</div></div>`:'<div class="sub">Your records will appear after you log sales.</div>'}}
-function renderStatsRateSearch(){const q=(document.getElementById('statsRateSearch')?.value||'').trim().toUpperCase();const el=document.getElementById('statsRateResults');if(!el)return;const rows=Object.entries(CURRENT_RATES).filter(([m])=>!q||m.toUpperCase().includes(q)).slice(0,18);el.innerHTML=rows.map(([m,v])=>`<div class="rate"><span><b style="color:var(--text)">${escapeHtml(m)}</b><small>Commission</small></span><b>${money(v)}</b></div>`).join('')||'<div class="sub">No matching rate.</div>'}
-function renderOffers(){const el=document.getElementById("offerList");if(el)el.innerHTML=Object.entries(CASHBACK).map(([m,v])=>`<div class="rate"><span><b style="color:var(--text)">${escapeHtml(m)}</b><small>Cashback • ${CASHBACK_PERIOD}</small></span><b>${money(v)}</b></div>`).join("");const t=document.getElementById("tradeInList");if(t)t.innerHTML=[...TRADEIN.rgb,...TRADEIN.selected].map(o=>`<div class="rate" style="margin-top:7px"><span><b style="color:var(--text)">${escapeHtml(o.label)}</b><small>Code ${escapeHtml(o.code)}</small></span><b>${money(o.off)} OFF</b></div>`).join("");renderOfferSearch();renderCompactStats();renderStatsRateSearch()}
-function renderPrice(){const opts=HUB_MODELS.filter(x=>x.base).map(x=>x.base);const unique=[...new Set(opts)];document.getElementById("pmModel").innerHTML=unique.map(m=>`<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join("");updatePrice()}
-const LIVE_PRICE_SNAPSHOT={"65UR8STUK":1699,"65UR9STUK":1999,"65U7STUK":1199,"75UR8STUK":2299,"75UR9STUK":2799,"55U7STUK":899,"65U7STUK":1199,"85U7STUK":1999,"100U7STUK":3499,"50Q7STUK":429,"55Q7STUK":499,"65Q7STUK":599,"75Q7STUK":699,"85Q7STUK":999,"65U8QTUK":1294};
-function price4BrandUrl(m){return "https://www.price4.co.uk/departments/televisions/brand/hisense"}
-function retailerSearchUrl(m){return "https://www.google.com/search?q="+encodeURIComponent('"'+m+'" UK price AO Argos Currys Marks Electrical Hughes Very Peter Tyson Appliance City')}
-function updatePrice(){const m=document.getElementById("pmModel").value;const p=LIVE_PRICE_SNAPSHOT[m];document.getElementById("pmResult").innerHTML=`<div class="row"><b>${escapeHtml(m)}</b><span class="pill">LIVE CHECK</span></div><div class="big" style="margin-top:7px">${p?money(p):"See live prices"}</div><div class="sub" style="margin-top:5px">${p?'Lowest/current comparison snapshot found in today’s research. Prices and stock can change.':'Open the live retailer search below for this exact model.'}</div><div style="margin-top:10px;display:grid;gap:8px"><button class="secondary" id="pmCompare">🏪 Open live UK price comparison</button><button class="secondary" id="pmRetailers">🔎 Search this exact model across UK retailers</button></div>`;document.getElementById('pmCompare').onclick=()=>window.open(price4BrandUrl(m),'_blank');document.getElementById('pmRetailers').onclick=()=>window.open(retailerSearchUrl(m),'_blank')}
-function doPriceSearch(){const m=document.getElementById("pmModel").value;window.open(retailerSearchUrl(m),"_blank")}
-
-function renderObjections(){const data={"I want Samsung.":"Samsung is a strong brand. Ask what they like most about it, then compare that exact priority against the Hisense model.","I want OLED.":"OLED is excellent. Ask whether they mainly want deep blacks or also want a very bright, colourful picture, then demonstrate the difference.","That's too expensive.":"Ask what they feel is too expensive, then break down the picture technology, refresh rate, sound and current offers.","TCL is cheaper.":"Compare like-for-like size, picture, brightness, gaming, warranty and today's offers — not just the ticket price.","I'll think about it.":"Ask what they are unsure about: picture, price, size or model. Solve the specific concern.","I'll buy it online.":"Make sure they compare the exact model and full deal, including cashback, bundles, finance and retailer terms.","I've never heard of Hisense.":"Don't sell the badge. Show what the exact model does and why it fits what they told you.","Is Hisense as good?":"Compare the exact TVs on the things that matter to them rather than making a blanket brand claim."};const el=document.getElementById("objectionList");el.innerHTML=Object.entries(data).map(([q,a])=>`<button class="card" data-objection="${escapeHtml(q)}" style="width:100%;text-align:left;margin-bottom:8px"><b>${escapeHtml(q)}</b></button>`).join("");el.onclick=e=>{const b=e.target.closest("[data-objection]");if(!b)return;document.getElementById("objectionAnswer").style.display="block";document.getElementById("objectionAnswer").innerHTML='<b>🗣️ Say this:</b><br>'+data[b.dataset.objection]}}
-function renderDemo(){document.getElementById("demoSteps").innerHTML=["Ask what they watch most.","Show picture: brightness, colour and contrast.","Show sport: motion and detail.","Show gaming: refresh rate and HDMI 2.1 where applicable.","Show sound: clarity and immersion.","Close: confirm size, budget and the offer."].map((x,i)=>`<div class="card" style="margin-bottom:8px"><b>${i+1}.</b> ${x}</div>`).join("")}
-function renderHisense(){document.getElementById("whyList").innerHTML=["RGB Mini LED: red, green and blue LEDs create colour at source on qualifying models.","Gaming: selected models offer high refresh rates and HDMI 2.1.","Sport: brightness, colour and motion are the key demo points.","Smart TV: current models include Freely and streaming/catch-up features.","Value: compare the exact picture technology, features, offers and price rather than the badge alone.","Always verify the exact model's guarantee and promotional eligibility."].map(x=>`<div class="card" style="margin-bottom:8px">${x}</div>`).join("")}
-document.getElementById("pmModel").onchange=updatePrice; document.getElementById("pmSearch").onclick=doPriceSearch;
-bindFolds();
-document.getElementById("offerSearch")?.addEventListener("input",renderOfferSearch);document.getElementById("cashbackSearch")?.addEventListener("input",filterCashback);document.getElementById("statsRateSearch")?.addEventListener("input",renderStatsRateSearch);
-init();
+document.getElementById("rateSearch").oninput=()=>{let m=document.getElementById("rateSearch").value,r=rate(m);document.getElementById("rateAnswer").innerHTML=m?(r==null?"No current rate found.":`<strong>${m.toUpperCase()}</strong> pays <strong>${money(r)}</strong> commission per unit.`):"Enter a model to see the current rate."};
+document.getElementById("backup").onclick=()=>{let blob=new Blob([JSON.stringify(sales,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="hisense-sales-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};
+fillModels();renderHome();document.getElementById("coachAnswer").textContent=COACH.opening;document.getElementById("saleDate").value=today();renderCalendar();
 </script>
-</body>
-</html>
+</body></html>
