@@ -41,6 +41,16 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 
 .navIcon{height:22px!important;line-height:0!important;display:flex!important;align-items:center;justify-content:center}.navIcon svg{width:21px;height:21px;fill:none;stroke:#f4f7f7;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.nav button.on .navIcon svg{stroke-width:1.7}.action{display:flex;align-items:center;min-height:86px}.actionIcon{display:flex!important;align-items:center;gap:12px;width:100%;margin:0!important}.action .quickIcon{flex:0 0 42px;width:42px;height:42px;border:1px solid #31575b;border-radius:11px;display:grid!important;place-items:center;color:#f4f7f7;background:#0b2023;margin:0!important}.action .quickIcon svg{width:20px;height:20px}.actionCopy{display:flex!important;flex-direction:column;gap:3px;text-align:left!important}.actionCopy b{font-size:14px;line-height:1.15}.actionCopy small{display:block;color:#9db0b1;font-size:10px;line-height:1.25;font-weight:500}.action .quickIcon svg{width:20px;height:20px;fill:none;stroke:#f4f7f7;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .navIcon svg,.quickIcon svg{stroke:#f4f7f7!important;color:#f4f7f7!important}.quickIcon{color:#f4f7f7!important}
+
+
+.summary-card{background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:18px;margin:14px 0 18px;box-shadow:0 14px 35px rgba(0,0,0,.18)}
+.summary-title{font-size:17px;font-weight:900;letter-spacing:-.02em}
+.summary-sub{font-size:12px;color:var(--muted);margin-top:3px;margin-bottom:14px}
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.summary-item{background:rgba(255,255,255,.045);border-radius:14px;padding:12px 7px;text-align:center}
+.summary-item:first-child{grid-column:1/-1}
+.summary-item strong{display:block;font-size:20px;font-weight:900;color:#fff}
+.summary-item span{display:block;font-size:10px;color:var(--muted);margin-top:3px}
 </style>
 </head>
 <body>
@@ -282,5 +292,28 @@ function renderStats(){
 document.getElementById("rateSearch").oninput=()=>{let m=document.getElementById("rateSearch").value,r=rate(m);document.getElementById("rateAnswer").innerHTML=m?(r==null?"No current rate found.":`<strong>${m.toUpperCase()}</strong> pays <strong>${money(r)}</strong> commission per unit.`):"Enter a model to see the current rate."};
 document.getElementById("backup").onclick=()=>{let blob=new Blob([JSON.stringify(sales,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="hisense-sales-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};
 fillModels();renderHome();document.getElementById("coachAnswer").textContent=COACH.opening;document.getElementById("saleDate").value=today();renderCalendar();
+
+
+function updateHomeSummary(){
+  const sales = JSON.parse(localStorage.getItem("hisenseSalesV2") || "[]");
+  let units=0, led=0, qled=0, mini=0, rgb=0;
+  sales.forEach(x=>{
+    const qty=Number(x.qty||1);
+    const model=String(x.model||"").toUpperCase();
+    units+=qty;
+    if(/UR8|UR9|UXT|UXQ/.test(model)) rgb+=qty;
+    else if(/U7|U8|MINI LED/.test(model)) mini+=qty;
+    else if(/Q7|Q8|QLED/.test(model)) qled+=qty;
+    else led+=qty;
+  });
+  const pct=n=>units?Math.round(n/units*100):0;
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set("homeUnits",units);
+  set("homeLED",pct(led)+"%");
+  set("homeQLED",pct(qled)+"%");
+  set("homeMiniLED",pct(mini)+"%");
+  set("homeRGB",pct(rgb)+"%");
+}
+updateHomeSummary();
 </script>
 </body></html>
