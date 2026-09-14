@@ -58,299 +58,14 @@ input:focus,select:focus{border-color:var(--accent)}
 .statGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px}.stat b{display:block;font-size:24px;margin-top:6px}
 .rate{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.rate b{color:var(--accent)}.rate small{color:var(--muted)}
 .achievement{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:18px;margin-bottom:9px}.badge{width:40px;height:40px;border-radius:14px;background:#18343a;display:grid;place-items:center;font-size:20px}
-.nav{position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:0;width:min(620px,100%);padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(7,16,20,.92);backdrop-filter:blur(18px);border-top:1px solid #1a2c32;display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.nav{position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:0;width:min(620px,100%);padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(7,16,20,.92);backdrop-filter:blur(18px);border-top:1px solid #1a2c32;display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
 .nav button{background:transparent;color:#71868e;font-size:10px;font-weight:750;padding:7px 2px}.nav button span{display:block;font-size:20px;margin-bottom:3px}.nav button.on{color:var(--accent)}
 .toast{position:fixed;z-index:20;left:50%;bottom:95px;transform:translateX(-50%) translateY(20px);background:#f4ffff;color:#061012;padding:12px 16px;border-radius:14px;font-weight:750;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.pop{animation:pop .35s ease-out}@keyframes pop{0%{transform:scale(.94)}70%{transform:scale(1.03)}100%{transform:scale(1)}}
 .danger{color:var(--danger)}
 @media(min-width:621px){.nav{border-radius:24px;bottom:15px;border:1px solid #1a2c32}.app{padding-bottom:120px}}
 </style>
-
-<style>
-.sales-assistant-workflow{margin:16px;padding:18px;border-radius:22px;background:linear-gradient(145deg,#121827,#1b2538);border:1px solid rgba(255,255,255,.09);box-shadow:0 12px 30px rgba(0,0,0,.18)}
-.sales-assistant-workflow h3{margin:0 0 5px;font-size:21px}.sales-assistant-workflow .sub{opacity:.7;font-size:13px;margin-bottom:14px}
-.saw-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.saw-grid label{font-size:11px;opacity:.7;display:block;margin-bottom:4px}
-.saw-grid select,.saw-grid input{width:100%;box-sizing:border-box;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0d1320;color:inherit}
-.saw-full{grid-column:1/-1}.saw-btn{margin-top:12px;width:100%;padding:13px;border:0;border-radius:14px;font-weight:900;font-size:15px;cursor:pointer}
-.saw-result{margin-top:14px;padding:14px;border-radius:16px;background:rgba(255,255,255,.055);display:none}.saw-result.show{display:block}
-.saw-pills{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.saw-pill{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px}
-.saw-pitch{padding:11px;border-left:3px solid currentColor;background:rgba(255,255,255,.035);border-radius:8px;font-size:14px;line-height:1.4}
-</style>
-
-<style>
-#priceMatchHub{margin:16px;padding:18px;border-radius:22px;background:linear-gradient(145deg,#121827,#1b2538);border:1px solid rgba(255,255,255,.09)}
-#priceMatchHub .pm-title{font-size:21px;font-weight:900}.pm-sub{font-size:13px;opacity:.7;margin:4px 0 14px}
-.pm-controls{display:grid;grid-template-columns:1fr;gap:9px}.pm-controls select{width:100%;box-sizing:border-box;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0d1320;color:inherit}
-.pm-card{margin-top:14px;padding:14px;border-radius:16px;background:rgba(255,255,255,.055)}
-.pm-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:13px}.pm-row:last-child{border-bottom:0}
-.pm-retailer{opacity:.8}.pm-price{font-weight:900}.pm-note{font-size:11px;opacity:.58;margin-top:10px;line-height:1.4}
-.pm-btn{display:block;text-align:center;margin-top:10px;padding:12px;border-radius:13px;background:rgba(255,255,255,.08);color:inherit;text-decoration:none;font-weight:800}
-.pm-good{font-weight:900;margin-top:10px}.pm-warn{font-size:12px;opacity:.72;margin-top:7px}
-</style>
-
-<style id="sleek-polish-v3">
-:root{
-  --app-bg:#080b12;
-  --app-card:rgba(255,255,255,.055);
-  --app-border:rgba(255,255,255,.09);
-  --app-muted:rgba(255,255,255,.62);
-  --app-text:#f7f8fb;
-}
-html,body{background:var(--app-bg)!important;}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,system-ui,sans-serif!important;
-  -webkit-font-smoothing:antialiased;
-  letter-spacing:-.01em;
-}
-button,select,input{font-family:inherit!important;-webkit-tap-highlight-color:transparent;}
-button{transition:transform .16s ease,opacity .16s ease,box-shadow .16s ease;}
-button:active{transform:scale(.97);}
-section,.card,.panel,.tile,.box{
-  border-color:var(--app-border)!important;
-}
-#genericHome{max-width:680px;margin:0 auto!important;padding:18px 16px 105px!important;}
-#genericHome>div:first-child{
-  position:relative;overflow:hidden;
-  padding:26px 22px!important;
-  border-radius:28px!important;
-  background:linear-gradient(145deg,rgba(31,42,67,.98),rgba(13,18,30,.98))!important;
-  box-shadow:0 18px 50px rgba(0,0,0,.28)!important;
-}
-#genericHome>div:first-child:after{
-  content:"";position:absolute;width:150px;height:150px;right:-55px;top:-55px;
-  border-radius:50%;background:rgba(255,255,255,.07);filter:blur(2px);
-}
-#genericHome>div:first-child>div{position:relative;z-index:1;}
-#genericHome>div:first-child div:nth-child(2){font-size:32px!important;letter-spacing:-.04em!important;}
-#dailyMotivation{
-  margin:12px 0 0!important;padding:17px 18px!important;border-radius:22px!important;
-  background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;
-  border:1px solid var(--app-border)!important;
-  box-shadow:0 10px 30px rgba(0,0,0,.14)!important;
-}
-#motivationQuote{font-size:17px!important;letter-spacing:-.02em!important;}
-#genericHome .generic-home-btn{
-  min-height:108px!important;border:1px solid var(--app-border)!important;
-  border-radius:21px!important;
-  background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.035))!important;
-  box-shadow:0 8px 24px rgba(0,0,0,.12)!important;
-  font-size:15px!important;
-}
-#genericHome .generic-home-btn br{line-height:1.6;}
-#genericHome .generic-home-btn:hover{background:rgba(255,255,255,.09)!important;}
-.sales-assistant-workflow,#priceMatchHub{
-  border-radius:24px!important;
-  box-shadow:0 16px 38px rgba(0,0,0,.2)!important;
-}
-.saw-grid{gap:10px!important;}
-.saw-grid select,.saw-grid input,#pmModel{
-  min-height:46px!important;border-radius:14px!important;
-  background:rgba(5,9,16,.82)!important;
-}
-.saw-btn{
-  min-height:48px!important;border-radius:15px!important;
-  background:linear-gradient(135deg,#f5f7fb,#cfd6e3)!important;
-  color:#0a0e16!important;
-  box-shadow:0 8px 20px rgba(0,0,0,.2)!important;
-}
-.pm-btn{border:1px solid var(--app-border)!important;border-radius:14px!important;}
-/* Make the existing bottom navigation cleaner on iPhone. */
-nav,.bottom-nav,.tab-bar,.navbar{
-  backdrop-filter:blur(18px)!important;
-  -webkit-backdrop-filter:blur(18px)!important;
-  background:rgba(8,11,18,.88)!important;
-  border-top:1px solid rgba(255,255,255,.08)!important;
-}
-@media(max-width:430px){
-  #genericHome{padding-left:13px!important;padding-right:13px!important;}
-  #genericHome>div:first-child{padding:23px 19px!important;}
-  #genericHome>div:first-child div:nth-child(2){font-size:29px!important;}
-  #genericHome .generic-home-btn{min-height:102px!important;}
-}
-</style>
-
-<style id="classy-luxury-refresh-v4">
-:root{
-  --lux-navy:#0b1220;
-  --lux-blue:#16345f;
-  --lux-slate:#24344d;
-  --lux-silver:#dfe6ef;
-  --lux-white:#f8fafc;
-  --lux-gold:#d6b36a;
-  --lux-gold-soft:rgba(214,179,106,.14);
-  --lux-line:rgba(223,230,239,.12);
-}
-html,body{background:
-  radial-gradient(900px 500px at 50% -120px,rgba(37,74,125,.38),transparent 70%),
-  linear-gradient(180deg,#08101d 0%,#0b1220 48%,#070c15 100%)!important;
-}
-body{
-  color:var(--lux-white)!important;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,system-ui,sans-serif!important;
-}
-#genericHome{max-width:700px!important;margin:auto!important;padding:18px 15px 110px!important}
-#genericHome>div:first-child{
-  border:1px solid rgba(214,179,106,.24)!important;
-  background:
-    radial-gradient(240px 150px at 100% 0,rgba(214,179,106,.16),transparent 72%),
-    linear-gradient(135deg,#142847,#0b1424 72%)!important;
-  border-radius:30px!important;
-  padding:28px 23px!important;
-  box-shadow:0 22px 55px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.06)!important;
-}
-#genericHome>div:first-child div:first-child{
-  color:#e6c984!important;letter-spacing:.14em!important;
-}
-#genericHome>div:first-child div:nth-child(2){
-  color:#fff!important;font-size:34px!important;font-weight:950!important;letter-spacing:-.045em!important;
-}
-#dailyMotivation{
-  border:1px solid rgba(214,179,106,.20)!important;
-  background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;
-  border-radius:23px!important;
-  box-shadow:0 14px 35px rgba(0,0,0,.18)!important;
-}
-#dailyMotivation>div:first-child{color:#e6c984!important}
-#genericHome>div[style*="display:grid"]{gap:11px!important}
-#genericHome .generic-home-btn{
-  position:relative;overflow:hidden;
-  min-height:112px!important;
-  border:1px solid rgba(223,230,239,.11)!important;
-  border-radius:22px!important;
-  background:linear-gradient(145deg,rgba(29,45,68,.82),rgba(13,21,34,.9))!important;
-  color:#f8fafc!important;
-  box-shadow:0 10px 26px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.035)!important;
-  font-weight:900!important;
-}
-#genericHome .generic-home-btn:before{
-  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:linear-gradient(180deg,#e6c984,rgba(230,201,132,0));
-  opacity:.8;
-}
-#genericHome .generic-home-btn:hover{border-color:rgba(214,179,106,.30)!important;transform:translateY(-1px)}
-#genericHome .generic-home-btn span{color:#aebbd0!important}
-.sales-assistant-workflow,#priceMatchHub{
-  background:
-    radial-gradient(320px 180px at 100% 0,rgba(214,179,106,.08),transparent 70%),
-    linear-gradient(145deg,#111d30,#0b1320)!important;
-  border:1px solid rgba(214,179,106,.16)!important;
-  border-radius:25px!important;
-  box-shadow:0 18px 42px rgba(0,0,0,.24)!important;
-}
-.saw-btn{
-  background:linear-gradient(135deg,#e8d19b,#c9a85e)!important;
-  color:#101722!important;
-  box-shadow:0 10px 25px rgba(0,0,0,.25)!important;
-}
-.saw-btn:hover{filter:brightness(1.04)}
-.saw-grid select,.saw-grid input,#pmModel{
-  border-color:rgba(223,230,239,.13)!important;
-  background:#0a1220!important;
-}
-.saw-pill{background:rgba(214,179,106,.10)!important;border:1px solid rgba(214,179,106,.12)}
-.pm-btn{background:rgba(255,255,255,.045)!important;border:1px solid rgba(214,179,106,.18)!important}
-.private-label{color:#e6c984!important;background:var(--lux-gold-soft)!important}
-nav,.bottom-nav,.tab-bar,.navbar{
-  background:rgba(7,12,21,.90)!important;
-  border-top:1px solid rgba(214,179,106,.14)!important;
-  backdrop-filter:blur(22px)!important;-webkit-backdrop-filter:blur(22px)!important;
-}
-@media(max-width:430px){
-  #genericHome{padding-left:12px!important;padding-right:12px!important}
-  #genericHome>div:first-child{padding:25px 20px!important}
-  #genericHome>div:first-child div:nth-child(2){font-size:30px!important}
-  #genericHome .generic-home-btn{min-height:105px!important}
-}
-</style>
-
-<style id="customer-mode-v1">
-#customerModeOverlay{position:fixed;inset:0;z-index:99999;background:linear-gradient(180deg,#f7f8fa,#e9edf2);color:#101722;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
-#customerModeOverlay.active{display:block}
-.cm-wrap{max-width:680px;margin:0 auto;padding:22px 16px 100px}
-.cm-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.cm-brand{font-weight:950;letter-spacing:.08em;font-size:12px;color:#29466e}
-.cm-exit{border:1px solid #c8d0da;background:#fff;color:#182231;border-radius:12px;padding:9px 12px;font-weight:900}
-.cm-hero{margin-top:18px;padding:26px 22px;border-radius:28px;background:linear-gradient(135deg,#17345e,#0e1b30);color:#fff;box-shadow:0 18px 40px rgba(20,42,72,.2)}
-.cm-hero h2{margin:0;font-size:30px;letter-spacing:-.04em}.cm-hero p{margin:7px 0 0;opacity:.78;font-size:14px}
-.cm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}
-.cm-btn{min-height:96px;border:1px solid #d7dde5;background:#fff;border-radius:19px;text-align:left;padding:16px;color:#101722;font-weight:900;box-shadow:0 7px 18px rgba(16,23,34,.06)}
-.cm-btn small{display:block;margin-top:5px;font-weight:600;color:#697586}
-.cm-panel{display:none;margin-top:13px;padding:18px;border-radius:21px;background:#fff;border:1px solid #d7dde5;box-shadow:0 7px 18px rgba(16,23,34,.06)}
-.cm-panel.active{display:block}.cm-panel h3{margin:0 0 8px;font-size:21px}.cm-panel p{line-height:1.5;color:#4c5969;font-size:14px}
-.cm-close{margin-top:12px;width:100%;padding:12px;border:0;border-radius:13px;background:#17345e;color:#fff;font-weight:900}
-@media(max-width:430px){.cm-wrap{padding-left:13px;padding-right:13px}.cm-hero h2{font-size:27px}}
-</style>
-
-<style id="ultimate-sales-suite-v5">
-.sales-suite{margin:14px 16px;padding:18px;border-radius:25px;background:linear-gradient(145deg,#111d30,#0b1320);border:1px solid rgba(214,179,106,.16);box-shadow:0 18px 42px rgba(0,0,0,.22)}
-.sales-suite h3{margin:0;font-size:21px}.sales-suite-sub{font-size:13px;opacity:.65;margin:4px 0 13px}
-.ss-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ss-btn{min-height:82px;border:1px solid rgba(223,230,239,.1);border-radius:17px;background:rgba(255,255,255,.045);color:#fff;font-weight:900;font-size:14px}.ss-btn span{display:block;font-size:11px;font-weight:600;opacity:.55;margin-top:4px}
-.ss-panel{display:none;margin-top:12px;padding:15px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}.ss-panel.active{display:block}
-.ss-panel h4{margin:0 0 8px;font-size:18px}.ss-panel p{font-size:13px;line-height:1.5;opacity:.78}
-.ss-option{width:100%;margin:5px 0;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:inherit;text-align:left;font-weight:800}
-.ss-answer{margin-top:10px;padding:12px;border-radius:13px;background:rgba(214,179,106,.09);border:1px solid rgba(214,179,106,.13);font-size:13px;line-height:1.45}
-.ss-close{width:100%;margin-top:10px;padding:11px;border:0;border-radius:12px;background:#c9a85e;color:#101722;font-weight:900}
-.ss-demo-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.ss-demo{padding:11px;border-radius:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);font-size:12px}
-.ss-deal{padding:14px;border-radius:16px;background:linear-gradient(135deg,rgba(214,179,106,.13),rgba(255,255,255,.035));border:1px solid rgba(214,179,106,.18)}
-.ss-deal strong{font-size:20px}
-</style>
-
-<style id="workdays-thu-sun-v1">
-.work-schedule-card{margin:12px 0;padding:13px 15px;border-radius:16px;background:rgba(214,179,106,.07);border:1px solid rgba(214,179,106,.14)}
-.work-days{display:flex;gap:6px;margin-top:9px}.work-day{padding:6px 9px;border-radius:999px;font-size:11px;font-weight:900;background:rgba(255,255,255,.06);opacity:.45}.work-day.on{background:rgba(214,179,106,.15);color:#e6c984;opacity:1}
-</style>
 </head>
 <body>
-<section id="genericHome" style="padding:18px 16px 100px;">
-  <div style="padding:22px;border-radius:24px;background:linear-gradient(145deg,#121827,#202a43);border:1px solid rgba(255,255,255,.1);">
-    <div style="font-size:12px;font-weight:900;letter-spacing:.1em;opacity:.65;text-transform:uppercase;">HISENSE SALES ASSISTANT</div>
-    <div style="font-size:30px;font-weight:950;margin-top:5px;">What do you need?</div>
-    <div style="font-size:14px;opacity:.7;margin-top:5px;">Choose a tool below. Your private commission figures are kept in the Commission tab.</div>
-  </div>
-  
-<div id="dailyMotivation" style="margin:14px 16px 0;padding:18px 18px;border-radius:20px;background:linear-gradient(145deg,#182238,#111827);border:1px solid rgba(255,255,255,.10);">
-  <div style="font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.6;">☀️ TODAY'S MINDSET</div>
-  <div id="motivationQuote" style="font-size:18px;font-weight:900;line-height:1.3;margin-top:7px;"></div>
-  <div style="font-size:12px;opacity:.62;margin-top:7px;">One customer at a time. Ask good questions, listen, and earn the sale.</div>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:14px;">
-    <button class="generic-home-btn" data-open="sales" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🛍️<br>Sales Hub<br><span style='font-size:11px;opacity:.55;font-weight:600'>Pitch & sell</span></button><button class="generic-home-btn" id="customerModeHome" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">👤<br>Customer Mode<br><span style="font-size:11px;opacity:.55;font-weight:600">Safe to show customers</span></button>
-    <button class="generic-home-btn" data-open="finder" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">📺<br>TV Finder<br><span style='font-size:11px;opacity:.55;font-weight:600'>Find the right TV</span></button>
-    <button class="generic-home-btn" data-open="promos" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🎁<br>Promotions<br><span style='font-size:11px;opacity:.55;font-weight:600'>Cashback & offers</span></button>
-    <button class="generic-home-btn" data-open="rates" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">💷<br>Commission Rates<br><span style='font-size:11px;opacity:.55;font-weight:600'>View rates</span></button>
-    <button class="generic-home-btn" data-open="price" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🔎<br>Price Match<br><span style='font-size:11px;opacity:.55;font-weight:600'>Check UK prices</span></button>
-    <button class="generic-home-btn" data-open="commission" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🔒<br>My Commission<br><span style='font-size:11px;opacity:.55;font-weight:600'>Private</span></button>
-  </div>
-  <div style="margin-top:14px;padding:13px 15px;border-radius:16px;background:rgba(255,255,255,.045);font-size:12px;opacity:.65;text-align:center;">Customer-facing home screen • Private commission is not shown here</div>
-</section>
-<div id="privateDayPlan" class="sales-suite" style="margin-top:12px;">
-  <h3>🔥 My Day</h3>
-  <div class="sales-suite-sub">Private motivation for your shift.</div>
-<div class="work-schedule-card" id="workScheduleCard">
-  <div style="font-size:11px;font-weight:900;letter-spacing:.08em;opacity:.6;">YOUR WORK WEEK</div>
-  <div style="font-size:17px;font-weight:900;margin-top:3px;">Thursday – Sunday</div>
-  <div style="font-size:12px;opacity:.62;margin-top:3px;">Your sales goals and daily motivation are based around your 4-day working week.</div>
-  <div class="work-days">
-    <span class="work-day">MON</span><span class="work-day">TUE</span><span class="work-day">WED</span>
-    <span class="work-day on">THU</span><span class="work-day on">FRI</span><span class="work-day on">SAT</span><span class="work-day on">SUN</span>
-  </div>
-</div>
-
-  <div style="padding:12px;border-radius:15px;background:rgba(214,179,106,.08);border:1px solid rgba(214,179,106,.12);">
-    <b>Today's mission</b><br>
-    Ask better questions • Demonstrate the picture • Make the value clear • Ask for the sale.
-  </div>
-  <div style="margin-top:10px;font-size:13px;opacity:.7;">🏆 Your personal records and commission remain in the private area.</div>
-</div>
-
-
-<div id="private-commission-note" style="margin:14px 16px 0;padding:14px 16px;border-radius:18px;background:linear-gradient(145deg,#151b2b,#202a43);border:1px solid rgba(255,255,255,.10);">
-  <div style="font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;opacity:.7;">SHOP FLOOR MODE</div>
-  <div style="font-size:18px;font-weight:900;margin-top:3px;">Sales Hub first</div>
-  <div style="font-size:13px;opacity:.75;margin-top:4px;">Your commission is kept in the separate 💷 Commission tab.</div>
-</div>
-
-
-
 <div class="app">
   <header class="top">
     <div><div class="brand">HISENSE • SALES</div><div class="title" id="pageTitle">Today</div></div>
@@ -358,7 +73,7 @@ nav,.bottom-nav,.tab-bar,.navbar{
   </header>
 
   <main>
-    <section id="home" class="screen active">
+    <section id="commission" class="screen">
       <div class="hero">
         <div class="kicker">Total commission</div>
         <div class="money" id="totalCommission">£0</div>
@@ -393,20 +108,11 @@ nav,.bottom-nav,.tab-bar,.navbar{
       <button class="cta" id="homeAdd">＋ Add a sale</button>
       <div class="sectionHead"><h2>Recent sales</h2><span class="link" data-go="sales">See all</span></div>
       <div id="recent"></div>
-    
-<section id="priceMatchHub">
-  <div class="pm-title">💷 Price Match</div>
-  <div class="pm-sub">Check the exact model against UK retailers before you close the sale.</div>
-  <div class="pm-controls">
-    <select id="pmModel"><option value="50U7STUK">Hisense 50U7STUK</option><option value="55U7STUK">Hisense 55U7STUK</option><option value="65U7STUK">Hisense 65U7STUK</option><option value="75U7STUK">Hisense 75U7STUK</option><option value="85U7STUK">Hisense 85U7STUK</option><option value="55UR8STUK">Hisense 55UR8STUK</option><option value="65UR8STUK">Hisense 65UR8STUK</option><option value="75UR8STUK">Hisense 75UR8STUK</option><option value="85UR8STUK">Hisense 85UR8STUK</option><option value="65UR9STUK">Hisense 65UR9STUK</option><option value="75UR9STUK">Hisense 75UR9STUK</option><option value="85UR9STUK">Hisense 85UR9STUK</option><option value="100UR8STUK">Hisense 100UR8STUK</option><option value="65Q7STUK">Hisense 65Q7STUK</option><option value="75Q7STUK">Hisense 75Q7STUK</option><option value="85Q7STUK">Hisense 85Q7STUK</option><option value="65E7STUK PRO">Hisense 65E7STUK PRO</option><option value="75E7STUK PRO">Hisense 75E7STUK PRO</option><option value="85E7STUK PRO">Hisense 85E7STUK PRO</option><option value="100E7STUK PRO">Hisense 100E7STUK PRO</option></select>
-  </div>
-  <div class="pm-card" id="pmResult"></div>
-  <a class="pm-btn" id="pmCompare" href="#" target="_blank" rel="noopener">🔎 Compare this exact model online</a>
-  <div class="pm-note">Prices change frequently. The app does not pretend a stored price is live. Use the comparison link to verify the current retailer price before quoting a customer. Exact-product comparison services can match by model/barcode; availability and prices can change at checkout.</div>
-</section>
-</section>
+    </section>
 
-    <section id="sales" class="screen">
+    <section id="home" class="screen active"><div class="hero"><div class="kicker">HISENSE • SALES ASSISTANT</div><div style="font-size:29px;font-weight:900;margin-top:7px">Sell with confidence.</div><div class="sub" style="margin-top:7px">Your shop-floor assistant for recommendations, offers, objections and product knowledge.</div><button class="cta" id="customerModeBtn">👤 Customer Mode</button></div><div class="sectionHead"><h2>What do you need?</h2></div><div class="grid2"><button class="card" data-go="hub" style="text-align:left"><b>📺 Sell a TV</b><div class="sub">Find the right model</div></button><button class="card" data-go="objections" style="text-align:left"><b>⚔️ Handle an objection</b><div class="sub">Quick responses</div></button><button class="card" data-go="offers" style="text-align:left"><b>🎁 Offers & bundles</b><div class="sub">Cashback • Xbox • finance</div></button><button class="card" data-go="price" style="text-align:left"><b>🔎 Price Match</b><div class="sub">UK retailer check</div></button><button class="card" data-go="demo" style="text-align:left"><b>🎤 Demo Mode</b><div class="sub">Follow a winning demo</div></button><button class="card" data-go="hisense" style="text-align:left"><b>✨ Why Hisense?</b><div class="sub">Customer talking points</div></button></div><div class="card" style="margin-top:12px"><div class="kicker">☀️ TODAY'S MINDSET</div><div style="font-weight:850;margin-top:7px">“Ask better questions. Demonstrate the difference. Make the value clear.”</div><div class="sub" style="margin-top:9px">Your working week: <b style="color:var(--text)">Thursday – Sunday</b></div></div><div class="card" style="margin-top:12px"><div class="row"><div><div class="cardTitle">Private area</div><div class="big" style="font-size:20px">My commission & stats</div></div><span class="pill">🔒 PRIVATE</span></div><button class="cta" data-go="commission">Open private area</button></div></section>
+
+<section id="sales" class="screen">
       <div class="formCard">
         <div class="kicker">Quick entry</div>
         <h2 style="margin:5px 0 0">Add a sale</h2>
@@ -483,27 +189,13 @@ nav,.bottom-nav,.tab-bar,.navbar{
       <div class="sectionHead"><h2>Best matches</h2><span class="tiny" id="hubCount"></span></div>
       <div id="hubResults"></div>
 
-      <div class="sectionHead"><h2>Why choose Hisense?</h2></div>
-<div class="tip-card" style="margin-top:10px;">
-  <strong>💳 RGB finance:</strong> Any qualifying Hisense RGB TV can be purchased on <strong>24 months interest free</strong> — a useful way to make the monthly cost easier to discuss with customers.
-</div>
-
-      <div id="whyHisense"></div>
-
-      <div class="sectionHead"><h2>Handling other-brand questions</h2></div>
-      <div id="brandObjections"></div>
-
-      <div class="sectionHead">
-<div class="tip-card" style="margin-top:10px;">
-  <strong>💳 Customer pitch — RGB finance:</strong>
-  “Another big advantage is that any qualifying Hisense RGB TV can be purchased on <strong>24 months interest free</strong>, so you can spread the cost rather than paying for the TV all at once.”
-  <div style="font-size:11px;margin-top:6px;opacity:.6;">Subject to finance approval and applicable terms.</div>
-</div>
-<h2>Quick sales tips</h2></div>
+      <div class="sectionHead"><h2>Quick sales tips</h2></div>
       <div id="tips"></div>
     </section>
 
-    <section id="rates" class="screen">
+    <section id="offers" class="screen"><div class="hero"><div class="kicker">Customer-facing offers</div><div class="money" style="font-size:36px">Current value</div><div class="sub">Cashback period: 9 Sep 2026 – 27 Oct 2026.</div></div><div class="card" style="margin-top:12px"><b>🎮 Mini LED TVs with a U in the model</b><div class="sub" style="margin-top:6px">Free personalised Xbox controller + 1 month Game Pass, including the UR8. Check exact model eligibility.</div></div><div class="card" style="margin-top:10px"><b>💳 RGB TVs</b><div class="sub" style="margin-top:6px">24 months interest free, subject to finance approval and applicable terms.</div></div><div class="sectionHead"><h2>Cashback models</h2></div><div id="offerList"></div></section><section id="price" class="screen"><div class="hero"><div class="kicker">Customer conversation</div><div class="money" style="font-size:36px">Price Match</div><div class="sub">Verify exact model, retailer, stock and like-for-like specification before quoting.</div></div><label>Model</label><select id="pmModel"></select><div id="pmResult" class="card" style="margin-top:10px"></div><button class="cta" id="pmSearch">🔎 Search UK retailers</button></section><section id="objections" class="screen"><div class="hero"><div class="kicker">Sales Coach</div><div style="font-size:29px;font-weight:900">Objection Buster</div><div class="sub">Keep it positive, ask a question, then demonstrate.</div></div><div id="objectionList"></div><div id="objectionAnswer" class="card" style="margin-top:10px;display:none"></div></section><section id="demo" class="screen"><div class="hero"><div class="kicker">Demo Mode</div><div style="font-size:29px;font-weight:900">A simple winning demo</div><div class="sub">Open → Picture → Sport → Gaming → Sound → Close.</div></div><div id="demoSteps"></div></section><section id="hisense" class="screen"><div class="hero"><div class="kicker">Customer-friendly</div><div style="font-size:29px;font-weight:900">Why Hisense?</div><div class="sub">Compare exact models and focus on what matters to the customer.</div></div><div id="whyList"></div></section>
+
+<section id="rates" class="screen">
       <input class="search" id="rateSearch" placeholder="🔎  Search models or categories…">
       <div class="chips" id="chips"></div>
       <div class="sectionHead"><h2>Commission rates</h2><span class="tiny" id="rateCount"></span></div>
@@ -511,15 +203,7 @@ nav,.bottom-nav,.tab-bar,.navbar{
     </section>
   </main>
 
-  <nav class="nav">
-    <button class="on" data-screen="home"><span>⌂</span>Home</button>
-    <button data-screen="sales"><span>＋</span>Add Sale</button>
-    <button data-screen="paydays"><span>◷</span>Paydays</button>
-    <button data-screen="stats"><span>▥</span>Stats</button>
-    <button data-screen="records"><span>★</span>Records</button>
-    <button data-screen="hub"><span>📺</span>Sales Hub</button>
-    <button data-screen="rates"><span>£</span>Rates</button>
-  </nav>
+  <nav class="nav"><button class="on" data-screen="home"><span>⌂</span>Home</button><button data-screen="sales"><span>＋</span>Sell</button><button data-screen="hub"><span>📺</span>Hub</button><button data-screen="offers"><span>🎁</span>Offers</button><button data-screen="price"><span>🔎</span>Price</button><button data-screen="commission"><span>£</span>Private</button><button data-screen="stats"><span>★</span>Stats</button><button data-screen="paydays"><span>◷</span>Paydays</button><button data-screen="rates"><span>▤</span>Rates</button></nav>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -594,9 +278,9 @@ function paydayFor(date){
 function go(screen){
   document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===screen));
   document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.screen===screen));
-  const titles={home:"Today",sales:"Sales",paydays:"Paydays",stats:"Stats",records:"Records",rates:"Commission Rates"};
+  const titles={home:"Good morning",sales:"Add a sale",paydays:"Paydays",stats:"My Stats",records:"Records",hub:"Sales Hub",offers:"Offers",price:"Price Match",objections:"Objection Buster",demo:"Demo Mode",hisense:"Why Hisense?",commission:"My Commission",rates:"Commission Rates"};
   document.getElementById("pageTitle").textContent=titles[screen];
-  if(screen==="home")renderHome(); if(screen==="sales")renderHistory(); if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="records")renderRecords(); if(screen==="hub")renderHub(); if(screen==="rates")renderRates();
+  if(screen==="commission")renderHome(); if(screen==="home"){} if(screen==="sales")renderHistory(); if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="records")renderRecords(); if(screen==="hub")renderHub(); if(screen==="offers")renderOffers(); if(screen==="price")renderPrice(); if(screen==="objections")renderObjections(); if(screen==="demo")renderDemo(); if(screen==="hisense")renderHisense(); if(screen==="rates")renderRates();
 }
 function renderHome(){
   const allTotal=total(), allUnits=units();
@@ -765,7 +449,7 @@ function renderRecords(){
   const now=new Date(), y=now.getFullYear(), m=now.getMonth();
   const first=new Date(y,m,1), last=new Date(y,m+1,0);
   const dayTotals={}; sales.forEach(s=>{if(s.date.startsWith(y+"-"+String(m+1).padStart(2,"0")))dayTotals[s.date]=(dayTotals[s.date]||0)+Number(s.total||0)});
-  let cal='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;font-size:11px">';
+  let cal='<div style="display:grid;grid-template-columns:repeat(9,1fr);gap:6px;text-align:center;font-size:11px">';
   ["M","T","W","T","F","S","S"].forEach(d=>cal+=`<div class="tiny" style="font-weight:800">${d}</div>`);
   let offset=(first.getDay()+6)%7; for(let i=0;i<offset;i++)cal+="<div></div>";
   for(let d=1;d<=last.getDate();d++){
@@ -791,26 +475,6 @@ const HUB_MODELS=[
 
 const CASHBACK = {'116UXQTUK': 1000, '100UXQTUK': 500, '85UR9STUK': 300, '75UR9STUK': 300, '65UR9STUK': 200, '100UR8STUK': 500, '85UR8STUK': 300, '75UR8STUK': 200, '65UR8STUK': 200, '55UR8STUK': 200, '100U7STUK': 500, '85U7STUK': 300, '75U7STUK': 200, '65U7STUK': 200, '55U7STUK': 100, '50U7STUK': 50, '85Q8STUK': 300, '75Q8STUK': 200, '65Q8STUK': 200, '55Q8STUK': 100, '50Q8STUK': 50, '100E7STUK PRO': 300, '85E7STUK PRO': 300, '75E7STUK PRO': 100, '65E7STUK PRO': 100, '55E7STUK PRO': 50, '50E7STUK PRO': 50, '43E7STUK PRO': 50, '85Q7STUK': 100, '75Q7STUK': 50, '65Q7STUK': 50, '55Q7STUK': 25, '50Q7STUK': 25, '43Q7STUK': 25, 'L9QTUK PRO': 200, 'L9QTUK': 200, 'XR10TUK': 200, 'PX4TUK PRO': 100, 'P1TUK': 50, 'C3TUK ULTRA MAX': 200, 'C3TUK ULTRA': 100, 'C3TUK PRO': 100};
 const CASHBACK_PERIOD = '9 Sep 2026 – 27 Oct 2026';
-const XBOX_PROMO_PERIOD = '5 Aug 2026 – 3 Nov 2026';
-function hasXboxBundle(x){ return /U/i.test(x.base) && /Mini LED/i.test(x.type); }
-
-const WHY_HISENSE=[
- ["💷","Value for the specification","When the customer is comparing brands, put the picture technology, gaming features, connectivity and current promotion side-by-side. Focus on what they actually get for their money rather than claiming one brand is universally better."],
- ["🌈","RGB Mini LED","On UR8/UR9 models, Currys describes RGB Mini LED as using individual red, green and blue LEDs to create colour at the source. That gives you a clear demonstration story: show bright colours and explain the technology in simple terms."],
- ["🎮","Gaming","Selected Hisense models offer high-refresh panels and HDMI 2.1. For example, Currys lists the 65UR8STUK at up to 180 Hz and the 65UR9STUK at up to 170 Hz, alongside HDMI 2.1. Ask what console they use, then demo fast action."],
- ["🎁","Free Xbox bundle","The U-series Mini LED TVs in the Sales Hub — including UR8 and UR9 — come with a free personalised Xbox Design Lab controller plus a 1-month Xbox Game Pass Premium trial, subject to the promotion terms and stock. The current qualifying purchase window shown by Currys is 5 Aug–3 Nov 2026."],
- ["⚽","Sport","Brightness, colour and motion are easy benefits to demonstrate. Currys specifically highlights the 65UR8STUK as strong for sport because of its 180 Hz panel and RGB Mini LED."],
- ["🛡️","Guarantee","Where the specific model carries a 5-year guarantee, make that part of the reassurance conversation. Always check the exact model because guarantees can differ between products."],
- ["📺","Freely + smart features","Currys lists Freely and major streaming/catch-up services on the current Hisense models. Ask what the customer watches, then show the services that matter to them."],
- ["🎁","Current promotions","Cashback, trade-in, soundbar offers and other promotions can change the value equation. Show the exact qualifying model and current promotion rather than relying on a generic 'Hisense is cheaper' message."]
-];
-const BRAND_OBJECTIONS=[
- ["Samsung / LG OLED","“OLED is great. The question I'd ask is whether you prioritise OLED's strengths or a very bright, colourful Mini LED picture. Let's put the two pictures side-by-side and see which you prefer.”"],
- ["Sony","“Sony is a strong choice, especially for processing. I'd compare the things that matter to you — picture, gaming, brightness, sound and price — rather than choosing by badge alone.”"],
- ["“I've always bought Samsung.”","“That's fair. What do you like about your Samsung? If you tell me that, I can show you the Hisense feature that matches it and where this model gives you something different.”"],
- ["“Is Hisense as good?”","“The best way to answer that is to compare the exact models. Let's look at the picture and features you actually care about rather than just the logo.”"],
- ["“Why is this one more expensive?”","“Let's break down what you're paying for — panel technology, brightness, refresh rate, processing, sound and the current promotion. If those upgrades matter to you, the extra spend makes sense.”"]
-];
 const HUB_TIPS=[
  ["🎯","Ask before you pitch","Find out what they watch, their room brightness, screen size and budget. Then show two or three TVs, not ten."],
  ["⚽","Selling sport","Ask whether they watch football. Demo fast movement and bright pitch footage, then talk about refresh rate, brightness and colour."],
@@ -850,7 +514,6 @@ function renderHub(){
      <div class="row"><div><div class="kicker">${escapeHtml(x.type)} • ${x.size}"</div><div class="big" style="font-size:22px">${escapeHtml(x.base)}</div></div><div style="text-align:right">${best}<div class="saleMoney" style="margin-top:8px">${x.price==null?"Price check":money(x.price)}</div><div class="tiny">${money(comm)} commission</div></div></div>
      <div class="sub" style="margin-top:9px">${escapeHtml(x.refresh)} • ${escapeHtml(x.features.slice(0,2).join(" • "))}</div>
      ${CASHBACK[x.base]!=null?`<div style="margin-top:12px;padding:11px 12px;border-radius:14px;background:#292315;border:1px solid #6d5930"><div class="row"><div><b style="color:#ffd166">🎁 Cashback</b><div class="tiny">Promo ends 27 Oct 2026</div></div><b style="color:#ffd166;font-size:20px">${money(CASHBACK[x.base])}</b></div></div>`:""}
-     ${hasXboxBundle(x)?`<div style="margin-top:10px;padding:11px 12px;border-radius:14px;background:#102c20;border:1px solid #2d7b55"><div style="font-weight:900;color:#8ff0b8">🎮 FREE XBOX BUNDLE</div><div class="tiny" style="margin-top:4px;color:#d7f7e4">Personalised Xbox Design Lab controller + 1 month Xbox Game Pass Premium trial</div><div class="tiny" style="margin-top:4px;color:#9bd4b4">Qualifying purchase window: ${XBOX_PROMO_PERIOD} • while stocks last</div></div>`:""}
      <details style="margin-top:12px"><summary style="cursor:pointer;color:var(--accent);font-weight:800">Open sales cheat sheet</summary>
        <div style="margin-top:12px"><b>🗣️ Pitch</b><div class="sub" style="margin-top:5px;color:var(--text)">${escapeHtml(x.pitch)}</div>
        <div style="margin-top:12px"><b>📺 Demo</b><div class="sub" style="margin-top:5px;color:var(--text)">${escapeHtml(x.demo)}</div>
@@ -860,8 +523,6 @@ function renderHub(){
      </details>
    </div>`;
  }).join(""):'<div class="empty">No exact match. Try a wider budget or another size.</div>';
- document.getElementById("whyHisense").innerHTML=WHY_HISENSE.map(t=>`<div class="achievement"><div class="badge">${t[0]}</div><div><b>${t[1]}</b><div class="tiny" style="margin-top:4px">${t[2]}</div></div></div>`).join("");
- document.getElementById("brandObjections").innerHTML=BRAND_OBJECTIONS.map(t=>`<details class="card" style="margin-bottom:9px"><summary style="cursor:pointer;font-weight:800">${escapeHtml(t[0])}</summary><div class="sub" style="margin-top:9px;color:var(--text);line-height:1.45">${escapeHtml(t[1])}</div></details>`).join("");
  document.getElementById("tips").innerHTML=HUB_TIPS.map(t=>`<div class="achievement"><div class="badge">${t[0]}</div><div><b>${t[1]}</b><div class="tiny" style="margin-top:4px">${t[2]}</div></div></div>`).join("");
 }
 function renderRates(){
@@ -927,371 +588,14 @@ function backup(){
 }
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderOffers(){const el=document.getElementById("offerList");if(el)el.innerHTML=Object.entries(CASHBACK).map(([m,v])=>`<div class="rate"><span><b style="color:var(--text)">${escapeHtml(m)}</b><small>Cashback • ${CASHBACK_PERIOD}</small></span><b>${money(v)}</b></div>`).join("")}
+function renderPrice(){const opts=["65UR8STUK","65UR9STUK","65U7STUK","75UR8STUK","75UR9STUK","85UR9STUK","100E7STUK PRO","85Q7STUK","75Q7STUK","65Q7STUK","55U7STUK","50U7STUK"];document.getElementById("pmModel").innerHTML=opts.map(m=>`<option>${m}</option>`).join("");updatePrice()}
+function updatePrice(){const m=document.getElementById("pmModel").value;const p={"65UR8STUK":1699,"65UR9STUK":1999,"65U7STUK":1199,"75UR8STUK":2299,"75UR9STUK":2799}[m];document.getElementById("pmResult").innerHTML=`<b>${escapeHtml(m)}</b><div class="big">${p?money(p):"Check current price"}</div><div class="sub">Use exact-model retailer checks before a price-match conversation.</div>`}
+function renderObjections(){const data={"I want Samsung.":"Samsung is a strong brand. Ask what they like most about it, then compare that exact priority against the Hisense model.","I want OLED.":"OLED is excellent. Ask whether they mainly want deep blacks or also want a very bright, colourful picture, then demonstrate the difference.","That's too expensive.":"Ask what they feel is too expensive, then break down the picture technology, refresh rate, sound and current offers.","TCL is cheaper.":"Compare like-for-like size, picture, brightness, gaming, warranty and today's offers — not just the ticket price.","I'll think about it.":"Ask what they are unsure about: picture, price, size or model. Solve the specific concern.","I'll buy it online.":"Make sure they compare the exact model and full deal, including cashback, bundles, finance and retailer terms.","I've never heard of Hisense.":"Don't sell the badge. Show what the exact model does and why it fits what they told you.","Is Hisense as good?":"Compare the exact TVs on the things that matter to them rather than making a blanket brand claim."};const el=document.getElementById("objectionList");el.innerHTML=Object.entries(data).map(([q,a])=>`<button class="card" data-objection="${escapeHtml(q)}" style="width:100%;text-align:left;margin-bottom:8px"><b>${escapeHtml(q)}</b></button>`).join("");el.onclick=e=>{const b=e.target.closest("[data-objection]");if(!b)return;document.getElementById("objectionAnswer").style.display="block";document.getElementById("objectionAnswer").innerHTML='<b>🗣️ Say this:</b><br>'+data[b.dataset.objection]}}
+function renderDemo(){document.getElementById("demoSteps").innerHTML=["Ask what they watch most.","Show picture: brightness, colour and contrast.","Show sport: motion and detail.","Show gaming: refresh rate and HDMI 2.1 where applicable.","Show sound: clarity and immersion.","Close: confirm size, budget and the offer."].map((x,i)=>`<div class="card" style="margin-bottom:8px"><b>${i+1}.</b> ${x}</div>`).join("")}
+function renderHisense(){document.getElementById("whyList").innerHTML=["RGB Mini LED: red, green and blue LEDs create colour at source on qualifying models.","Gaming: selected models offer high refresh rates and HDMI 2.1.","Sport: brightness, colour and motion are the key demo points.","Smart TV: current models include Freely and streaming/catch-up features.","Value: compare the exact picture technology, features, offers and price rather than the badge alone.","Always verify the exact model's guarantee and promotional eligibility."].map(x=>`<div class="card" style="margin-bottom:8px">${x}</div>`).join("")}
+document.getElementById("customerModeBtn").onclick=()=>toast("Customer Mode: use the customer-safe Sales Hub and Offers screens");document.getElementById("pmModel").onchange=updatePrice;
 init();
-</script>
-
-<section id="sales-assistant-workflow" class="sales-assistant-workflow">
-  <h3>🎯 Close the Sale</h3>
-  <div class="sub">Customer → needs → recommendation → offers → pitch</div>
-  <div class="saw-grid">
-    <div>
-      <label>Screen size</label>
-      <select id="sawSize"><option value="43">43"</option><option value="50">50"</option><option value="55">55"</option><option value="65" selected>65"</option><option value="75">75"</option><option value="85">85"</option><option value="100">100"</option></select>
-    </div>
-    <div>
-      <label>Budget</label>
-      <select id="sawBudget"><option value="500">Up to £500</option><option value="1000">Up to £1,000</option><option value="1500" selected>Up to £1,500</option><option value="2500">Up to £2,500</option><option value="99999">Flexible</option></select>
-    </div>
-    <div class="saw-full">
-      <label>What matters most?</label>
-      <select id="sawNeed">
-        <option value="sport">⚽ Sport</option><option value="gaming">🎮 Gaming</option><option value="films">🎬 Films & picture quality</option><option value="bright">☀️ Bright room</option><option value="everyday">📺 Everyday TV</option>
-      </select>
-    </div>
-  </div>
-  <button class="saw-btn" id="sawGo">Find my best recommendation</button>
-  <div class="saw-result" id="sawResult"></div>
-</section>
-<section class="sales-suite" id="ultimateSalesSuite">
-  <h3>🚀 Sales Toolkit</h3>
-  <div class="sales-suite-sub">Everything you need to move from conversation to close.</div>
-  <div class="ss-grid">
-    <button class="ss-btn" data-suite="coach">🧠 Sales Coach<span>Recommendation + pitch</span></button>
-    <button class="ss-btn" data-suite="objections">⚔️ Objection Buster<span>Know what to say next</span></button>
-    <button class="ss-btn" data-suite="demo">🎤 Demo Mode<span>Follow a winning demo</span></button>
-    <button class="ss-btn" data-suite="deal">💰 Customer Deal<span>Show the full value</span></button>
-  </div>
-
-  <div class="ss-panel" id="suite-coach">
-    <h4>🧠 Sales Coach</h4>
-    <p>Start with what the customer actually wants. Pick their main priority:</p>
-    <button class="ss-option" data-coach="sport">⚽ Mainly sport</button>
-    <button class="ss-option" data-coach="gaming">🎮 Mainly gaming</button>
-    <button class="ss-option" data-coach="films">🎬 Films & picture quality</button>
-    <button class="ss-option" data-coach="bright">☀️ Bright room</button>
-    <button class="ss-option" data-coach="everyday">📺 Everyday viewing</button>
-    <div id="coachAnswer" class="ss-answer" style="display:none"></div>
-  </div>
-
-  <div class="ss-panel" id="suite-objections">
-    <h4>⚔️ Objection Buster</h4>
-    <p>Tap what the customer says. Keep it positive, ask a question, then demonstrate.</p>
-    <button class="ss-option" data-objection="samsung">“I want Samsung.”</button>
-    <button class="ss-option" data-objection="oled">“I want OLED.”</button>
-    <button class="ss-option" data-objection="expensive">“That's too expensive.”</button>
-    <button class="ss-option" data-objection="tcl">“TCL is cheaper.”</button>
-    <button class="ss-option" data-objection="think">“I'll think about it.”</button>
-    <button class="ss-option" data-objection="online">“I'll buy it online.”</button>
-    <button class="ss-option" data-objection="unknown">“I've never heard of Hisense.”</button>
-    <button class="ss-option" data-objection="quality">“Is Hisense as good?”</button>
-    <div id="objectionAnswer" class="ss-answer" style="display:none"></div>
-  </div>
-
-  <div class="ss-panel" id="suite-demo">
-    <h4>🎤 Demo Mode</h4>
-    <p>Use this simple sequence when you have the customer in front of the TV.</p>
-    <div class="ss-demo-row">
-      <div class="ss-demo"><b>1. OPEN</b><br>“What do you watch most?”</div>
-      <div class="ss-demo"><b>2. PICTURE</b><br>Show brightness, colour and contrast.</div>
-      <div class="ss-demo"><b>3. SPORT</b><br>Show fast movement and detail.</div>
-      <div class="ss-demo"><b>4. GAMING</b><br>Show refresh rate and HDMI 2.1.</div>
-      <div class="ss-demo"><b>5. SOUND</b><br>Demonstrate clarity and immersion.</div>
-      <div class="ss-demo"><b>6. CLOSE</b><br>Confirm the right size, budget and offer.</div>
-    </div>
-  </div>
-
-  <div class="ss-panel" id="suite-deal">
-    <h4>💰 Customer Deal Card</h4>
-    <div class="ss-deal">
-      <div style="opacity:.65;font-size:11px;font-weight:900;letter-spacing:.08em">EXAMPLE CUSTOMER VALUE</div>
-      <strong>65UR8STUK</strong>
-      <div style="margin-top:7px">£1,699 TV</div>
-      <div class="ss-pills" style="margin-top:10px">
-        <span class="saw-pill">💰 £200 cashback</span>
-        <span class="saw-pill">🎮 FREE personalised Xbox controller</span>
-        <span class="saw-pill">🕹️ 1 month Game Pass</span>
-        <span class="saw-pill">💳 24 months interest free*</span>
-      </div>
-      <div style="font-size:11px;opacity:.55;margin-top:9px">*Subject to finance approval and applicable terms. Promotional eligibility and prices can change.</div>
-    </div>
-  </div>
-</section>
-
-
-<script>
-(function(){
-  const $=id=>document.getElementById(id);
-  const cb={
-    "65UR8STUK":200,"75UR8STUK":200,"85UR8STUK":300,"55UR8STUK":200,
-    "65UR9STUK":200,"75UR9STUK":300,"85UR9STUK":300,
-    "65U7STUK":200,"75U7STUK":200,"85U7STUK":300,"55U7STUK":100,"50U7STUK":50,
-    "65Q7STUK":50,"75Q7STUK":50,"85Q7STUK":100,"55Q7STUK":25,"50Q7STUK":25,"43Q7STUK":25,
-    "100E7STUK PRO":300,"85E7STUK PRO":300,"75E7STUK PRO":100,"65E7STUK PRO":100,"55E7STUK PRO":50
-  };
-  const commission={
-    "50U7STUK":15,"55U7STUK":20,"65U7STUK":25,"75U7STUK":30,"85U7STUK":40,
-    "55UR8STUK":35,"65UR8STUK":45,"75UR8STUK":60,"85UR8STUK":80,
-    "65UR9STUK":60,"75UR9STUK":80,"85UR9STUK":120,
-    "43Q7STUK":5,"50Q7STUK":5,"55Q7STUK":10,"65Q7STUK":15,"75Q7STUK":20,"85Q7STUK":25,
-    "43E7Q PRO":10,"50E7STUK PRO":10,"55E7STUK PRO":15,"65E7STUK PRO":20,"75E7STUK PRO":25,"85E7STUK PRO":30,"100E7STUK PRO":40
-  };
-  const models=[
-    {m:"43E7QTUK",base:"43E7Q",s:43,p:269,t:"QLED",needs:["everyday"]},
-    {m:"55E7QTUK",base:"55E7Q",s:55,p:329,t:"QLED",needs:["everyday"]},
-    {m:"50U7STUK",base:"50U7STUK",s:50,p:null,t:"Mini LED",needs:["sport","gaming","bright","films"]},
-    {m:"65U7STUK",base:"65U7STUK",s:65,p:1199,t:"Mini LED",needs:["sport","gaming","bright","films"]},
-    {m:"55UR8STUK",base:"55UR8STUK",s:55,p:1299,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
-    {m:"65UR8STUK",base:"65UR8STUK",s:65,p:1699,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
-    {m:"75UR8STUK",base:"75UR8STUK",s:75,p:2299,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
-    {m:"65UR9STUK",base:"65UR9STUK",s:65,p:1999,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
-    {m:"75UR9STUK",base:"75UR9STUK",s:75,p:2799,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
-    {m:"85UR9STUK",base:"85UR9STUK",s:85,p:null,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]}
-  ];
-  function recommend(){
-    const size=+$("sawSize").value,budget=+$("sawBudget").value,need=$("sawNeed").value;
-    let candidates=models.filter(x=>x.s===size && x.needs.includes(need) && (x.p===null || x.p<=budget));
-    if(!candidates.length) candidates=models.filter(x=>x.s===size && (x.p===null || x.p<=budget));
-    if(!candidates.length) candidates=models.filter(x=>x.p!==null && x.p<=budget);
-    if(!candidates.length){$("sawResult").innerHTML="<strong>Try widening the budget or screen size.</strong>";$("sawResult").classList.add("show");return;}
-    candidates.sort((a,b)=>(b.t==="RGB Mini LED")-(a.t==="RGB Mini LED") || (b.p||0)-(a.p||0));
-    const x=candidates[0], c=commission[x.base]||0, cash=cb[x.base]||0;
-    const xbox=/U7|UR8|UR9/.test(x.base);
-    const pitch=x.t==="RGB Mini LED"
-      ? `“If picture quality and sport are important, I'd show you this ${x.s}-inch RGB Mini LED. It gives you a really bright, colourful picture and strong motion performance. And you've got ${cash?"£"+cash+" cashback, ":""}${xbox?"the free personalised Xbox controller and 1-month Game Pass offer, ":""}plus 24 months interest free on qualifying RGB TVs.”`
-      : `“For what you've told me, this ${x.s}-inch ${x.t} is a strong fit. It gives you the features you need without pushing you beyond your budget.”`;
-    $("sawResult").innerHTML=`<div style="font-size:12px;opacity:.7">BEST FIT</div><div style="font-size:22px;font-weight:900;margin:3px 0">${x.m}</div><div>${x.t}${x.p?" · £"+x.p:""}</div><div class="saw-pills"><span class="saw-pill">💷 Commission £${c}</span>${cash?`<span class="saw-pill">💰 Cashback £${cash}</span>`:""}${xbox?'<span class="saw-pill">🎮 Xbox bundle</span>':''}${x.t==="RGB Mini LED"?'<span class="saw-pill">💳 24 months interest free</span>':''}</div><div class="saw-pitch"><strong>🗣️ Say this:</strong><br>${pitch}</div>`;
-    $("sawResult").classList.add("show");
-  }
-  if($("sawGo")) $("sawGo").addEventListener("click",recommend);
-})();
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  // Put the customer-facing Sales Hub/home view first.
-  const commissionSelectors = [
-    '[data-tab="commission"]',
-    '[data-page="commission"]',
-    '#commissionTab',
-    '#tabCommission'
-  ];
-  const homeSelectors = [
-    '[data-tab="home"]',
-    '[data-page="home"]',
-    '#homeTab',
-    '#tabHome',
-    '[data-tab="sales"]',
-    '[data-page="sales"]',
-    '#salesHubTab',
-    '#salesTab'
-  ];
-  function first(selectors){
-    for(const s of selectors){
-      const el=document.querySelector(s);
-      if(el) return el;
-    }
-    return null;
-  }
-  const home=first(homeSelectors);
-  if(home) setTimeout(()=>home.click(), 0);
-
-  // If a separate commission panel exists, add an explicit privacy label.
-  const commission=first(['#commission','#commissionSection','#commission-page','.commission-section']);
-  if(commission && !commission.querySelector('.private-label')){
-    const n=document.createElement('div');
-    n.className='private-label';
-    n.textContent='🔒 Private — commission';
-    n.style.cssText='display:inline-block;margin:0 0 10px;padding:6px 10px;border-radius:999px;background:rgba(255,193,7,.12);font-size:11px;font-weight:800;';
-    commission.prepend(n);
-  }
-});
-</script>
-
-<script>
-(function(){
-  const sel=document.getElementById('pmModel'), result=document.getElementById('pmResult'), link=document.getElementById('pmCompare');
-  if(!sel||!result||!link)return;
-  const currys={
-    "65UR8STUK":1699,"65UR9STUK":1999,"65U7STUK":1199,
-    "55U7STUK":null,"50U7STUK":null,"75UR8STUK":2299,"75UR9STUK":2799,
-    "43Q7STUK":null,"65Q7STUK":null,"75Q7STUK":null,"85Q7STUK":null,
-    "65E7STUK PRO":null,"75E7STUK PRO":null,"85E7STUK PRO":null,"100E7STUK PRO":null
-  };
-  function update(){
-    const m=sel.value, q=encodeURIComponent(m);
-    const price=currys[m];
-    result.innerHTML='<div style="font-size:12px;opacity:.65">CURRENT CURRYS REFERENCE</div>'+
-      '<div style="font-size:19px;font-weight:900;margin-top:3px">'+m+'</div>'+
-      '<div class="pm-row"><span class="pm-retailer">Currys</span><span class="pm-price">'+(price?'£'+price.toLocaleString():'Check current price')+'</span></div>'+
-      '<div class="pm-good">🔎 Search exact model across UK retailers</div>'+
-      '<div class="pm-warn">The live comparison is opened from the app so you can verify the retailer, price and stock before using it in a price-match conversation.</div>';
-    link.href='https://asap.co.uk/?q='+q;
-  }
-  sel.addEventListener('change',update); update();
-})();
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  const home=document.getElementById('genericHome');
-  if(!home) return;
-
-  // Hide commission-looking dashboard sections on initial load.
-  const all=[...document.querySelectorAll('body > section, body > main > section, .page, .screen, .tab-content, .tab-pane')];
-  all.forEach(el=>{
-    if(el.id==='genericHome') return;
-    const text=(el.id+' '+el.className+' '+el.textContent.slice(0,500)).toLowerCase();
-    if(/commission|payday|earnings/.test(text) && !/sales hub/.test(text)){
-      el.dataset.hiddenOnLanding='1';
-      el.style.display='none';
-    }
-  });
-
-  // Try to activate an existing Home tab if one exists.
-  const homeNav=[...document.querySelectorAll('button,a,[role="button"]')].find(el=>{
-    const t=(el.textContent||'').trim().toLowerCase();
-    return t==='home' || t==='dashboard';
-  });
-  if(homeNav) setTimeout(()=>homeNav.click(),50);
-
-  // Generic home buttons: use existing nav where possible.
-  document.querySelectorAll('.generic-home-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const target=btn.dataset.open;
-      if(target==='commission'){
-        // Reveal only commission when explicitly requested.
-        document.querySelectorAll('[data-hidden-on-landing="1"]').forEach(el=>el.style.display='');
-        const c=[...document.querySelectorAll('button,a,[role="button"]')].find(el=>/commission/i.test(el.textContent||''));
-        if(c) c.click();
-        home.style.display='none';
-        return;
-      }
-      const candidates=[...document.querySelectorAll('button,a,[role="button"]')];
-      const map={sales:/sales hub|sales/,finder:/tv finder|finder/,promos:/promotion/,rates:/commission rates|rates/,price:/price match/};
-      const hit=candidates.find(el=>map[target] && map[target].test((el.textContent||'').trim().toLowerCase()));
-      if(hit){home.style.display='none'; hit.click();}
-    });
-  });
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  const q=document.getElementById('motivationQuote');
-  if(!q)return;
-  const quotes=[
-    "“Every customer is an opportunity to make someone’s day better — and make a great sale.”",
-    "“Ask the right questions, listen carefully, and the right TV will sell itself.”",
-    "“Don’t chase the sale. Build the confidence that makes the customer want to buy.”",
-    "“Know your product. Believe in your recommendation. Be confident.”",
-    "“Small wins become big results. One great conversation at a time.”",
-    "“Your goal today: help the customer find the TV they’ll be excited to take home.”",
-    "“Confidence is contagious. If you believe in the recommendation, the customer feels it too.”"
-  ];
-  const d=new Date();
-  q.textContent=quotes[(Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000)))%quotes.length];
-});
-</script>
-
-<div id="customerModeOverlay" aria-hidden="true">
-  <div class="cm-wrap">
-    <div class="cm-top">
-      <div class="cm-brand">HISENSE SALES ASSISTANT</div>
-      <button class="cm-exit" id="cmExit">🔒 Exit</button>
-    </div>
-    <div class="cm-hero">
-      <h2>Find your perfect TV</h2>
-      <p>Let's find the right picture, size and features for the way you watch.</p>
-    </div>
-    <div class="cm-grid">
-      <button class="cm-btn" data-cm="finder">📺 TV Finder<small>Find the right TV</small></button>
-      <button class="cm-btn" data-cm="compare">⚖️ Compare TVs<small>Compare features</small></button>
-      <button class="cm-btn" data-cm="promos">🎁 Current Offers<small>Cashback & bundles</small></button>
-      <button class="cm-btn" data-cm="hisense">✨ Why Hisense?<small>Key benefits</small></button>
-    </div>
-    <div class="cm-panel" id="cmFinder"><h3>📺 What matters most?</h3><p>Tell me your screen size, budget and what you watch most. We can then use the TV Finder in the app to narrow down the best options.</p><button class="cm-close" data-cm-jump="finder">Open TV Finder</button></div>
-    <div class="cm-panel" id="cmCompare"><h3>⚖️ Compare TVs</h3><p>Compare picture technology, brightness, refresh rate, gaming features and other customer-relevant differences — without showing private sales information.</p><button class="cm-close" data-cm-jump="compare">Open comparison</button></div>
-    <div class="cm-panel" id="cmPromos"><h3>🎁 Current offers</h3><p>See the current cashback, Xbox bundle and other promotional information available on qualifying Hisense models.</p><button class="cm-close" data-cm-jump="promos">Open promotions</button></div>
-    <div class="cm-panel" id="cmHisense"><h3>✨ Why Hisense?</h3><p>Explore the picture, gaming, sport, smart TV and value points that can help you choose between models.</p><button class="cm-close" data-cm-jump="hisense">Open Why Hisense</button></div>
-  </div>
-</div>
-
-<script id="customer-mode-js">
-document.addEventListener('DOMContentLoaded',function(){
-  const overlay=document.getElementById('customerModeOverlay');
-  if(!overlay)return;
-  function openCM(){overlay.classList.add('active');overlay.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
-  function closeCM(){overlay.classList.remove('active');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';}
-  const buttons=[...document.querySelectorAll('button,a')];
-  const customerTrigger=buttons.find(el=>/customer mode/i.test((el.textContent||'')));
-  if(customerTrigger) customerTrigger.addEventListener('click',function(e){e.preventDefault();openCM();});
-
-  document.getElementById('cmExit').addEventListener('click',closeCM);
-  overlay.addEventListener('click',function(e){
-    const b=e.target.closest('[data-cm]');
-    if(b){
-      document.querySelectorAll('.cm-panel').forEach(x=>x.classList.remove('active'));
-      const id={'finder':'cmFinder','compare':'cmCompare','promos':'cmPromos','hisense':'cmHisense'}[b.dataset.cm];
-      if(id)document.getElementById(id).classList.add('active');
-    }
-    const j=e.target.closest('[data-cm-jump]');
-    if(j){
-      const target=j.dataset.cmJump;
-      closeCM();
-      const candidates=[...document.querySelectorAll('button,a,[role="button"]')];
-      const re={'finder':/tv finder|finder/,'compare':/compare/,'promos':/promotion|offers/,'hisense':/why choose hisense|why hisense/}[target];
-      const hit=candidates.find(x=>re&&re.test((x.textContent||'').toLowerCase()));
-      if(hit) setTimeout(()=>hit.click(),80);
-    }
-  });
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  const b=document.getElementById('customerModeHome'),o=document.getElementById('customerModeOverlay');
-  if(b&&o)b.addEventListener('click',function(){o.classList.add('active');o.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';});
-});
-</script>
-
-<script id="ultimate-sales-suite-js">
-document.addEventListener('DOMContentLoaded',function(){
-  const suite=document.getElementById('ultimateSalesSuite'); if(!suite)return;
-  const answers={
-    samsung:"“Samsung is a strong brand. What do you like most about Samsung — the picture, the smart features or the brand itself?” Then match that priority against the exact Hisense model.",
-    oled:"“OLED is excellent. Is the main thing you're after deep blacks, or do you also want a very bright and colourful picture?” Then demonstrate the difference rather than arguing about brands.",
-    expensive:"“I understand. Before we rule it out, can I show you exactly what you're getting for the extra money?” Then link the picture technology, refresh rate, sound and current offers to what they actually need.",
-    tcl:"“TCL is definitely worth comparing. Let's compare the exact size and specification — picture, brightness, gaming, warranty and today's offers — rather than just the ticket price.”",
-    think:"“Of course. What part are you unsure about — the picture, the price, the size or the model?” Solve the specific concern instead of pushing.",
-    online:"“Absolutely, it's worth checking. Before you do, let me make sure you're comparing the exact model and the full deal, including cashback, bundles and finance.”",
-    unknown:"“That's fair. Rather than asking you to buy on the badge, let me show you what this exact model does and why it fits what you've told me.”",
-    quality:"“The best way to answer that is to compare the exact TVs. Tell me what matters most to you and I'll show you where each model is strongest.”"
-  };
-  const coach={
-    sport:["65UR8STUK","RGB Mini LED • up to 180 Hz • strong brightness and motion","Show fast football footage, then say: “This is where the colour, brightness and high refresh rate really come into their own.”"],
-    gaming:["65UR8STUK","RGB Mini LED • up to 180 Hz • HDMI 2.1 on the model","“If gaming is your priority, the high refresh rate and gaming connections are the things I'd focus on.”"],
-    films:["65UR9STUK","RGB Mini LED • premium picture performance","“Let's focus on the picture first — colour, contrast and detail — then compare the exact price and offer.”"],
-    bright:["65UR8STUK","RGB Mini LED • high brightness focus","“In a bright room, I'd prioritise a TV that can keep the picture punchy rather than looking washed out.”"],
-    everyday:["65U7STUK","Mini LED • 144 Hz • strong all-round specification","“This gives you a strong step up in picture and gaming features without automatically jumping to the premium price point.”"]
-  };
-  suite.querySelectorAll('[data-suite]').forEach(b=>b.addEventListener('click',()=>{
-    suite.querySelectorAll('.ss-panel').forEach(p=>p.classList.remove('active'));
-    const p=document.getElementById('suite-'+b.dataset.suite);if(p)p.classList.add('active');
-  }));
-  suite.querySelectorAll('[data-objection]').forEach(b=>b.addEventListener('click',()=>{
-    const a=document.getElementById('objectionAnswer');a.style.display='block';a.innerHTML='<b>🗣️ Say this:</b><br>'+answers[b.dataset.objection];
-  }));
-  suite.querySelectorAll('[data-coach]').forEach(b=>b.addEventListener('click',()=>{
-    const a=document.getElementById('coachAnswer'),x=coach[b.dataset.coach];a.style.display='block';a.innerHTML='<b>🥇 Recommend:</b> '+x[0]+'<br><br><b>Why:</b> '+x[1]+'<br><br><b>🎤 Say this:</b> '+x[2];
-  }));
-});
-</script>
-
-<script id="workdays-thu-sun-js">
-document.addEventListener('DOMContentLoaded',function(){
-  // Thursday–Sunday work pattern is used for motivation/planning.
-  window.HISENSE_WORK_DAYS=[4,5,6,0]; // JS Sunday=0, Thursday=4
-});
 </script>
 </body>
 </html>
