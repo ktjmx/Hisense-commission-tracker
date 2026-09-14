@@ -96,6 +96,17 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .sale-rate-pop{margin-top:-5px;margin-bottom:11px;padding:9px 11px;border:1px solid #31575b;border-radius:11px;background:#102b2e;color:#b8c9ca;font-size:11px;display:none}
 .sale-rate-pop.show{display:block}
 
+.commission-summary{padding:17px;background:linear-gradient(145deg,#12363a,#0b2023);border-color:#356b6e}
+.commission-main{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:13px}
+.commission-main strong{display:block;font-family:Manrope,sans-serif;font-size:32px;letter-spacing:-1px;color:#f1d79e;margin-top:4px}
+.commission-side{text-align:right}.commission-side b{display:block;font-family:Manrope,sans-serif;font-size:22px;margin-top:4px}
+.commission-details{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.commission-details>div{background:#0a1d20;border:1px solid #25484c;border-radius:13px;padding:10px}
+.commission-details b{display:block;font-family:Manrope,sans-serif;font-size:17px;margin-top:3px}
+.pay-estimate{border:1px solid #2d5054;border-radius:14px;background:#10292c;padding:12px;margin-top:8px}
+.pay-estimate .pay-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pay-estimate .pay-date{font-weight:850}.pay-estimate .pay-amount{font-family:Manrope,sans-serif;font-weight:900;color:#f1d79e;white-space:nowrap}
+.pay-estimate .pay-sub{font-size:10px;color:#9db0b1;margin-top:4px}
 </style>
 </head>
 <body>
@@ -222,6 +233,17 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 </section>
 
 <section class="screen" id="stats">
+  <div class="card commission-summary">
+    <div class="section-title">Total commission summary</div>
+    <div class="commission-main">
+      <div><span class="muted">Total commission</span><strong id="statsTotalCommission">£0</strong></div>
+      <div class="commission-side"><span class="muted">Units sold</span><b id="statsCommissionUnits">0</b></div>
+    </div>
+    <div class="commission-details">
+      <div><span class="muted">Sales entries</span><b id="statsCommissionEntries">0</b></div>
+      <div><span class="muted">Average per unit</span><b id="statsAverageCommission">£0</b></div>
+    </div>
+  </div>
   <div class="card weekly-stats">
     <div class="section-title">Weekly sales summary</div>
     <div class="weekly-dates" id="statsWeeklyDates"></div>
@@ -561,6 +583,55 @@ function renderSoundbars(){
    <div class="soundbar-pitch">${x.pitch.replace(/^“|”$/g,"")}</div>
  </div>`).join("");
 }
+
+
+function isoWeekNumber(dateString){
+ const d=new Date(dateString+"T12:00:00"),day=d.getDay()||7;
+ d.setDate(d.getDate()+4-day);
+ const y=new Date(d.getFullYear(),0,1);
+ return Math.ceil((((d-y)/86400000)+1)/7);
+}
+function payPeriodCommission(a,b){
+ return sales.filter(s=>{const w=isoWeekNumber(s[0]);return w>=a&&w<=b})
+   .reduce((sum,s)=>sum+Number(s[3]||0),0);
+}
+function renderStats(){
+ const now=new Date(),day=now.getDay();
+ const st=new Date(now);st.setHours(12,0,0,0);st.setDate(now.getDate()-day);
+ const en=new Date(st);en.setDate(st.getDate()+6);
+ const iso=d=>d.toISOString().slice(0,10);
+ const weekSales=sales.filter(x=>x[0]>=iso(st)&&x[0]<=iso(en));
+ const w=getSalesMix(weekSales),o=getSalesMix(sales);
+ const fmt=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"short"});
+ document.getElementById("statsWeeklyDates").textContent=fmt(st)+" – "+fmt(en)+" • Sunday to Saturday";
+ document.getElementById("statsWeeklyUnits").textContent=w.tvUnits;
+ document.getElementById("statsWeeklySoundbars").textContent=w.soundbars;
+ document.getElementById("statsWeeklyLED").textContent=w.p(w.led)+"%";
+ document.getElementById("statsWeeklyQLED").textContent=w.p(w.qled)+"%";
+ document.getElementById("statsWeeklyMiniLED").textContent=w.p(w.mini)+"%";
+ document.getElementById("statsWeeklyRGB").textContent=w.p(w.rgb)+"%";
+ document.getElementById("statsOverallUnits").textContent=o.tvUnits;
+ document.getElementById("statsOverallLED").textContent=o.p(o.led)+"%";
+ document.getElementById("statsOverallQLED").textContent=o.p(o.qled)+"%";
+ document.getElementById("statsOverallMiniLED").textContent=o.p(o.mini)+"%";
+ document.getElementById("statsOverallRGB").textContent=o.p(o.rgb)+"%";
+ const total=totalComm(),units=totalUnits();
+ document.getElementById("statsTotalCommission").textContent=money(total);
+ document.getElementById("statsCommissionUnits").textContent=units;
+ document.getElementById("statsCommissionEntries").textContent=sales.length;
+ document.getElementById("statsAverageCommission").textContent=money(units?total/units:0);
+ const periods=[[32,35,"25 Sep 2026"],[36,39,"23 Oct 2026"],[40,44,"25 Nov 2026"],[45,48,"TBC"],[49,52,"25 Jan 2027"]];
+ const cw=isoWeekNumber(iso(new Date()));
+ document.getElementById("payday").innerHTML=periods.map(p=>{
+   const amount=payPeriodCommission(p[0],p[1]);
+   const status=cw>p[1]?"Paid period":(cw>=p[0]?"Next payday":"Upcoming");
+   return `<div class="pay-estimate"><div class="pay-head"><div><div class="pay-date">${p[2]}</div><div class="pay-sub">WK${p[0]}–${p[1]} • ${status}</div></div><div class="pay-amount">${money(amount)}</div></div></div>`;
+ }).join("");
+}
+document.getElementById("rateSearch").oninput=()=>{
+ const m=document.getElementById("rateSearch").value,r=rate(m);
+ document.getElementById("rateAnswer").innerHTML=m?(r==null?"No current rate found.":`<strong>${m.toUpperCase()}</strong> pays <strong>${money(r)}</strong> commission per unit.`):"Enter a model to see the current rate.";
+};
 
 function renderCoach(){
  const key=document.getElementById("coachModel").value;
