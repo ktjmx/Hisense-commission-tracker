@@ -293,6 +293,11 @@ nav,.bottom-nav,.tab-bar,.navbar{
 .ss-deal{padding:14px;border-radius:16px;background:linear-gradient(135deg,rgba(214,179,106,.13),rgba(255,255,255,.035));border:1px solid rgba(214,179,106,.18)}
 .ss-deal strong{font-size:20px}
 </style>
+
+<style id="workdays-thu-sun-v1">
+.work-schedule-card{margin:12px 0;padding:13px 15px;border-radius:16px;background:rgba(214,179,106,.07);border:1px solid rgba(214,179,106,.14)}
+.work-days{display:flex;gap:6px;margin-top:9px}.work-day{padding:6px 9px;border-radius:999px;font-size:11px;font-weight:900;background:rgba(255,255,255,.06);opacity:.45}.work-day.on{background:rgba(214,179,106,.15);color:#e6c984;opacity:1}
+</style>
 </head>
 <body>
 <section id="genericHome" style="padding:18px 16px 100px;">
@@ -320,6 +325,16 @@ nav,.bottom-nav,.tab-bar,.navbar{
 <div id="privateDayPlan" class="sales-suite" style="margin-top:12px;">
   <h3>🔥 My Day</h3>
   <div class="sales-suite-sub">Private motivation for your shift.</div>
+<div class="work-schedule-card" id="workScheduleCard">
+  <div style="font-size:11px;font-weight:900;letter-spacing:.08em;opacity:.6;">YOUR WORK WEEK</div>
+  <div style="font-size:17px;font-weight:900;margin-top:3px;">Thursday – Sunday</div>
+  <div style="font-size:12px;opacity:.62;margin-top:3px;">Your sales goals and daily motivation are based around your 4-day working week.</div>
+  <div class="work-days">
+    <span class="work-day">MON</span><span class="work-day">TUE</span><span class="work-day">WED</span>
+    <span class="work-day on">THU</span><span class="work-day on">FRI</span><span class="work-day on">SAT</span><span class="work-day on">SUN</span>
+  </div>
+</div>
+
   <div style="padding:12px;border-radius:15px;background:rgba(214,179,106,.08);border:1px solid rgba(214,179,106,.12);">
     <b>Today's mission</b><br>
     Ask better questions • Demonstrate the picture • Make the value clear • Ask for the sale.
@@ -1269,6 +1284,13 @@ document.addEventListener('DOMContentLoaded',function(){
   suite.querySelectorAll('[data-coach]').forEach(b=>b.addEventListener('click',()=>{
     const a=document.getElementById('coachAnswer'),x=coach[b.dataset.coach];a.style.display='block';a.innerHTML='<b>🥇 Recommend:</b> '+x[0]+'<br><br><b>Why:</b> '+x[1]+'<br><br><b>🎤 Say this:</b> '+x[2];
   }));
+});
+</script>
+
+<script id="workdays-thu-sun-js">
+document.addEventListener('DOMContentLoaded',function(){
+  // Thursday–Sunday work pattern is used for motivation/planning.
+  window.HISENSE_WORK_DAYS=[4,5,6,0]; // JS Sunday=0, Thursday=4
 });
 </script>
 </body>
