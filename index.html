@@ -526,7 +526,7 @@ function findTV(){
     if(n==="picture"||n==="brightness") return /UR8|UR9|U8/i.test(model)?0:1;
     return 0;
   };
-  matches.sort((a,z)=>rank(a)-rank(z)||Number(z[1])-Number(a[1]));
+  matches.sort((a,z)=>Number(z[1])-Number(a[1]));
 
   if(!matches.length){
     out.innerHTML=`<div class="card"><b>No TVs match those filters.</b>
@@ -556,7 +556,8 @@ function findTV(){
         <b>Customer deal</b>
         <div>Trade-in: <strong>${money(trade)}</strong>${d.code?` (${d.code})`:""}</div>
         <div>Cashback: <strong>${money(cb)}</strong></div>
-        <div class="saving">Effective cost: ${money(effective)}</div>
+        <div class="saving">Total savings: <strong>${money(trade+cb)}</strong></div>
+       <div class="saving">Effective cost: <strong>${money(effective)}</strong></div>
         <button class="offer-btn" data-offer-model="${model.replace(/"/g,'&quot;')}">View offers</button>
       </div>
     </div>`;
