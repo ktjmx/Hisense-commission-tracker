@@ -67,13 +67,13 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .coach-list{margin:8px 0 0;padding-left:18px;color:#d3dfe0;font-size:13px;line-height:1.55}
 .coach-tip{border-left:3px solid #f1d79e;padding:9px 11px;background:rgba(241,215,158,.06);border-radius:8px;margin-top:10px;font-size:12px;line-height:1.5}
 .coach-cap{width:34px;height:34px;border:1px solid rgba(255,255,255,.18);border-radius:10px;display:grid;place-items:center;color:#fff;font-size:18px}
-.soundbar-card{padding:13px;border:1px solid #2d5054;border-radius:15px;background:#0d2528;margin-top:8px}
-.soundbar-card .sb-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.soundbar-card{padding:12px 13px;border:1px solid #2d5054;border-radius:14px;background:#0d2528;margin-top:7px}
+.soundbar-card .sb-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .soundbar-card b{font-family:Manrope,sans-serif;font-size:14px}
-.soundbar-price{color:#f1d79e;font-family:Manrope,sans-serif;font-weight:900;white-space:nowrap}
-.soundbar-price.missing{color:#9db0b1;font-size:11px;text-align:right;white-space:normal}
-.soundbar-meta{font-size:11px;color:#9db0b1;margin-top:5px;line-height:1.4}
-.soundbar-pitch{font-size:12px;color:#d3dfe0;line-height:1.45;margin-top:8px}
+.soundbar-badge{font-size:9px;color:#8fdce0;font-weight:850;text-transform:uppercase;letter-spacing:.08em}
+.soundbar-meta{font-size:10.5px;color:#9db0b1;margin-top:5px;line-height:1.35}
+.soundbar-pitch{font-size:11.5px;color:#d3dfe0;line-height:1.42;margin-top:6px}
+.soundbar-pitch strong{color:#f1d79e}
 
 .weekly-stats,.overall-stats{padding:17px}
 .weekly-stat-top{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -85,6 +85,17 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .overall-mix b{display:block;font-family:Manrope,sans-serif;font-size:17px}
 .overall-mix span{display:block;color:var(--muted);font-size:9px;font-weight:700;margin-top:3px}
 .overall-total{display:flex;align-items:baseline;gap:7px;margin-bottom:12px}
+
+.autocomplete-wrap{position:relative}
+.autocomplete-popup{position:absolute;left:0;right:0;top:calc(100% + 5px);z-index:50;background:#0b2023;border:1px solid #3a666a;border-radius:14px;box-shadow:0 18px 35px #000b;overflow:hidden;display:none;max-height:260px;overflow-y:auto}
+.autocomplete-popup.show{display:block}
+.autocomplete-item{width:100%;border:0;border-bottom:1px solid #244448;background:none;color:#f5f8f7;padding:11px 13px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;font-weight:750}
+.autocomplete-item:last-child{border-bottom:0}
+.autocomplete-item:active{background:#15383b}
+.autocomplete-item small{color:#f1d79e;font-size:11px;font-weight:900;white-space:nowrap}
+.sale-rate-pop{margin-top:-5px;margin-bottom:11px;padding:9px 11px;border:1px solid #31575b;border-radius:11px;background:#102b2e;color:#b8c9ca;font-size:11px;display:none}
+.sale-rate-pop.show{display:block}
+
 </style>
 </head>
 <body>
@@ -123,9 +134,16 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   <div class="card">
     <div class="section-title">Log a sale</div>
     <div class="field"><label>Date</label><input type="date" id="saleDate"></div>
-    <div class="field"><label>Model</label><input id="saleModel" list="modelList" placeholder="e.g. 65UR8STUK"><datalist id="modelList"></datalist></div>
+    <div class="field">
+<label>Model</label>
+<div class="autocomplete-wrap">
+<input id="saleModel" autocomplete="off" placeholder="Start typing a model…">
+<div id="saleModelPopup" class="autocomplete-popup"></div>
+</div>
+</div>
+<div id="saleRate" class="sale-rate-pop"></div>
+<datalist id="modelList"></datalist>
     <div class="field"><label>Quantity</label><select id="saleQty"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-    <div class="rate-result" id="saleRate">Commission: —</div>
     <button class="primary" id="addSale">Add Sale</button>
   </div>
   <div class="card">
@@ -196,7 +214,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     
 <div class="card soundbar-catalogue">
   <div class="section-title">Hisense Soundbars</div>
-  <div class="muted" style="margin-top:-7px;margin-bottom:10px">Current Currys pricing checked 14 Sep 2026. Prices shown are the current standard price where Currys currently lists the model.</div>
+  <div class="muted" style="margin-top:-7px;margin-bottom:10px">A quick guide to the range — key specs and an easy customer pitch for each model.</div>
   <div id="soundbarList"></div>
 </div>
 
@@ -370,11 +388,43 @@ function showDay(key){
 }
 document.getElementById("prevMonth").onclick=()=>{window.calDate=new Date(window.calDate.getFullYear(),window.calDate.getMonth()-1,1);renderCalendar()}
 document.getElementById("nextMonth").onclick=()=>{window.calDate=new Date(window.calDate.getFullYear(),window.calDate.getMonth()+1,1);renderCalendar()}
-document.getElementById("saleModel").oninput=()=>document.getElementById("saleRate").textContent="Commission: "+money(rate(document.getElementById("saleModel").value));
+const saleModelInput=document.getElementById("saleModel");
+const saleModelPopup=document.getElementById("saleModelPopup");
+const saleRatePop=document.getElementById("saleRate");
+
+function saleModelMatches(q){
+  const n=norm(q);
+  const vals=[...new Set(Object.keys(R))].sort();
+  if(!n)return [];
+  return vals.filter(x=>norm(x).includes(n)).slice(0,8);
+}
+function hideSaleModelPopup(){saleModelPopup.classList.remove("show");saleModelPopup.innerHTML="";}
+function showSaleModelPopup(){
+  const q=saleModelInput.value.trim();
+  const matches=saleModelMatches(q);
+  if(!q||!matches.length){hideSaleModelPopup();return}
+  saleModelPopup.innerHTML=matches.map(m=>`<button type="button" class="autocomplete-item" data-model="${m.replace(/"/g,'&quot;')}"><span>${m}</span><small>${money(rate(m))} commission</small></button>`).join("");
+  saleModelPopup.classList.add("show");
+  saleModelPopup.querySelectorAll("[data-model]").forEach(b=>b.onclick=()=>{
+    saleModelInput.value=b.dataset.model;
+    updateSaleRate();
+    hideSaleModelPopup();
+  });
+}
+function updateSaleRate(){
+  const m=saleModelInput.value.trim(),r=rate(m);
+  if(!m){saleRatePop.textContent="";saleRatePop.classList.remove("show");return}
+  if(r==null){saleRatePop.textContent="No commission rate found for this model";saleRatePop.classList.add("show");return}
+  saleRatePop.textContent="Commission: "+money(r)+" per unit";
+  saleRatePop.classList.add("show");
+}
+saleModelInput.addEventListener("input",()=>{updateSaleRate();showSaleModelPopup()});
+saleModelInput.addEventListener("focus",()=>showSaleModelPopup());
+saleModelInput.addEventListener("blur",()=>setTimeout(hideSaleModelPopup,180));
 document.getElementById("addSale").onclick=()=>{
  let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rate(model);
  if(!model||r==null){alert("Please enter a model with a commission rate.");return}
- sales.push([date,model,qty,r*qty]);save();document.getElementById("saleModel").value="";document.getElementById("saleRate").textContent="Commission: —";renderCalendar();renderHome();renderStats();alert("Sale added.");
+ sales.push([date,model,qty,r*qty]);save();document.getElementById("saleModel").value="";document.getElementById("saleRate").textContent="";document.getElementById("saleRate").classList.remove("show");hideSaleModelPopup();renderCalendar();renderHome();renderStats();alert("Sale added.");
 };
 function findTV(){
  let q=norm(document.getElementById("tvSearch").value),b=document.getElementById("budget").value,s=document.getElementById("size").value,n=document.getElementById("need").value,t=document.getElementById("tech").value;
@@ -489,26 +539,26 @@ tip:"Sell the experience as a package: “Great picture + great sound.” Then u
 
 
 const SOUNDBARS=[
- {m:"HS214",price:79,meta:"2.1 • 108 W • Built-in subwoofer",pitch:"“A simple, compact upgrade if the customer wants fuller TV sound without adding a separate subwoofer.”"},
- {m:"HS2000",price:85,meta:"2.1 • 240 W • Built-in subwoofer • DTS Virtual:X",pitch:"“A great value step-up with more power and built-in bass — ideal for films, sport and everyday streaming.”"},
- {m:"HS2100",price:81,meta:"2.1 • 240 W peak / 120 W RMS • Wireless subwoofer • DTS Virtual:X",pitch:"“This gives you proper bass from a separate wireless subwoofer while keeping the setup simple.”"},
- {m:"HS3100",price:95,meta:"3.1 • 480 W • Wireless subwoofer • DTS Virtual:X",pitch:"“The extra centre channel is a strong story for dialogue, while the subwoofer gives films and sport much more impact.”"},
- {m:"AX3120Q",price:499,meta:"3.1.2 • 440 W • Dolby Atmos & DTS Virtual:X • Wireless subwoofer",pitch:"“This is where we start getting serious about home cinema — Dolby Atmos, dedicated bass and room-filling sound.”"},
- {m:"AX5125H",price:209,meta:"5.1.2 • 500 W • Dolby Atmos & DTS Virtual:X • Wireless subwoofer & rear speakers",pitch:"“You’re getting a genuine step toward surround sound here — rear speakers, a subwoofer and Dolby Atmos for a much more immersive film or gaming experience.”"},
- {m:"AX5100Q",price:199,meta:"5.1 • 580 W • Dolby Atmos & DTS:X • Wireless subwoofer & rear speakers",pitch:"“This is a powerful all-round cinema package: 580 W, rear speakers, a wireless subwoofer and Dolby Atmos/DTS:X.”"},
- {m:"AX5140Q",price:599,meta:"5.1.4 • 600 W • Dolby Atmos & DTS:X • Up-firing speakers • Wireless subwoofer & rear speakers",pitch:"“If the customer wants the full cinema experience, this is the serious upgrade — four up-firing channels help create that overhead Atmos effect.”"},
- {m:"S5120GQ",price:null,meta:"Currys price not currently listed on the live Currys pages checked",pitch:"“A useful option to check in-store if this is the model you have available, but confirm today's selling price before quoting it.”"},
- {m:"S5120Q",price:null,meta:"Currys price not currently listed on the live Currys pages checked",pitch:"“Position it around the customer's room and sound needs, then confirm the live Currys price before presenting the deal.”"},
- {m:"HT SATURN",price:1299,meta:"4.1.2 • 720 W • Dolby Atmos & DTS:X • Wireless subwoofer & rear speakers • Room calibration",pitch:"“This is the flagship conversation — 720 W, a 4.1.2 layout, room calibration and Dolby Atmos/DTS:X. If they want cinema sound without compromising, this is the one to demonstrate.”"}
+ {m:"HS214",meta:"2.1 • 108 W • Built-in subwoofer",pitch:"“A simple, compact upgrade if the customer wants fuller TV sound without adding a separate subwoofer.”"},
+ {m:"HS2000",meta:"2.1 • 240 W • Built-in subwoofer • DTS Virtual:X",pitch:"“A great value step-up with more power and built-in bass — ideal for films, sport and everyday streaming.”"},
+ {m:"HS2100",meta:"2.1 • 240 W peak / 120 W RMS • Wireless subwoofer • DTS Virtual:X",pitch:"“This gives you proper bass from a separate wireless subwoofer while keeping the setup simple.”"},
+ {m:"HS3100",meta:"3.1 • 480 W • Wireless subwoofer • DTS Virtual:X",pitch:"“The extra centre channel is a strong story for dialogue, while the subwoofer gives films and sport much more impact.”"},
+ {m:"AX3120Q",meta:"3.1.2 • 440 W • Dolby Atmos & DTS Virtual:X • Wireless subwoofer",pitch:"“This is where we start getting serious about home cinema — Dolby Atmos, dedicated bass and room-filling sound.”"},
+ {m:"AX5125H",meta:"5.1.2 • 500 W • Dolby Atmos & DTS Virtual:X • Wireless subwoofer & rear speakers",pitch:"“You’re getting a genuine step toward surround sound here — rear speakers, a subwoofer and Dolby Atmos for a much more immersive film or gaming experience.”"},
+ {m:"AX5100Q",meta:"5.1 • 580 W • Dolby Atmos & DTS:X • Wireless subwoofer & rear speakers",pitch:"“This is a powerful all-round cinema package: 580 W, rear speakers, a wireless subwoofer and Dolby Atmos/DTS:X.”"},
+ {m:"AX5140Q",meta:"5.1.4 • 600 W • Dolby Atmos & DTS:X • Up-firing speakers • Wireless subwoofer & rear speakers",pitch:"“If the customer wants the full cinema experience, this is the serious upgrade — four up-firing channels help create that overhead Atmos effect.”"},
+ {m:"S5120GQ",meta:"Currys price not currently listed on the live Currys pages checked",pitch:"“A useful option to check in-store if this is the model you have available, but confirm today's selling price before quoting it.”"},
+ {m:"S5120Q",meta:"Currys price not currently listed on the live Currys pages checked",pitch:"“Position it around the customer's room and sound needs, then confirm the live Currys price before presenting the deal.”"},
+ {m:"HT SATURN",meta:"4.1.2 • 720 W • Dolby Atmos & DTS:X • Wireless subwoofer & rear speakers • Room calibration",pitch:"“This is the flagship conversation — 720 W, a 4.1.2 layout, room calibration and Dolby Atmos/DTS:X. If they want cinema sound without compromising, this is the one to demonstrate.”"}
 ];
 
 function renderSoundbars(){
  const el=document.getElementById("soundbarList");
  if(!el)return;
  el.innerHTML=SOUNDBARS.map(x=>`<div class="soundbar-card">
-   <div class="sb-head"><b>${x.m}</b><span class="soundbar-price ${x.price==null?"missing":""}">${x.price==null?"Not currently listed on Currys":"£"+x.price.toLocaleString("en-GB")}</span></div>
+   <div class="sb-head"><b>${x.m}</b><span class="soundbar-badge">Soundbar</span></div>
    <div class="soundbar-meta">${x.meta}</div>
-   <div class="soundbar-pitch">${x.pitch}</div>
+   <div class="soundbar-pitch">${x.pitch.replace(/^“|”$/g,"")}</div>
  </div>`).join("");
 }
 
