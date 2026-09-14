@@ -615,37 +615,28 @@ function renderStats(){
  document.getElementById("statsOverallQLED").textContent=o.p(o.qled)+"%";
  document.getElementById("statsOverallMiniLED").textContent=o.p(o.mini)+"%";
  document.getElementById("statsOverallRGB").textContent=o.p(o.rgb)+"%";
+
  const total=totalComm(),units=totalUnits();
  document.getElementById("statsTotalCommission").textContent=money(total);
  document.getElementById("statsCommissionUnits").textContent=units;
  document.getElementById("statsCommissionEntries").textContent=sales.length;
  document.getElementById("statsAverageCommission").textContent=money(units?total/units:0);
- const periods=[[32,35,"25 Sep 2026"],[36,39,"23 Oct 2026"],[40,44,"25 Nov 2026"],[45,48,"TBC"],[49,52,"25 Jan 2027"]];
- const cw=isoWeekNumber(iso(new Date()));
- document.getElementById("payday").innerHTML=periods.map(p=>{
-   const amount=payPeriodCommission(p[0],p[1]);
-   const status=cw>p[1]?"Paid period":(cw>=p[0]?"Next payday":"Upcoming");
-   return `<div class="pay-estimate"><div class="pay-head"><div><div class="pay-date">${p[2]}</div><div class="pay-sub">WK${p[0]}–${p[1]} • ${status}</div></div><div class="pay-amount">${money(amount)}</div></div></div>`;
- }).join("");
-}
-document.getElementById("rateSearch").oninput=()=>{
- const m=document.getElementById("rateSearch").value,r=rate(m);
- document.getElementById("rateAnswer").innerHTML=m?(r==null?"No current rate found.":`<strong>${m.toUpperCase()}</strong> pays <strong>${money(r)}</strong> commission per unit.`):"Enter a model to see the current rate.";
-};
 
-function renderCoach(){
- const key=document.getElementById("coachModel").value;
- const c=COACH[key];
- if(!c)return;
- document.getElementById("coachContent").innerHTML=`
-   <div class="coach-block"><div class="coach-kicker">Passionate pitch</div><div class="coach-pitch">${c.pitch}</div></div>
-   <div class="coach-block"><div class="coach-kicker">Explain the technology</div><div class="coach-copy">${c.tech}</div></div>
-   <div class="coach-block"><div class="coach-kicker">Translate it for the customer</div><div class="coach-copy">${c.why}</div></div>
-   <div class="coach-block"><div class="coach-kicker">Key points to remember</div><ul class="coach-list">${c.points.map(x=>`<li>${x}</li>`).join("")}</ul></div>
-   <div class="coach-tip"><strong>Shop-floor tip:</strong> ${c.tip}</div>
- `;
-}
-renderCoach();
+ // Currys pay periods supplied for the user's commission tracker.
+ const periods=[
+  {start:"2026-08-30",end:"2026-09-19",label:"WK32–35",date:"25 Sep 2026"},
+  {start:"2026-09-20",end:"2026-10-17",label:"WK36–39",date:"23 Oct 2026"},
+  {start:"2026-10-18",end:"2026-11-21",label:"WK40–44",date:"25 Nov 2026"},
+  {start:"2026-11-22",end:"2026-12-19",label:"WK45–48",date:"TBC"},
+  {start:"2026-12-20",end:"2027-01-16",label:"WK49–52",date:"25 Jan 2027"}
+ ];
+ const periodComm=(a,b)=>sales.filter(s=>s[0]>=a&&s[0]<=b).reduce((sum,s)=>sum+Number(s[3]||0),0);
+ const periodUnits=(a,b)=>sales.filter(s=>s[0]>=a&&s[0]<=b).reduce((sum,s)=>sum+Number(s[2]||0),0);
+ document.getElementById("payday").innerHTML=periods.map(x=>{
+   const comm=periodComm(x.start,x.end),unitsP=periodUnits(x.start,x.end);
+   return `<div class="pay-estimate"><div class="pay-head"><div><div class="pay-date">${x.date}</div><div class="pay-sub">${x.label} • ${unitsP} units logged</div></div><div class="pay-amount">${money(comm)}</div></div></div>`;
+ }).join("");
+}renderCoach();
 renderSoundbars();
 </script>
 </body></html>
