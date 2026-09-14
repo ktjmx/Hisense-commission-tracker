@@ -228,15 +228,19 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
       <option value="SOUNDBAR">Hisense Soundbars</option>
     </select>
 
-    <div id="coachContent" class="coach-content"></div>
+    <div id="coachContent" class="coach-content"></div><div class="coach-tabs">
+      <button id="coachMainTab" class="coach-tab active" onclick="showCoachTab('main')">TV Sales Pitches</button>
+      <button id="soundbarCoachTab" class="coach-tab" onclick="showCoachTab('soundbars')">Soundbars</button>
+    </div>
+    <div id="soundbarCoachPanel" class="coach-tab-panel" style="display:none;">
+      <div class="card soundbar-catalogue">
+        <div class="section-title">Hisense Soundbars</div>
+        <div class="muted" style="margin-top:-7px;margin-bottom:10px">Key specs and an easy customer pitch for each model.</div>
+        <div id="soundbarList"></div>
+      </div>
+    </div>
     
-<div class="card soundbar-catalogue">
-  <div class="section-title">Hisense Soundbars</div>
-  <div class="muted" style="margin-top:-7px;margin-bottom:10px">A quick guide to the range — key specs and an easy customer pitch for each model.</div>
-  <div id="soundbarList"></div>
 </div>
-
-  </div>
 </section>
 
 <section class="screen" id="stats">
@@ -396,6 +400,7 @@ function renderHome(){
  document.getElementById("weeklyQLED").textContent=pct(qled)+"%";
  document.getElementById("weeklyMiniLED").textContent=pct(mini)+"%";
  document.getElementById("weeklyRGB").textContent=pct(rgb)+"%";
+ updateHomeSalesValue();
 }
 
 function fillModels(){
@@ -455,7 +460,7 @@ document.getElementById("addSale").onclick=()=>{
  const price=Number(document.getElementById("salePrice").value||0);
  let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rate(model);
  if(!model||r==null){alert("Please enter a model with a commission rate.");return}
- sales.push([date,model,qty,r*qty]);save();document.getElementById("saleModel").value="";
+ sales.push([date,model,qty,r*qty,price]);save();document.getElementById("saleModel").value="";
  document.getElementById("salePrice").value="";document.getElementById("saleRate").textContent="";document.getElementById("saleRate").classList.remove("show");hideSaleModelPopup();renderCalendar();renderHome();renderStats();alert("Sale added.");
 };
 function findTV(){
@@ -587,31 +592,38 @@ const SOUNDBARS=[
 function showCoachTab(tab){
  const main=document.getElementById("coachContent");
  const sb=document.getElementById("soundbarCoachPanel");
- const mainBtn=document.getElementById("coachMainTab");
- const sbBtn=document.getElementById("soundbarCoachTab");
- if(tab==="soundbars"){
-   if(main) main.style.display="none";
-   if(sb) sb.style.display="block";
-   if(mainBtn) mainBtn.classList.remove("active");
-   if(sbBtn) sbBtn.classList.add("active");
-   if(typeof renderSoundbars==="function") renderSoundbars();
- }else{
-   if(main) main.style.display="block";
-   if(sb) sb.style.display="none";
-   if(mainBtn) mainBtn.classList.add("active");
-   if(sbBtn) sbBtn.classList.remove("active");
- }
+ const a=document.getElementById("coachMainTab");
+ const b=document.getElementById("soundbarCoachTab");
+ const sound=tab==="soundbars";
+ if(main) main.style.display=sound?"none":"block";
+ if(sb) sb.style.display=sound?"block":"none";
+ if(a) a.classList.toggle("active",!sound);
+ if(b) b.classList.toggle("active",sound);
+ if(sound) renderSoundbars();
 }
 function renderSoundbars(){
- const el=document.getElementById("soundbarList");
- if(!el)return;
- el.innerHTML=SOUNDBARS.map(x=>`<div class="soundbar-card">
-   <div class="sb-head"><b>${x.m}</b><span class="soundbar-badge">Soundbar</span></div>
-   <div class="soundbar-meta">${x.meta}</div>
-   <div class="soundbar-pitch">${x.pitch.replace(/^“|”$/g,"")}</div>
- </div>`).join("");
+ const el=document.getElementById("soundbarCatalogue");
+ if(!el) return;
+ el.innerHTML=SOUNDBARS.map(s=>`<div class="soundbar-card"><div class="soundbar-top"><strong>${s.m}</strong><span class="badge">Soundbar</span></div><div class="soundbar-meta">${s.meta}</div><div class="soundbar-pitch">${String(s.pitch||"").replace(/^“|”$/g,"")}</div></div>`).join("");
 }
 
+
+function getSalesMix(list){
+ const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","S5120GQ","S5120Q","HT SATURN"];
+ const isSoundbar=m=>soundbarModels.some(x=>norm(x)===norm(m));
+ let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0;
+ list.forEach(s=>{
+   const m=String(s[1]||"").toUpperCase(),q=Number(s[2]||0);
+   if(isSoundbar(m)){soundbars+=q;return}
+   tvUnits+=q;
+   if(/UR8|UR9|UXT|UXQ/.test(m)) rgb+=q;
+   else if(/U7|U8/.test(m)) mini+=q;
+   else if(/Q7|Q8|E7/.test(m)) qled+=q;
+   else led+=q;
+ });
+ const p=n=>tvUnits?Math.round(n/tvUnits*100):0;
+ return {led,qled,mini,rgb,soundbars,tvUnits,p};
+}
 
 function isoWeekNumber(dateString){
  const d=new Date(dateString+"T12:00:00"),day=d.getDay()||7;
@@ -655,29 +667,25 @@ function renderStats(){
  document.getElementById("statsCommissionEntries").textContent=sales.length;
  document.getElementById("statsAverageCommission").textContent=money(units?total/units:0);
 
- // Currys pay periods supplied for the user's commission tracker.
  const periods=[
-  {start:"2026-08-30",end:"2026-09-19",label:"WK32–35",date:"25 Sep 2026"},
-  {start:"2026-09-20",end:"2026-10-17",label:"WK36–39",date:"23 Oct 2026"},
-  {start:"2026-10-18",end:"2026-11-21",label:"WK40–44",date:"25 Nov 2026"},
-  {start:"2026-11-22",end:"2026-12-19",label:"WK45–48",date:"TBC"},
-  {start:"2026-12-20",end:"2027-01-16",label:"WK49–52",date:"25 Jan 2027"}
+  {weeks:[32,35],label:"WK32–35",date:"25 Sep 2026"},
+  {weeks:[36,39],label:"WK36–39",date:"23 Oct 2026"},
+  {weeks:[40,44],label:"WK40–44",date:"25 Nov 2026"},
+  {weeks:[45,48],label:"WK45–48",date:"TBC"},
+  {weeks:[49,52],label:"WK49–52",date:"25 Jan 2027"}
  ];
- const periodComm=(a,b)=>sales.filter(s=>s[0]>=a&&s[0]<=b).reduce((sum,s)=>sum+Number(s[3]||0),0);
- const periodUnits=(a,b)=>sales.filter(s=>s[0]>=a&&s[0]<=b).reduce((sum,s)=>sum+Number(s[2]||0),0);
- document.getElementById("payday").innerHTML=periods.map((x,i)=>{
-   const comm=periodComm(x.start,x.end),unitsP=periodUnits(x.start,x.end);
-   const today=iso(new Date());
-   const status=today>x.end ? "Past" : (today>=x.start ? "Current pay period" : (i===1 ? "Next payday" : "Upcoming"));
+ const commFor=(a,b)=>sales.filter(s=>{const w=isoWeekNumber(s[0]);return w>=a&&w<=b}).reduce((sum,s)=>sum+Number(s[3]||0),0);
+ const unitsFor=(a,b)=>sales.filter(s=>{const w=isoWeekNumber(s[0]);return w>=a&&w<=b}).reduce((sum,s)=>sum+Number(s[2]||0),0);
+ const currentWeek=isoWeekNumber(iso(now));
+ document.getElementById("payday").innerHTML=periods.map(x=>{
+   const comm=commFor(x.start,x.end),u=unitsFor(x.start,x.end);
+   const status=currentWeek>=x.start&&currentWeek<=x.end?"Current pay period":(currentWeek<x.start?"Upcoming":"Past");
    return `<div class="pay-estimate">
-     <div class="pay-head">
-       <div>
-         <div class="pay-date">${x.date}</div>
-         <div class="pay-sub">${x.label} • ${status}</div>
-       </div>
-       <div class="pay-amount">${money(comm)}</div>
-     </div>
-     <div class="pay-sub" style="margin-top:5px">${unitsP} units logged • Commission earned in this pay period</div>
+    <div class="pay-head">
+      <div><div class="pay-date">${x.date}</div><div class="pay-sub">WK${x.start}–${x.end} • ${status}</div></div>
+      <div class="pay-amount">${money(comm)}</div>
+    </div>
+    <div class="pay-sub" style="margin-top:5px">${u} units • Commission earned in this pay period</div>
    </div>`;
  }).join("");
 }renderCoach();
