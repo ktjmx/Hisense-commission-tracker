@@ -75,8 +75,217 @@ input:focus,select:focus{border-color:var(--accent)}
 .saw-pills{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.saw-pill{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px}
 .saw-pitch{padding:11px;border-left:3px solid currentColor;background:rgba(255,255,255,.035);border-radius:8px;font-size:14px;line-height:1.4}
 </style>
+
+<style>
+#priceMatchHub{margin:16px;padding:18px;border-radius:22px;background:linear-gradient(145deg,#121827,#1b2538);border:1px solid rgba(255,255,255,.09)}
+#priceMatchHub .pm-title{font-size:21px;font-weight:900}.pm-sub{font-size:13px;opacity:.7;margin:4px 0 14px}
+.pm-controls{display:grid;grid-template-columns:1fr;gap:9px}.pm-controls select{width:100%;box-sizing:border-box;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0d1320;color:inherit}
+.pm-card{margin-top:14px;padding:14px;border-radius:16px;background:rgba(255,255,255,.055)}
+.pm-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:13px}.pm-row:last-child{border-bottom:0}
+.pm-retailer{opacity:.8}.pm-price{font-weight:900}.pm-note{font-size:11px;opacity:.58;margin-top:10px;line-height:1.4}
+.pm-btn{display:block;text-align:center;margin-top:10px;padding:12px;border-radius:13px;background:rgba(255,255,255,.08);color:inherit;text-decoration:none;font-weight:800}
+.pm-good{font-weight:900;margin-top:10px}.pm-warn{font-size:12px;opacity:.72;margin-top:7px}
+</style>
+
+<style id="sleek-polish-v3">
+:root{
+  --app-bg:#080b12;
+  --app-card:rgba(255,255,255,.055);
+  --app-border:rgba(255,255,255,.09);
+  --app-muted:rgba(255,255,255,.62);
+  --app-text:#f7f8fb;
+}
+html,body{background:var(--app-bg)!important;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,system-ui,sans-serif!important;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;
+}
+button,select,input{font-family:inherit!important;-webkit-tap-highlight-color:transparent;}
+button{transition:transform .16s ease,opacity .16s ease,box-shadow .16s ease;}
+button:active{transform:scale(.97);}
+section,.card,.panel,.tile,.box{
+  border-color:var(--app-border)!important;
+}
+#genericHome{max-width:680px;margin:0 auto!important;padding:18px 16px 105px!important;}
+#genericHome>div:first-child{
+  position:relative;overflow:hidden;
+  padding:26px 22px!important;
+  border-radius:28px!important;
+  background:linear-gradient(145deg,rgba(31,42,67,.98),rgba(13,18,30,.98))!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.28)!important;
+}
+#genericHome>div:first-child:after{
+  content:"";position:absolute;width:150px;height:150px;right:-55px;top:-55px;
+  border-radius:50%;background:rgba(255,255,255,.07);filter:blur(2px);
+}
+#genericHome>div:first-child>div{position:relative;z-index:1;}
+#genericHome>div:first-child div:nth-child(2){font-size:32px!important;letter-spacing:-.04em!important;}
+#dailyMotivation{
+  margin:12px 0 0!important;padding:17px 18px!important;border-radius:22px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;
+  border:1px solid var(--app-border)!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.14)!important;
+}
+#motivationQuote{font-size:17px!important;letter-spacing:-.02em!important;}
+#genericHome .generic-home-btn{
+  min-height:108px!important;border:1px solid var(--app-border)!important;
+  border-radius:21px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.035))!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.12)!important;
+  font-size:15px!important;
+}
+#genericHome .generic-home-btn br{line-height:1.6;}
+#genericHome .generic-home-btn:hover{background:rgba(255,255,255,.09)!important;}
+.sales-assistant-workflow,#priceMatchHub{
+  border-radius:24px!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.2)!important;
+}
+.saw-grid{gap:10px!important;}
+.saw-grid select,.saw-grid input,#pmModel{
+  min-height:46px!important;border-radius:14px!important;
+  background:rgba(5,9,16,.82)!important;
+}
+.saw-btn{
+  min-height:48px!important;border-radius:15px!important;
+  background:linear-gradient(135deg,#f5f7fb,#cfd6e3)!important;
+  color:#0a0e16!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.2)!important;
+}
+.pm-btn{border:1px solid var(--app-border)!important;border-radius:14px!important;}
+/* Make the existing bottom navigation cleaner on iPhone. */
+nav,.bottom-nav,.tab-bar,.navbar{
+  backdrop-filter:blur(18px)!important;
+  -webkit-backdrop-filter:blur(18px)!important;
+  background:rgba(8,11,18,.88)!important;
+  border-top:1px solid rgba(255,255,255,.08)!important;
+}
+@media(max-width:430px){
+  #genericHome{padding-left:13px!important;padding-right:13px!important;}
+  #genericHome>div:first-child{padding:23px 19px!important;}
+  #genericHome>div:first-child div:nth-child(2){font-size:29px!important;}
+  #genericHome .generic-home-btn{min-height:102px!important;}
+}
+</style>
+
+<style id="classy-luxury-refresh-v4">
+:root{
+  --lux-navy:#0b1220;
+  --lux-blue:#16345f;
+  --lux-slate:#24344d;
+  --lux-silver:#dfe6ef;
+  --lux-white:#f8fafc;
+  --lux-gold:#d6b36a;
+  --lux-gold-soft:rgba(214,179,106,.14);
+  --lux-line:rgba(223,230,239,.12);
+}
+html,body{background:
+  radial-gradient(900px 500px at 50% -120px,rgba(37,74,125,.38),transparent 70%),
+  linear-gradient(180deg,#08101d 0%,#0b1220 48%,#070c15 100%)!important;
+}
+body{
+  color:var(--lux-white)!important;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,system-ui,sans-serif!important;
+}
+#genericHome{max-width:700px!important;margin:auto!important;padding:18px 15px 110px!important}
+#genericHome>div:first-child{
+  border:1px solid rgba(214,179,106,.24)!important;
+  background:
+    radial-gradient(240px 150px at 100% 0,rgba(214,179,106,.16),transparent 72%),
+    linear-gradient(135deg,#142847,#0b1424 72%)!important;
+  border-radius:30px!important;
+  padding:28px 23px!important;
+  box-shadow:0 22px 55px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.06)!important;
+}
+#genericHome>div:first-child div:first-child{
+  color:#e6c984!important;letter-spacing:.14em!important;
+}
+#genericHome>div:first-child div:nth-child(2){
+  color:#fff!important;font-size:34px!important;font-weight:950!important;letter-spacing:-.045em!important;
+}
+#dailyMotivation{
+  border:1px solid rgba(214,179,106,.20)!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;
+  border-radius:23px!important;
+  box-shadow:0 14px 35px rgba(0,0,0,.18)!important;
+}
+#dailyMotivation>div:first-child{color:#e6c984!important}
+#genericHome>div[style*="display:grid"]{gap:11px!important}
+#genericHome .generic-home-btn{
+  position:relative;overflow:hidden;
+  min-height:112px!important;
+  border:1px solid rgba(223,230,239,.11)!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,rgba(29,45,68,.82),rgba(13,21,34,.9))!important;
+  color:#f8fafc!important;
+  box-shadow:0 10px 26px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.035)!important;
+  font-weight:900!important;
+}
+#genericHome .generic-home-btn:before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#e6c984,rgba(230,201,132,0));
+  opacity:.8;
+}
+#genericHome .generic-home-btn:hover{border-color:rgba(214,179,106,.30)!important;transform:translateY(-1px)}
+#genericHome .generic-home-btn span{color:#aebbd0!important}
+.sales-assistant-workflow,#priceMatchHub{
+  background:
+    radial-gradient(320px 180px at 100% 0,rgba(214,179,106,.08),transparent 70%),
+    linear-gradient(145deg,#111d30,#0b1320)!important;
+  border:1px solid rgba(214,179,106,.16)!important;
+  border-radius:25px!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.24)!important;
+}
+.saw-btn{
+  background:linear-gradient(135deg,#e8d19b,#c9a85e)!important;
+  color:#101722!important;
+  box-shadow:0 10px 25px rgba(0,0,0,.25)!important;
+}
+.saw-btn:hover{filter:brightness(1.04)}
+.saw-grid select,.saw-grid input,#pmModel{
+  border-color:rgba(223,230,239,.13)!important;
+  background:#0a1220!important;
+}
+.saw-pill{background:rgba(214,179,106,.10)!important;border:1px solid rgba(214,179,106,.12)}
+.pm-btn{background:rgba(255,255,255,.045)!important;border:1px solid rgba(214,179,106,.18)!important}
+.private-label{color:#e6c984!important;background:var(--lux-gold-soft)!important}
+nav,.bottom-nav,.tab-bar,.navbar{
+  background:rgba(7,12,21,.90)!important;
+  border-top:1px solid rgba(214,179,106,.14)!important;
+  backdrop-filter:blur(22px)!important;-webkit-backdrop-filter:blur(22px)!important;
+}
+@media(max-width:430px){
+  #genericHome{padding-left:12px!important;padding-right:12px!important}
+  #genericHome>div:first-child{padding:25px 20px!important}
+  #genericHome>div:first-child div:nth-child(2){font-size:30px!important}
+  #genericHome .generic-home-btn{min-height:105px!important}
+}
+</style>
 </head>
 <body>
+<section id="genericHome" style="padding:18px 16px 100px;">
+  <div style="padding:22px;border-radius:24px;background:linear-gradient(145deg,#121827,#202a43);border:1px solid rgba(255,255,255,.1);">
+    <div style="font-size:12px;font-weight:900;letter-spacing:.1em;opacity:.65;text-transform:uppercase;">HISENSE SALES ASSISTANT</div>
+    <div style="font-size:30px;font-weight:950;margin-top:5px;">What do you need?</div>
+    <div style="font-size:14px;opacity:.7;margin-top:5px;">Choose a tool below. Your private commission figures are kept in the Commission tab.</div>
+  </div>
+  
+<div id="dailyMotivation" style="margin:14px 16px 0;padding:18px 18px;border-radius:20px;background:linear-gradient(145deg,#182238,#111827);border:1px solid rgba(255,255,255,.10);">
+  <div style="font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.6;">☀️ TODAY'S MINDSET</div>
+  <div id="motivationQuote" style="font-size:18px;font-weight:900;line-height:1.3;margin-top:7px;"></div>
+  <div style="font-size:12px;opacity:.62;margin-top:7px;">One customer at a time. Ask good questions, listen, and earn the sale.</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:14px;">
+    <button class="generic-home-btn" data-open="sales" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🛍️<br>Sales Hub<br><span style='font-size:11px;opacity:.55;font-weight:600'>Pitch & sell</span></button>
+    <button class="generic-home-btn" data-open="finder" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">📺<br>TV Finder<br><span style='font-size:11px;opacity:.55;font-weight:600'>Find the right TV</span></button>
+    <button class="generic-home-btn" data-open="promos" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🎁<br>Promotions<br><span style='font-size:11px;opacity:.55;font-weight:600'>Cashback & offers</span></button>
+    <button class="generic-home-btn" data-open="rates" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">💷<br>Commission Rates<br><span style='font-size:11px;opacity:.55;font-weight:600'>View rates</span></button>
+    <button class="generic-home-btn" data-open="price" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🔎<br>Price Match<br><span style='font-size:11px;opacity:.55;font-weight:600'>Check UK prices</span></button>
+    <button class="generic-home-btn" data-open="commission" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🔒<br>My Commission<br><span style='font-size:11px;opacity:.55;font-weight:600'>Private</span></button>
+  </div>
+  <div style="margin-top:14px;padding:13px 15px;border-radius:16px;background:rgba(255,255,255,.045);font-size:12px;opacity:.65;text-align:center;">Customer-facing home screen • Private commission is not shown here</div>
+</section>
+
 <div id="private-commission-note" style="margin:14px 16px 0;padding:14px 16px;border-radius:18px;background:linear-gradient(145deg,#151b2b,#202a43);border:1px solid rgba(255,255,255,.10);">
   <div style="font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;opacity:.7;">SHOP FLOOR MODE</div>
   <div style="font-size:18px;font-weight:900;margin-top:3px;">Sales Hub first</div>
@@ -127,7 +336,18 @@ input:focus,select:focus{border-color:var(--accent)}
       <button class="cta" id="homeAdd">＋ Add a sale</button>
       <div class="sectionHead"><h2>Recent sales</h2><span class="link" data-go="sales">See all</span></div>
       <div id="recent"></div>
-    </section>
+    
+<section id="priceMatchHub">
+  <div class="pm-title">💷 Price Match</div>
+  <div class="pm-sub">Check the exact model against UK retailers before you close the sale.</div>
+  <div class="pm-controls">
+    <select id="pmModel"><option value="50U7STUK">Hisense 50U7STUK</option><option value="55U7STUK">Hisense 55U7STUK</option><option value="65U7STUK">Hisense 65U7STUK</option><option value="75U7STUK">Hisense 75U7STUK</option><option value="85U7STUK">Hisense 85U7STUK</option><option value="55UR8STUK">Hisense 55UR8STUK</option><option value="65UR8STUK">Hisense 65UR8STUK</option><option value="75UR8STUK">Hisense 75UR8STUK</option><option value="85UR8STUK">Hisense 85UR8STUK</option><option value="65UR9STUK">Hisense 65UR9STUK</option><option value="75UR9STUK">Hisense 75UR9STUK</option><option value="85UR9STUK">Hisense 85UR9STUK</option><option value="100UR8STUK">Hisense 100UR8STUK</option><option value="65Q7STUK">Hisense 65Q7STUK</option><option value="75Q7STUK">Hisense 75Q7STUK</option><option value="85Q7STUK">Hisense 85Q7STUK</option><option value="65E7STUK PRO">Hisense 65E7STUK PRO</option><option value="75E7STUK PRO">Hisense 75E7STUK PRO</option><option value="85E7STUK PRO">Hisense 85E7STUK PRO</option><option value="100E7STUK PRO">Hisense 100E7STUK PRO</option></select>
+  </div>
+  <div class="pm-card" id="pmResult"></div>
+  <a class="pm-btn" id="pmCompare" href="#" target="_blank" rel="noopener">🔎 Compare this exact model online</a>
+  <div class="pm-note">Prices change frequently. The app does not pretend a stored price is live. Use the comparison link to verify the current retailer price before quoting a customer. Exact-product comparison services can match by model/barcode; availability and prices can change at checkout.</div>
+</section>
+</section>
 
     <section id="sales" class="screen">
       <div class="formCard">
@@ -762,6 +982,92 @@ document.addEventListener('DOMContentLoaded', function () {
     n.style.cssText='display:inline-block;margin:0 0 10px;padding:6px 10px;border-radius:999px;background:rgba(255,193,7,.12);font-size:11px;font-weight:800;';
     commission.prepend(n);
   }
+});
+</script>
+
+<script>
+(function(){
+  const sel=document.getElementById('pmModel'), result=document.getElementById('pmResult'), link=document.getElementById('pmCompare');
+  if(!sel||!result||!link)return;
+  const currys={
+    "65UR8STUK":1699,"65UR9STUK":1999,"65U7STUK":1199,
+    "55U7STUK":null,"50U7STUK":null,"75UR8STUK":2299,"75UR9STUK":2799,
+    "43Q7STUK":null,"65Q7STUK":null,"75Q7STUK":null,"85Q7STUK":null,
+    "65E7STUK PRO":null,"75E7STUK PRO":null,"85E7STUK PRO":null,"100E7STUK PRO":null
+  };
+  function update(){
+    const m=sel.value, q=encodeURIComponent(m);
+    const price=currys[m];
+    result.innerHTML='<div style="font-size:12px;opacity:.65">CURRENT CURRYS REFERENCE</div>'+
+      '<div style="font-size:19px;font-weight:900;margin-top:3px">'+m+'</div>'+
+      '<div class="pm-row"><span class="pm-retailer">Currys</span><span class="pm-price">'+(price?'£'+price.toLocaleString():'Check current price')+'</span></div>'+
+      '<div class="pm-good">🔎 Search exact model across UK retailers</div>'+
+      '<div class="pm-warn">The live comparison is opened from the app so you can verify the retailer, price and stock before using it in a price-match conversation.</div>';
+    link.href='https://asap.co.uk/?q='+q;
+  }
+  sel.addEventListener('change',update); update();
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const home=document.getElementById('genericHome');
+  if(!home) return;
+
+  // Hide commission-looking dashboard sections on initial load.
+  const all=[...document.querySelectorAll('body > section, body > main > section, .page, .screen, .tab-content, .tab-pane')];
+  all.forEach(el=>{
+    if(el.id==='genericHome') return;
+    const text=(el.id+' '+el.className+' '+el.textContent.slice(0,500)).toLowerCase();
+    if(/commission|payday|earnings/.test(text) && !/sales hub/.test(text)){
+      el.dataset.hiddenOnLanding='1';
+      el.style.display='none';
+    }
+  });
+
+  // Try to activate an existing Home tab if one exists.
+  const homeNav=[...document.querySelectorAll('button,a,[role="button"]')].find(el=>{
+    const t=(el.textContent||'').trim().toLowerCase();
+    return t==='home' || t==='dashboard';
+  });
+  if(homeNav) setTimeout(()=>homeNav.click(),50);
+
+  // Generic home buttons: use existing nav where possible.
+  document.querySelectorAll('.generic-home-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const target=btn.dataset.open;
+      if(target==='commission'){
+        // Reveal only commission when explicitly requested.
+        document.querySelectorAll('[data-hidden-on-landing="1"]').forEach(el=>el.style.display='');
+        const c=[...document.querySelectorAll('button,a,[role="button"]')].find(el=>/commission/i.test(el.textContent||''));
+        if(c) c.click();
+        home.style.display='none';
+        return;
+      }
+      const candidates=[...document.querySelectorAll('button,a,[role="button"]')];
+      const map={sales:/sales hub|sales/,finder:/tv finder|finder/,promos:/promotion/,rates:/commission rates|rates/,price:/price match/};
+      const hit=candidates.find(el=>map[target] && map[target].test((el.textContent||'').trim().toLowerCase()));
+      if(hit){home.style.display='none'; hit.click();}
+    });
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  const q=document.getElementById('motivationQuote');
+  if(!q)return;
+  const quotes=[
+    "“Every customer is an opportunity to make someone’s day better — and make a great sale.”",
+    "“Ask the right questions, listen carefully, and the right TV will sell itself.”",
+    "“Don’t chase the sale. Build the confidence that makes the customer want to buy.”",
+    "“Know your product. Believe in your recommendation. Be confident.”",
+    "“Small wins become big results. One great conversation at a time.”",
+    "“Your goal today: help the customer find the TV they’ll be excited to take home.”",
+    "“Confidence is contagious. If you believe in the recommendation, the customer feels it too.”"
+  ];
+  const d=new Date();
+  q.textContent=quotes[(Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000)))%quotes.length];
 });
 </script>
 </body>
