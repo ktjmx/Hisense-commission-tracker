@@ -230,15 +230,58 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 
     <label>What are you selling?</label>
     <select id="coachModel" onchange="renderCoach()">
-      <option value="UR9">Hisense UR9 — RGB Mini LED</option>
-      <option value="UR8">Hisense UR8 — RGB Mini LED</option>
-      <option value="U8">Hisense U8 — Mini LED</option>
-      <option value="U7PRO">Hisense U7 Pro — Mini LED Pro</option>
-      <option value="U7">Hisense U7 — Mini LED</option>
-      <option value="Q7">Hisense Q7 — QLED</option>
-      <option value="E7PRO">Hisense E7 Pro — QLED Pro</option>
-      <option value="A6">Hisense A6 — LED</option>
-      <option value="SOUNDBAR">Hisense Soundbars</option>
+      <optgroup label="RGB Mini LED">
+        <option value="65UR9STUK">65UR9STUK — UR9</option>
+        <option value="75UR9STUK">75UR9STUK — UR9</option>
+        <option value="85UR9STUK">85UR9STUK — UR9</option>
+        <option value="55UR8STUK">55UR8STUK — UR8</option>
+        <option value="65UR8STUK">65UR8STUK — UR8</option>
+        <option value="75UR8STUK">75UR8STUK — UR8</option>
+        <option value="85UR8STUK">85UR8STUK — UR8</option>
+        <option value="100UR8STUK">100UR8STUK — UR8</option>
+      </optgroup>
+      <optgroup label="Mini LED / Mini LED Pro">
+        <option value="55U8QTUK">55U8QTUK — U8</option>
+        <option value="65U8QTUK">65U8QTUK — U8</option>
+        <option value="75U8QTUK">75U8QTUK — U8</option>
+        <option value="85U8QTUK">85U8QTUK — U8</option>
+        <option value="100U8QTUK">100U8QTUK — U8</option>
+        <option value="50U7STUK">50U7STUK — U7</option>
+        <option value="55U7STUK">55U7STUK — U7</option>
+        <option value="65U7STUK">65U7STUK — U7</option>
+        <option value="75U7STUK">75U7STUK — U7</option>
+        <option value="85U7STUK">85U7STUK — U7</option>
+        <option value="100U7STUK">100U7STUK — U7</option>
+        <option value="55U7STUK PRO">55U7STUK PRO — U7 Pro</option>
+        <option value="65U7STUK PRO">65U7STUK PRO — U7 Pro</option>
+        <option value="75U7STUK PRO">75U7STUK PRO — U7 Pro</option>
+        <option value="85U7STUK PRO">85U7STUK PRO — U7 Pro</option>
+        <option value="100U7STUK PRO">100U7STUK PRO — U7 Pro</option>
+      </optgroup>
+      <optgroup label="QLED / QLED Pro">
+        <option value="43Q7STUK">43Q7STUK — Q7</option>
+        <option value="50Q7STUK">50Q7STUK — Q7</option>
+        <option value="55Q7STUK">55Q7STUK — Q7</option>
+        <option value="65Q7STUK">65Q7STUK — Q7</option>
+        <option value="75Q7STUK">75Q7STUK — Q7</option>
+        <option value="85Q7STUK">85Q7STUK — Q7</option>
+        <option value="43E7STUK PRO">43E7STUK PRO — E7 Pro</option>
+        <option value="50E7STUK PRO">50E7STUK PRO — E7 Pro</option>
+        <option value="55E7STUK PRO">55E7STUK PRO — E7 Pro</option>
+        <option value="65E7STUK PRO">65E7STUK PRO — E7 Pro</option>
+        <option value="75E7STUK PRO">75E7STUK PRO — E7 Pro</option>
+        <option value="85E7STUK PRO">85E7STUK PRO — E7 Pro</option>
+        <option value="100E7STUK PRO">100E7STUK PRO — E7 Pro</option>
+      </optgroup>
+      <optgroup label="Entry LED">
+        <option value="43A6STUK">43A6STUK — A6</option>
+        <option value="50A6STUK">50A6STUK — A6</option>
+        <option value="55A6STUK">55A6STUK — A6</option>
+        <option value="65A6STUK">65A6STUK — A6</option>
+      </optgroup>
+      <optgroup label="Soundbars">
+        <option value="SOUNDBAR">Hisense Soundbars</option>
+      </optgroup>
     </select>
 
     <div id="coachContent" class="coach-content"></div><div class="coach-tabs">
@@ -615,17 +658,38 @@ function renderCoach(){
  const el=document.getElementById("coachContent");
  if(!el) return;
  const sel=document.getElementById("coachModel");
- const key=sel?.value || Object.keys(COACH)[0];
+ const model=sel?.value || "65UR9STUK";
+ if(model==="SOUNDBAR"){showCoachTab("soundbars");return;}
+
+ let key="A6";
+ if(/UR9/.test(model)) key="UR9";
+ else if(/UR8/.test(model)) key="UR8";
+ else if(/U8/.test(model)) key="U8";
+ else if(/U7.*PRO/.test(model)) key="U7PRO";
+ else if(/U7/.test(model)) key="U7";
+ else if(/Q7/.test(model)) key="Q7";
+ else if(/E7.*PRO/.test(model)) key="E7PRO";
+ else if(/A6/.test(model)) key="A6";
+
  const c=COACH[key];
- if(key==="SOUNDBAR"){showCoachTab("soundbars");return;} 
- if(!c){el.innerHTML="<div class='muted'>No sales-coach information is available for this model yet.</div>";return;}
- const label=sel?.selectedOptions?.[0]?.textContent || key;
+ if(!c){
+   el.innerHTML="<div class='muted'>No sales-coach information is available for this model yet.</div>";
+   return;
+ }
+
+ const label=sel?.selectedOptions?.[0]?.textContent || model;
  const points=Array.isArray(c.points)?c.points:[];
+
  el.innerHTML=`
- <div class="coach-hero"><div class="eyebrow">SALES COACH</div><h2>${label}</h2><p>${c.pitch||c.passion||""}</p></div>
+ <div class="coach-hero">
+   <div class="eyebrow">SALES COACH</div>
+   <h2>${label}</h2>
+   <div class="small" style="margin-bottom:10px">Model: ${model}</div>
+   <p>${c.pitch||""}</p>
+ </div>
  <div class="coach-grid">
   <div class="coach-card"><div class="coach-card-title">Explain the technology</div><div>${c.tech||""}</div></div>
-  <div class="coach-card"><div class="coach-card-title">Why it matters to the customer</div><div>${c.why||c.customer||""}</div></div>
+  <div class="coach-card"><div class="coach-card-title">Why it matters to the customer</div><div>${c.why||""}</div></div>
   <div class="coach-card"><div class="coach-card-title">Key selling points</div><ul>${points.map(x=>`<li>${x}</li>`).join("")}</ul></div>
   <div class="coach-card"><div class="coach-card-title">Shop-floor demo tip</div><div>${c.tip||""}</div></div>
  </div>`;
@@ -725,7 +789,7 @@ function renderStats(){
     <div class="pay-sub" style="margin-top:6px">${q} units • Commission earned for this pay period</div>
    </div>`;
  }).join("");
-}renderCoach();
+}showCoachTab("main");renderCoach();
 renderSoundbars();
 renderStats();
 
