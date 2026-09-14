@@ -65,6 +65,17 @@ input:focus,select:focus{border-color:var(--accent)}
 @media(min-width:621px){.nav{border-radius:24px;bottom:15px;border:1px solid #1a2c32}.app{padding-bottom:120px}}
 
 .modelSuggest{position:relative;margin-top:6px}.modelSuggestList{position:absolute;z-index:50;left:0;right:0;top:100%;background:#17191d;border:1px solid #3b3f46;border-radius:12px;max-height:260px;overflow:auto;box-shadow:0 14px 35px rgba(0,0,0,.45)}.modelSuggestItem{display:block;width:100%;padding:12px 14px;background:transparent;border:0;border-bottom:1px solid #292c31;color:#fff;text-align:left;font:inherit}.modelSuggestItem:last-child{border-bottom:0}.modelSuggestItem b{display:block}.modelSuggestItem span{display:block;color:#9aa0aa;font-size:12px;margin-top:3px}.modelSuggestEmpty{padding:12px 14px;color:#9aa0aa;font-size:13px}
+
+.calendarWrap{width:100%}.calendarTop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.calendarMonth{font-size:18px;font-weight:900;text-align:center;flex:1}.calendarNav{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#101c21;color:var(--text);font-size:20px;font-weight:900}.calendarWeek{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center;margin-bottom:5px}.calendarGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.calendarDay{min-height:52px;border:1px solid #20343c;border-radius:11px;padding:5px 2px;background:#0e191e;color:var(--text);font:inherit;cursor:pointer}.calendarDay.hasSales{border-color:#2a6263;background:#102a2d}.calendarDay.selected{outline:2px solid var(--accent);outline-offset:1px}.calendarDay.today{box-shadow:inset 0 0 0 1px var(--accent)}.calendarDayNum{font-weight:900;font-size:13px}.calendarDayMoney{font-size:9px;color:var(--accent);margin-top:4px;font-weight:800;white-space:nowrap}.calendarSelected{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#101c21}.calendarSale{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #20343c}.calendarSale:last-child{border-bottom:0}.calendarSaleModel{font-weight:850;font-size:13px}.calendarSaleMeta{font-size:11px;color:var(--muted);margin-top:2px}.calendarSaleMoney{font-weight:900;white-space:nowrap}@media(max-width:380px){.calendarDay{min-height:48px}.calendarDayMoney{font-size:8px}}
+
+/* Refined shop-floor internal navigation */
+.innerTabBar{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:7px;margin:10px 0 14px;position:sticky;top:0;z-index:5;background:var(--bg);padding:5px 0}
+.innerTab{border:1px solid var(--line);background:#101c21;color:var(--muted);border-radius:12px;padding:10px 8px;font-weight:850;font-size:12px;min-height:42px;cursor:pointer}
+.innerTab.active{background:var(--accent);color:#071315;border-color:var(--accent)}
+.innerPane{display:none}
+.innerPane.active{display:block}
+.innerIntro{margin-bottom:8px}
+@media(max-width:430px){.innerTabBar{grid-template-columns:repeat(2,1fr)}.innerTab{font-size:11px;padding:9px 6px}}
 </style>
 
 <style>
@@ -515,24 +526,22 @@ function renderStats(){
  const ach=[["🏁","10-unit week",bestWeek>=10],["💷","£100 commission",total()>=100],["💎","£250 commission",total()>=250],["👑","£500 commission",total()>=500],["📺","25 TVs sold",tv>=25]];
  document.getElementById("achievements").innerHTML=ach.map(a=>`<div class="achievement" style="opacity:${a[2]?1:.45}"><div class="badge">${a[0]}</div><div><b>${a[1]}</b><div class="tiny">${a[2]?"Unlocked":"Keep selling to unlock"}</div></div></div>`).join("");
 }
+let calendarCursor = new Date();
+
 function renderRecords(){
   if(!document.getElementById("recordBest")) return;
   const best=[...sales].sort((a,b)=>Number(b.total)-Number(a.total))[0];
   document.getElementById("recordBest").textContent=best?money(best.total):"£0";
 
-  const days={}; const weeks={};
-  sales.forEach(s=>{
-    days[s.date]=(days[s.date]||0)+Number(s.total||0);
-    const w=weekNum(s.date); weeks[w]=(weeks[w]||0)+Number(s.total||0);
-  });
-  const bd=Object.entries(days).sort((a,b)=>b[1]-a[1])[0];
-  const bw=Object.entries(weeks).sort((a,b)=>b[1]-a[1])[0];
+  const days={},weeks={};
+  sales.forEach(s=>{days[s.date]=(days[s.date]||0)+Number(s.total||0);const w=weekNum(s.date);weeks[w]=(weeks[w]||0)+Number(s.total||0)});
+  const bd=Object.entries(days).sort((a,b)=>b[1]-a[1])[0],bw=Object.entries(weeks).sort((a,b)=>b[1]-a[1])[0];
   document.getElementById("recordDay").textContent=bd?money(bd[1]):"£0";
   document.getElementById("recordDayMeta").textContent=bd?fmtDate(bd[0]):"";
   document.getElementById("recordWeek").textContent=bw?money(bw[1]):"£0";
   document.getElementById("recordWeekMeta").textContent=bw?"WK"+bw[0]:"";
 
-  const pays={}; sales.forEach(s=>{const p=paydayFor(s.date);pays[p[1]]=(pays[p[1]]||0)+Number(s.total||0)});
+  const pays={};sales.forEach(s=>{const p=paydayFor(s.date);pays[p[1]]=(pays[p[1]]||0)+Number(s.total||0)});
   const bp=Object.entries(pays).sort((a,b)=>b[1]-a[1])[0];
   document.getElementById("recordPayday").textContent=bp?money(bp[1]):"£0";
   document.getElementById("recordPaydayMeta").textContent=bp?"Pays "+bp[0]:"";
@@ -542,18 +551,35 @@ function renderRecords(){
   document.getElementById("recordUnits").textContent=bu?bu[1]:0;
   document.getElementById("recordUnitsMeta").textContent=bu?fmtDate(bu[0]):"";
 
-  // A compact rolling calendar covering the current month.
-  const now=new Date(), y=now.getFullYear(), m=now.getMonth();
-  const first=new Date(y,m,1), last=new Date(y,m+1,0);
-  const dayTotals={}; sales.forEach(s=>{if(s.date.startsWith(y+"-"+String(m+1).padStart(2,"0")))dayTotals[s.date]=(dayTotals[s.date]||0)+Number(s.total||0)});
-  let cal='<div style="display:grid;grid-template-columns:repeat(9,1fr);gap:6px;text-align:center;font-size:11px">';
-  ["M","T","W","T","F","S","S"].forEach(d=>cal+=`<div class="tiny" style="font-weight:800">${d}</div>`);
-  let offset=(first.getDay()+6)%7; for(let i=0;i<offset;i++)cal+="<div></div>";
+  const y=calendarCursor.getFullYear(),m=calendarCursor.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0);
+  const monthKey=`${y}-${String(m+1).padStart(2,"0")}`,dayTotals={};
+  sales.forEach(s=>{if(s.date.startsWith(monthKey))dayTotals[s.date]=(dayTotals[s.date]||0)+Number(s.total||0)});
+  const monthLabel=calendarCursor.toLocaleDateString("en-GB",{month:"long",year:"numeric"}),todayKey=localDateKey();
+  const selectedKey=calendarCursor._selectedDate||(dayTotals[todayKey]&&todayKey.startsWith(monthKey)?todayKey:null);
+
+  let cal=`<div class="calendarWrap"><div class="calendarTop"><button class="calendarNav" id="calendarPrev" aria-label="Previous month">‹</button><div class="calendarMonth">${monthLabel}</div><button class="calendarNav" id="calendarNext" aria-label="Next month">›</button></div><div class="calendarWeek">${["M","T","W","T","F","S","S"].map(d=>`<div class="tiny" style="font-weight:900">${d}</div>`).join("")}</div><div class="calendarGrid">`;
+  const offset=(first.getDay()+6)%7;
+  for(let i=0;i<offset;i++)cal+="<div></div>";
   for(let d=1;d<=last.getDate();d++){
-    const keyDate=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`, val=dayTotals[keyDate]||0;
-    cal+=`<div style="min-height:48px;border:1px solid ${val?"#2a6263":"#20343c"};border-radius:12px;padding:6px 2px;background:${val?"#102a2d":"#0e191e"}"><div style="font-weight:800">${d}</div><div style="font-size:9px;color:${val?"var(--accent)":"var(--muted)"};margin-top:5px">${val?money(val):"—"}</div></div>`;
+    const keyDate=`${monthKey}-${String(d).padStart(2,"0")}`,val=dayTotals[keyDate]||0;
+    cal+=`<button class="calendarDay ${val?"hasSales":""} ${keyDate===selectedKey?"selected":""} ${keyDate===todayKey?"today":""}" data-calendar-date="${keyDate}"><div class="calendarDayNum">${d}</div><div class="calendarDayMoney">${val?money(val):"—"}</div></button>`;
   }
-  cal+="</div>"; document.getElementById("calendar").innerHTML=cal;
+  cal+=`</div><div id="calendarSelected" class="calendarSelected"></div></div>`;
+  document.getElementById("calendar").innerHTML=cal;
+
+  const renderSelected=(date)=>{
+    const box=document.getElementById("calendarSelected");if(!box)return;
+    const rows=sales.filter(s=>s.date===date).sort((a,b)=>(b.loggedAt||"").localeCompare(a.loggedAt||""));
+    if(!date){box.innerHTML='<div class="tiny">Tap a date to see the sales logged that day.</div>';return}
+    const label=new Date(date+"T12:00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
+    const totalDay=rows.reduce((a,s)=>a+Number(s.total||0),0),unitDay=rows.reduce((a,s)=>a+Number(s.qty||0),0);
+    box.innerHTML=`<div class="row" style="margin-bottom:8px"><div><b>${label}</b><div class="tiny">${rows.length} sale${rows.length===1?"":"s"} • ${unitDay} unit${unitDay===1?"":"s"}</div></div><b>${money(totalDay)}</b></div>${rows.length?rows.map(s=>`<div class="calendarSale"><div><div class="calendarSaleModel">${escapeHtml(s.model)}</div><div class="calendarSaleMeta">×${s.qty}${s.loggedAt?" • "+new Date(s.loggedAt).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):""}</div></div><div class="calendarSaleMoney">${money(s.total)}</div></div>`).join(""):'<div class="tiny">No sales recorded on this date.</div>'}`;
+  };
+
+  document.querySelectorAll("[data-calendar-date]").forEach(btn=>btn.addEventListener("click",()=>{calendarCursor._selectedDate=btn.dataset.calendarDate;renderRecords()}));
+  document.getElementById("calendarPrev")?.addEventListener("click",()=>{calendarCursor=new Date(y,m-1,1);calendarCursor._selectedDate=null;renderRecords()});
+  document.getElementById("calendarNext")?.addEventListener("click",()=>{calendarCursor=new Date(y,m+1,1);calendarCursor._selectedDate=null;renderRecords()});
+  renderSelected(selectedKey);
 }
 
 const HUB_PRICE_CHECKED = "14 Sep 2026"; const HUB_MODELS=[
@@ -651,6 +677,30 @@ function hubBudgetMax(){
  if(hubBudget==="Under £500")return 500;if(hubBudget==="£500–£1,000")return 1000;if(hubBudget==="£1,000–£1,500")return 1500;
  if(hubBudget==="£1,500–£2,000")return 2000;if(hubBudget==="£2,000+")return Infinity;return Infinity;
 }
+
+function customerDeal(x){
+  const price=Number(x.price);
+  const cashback=price>0 ? Number(CASHBACK[x.base]||0) : 0;
+  const trade=price>0 ? (tradeInOffer(x)?.off||0) : 0;
+  const saving=cashback+trade;
+  const effective=price>0 ? Math.max(0,price-saving) : null;
+  return {price,cashback,trade,saving,effective};
+}
+function dealBox(x){
+  if(x.price==null) return `<div style="margin-top:12px;padding:12px;border-radius:14px;background:#101c21;border:1px solid var(--line)"><div class="kicker">CUSTOMER PRICE</div><div class="tiny" style="margin-top:4px">Check the live price before quoting — the final customer price can't be calculated until a price is known.</div></div>`;
+  const d=customerDeal(x);
+  return `<div style="margin-top:12px;padding:13px;border-radius:15px;background:linear-gradient(145deg,#102a2d,#101c21);border:1px solid #2a6263">
+    <div class="kicker" style="color:var(--accent)">CUSTOMER DEAL</div>
+    <div class="row" style="margin-top:7px"><span>TV price</span><b>${money(d.price)}</b></div>
+    <div class="row" style="margin-top:5px"><span>♻️ Trade-in</span><b>${d.trade?'-'+money(d.trade):'—'}</b></div>
+    <div class="row" style="margin-top:5px"><span>🎁 Cashback</span><b>${d.cashback?'-'+money(d.cashback):'—'}</b></div>
+    <div style="height:1px;background:#2a6263;margin:9px 0"></div>
+    <div class="row"><b style="font-size:16px">Effective cost</b><b style="font-size:24px;color:var(--accent)">${money(d.effective)}</b></div>
+    ${d.saving?`<div class="tiny" style="margin-top:5px;text-align:right">£${Number(d.saving).toFixed(0)} total promo saving</div>`:'<div class="tiny" style="margin-top:5px">No current cashback/trade-in saving recorded for this model.</div>'}
+    <div class="tiny" style="margin-top:7px">Assumes the customer qualifies for the trade-in and successfully claims the cashback.</div>
+  </div>`;
+}
+
 function renderHub(){
  const sizes=["Any","43\"","50\"","55\"","65\"","75\"","85\"","100\"+"];
  const budgets=["Any","Under £500","£500–£1,000","£1,000–£1,500","£1,500–£2,000","£2,000+"];
@@ -675,6 +725,7 @@ function renderHub(){
    const best=i===0?"<span class='pill'>BEST MATCH</span>":"";
    return `<div class="card" style="margin-bottom:10px">
      <div class="row"><div><div class="kicker">${escapeHtml(x.type)} • ${x.size}"</div><div class="big" style="font-size:22px">${escapeHtml(x.base)}</div></div><div style="text-align:right">${best}<div class="saleMoney" style="margin-top:8px">${x.price==null?"Price check":money(x.price)}</div><div class="tiny">${money(comm)} commission</div></div></div>
+     ${dealBox(x)}
      <div class="sub" style="margin-top:9px">${escapeHtml(x.refresh)} • ${escapeHtml(x.features.slice(0,2).join(" • "))}</div>
      ${CASHBACK[x.base]!=null?`<div style="margin-top:12px;padding:11px 12px;border-radius:14px;background:#292315;border:1px solid #6d5930"><div class="row"><div><b style="color:#ffd166">🎁 Cashback</b><div class="tiny">Promo ends 27 Oct 2026</div></div><b style="color:#ffd166;font-size:20px">${money(CASHBACK[x.base])}</b></div></div>`:""}
      ${tradeInOffer(x)?`<div style="margin-top:9px;padding:11px 12px;border-radius:14px;background:#20291f;border:1px solid #4d6b45"><div class="row"><div><b style="color:#9be27d">♻️ TRADE-IN</b><div class="tiny">${escapeHtml(tradeInOffer(x).label)} • ${escapeHtml(tradeInOffer(x).code)}</div></div><b style="color:#9be27d;font-size:20px">-${money(tradeInOffer(x).off)}</b></div></div>`:""}
@@ -693,7 +744,10 @@ function renderHub(){
 function renderRates(){
  const q=document.getElementById("rateSearch").value.toLowerCase(), arr=Object.entries(CURRENT_RATES).filter(([m])=>(m+" "+CATEGORY[m]).toLowerCase().includes(q)&&(categoryFilter==="All"||CATEGORY[m]===categoryFilter)).sort((a,b)=>b[1]-a[1]);
  document.getElementById("rateCount").textContent=arr.length+" models";
- document.getElementById("rateList").innerHTML=arr.map(([m,r])=>`<div class="rate"><div><b>${escapeHtml(m)}</b><br><small>${CATEGORY[m]}</small></div><b>${money(r)}</b></div>`).join("");
+ document.getElementById("rateList").innerHTML=arr.map(([m,r])=>{
+  const x=HUB_MODELS.find(v=>v.base===m||v.m===m), d=x?customerDeal(x):null;
+  return `<div class="rate" style="align-items:flex-start"><div><b>${escapeHtml(m)}</b><br><small>${CATEGORY[m]}</small>${d&&d.price!=null?`<div class="tiny" style="margin-top:4px">Effective customer cost: <b style="color:var(--accent)">${money(d.effective)}</b></div>`:""}</div><b>${money(r)}</b></div>`;
+}).join("");
 }
 
 function findModelsForCustomer(){
@@ -830,7 +884,102 @@ function refineInternalNavigation(){
    leftover.forEach(n=>n.style.display='none');
  }
 }
+
+function makeInnerTabs(id, items, opts={}){
+  const host=document.getElementById(id); if(!host) return;
+  const old=host.querySelector(':scope > .innerTabBar'); if(old) old.remove();
+  const bar=document.createElement('div'); bar.className='innerTabBar';
+  const panes=[];
+  items.forEach((item,i)=>{
+    const pane=document.createElement('div'); pane.className='innerPane'; pane.dataset.innerKey=item.key;
+    if(item.nodes){item.nodes.forEach(n=>{if(n) pane.appendChild(n)});}
+    if(item.html) pane.innerHTML=item.html;
+    panes.push(pane);
+    const b=document.createElement('button'); b.type='button'; b.className='innerTab'; b.textContent=item.label;
+    b.addEventListener('click',()=>{
+      panes.forEach(x=>x.classList.toggle('active',x===pane));
+      bar.querySelectorAll('.innerTab').forEach(x=>x.classList.toggle('active',x===b));
+      if(item.onOpen) item.onOpen();
+    });
+    bar.appendChild(b);
+  });
+  host.appendChild(bar);
+  panes.forEach(p=>host.appendChild(p));
+  const first=Math.max(0,Math.min(opts.start||0,panes.length-1));
+  panes[first]?.classList.add('active'); bar.querySelectorAll('.innerTab')[first]?.classList.add('active');
+}
+
+function setupInternalTabs(){
+  // SELL: Log sale vs calendar sales history.
+  const salesHost=document.getElementById('sales');
+  if(salesHost && !salesHost.dataset.tabsReady){
+    const form=salesHost.querySelector(':scope > .formCard');
+    const head=[...salesHost.querySelectorAll(':scope > .sectionHead')].find(x=>x.textContent.includes('Sales history'));
+    const hist=document.getElementById('history');
+    makeInnerTabs('sales',[
+      {key:'log',label:'＋ Log Sale',nodes:[form]},
+      {key:'history',label:'📅 Sales Calendar',nodes:[head,hist]}
+    ]);
+    salesHost.dataset.tabsReady='1';
+  }
+
+  // OFFERS: turn the long accordion list into true internal tabs.
+  const offers=document.getElementById('offers');
+  if(offers && !offers.dataset.tabsReady){
+    const folds=[...offers.querySelectorAll(':scope > .fold')];
+    const labels=['💰 Cashback','♻️ Trade-In','🎮 Xbox','🧮 Deal','💳 Finance'];
+    makeInnerTabs('offers',folds.map((n,i)=>({key:'o'+i,label:labels[i]||('Option '+(i+1)),nodes:[n]})));
+    offers.dataset.tabsReady='1';
+  }
+
+  // STATS: each large information block gets its own tab.
+  const stats=document.getElementById('stats');
+  if(stats && !stats.dataset.tabsReady){
+    const folds=[...stats.querySelectorAll(':scope > .fold')];
+    const labels=['🎯 Overview','📅 Paydays','🏆 Records','💷 Rates'];
+    makeInnerTabs('stats',folds.map((n,i)=>({key:'s'+i,label:labels[i],nodes:[n]})));
+    stats.dataset.tabsReady='1';
+  }
+
+  // TV FINDER: separate choosing a TV, results/tips, and price match.
+  const hub=document.getElementById('hub');
+  if(hub && !hub.dataset.tabsReady){
+    const children=[...hub.children].filter(n=>!n.classList.contains('innerTabBar'));
+    const price=document.getElementById('price');
+    const priceNodes=price?[...price.children]:[];
+    if(price) price.style.display='none';
+    const filterNodes=children.slice(0,9);
+    const resultNodes=children.slice(9);
+    makeInnerTabs('hub',[
+      {key:'find',label:'📺 Find a TV',nodes:filterNodes},
+      {key:'results',label:'✨ Results',nodes:resultNodes},
+      {key:'price',label:'🔎 Price Match',nodes:priceNodes,onOpen:()=>{if(typeof renderPrice==='function')renderPrice();}}
+    ]);
+    hub.dataset.tabsReady='1';
+  }
+
+  // SALES COACH: split the long toolkit into focused shop-floor tasks.
+  const coach=document.getElementById('coach');
+  if(coach && !coach.dataset.tabsReady){
+    const c=[...coach.children].filter(n=>!n.classList.contains('innerTabBar'));
+    const oldSections=['objections','demo','hisense'].map(id=>document.getElementById(id));
+    oldSections.forEach(s=>{if(s)s.style.display='none'});
+    const main=c.slice(1); // keep hero outside the panes
+    const groups=[
+      {label:'🎯 Customer',nodes:main.slice(0,3)},
+      {label:'💷 Deal & Upsell',nodes:main.slice(3,7)},
+      {label:'🗣️ Pitches',nodes:main.slice(11,13)},
+      {label:'⚔️ Objections',nodes:oldSections[0]?[...oldSections[0].children]:[]},
+      {label:'🎤 Demo',nodes:oldSections[1]?[...oldSections[1].children]:[]},
+      {label:'✨ Why Hisense',nodes:oldSections[2]?[...oldSections[2].children]:[]}
+    ];
+    makeInnerTabs('coach',groups.map((g,i)=>({key:'c'+i,label:g.label,nodes:g.nodes})));
+    coach.dataset.tabsReady='1';
+  }
+}
+
 function init(){
+  setupInternalTabs();
  organiseSections();
  refineInternalNavigation();
  document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
