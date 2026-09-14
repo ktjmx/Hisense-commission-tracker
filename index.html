@@ -209,6 +209,37 @@ input:focus,select:focus{border-color:var(--accent)}
 
     <section id="offers" class="screen"><div class="hero"><div class="kicker">Customer-facing offers</div><div class="money" style="font-size:36px">Today's offers</div><div class="sub">Trade-in offers valid 19 Aug 2026 – 29 Sep 2026 • Cashback valid 9 Sep 2026 – 27 Oct 2026.</div></div><div class="card" style="margin-top:12px;border-color:#6d5930;background:linear-gradient(145deg,#292315,#171611)"><div class="kicker" style="color:#ffd166">📺 TRADE-IN OFFERS</div><b style="font-size:18px">Hand the customer's old TV in and save more</b><div class="sub" style="margin-top:7px">Use the exact qualifying voucher code at checkout. The offers shown below are the codes from your supplied promotion sheet.</div><div style="margin-top:12px" id="tradeInList"></div><div class="tiny" style="margin-top:10px">Voucher sheet validity: 19/08/2026 – 29/09/2026. Barcode fallback codes shown exactly as supplied.</div></div><div class="card" style="margin-top:10px"><b>🎮 Free personalised Xbox controller + 1 month Game Pass</b><div class="sub" style="margin-top:6px">Qualifying Mini LED TVs with a U in the model, including UR8. Check exact model eligibility and promotion dates.</div></div><div class="card" style="margin-top:10px"><b>💳 Finance</b><div class="sub" style="margin-top:6px">24 months interest free where applicable, subject to finance approval and terms.</div></div><div class="sectionHead"><h2>Cashback models</h2></div><div id="offerList"></div></section><section id="price" class="screen"><div class="hero"><div class="kicker">Customer conversation</div><div class="money" style="font-size:36px">Price Match</div><div class="sub">Verify exact model, retailer, stock and like-for-like specification before quoting.</div></div><label>Model</label><select id="pmModel"></select><div id="pmResult" class="card" style="margin-top:10px"></div><button class="cta" id="pmSearch">🔎 Search UK retailers</button></section><section id="objections" class="screen"><div class="hero"><div class="kicker">Sales Coach</div><div style="font-size:29px;font-weight:900">Objection Buster</div><div class="sub">Keep it positive, ask a question, then demonstrate.</div></div><div id="objectionList"></div><div id="objectionAnswer" class="card" style="margin-top:10px;display:none"></div></section><section id="demo" class="screen"><div class="hero"><div class="kicker">Demo Mode</div><div style="font-size:29px;font-weight:900">A simple winning demo</div><div class="sub">Open → Picture → Sport → Gaming → Sound → Close.</div></div><div id="demoSteps"></div></section><section id="hisense" class="screen"><div class="hero"><div class="kicker">Customer-friendly</div><div style="font-size:29px;font-weight:900">Why Hisense?</div><div class="sub">Compare exact models and focus on what matters to the customer.</div></div><div id="whyList"></div></section>
 
+
+<section id="coach" class="screen">
+  <div class="hero"><div class="kicker">SHOP-FLOOR SALES COACH</div><div class="money" style="font-size:34px">Sell smarter</div><div class="sub">Customer finder • deal calculator • upselling • objections • demos • pitches • commission goals</div></div>
+
+  <div class="sectionHead"><h2>🎯 Customer Needs Finder</h2></div>
+  <div class="card">
+    <label>Screen size</label><select id="cfSize"><option>Any</option><option>43</option><option>50</option><option>55</option><option>65</option><option>75</option><option>85</option><option>100</option></select>
+    <label style="margin-top:10px">Budget</label><select id="cfBudget"><option>Any</option><option>Under £500</option><option>£500–£1,000</option><option>£1,000–£1,500</option><option>£1,500–£2,000</option><option>£2,000+</option></select>
+    <label style="margin-top:10px">Main use</label><select id="cfNeed"><option>Any</option><option value="sport">Football / sport</option><option value="gaming">Gaming</option><option value="films">Films</option><option value="bright">Bright room</option><option value="everyday">Everyday TV</option></select>
+    <button class="cta" id="findCustomer">🎯 Find my best TV</button>
+  </div>
+  <div id="customerMatches"></div>
+
+  <div class="sectionHead"><h2>💷 Deal Calculator</h2></div>
+  <div class="card">
+    <label>Choose TV</label><select id="dealModel"></select>
+    <div id="dealBreakdown" style="margin-top:12px"></div>
+  </div>
+
+  <div class="sectionHead"><h2>⬆️ Upselling</h2></div>
+  <div class="card"><div class="sub">Start with the customer's chosen TV, then show one step up and explain exactly what the extra money buys.</div><div id="upsellResult" style="margin-top:10px"></div></div>
+
+  <div class="sectionHead"><h2>💰 Commission Opportunity</h2></div>
+  <div id="commissionOpportunity"></div>
+
+  <div class="sectionHead"><h2>🔥 Daily Sales Target</h2></div>
+  <div class="card" id="dailyTargetCard"></div>
+
+  <div class="sectionHead"><h2>🗣️ 10 / 30 / 60 Second Pitches</h2></div>
+  <div class="card"><label>Model</label><select id="pitchModel"></select><div class="chips" style="margin-top:10px"><button class="chip pitchBtn on" data-sec="10">10 sec</button><button class="chip pitchBtn" data-sec="30">30 sec</button><button class="chip pitchBtn" data-sec="60">60 sec</button></div><div id="pitchOutput" class="sub" style="margin-top:12px;color:var(--text)"></div></div>
+</section>
 <section id="rates" class="screen">
       <input class="search" id="rateSearch" placeholder="🔎  Search models or categories…">
       <div class="chips" id="chips"></div>
@@ -217,7 +248,7 @@ input:focus,select:focus{border-color:var(--accent)}
     </section>
   </main>
 
-  <nav class="nav"><button class="on" data-screen="home"><span>⌂</span>Home</button><button data-screen="sales"><span>＋</span>Sell</button><button data-screen="hub"><span>📺</span>Hub</button><button data-screen="offers"><span>🎁</span>Offers</button><button data-screen="price"><span>🔎</span>Price</button><button data-screen="commission"><span>£</span>Private</button><button data-screen="stats"><span>★</span>Stats</button><button data-screen="paydays"><span>◷</span>Paydays</button><button data-screen="rates"><span>▤</span>Rates</button></nav>
+  <nav class="nav"><button class="on" data-screen="home"><span>⌂</span>Home</button><button data-screen="sales"><span>＋</span>Sell</button><button data-screen="hub"><span>📺</span>Hub</button><button data-screen="offers"><span>🎁</span>Offers</button><button data-screen="price"><span>🔎</span>Price</button><button data-screen="commission"><span>£</span>Private</button><button data-screen="stats"><span>★</span>Stats</button><button data-screen="paydays"><span>◷</span>Paydays</button><button data-screen="coach"><span>🧠</span>Coach</button><button data-screen="rates"><span>▤</span>Rates</button></nav>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -296,7 +327,8 @@ function go(screen){
   document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.screen===screen));
   const titles={home:"Good morning",sales:"Add a sale",paydays:"Paydays",stats:"My Stats",records:"Records",hub:"Sales Hub",offers:"Offers",price:"Price Match",objections:"Objection Buster",demo:"Demo Mode",hisense:"Why Hisense?",commission:"My Commission",rates:"Commission Rates"};
   document.getElementById("pageTitle").textContent=titles[screen]||"Hisense Sales App";
-  if(screen==="commission")renderHome(); if(screen==="home"){} if(screen==="sales"){document.getElementById("saleDate").value=localDateKey();renderHistory();} if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="records")renderRecords(); if(screen==="hub")renderHub(); if(screen==="offers")renderOffers(); if(screen==="price")renderPrice(); if(screen==="objections")renderObjections(); if(screen==="demo")renderDemo(); if(screen==="hisense")renderHisense(); if(screen==="rates")renderRates();
+  if(screen==="commission")renderHome(); if(screen==="home"){} if(screen==="sales"){document.getElementById("saleDate").value=localDateKey();renderHistory();} if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="records")renderRecords(); if(screen==="hub")renderHub(); if(screen==="offers")renderOffers(); if(screen==="price")renderPrice(); if(screen==="objections")renderObjections(); if(screen==="demo")renderDemo(); if(screen==="hisense")renderHisense(); if(screen==="coach")renderCoach();
+ if(screen==="rates")renderRates();
 }
 function renderHome(){
   const allTotal=total(), allUnits=units();
@@ -626,6 +658,51 @@ function renderRates(){
  document.getElementById("rateCount").textContent=arr.length+" models";
  document.getElementById("rateList").innerHTML=arr.map(([m,r])=>`<div class="rate"><div><b>${escapeHtml(m)}</b><br><small>${CATEGORY[m]}</small></div><b>${money(r)}</b></div>`).join("");
 }
+
+function findModelsForCustomer(){
+ const size=Number(document.getElementById('cfSize').value)||null, budget=document.getElementById('cfBudget').value, need=document.getElementById('cfNeed').value;
+ const max=budget==='Under £500'?500:budget==='£500–£1,000'?1000:budget==='£1,000–£1,500'?1500:budget==='£1,500–£2,000'?2000:Infinity;
+ let arr=HUB_MODELS.filter(x=>(!size||x.size===size)&&(x.price!=null&&x.price<=max)&&(!need||x.needs.includes(need)));
+ if(!arr.length) arr=HUB_MODELS.filter(x=>(!size||x.size===size)&&(x.price!=null&&x.price<=max));
+ arr.sort((a,b)=>((CURRENT_RATES[b.base]||0)-(CURRENT_RATES[a.base]||0))||((a.price||99999)-(b.price||99999)));
+ const top=arr.slice(0,3); const el=document.getElementById('customerMatches');
+ el.innerHTML=top.length?top.map((x,i)=>`<div class="card" style="margin-top:9px"><div class="row"><div><div class="kicker">${i===0?'🥇 BEST MATCH':i===1?'🥈 ALTERNATIVE':'🥉 BUDGET / OTHER OPTION'}</div><div class="big" style="font-size:21px">${escapeHtml(x.base)}</div></div><b class="saleMoney">${money(x.price)}</b></div><div class="sub" style="margin-top:7px">${escapeHtml(x.pitch)}</div><div class="tiny" style="margin-top:7px">${money(CURRENT_RATES[x.base]||0)} commission${CASHBACK[x.base]!=null?' • '+money(CASHBACK[x.base])+' cashback':''}</div></div>`).join(''):'<div class="empty">No exact match. Try a wider budget or another size.</div>';
+}
+function dealData(m){
+ const x=HUB_MODELS.find(v=>v.base===m); if(!x)return null;
+ const cb=CASHBACK[x.base]||0, tr=tradeInOffer(x), comm=CURRENT_RATES[x.base]||0;
+ const effective=x.price!=null?Math.max(0,x.price-cb-(tr?tr.off:0)):null;
+ return {x,cb,tr,comm,effective};
+}
+function renderDeal(){
+ const d=dealData(document.getElementById('dealModel').value),el=document.getElementById('dealBreakdown'); if(!d){el.innerHTML='';return;}
+ el.innerHTML=`<div class="row"><b>${escapeHtml(d.x.base)}</b><b class="saleMoney">${d.x.price!=null?money(d.x.price):'Price check'}</b></div><div class="rate"><span>Cashback</span><b>${d.cb?'-'+money(d.cb):'—'}</b></div><div class="rate"><span>Trade-in</span><b>${d.tr?'-'+money(d.tr.off):'—'}</b></div><div class="rate"><span>Effective cost*</span><b>${d.effective!=null?money(d.effective):'Check price'}</b></div><div class="rate"><span>Your commission</span><b>${money(d.comm)}</b></div>${/U/i.test(d.x.base)&&/Mini LED/i.test(d.x.type)?'<div class="card" style="margin-top:9px">🎮 <b>Free personalised Xbox controller + 1 month Game Pass*</b></div>':''}<div class="tiny" style="margin-top:8px">*Effective cost is a simple illustration using the currently listed promotion values; confirm eligibility and final checkout price.</div>`;
+ renderUpsell(d.x);
+}
+function renderUpsell(x){
+ const arr=HUB_MODELS.filter(v=>v.price!=null&&v.size===x.size&&v.price>x.price).sort((a,b)=>a.price-b.price);
+ const up=arr[0],el=document.getElementById('upsellResult');
+ if(!up){el.innerHTML='No higher-priced model found at this size.';return;}
+ const diff=up.price-x.price; const commDiff=(CURRENT_RATES[up.base]||0)-(CURRENT_RATES[x.base]||0);
+ el.innerHTML=`<div class="row"><div><b>Chosen: ${escapeHtml(x.base)}</b><div class="tiny">${money(x.price)}</div></div><div style="font-size:22px">⬆️</div><div><b>Show: ${escapeHtml(up.base)}</b><div class="tiny">${money(up.price)}</div></div></div><div class="card" style="margin-top:9px"><b>What the extra ${money(diff)} buys:</b><div class="sub" style="margin-top:6px">${escapeHtml(up.features.slice(0,4).join(' • '))}</div>${commDiff>0?`<div class="tiny" style="margin-top:7px">💰 You earn ${money(commDiff)} more commission on the upgrade.</div>`:''}</div>`;
+}
+function renderCommissionOpportunity(){
+ const arr=HUB_MODELS.filter(x=>CURRENT_RATES[x.base]!=null).sort((a,b)=>(CURRENT_RATES[b.base]||0)-(CURRENT_RATES[a.base]||0)).slice(0,5);
+ document.getElementById('commissionOpportunity').innerHTML=arr.map((x,i)=>`<div class="rate"><span><b>${i+1}. ${escapeHtml(x.base)}</b><small>${x.size}" • ${x.price!=null?money(x.price):'Price check'}</small></span><b>${money(CURRENT_RATES[x.base])}</b></div>`).join('');
+}
+function renderDailyTarget(){
+ const today=localDateKey(), todayUnits=sales.filter(s=>s.date===today).reduce((a,s)=>a+Number(s.qty||0),0), target=Number(localStorage.getItem('hisenseDailyTarget')||3), pct=Math.min(100,Math.round(todayUnits/target*100));
+ document.getElementById('dailyTargetCard').innerHTML=`<div class="row"><div><div class="kicker">TODAY • ${fmtDate(today)}</div><div class="big">${todayUnits} / ${target} TVs</div></div><b style="font-size:22px">${pct}%</b></div><div class="progress" style="margin-top:10px"><i style="width:${pct}%"></i></div><div class="sub" style="margin-top:8px">${todayUnits>=target?'🔥 Target hit — keep going.':(target-todayUnits)+' more sale'+(target-todayUnits===1?'':'s')+' to hit today’s target.'}</div><button class="chip" id="changeDailyTarget" style="margin-top:10px">Set daily target</button>`;
+ document.getElementById('changeDailyTarget').onclick=()=>{const n=prompt('What is your daily TV target?',target);if(n!==null&&Number(n)>0){localStorage.setItem('hisenseDailyTarget',Math.round(Number(n)));renderDailyTarget();}};
+}
+let pitchSeconds=10;
+function renderPitch(){const m=document.getElementById('pitchModel').value,x=HUB_MODELS.find(v=>v.base===m),el=document.getElementById('pitchOutput');if(!x){el.textContent='';return;}const f=x.features.slice(0,3).join(', ');const t=pitchSeconds===10?`${x.base}: “If you want ${x.size}-inch picture with ${f}, this is one I’d show you. Let me demonstrate the difference.”`:pitchSeconds===30?`${x.base}: “I’d look at this one because you’re getting ${f}. For ${x.needs.includes('sport')?'sport and gaming':'everyday viewing'}, the picture and motion are really strong. Let me show you it running, then we can compare it with the cheaper option so you can see what you’re paying for.”`:`${x.base}: “Based on what you’ve told me, this is a strong fit. You’re getting ${f}, plus ${x.pitch.toLowerCase()} I wouldn’t just look at the ticket price — I’d compare the picture, motion, sound and the offers available today. Let me show you the key difference on the screen, and then we can decide whether the step up is actually worth it for you.”`;el.textContent=t;}
+function renderCoach(){
+ const list=HUB_MODELS.filter(x=>x.price!=null).sort((a,b)=>(a.size-b.size)||a.price-b.price).map(x=>x.base);['dealModel','pitchModel'].forEach(id=>document.getElementById(id).innerHTML=list.map(m=>`<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join(''));
+ ['dealModel','pitchModel'].forEach(id=>document.getElementById(id).onchange=id==='dealModel'?renderDeal:renderPitch);
+ document.querySelectorAll('.pitchBtn').forEach(b=>b.onclick=()=>{pitchSeconds=Number(b.dataset.sec);document.querySelectorAll('.pitchBtn').forEach(x=>x.classList.toggle('on',x===b));renderPitch();});
+ document.getElementById('findCustomer').onclick=findModelsForCustomer; renderDeal();renderCommissionOpportunity();renderDailyTarget();renderPitch();
+}
 function init(){
  document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
@@ -671,7 +748,7 @@ function init(){
    }
  };
  document.getElementById("modelList").innerHTML=Object.keys(CURRENT_RATES).sort().map(m=>`<option value="${escapeHtml(m)}"></option>`).join("");
- renderHome();renderHistory();renderPaydays();renderStats();renderRecords();renderHub();renderRates();
+ renderHome();renderHistory();renderPaydays();renderStats();renderRecords();renderHub();renderRates();renderOffers();renderPrice();renderObjections();renderDemo();renderHisense();renderCoach();
 }
 function preview(){const m=document.getElementById("model").value.trim(),d=document.getElementById("saleDate").value,r=rateFor(m,d);document.getElementById("preview").textContent=r==null?"—":money(r*qty);document.getElementById("previewMeta").textContent=r==null?"Unknown rate — check Rates":"£"+r+" per unit × "+qty}
 function addSale(){
