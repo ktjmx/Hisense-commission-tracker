@@ -422,62 +422,6 @@ function renderOffer(){
 
 document.getElementById("offerModel").oninput=renderOffer;
 const COACH={
-opening:"“What are you mainly using the TV for — films, sport, gaming or a bit of everything?” Then build the recommendation around their answer.",
-oled:"“OLED is excellent, but don’t just compare the panel. Show them brightness, colour volume, motion, gaming and what they actually see in their room.”",
-price:"“I completely understand. Let’s look at what you’re getting for the extra money and whether the picture/features will actually matter to you.”",
-brightness:"“Brightness matters because it keeps HDR highlights, sport and daytime viewing looking punchy instead of washed out.”",
-gaming:"“If you game, look for high refresh, HDMI 2.1, low input lag and VRR. The U7/U8/UR ranges give you a strong gaming story.”",
-sport:"“For sport, motion and brightness are the big wins. The UR8/UR9 are especially easy to demo because of their high refresh and RGB colour.”",
-upsell:"“If we step up one level, the main question is whether the customer will notice the improvement every day. Show the picture difference, then explain the offer.”",
-hisense:"“Hisense gives you a lot of picture technology for the money, plus strong gaming features, big-screen options and current promotional value.”"
-};
-document.getElementById("coachTopic").onchange=()=>document.getElementById("coachAnswer").textContent=COACH[document.getElementById("coachTopic").value];
-function getSalesMix(list){
- let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0;
- const sb=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"];
- const isSB=m=>sb.some(x=>norm(x)===norm(m));
- list.forEach(x=>{
-   const m=String(x[1]||""),q=Number(x[2]||0);
-   if(isSB(m)){soundbars+=q;return}
-   tvUnits+=q;
-   if(/UR8|UR9|UXT|UXQ/i.test(m))rgb+=q;
-   else if(/U7|U8/i.test(m))mini+=q;
-   else if(/Q7|Q8|E7/i.test(m))qled+=q;
-   else led+=q;
- });
- const p=n=>tvUnits?Math.round(n/tvUnits*100):0;
- return {tvUnits,soundbars,led,qled,mini,rgb,p};
-}
-function renderStats(){
- let now=new Date(),day=now.getDay();
- let st=new Date(now);st.setHours(12,0,0,0);st.setDate(now.getDate()-day);
- let en=new Date(st);en.setDate(st.getDate()+6);
- let iso=d=>d.toISOString().slice(0,10);
- let weekSales=sales.filter(x=>x[0]>=iso(st)&&x[0]<=iso(en));
- let w=getSalesMix(weekSales),o=getSalesMix(sales);
- let fmt=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"short"});
- document.getElementById("statsWeeklyDates").textContent=fmt(st)+" – "+fmt(en)+" • Sunday to Saturday";
- document.getElementById("statsWeeklyUnits").textContent=w.tvUnits;
- document.getElementById("statsWeeklySoundbars").textContent=w.soundbars;
- document.getElementById("statsWeeklyLED").textContent=w.p(w.led)+"%";
- document.getElementById("statsWeeklyQLED").textContent=w.p(w.qled)+"%";
- document.getElementById("statsWeeklyMiniLED").textContent=w.p(w.mini)+"%";
- document.getElementById("statsWeeklyRGB").textContent=w.p(w.rgb)+"%";
- document.getElementById("statsOverallUnits").textContent=o.tvUnits;
- document.getElementById("statsOverallLED").textContent=o.p(o.led)+"%";
- document.getElementById("statsOverallQLED").textContent=o.p(o.qled)+"%";
- document.getElementById("statsOverallMiniLED").textContent=o.p(o.mini)+"%";
- document.getElementById("statsOverallRGB").textContent=o.p(o.rgb)+"%";
- document.getElementById("statCards").innerHTML=`<div class="stat"><span class="muted">Commission</span><b>${money(totalComm())}</b></div><div class="stat"><span class="muted">All units</span><b>${totalUnits()}</b></div><div class="stat"><span class="muted">Sales entries</span><b>${sales.length}</b></div>`;
- let dates=[["WK32–35","25 Sep 2026"],["WK36–39","23 Oct 2026"],["WK40–44","25 Nov 2026"],["WK45–48","TBC"],["WK49–52","25 Jan 2027"]];
- document.getElementById("payday").innerHTML=dates.map(x=>`<div class="sale-row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
-}
-
-document.getElementById("rateSearch").oninput=()=>{let m=document.getElementById("rateSearch").value,r=rate(m);document.getElementById("rateAnswer").innerHTML=m?(r==null?"No current rate found.":`<strong>${m.toUpperCase()}</strong> pays <strong>${money(r)}</strong> commission per unit.`):"Enter a model to see the current rate."};
-document.getElementById("backup").onclick=()=>{let blob=new Blob([JSON.stringify(sales,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="hisense-sales-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};
-fillModels();renderHome();renderStats();document.getElementById("saleDate").value=today();renderCalendar();
-
-const COACH={
 UR9:{
 pitch:"“If you want the picture to genuinely jump off the screen, this is the one I’d show you. The UR9 combines RGB colour technology with Mini LED control, so you’re getting incredibly vibrant colour, serious brightness and much tighter control over light and dark scenes. It’s not just a spec sheet — put sport, a film or a game on it and you can actually see what the technology is doing.”",
 tech:"RGB Mini LED uses dedicated red, green and blue light sources rather than relying on a conventional white backlight plus colour filters. Combined with Mini LED backlighting, the TV can control brightness and contrast very precisely while the RGB system is focused on producing vivid, high-purity colour.",
