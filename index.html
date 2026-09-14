@@ -126,7 +126,21 @@ input:focus,select:focus{border-color:var(--accent)}
       <div id="history"></div>
     </section>
 
-    <section id="paydays" class="screen"><div id="paydayList"></div></section>
+    <section id="paydays" class="screen">
+<div class="hero" style="margin-bottom:12px"><div class="kicker">PAYDAY TRACKER</div><div class="money" style="font-size:38px">£845</div><div class="sub">Current recorded commission • WK36–39 • pays 23 Oct 2026</div><div class="pill" style="display:inline-block;margin-top:12px">CURRENT PAY PERIOD</div></div>
+<div id="paydayList">
+<div class="sectionHead"><div><div class="eyebrow">PAY CALENDAR</div><h2>Commission paydays</h2><p class="sub">Your sales are grouped into the correct payday automatically.</p></div></div>
+<div class="card payday current" style="margin-bottom:10px"><div class="row"><div><div class="kicker">CURRENT PAY PERIOD</div><div class="paydayTotal">£845</div><div class="tiny">WK36–39 • 33 units • pays 23/10/2026</div></div><div class="pill">27 sales</div></div><div class="sub" style="margin-top:10px">Recorded sales currently falling into this payday: 3 Sep – 13 Sep 2026.</div></div>
+<div class="card payday" style="margin-bottom:10px"><div class="row"><div><div class="kicker">NEXT</div><div class="paydayTotal">£0</div><div class="tiny">WK40–44 • pays 25/11/2026</div></div><div class="pill">0 sales</div></div></div>
+<div class="card payday" style="margin-bottom:10px"><div class="row"><div><div class="kicker">UPCOMING</div><div class="paydayTotal">£0</div><div class="tiny">WK45–48 • payday TBC</div></div><div class="pill">0 sales</div></div></div>
+<div class="card payday" style="margin-bottom:10px"><div class="row"><div><div class="kicker">UPCOMING</div><div class="paydayTotal">£0</div><div class="tiny">WK49–52 • pays 25/01/2027</div></div><div class="pill">0 sales</div></div></div>
+<div class="sectionHead"><h2>Previous paydays</h2></div>
+<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK32–35</b><div class="tiny">Pays 25/09/2026</div></div><b>£0</b></div></div>
+<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK27–31</b><div class="tiny">Pays 25/08/2026</div></div><b>£0</b></div></div>
+<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK23–26</b><div class="tiny">Pays 24/07/2026</div></div><b>£0</b></div></div>
+<div class="card" style="margin-bottom:9px"><div class="row"><div><b>WK18–22</b><div class="tiny">Pays 25/06/2026</div></div><b>£0</b></div></div>
+<div class="card"><div class="row"><div><b>WK16–17</b><div class="tiny">Pays 25/05/2026</div></div><b>£0</b></div></div>
+</div></section>
 
     <section id="stats" class="screen">
       <div class="card" style="margin-bottom:12px">
@@ -402,32 +416,20 @@ function renderPaydays(){
  if(!el)return;
  const now=new Date();
  const today=now.toISOString().slice(0,10);
- const current=PAYDAYS.findIndex(p=>{
-   const m=p[0].match(/(\d+)[–-](\d+)/);
-   if(!m)return false;
-   const w=weekNum(today);
-   return w>=Number(m[1]) && w<=Number(m[2]);
- });
- el.innerHTML=`
- <div class="sectionHead"><div><div class="eyebrow">PAY CALENDAR</div><h2>Commission paydays</h2><p class="sub">Your sales are grouped into the correct payday automatically.</p></div></div>
- ${PAYDAYS.map((p,i)=>{
+ const w=weekNum(today);
+ const current=PAYDAYS.findIndex(p=>{const m=p[0].match(/(\d+)[–-](\d+)/);return m && w>=Number(m[1]) && w<=Number(m[2]);});
+ el.innerHTML=`<div class="sectionHead"><div><div class="kicker">PAY CALENDAR</div><h2>Commission paydays</h2><p class="sub">Sales are grouped into the correct payday automatically.</p></div></div>` + PAYDAYS.map((p,i)=>{
    const rows=sales.filter(x=>paydayFor(x.date)[1]===p[1]).sort((a,b)=>b.date.localeCompare(a.date));
    const sum=rows.reduce((a,x)=>a+Number(x.total||0),0);
    const u=rows.reduce((a,x)=>a+Number(x.qty||0),0);
    const isCurrent=i===current;
-   return `<details class="card" ${isCurrent?"open":""} style="margin-bottom:10px">
-    <summary style="list-style:none;cursor:pointer">
-      <div class="row">
-       <div><div class="kicker">${isCurrent?"CURRENT PAY PERIOD • ":""}${escapeHtml(p[0])}</div>
-       <div class="paydayTotal">${money(sum)}</div>
-       <div class="tiny">${u} units • pays ${escapeHtml(p[1])}</div></div>
-       <div class="pill">${rows.length} sale${rows.length===1?"":"s"}</div>
-      </div>
-    </summary>
-    <div style="margin-top:12px">${rows.length?rows.map(saleHTML).join(""):'<div class="empty">No sales recorded for this payday yet.</div>'}</div>
+   return `<details class="card payday ${isCurrent?"current":""}" ${isCurrent?"open":""} style="margin-bottom:10px">
+    <summary style="list-style:none;cursor:pointer"><div class="row"><div><div class="kicker">${isCurrent?"CURRENT PAY PERIOD • ":""}${escapeHtml(p[0])}</div><div class="paydayTotal">${money(sum)}</div><div class="tiny">${u} units • pays ${escapeHtml(p[1])}</div></div><div class="pill">${rows.length} sale${rows.length===1?"":"s"}</div></div></summary>
+    <div style="margin-top:12px">${rows.length?rows.map(saleHTML).join(""):"<div class=\"empty\">No sales recorded for this payday yet.</div>"}</div>
    </details>`;
- }).join("")}`;
+ }).join("");
 }
+
 function renderStats(){
  const targetSetting=document.getElementById("targetSettingValue");
  if(targetSetting) targetSetting.textContent=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
