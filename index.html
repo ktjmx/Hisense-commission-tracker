@@ -107,6 +107,11 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .pay-estimate .pay-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .pay-estimate .pay-date{font-weight:850}.pay-estimate .pay-amount{font-family:Manrope,sans-serif;font-weight:900;color:#f1d79e;white-space:nowrap}
 .pay-estimate .pay-sub{font-size:10px;color:#9db0b1;margin-top:4px}
+
+.coach-tabs{display:flex;gap:8px;margin:12px 0 14px;padding:4px;background:#101d20;border:1px solid #20383b;border-radius:14px}
+.coach-tab{flex:1;border:0;border-radius:10px;padding:11px 12px;background:transparent;color:#9eb0b2;font-weight:800;font-size:13px;cursor:pointer}
+.coach-tab.active{background:#e51b23;color:#fff}
+.coach-tab-panel{margin-top:4px}
 </style>
 </head>
 <body>
@@ -574,6 +579,24 @@ const SOUNDBARS=[
  {m:"HT SATURN",meta:"4.1.2 • 720 W • Dolby Atmos & DTS:X • Wireless subwoofer & rear speakers • Room calibration",pitch:"“This is the flagship conversation — 720 W, a 4.1.2 layout, room calibration and Dolby Atmos/DTS:X. If they want cinema sound without compromising, this is the one to demonstrate.”"}
 ];
 
+function showCoachTab(tab){
+ const main=document.getElementById("coachContent");
+ const sb=document.getElementById("soundbarCoachPanel");
+ const mainBtn=document.getElementById("coachMainTab");
+ const sbBtn=document.getElementById("soundbarCoachTab");
+ if(tab==="soundbars"){
+   if(main) main.style.display="none";
+   if(sb) sb.style.display="block";
+   if(mainBtn) mainBtn.classList.remove("active");
+   if(sbBtn) sbBtn.classList.add("active");
+   if(typeof renderSoundbars==="function") renderSoundbars();
+ }else{
+   if(main) main.style.display="block";
+   if(sb) sb.style.display="none";
+   if(mainBtn) mainBtn.classList.add("active");
+   if(sbBtn) sbBtn.classList.remove("active");
+ }
+}
 function renderSoundbars(){
  const el=document.getElementById("soundbarList");
  if(!el)return;
@@ -632,11 +655,23 @@ function renderStats(){
  ];
  const periodComm=(a,b)=>sales.filter(s=>s[0]>=a&&s[0]<=b).reduce((sum,s)=>sum+Number(s[3]||0),0);
  const periodUnits=(a,b)=>sales.filter(s=>s[0]>=a&&s[0]<=b).reduce((sum,s)=>sum+Number(s[2]||0),0);
- document.getElementById("payday").innerHTML=periods.map(x=>{
+ document.getElementById("payday").innerHTML=periods.map((x,i)=>{
    const comm=periodComm(x.start,x.end),unitsP=periodUnits(x.start,x.end);
-   return `<div class="pay-estimate"><div class="pay-head"><div><div class="pay-date">${x.date}</div><div class="pay-sub">${x.label} • ${unitsP} units logged</div></div><div class="pay-amount">${money(comm)}</div></div></div>`;
+   const today=iso(new Date());
+   const status=today>x.end ? "Past" : (today>=x.start ? "Current pay period" : (i===1 ? "Next payday" : "Upcoming"));
+   return `<div class="pay-estimate">
+     <div class="pay-head">
+       <div>
+         <div class="pay-date">${x.date}</div>
+         <div class="pay-sub">${x.label} • ${status}</div>
+       </div>
+       <div class="pay-amount">${money(comm)}</div>
+     </div>
+     <div class="pay-sub" style="margin-top:5px">${unitsP} units logged • Commission earned in this pay period</div>
+   </div>`;
  }).join("");
 }renderCoach();
 renderSoundbars();
+renderStats();
 </script>
 </body></html>
