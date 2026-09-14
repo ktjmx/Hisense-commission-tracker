@@ -76,6 +76,20 @@ input:focus,select:focus{border-color:var(--accent)}
 .quickResult{padding:12px;border:1px solid var(--line);border-radius:13px;background:#0e1317;margin:7px 0}
 .smallGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 </style>
+
+<style>
+/* Refined internal navigation */
+.internalTabs{display:flex;gap:7px;overflow-x:auto;padding:3px 1px 10px;margin:4px 0 12px;scrollbar-width:none;position:sticky;top:0;z-index:5;background:linear-gradient(var(--bg) 75%,transparent);}
+.internalTabs::-webkit-scrollbar{display:none}
+.internalTab{flex:0 0 auto;padding:10px 13px;border-radius:13px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:800;white-space:nowrap}
+.internalTab.on{background:rgba(22,214,196,.14);border-color:#2b7776;color:var(--accent)}
+.internalPanel{display:none}.internalPanel.on{display:block;animation:panelIn .18s ease-out}
+@keyframes panelIn{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
+.internalPanel>.sectionHead:first-child{margin-top:4px}
+.screen.refined{padding-bottom:18px}
+.noPanelScroll{overflow:visible}
+@media(max-width:420px){.internalTab{padding:9px 11px;font-size:11px}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -746,8 +760,79 @@ function organiseSections(){
   move("records","stats","🏆 Personal Records");
   move("rates","stats","▤ Commission Rates");
 }
+function addInternalTabs(screenId, labels, panelBuilders, active=0){
+ const screen=document.getElementById(screenId); if(!screen)return;
+ screen.classList.add('refined');
+ const old=screen.querySelector('.internalTabs'); if(old)old.remove();
+ const tabs=document.createElement('div'); tabs.className='internalTabs';
+ labels.forEach((label,i)=>{const b=document.createElement('button');b.type='button';b.className='internalTab'+(i===active?' on':'');b.textContent=label;b.onclick=()=>{
+   tabs.querySelectorAll('.internalTab').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+   screen.querySelectorAll(':scope > .internalPanel').forEach((p,j)=>p.classList.toggle('on',j===i));
+ };tabs.appendChild(b)});
+ const anchor=screen.querySelector('.hero'); if(anchor)anchor.after(tabs); else screen.prepend(tabs);
+ panelBuilders.forEach((builder,i)=>{const panel=document.createElement('div');panel.className='internalPanel'+(i===active?' on':'');panel.dataset.internalPanel=i;builder(panel);screen.appendChild(panel)});
+}
+function moveNodes(parent, nodes){nodes.filter(Boolean).forEach(n=>parent.appendChild(n));}
+function directChildrenAfter(screen, anchor){let out=[], n=anchor?anchor.nextElementSibling:null;while(n){let next=n.nextElementSibling;if(!n.classList.contains('internalTabs'))out.push(n);n=next;}return out;}
+function refineInternalNavigation(){
+ // SALES: quick entry vs history
+ const sales=document.getElementById('sales');
+ if(sales){const form=sales.querySelector('.formCard'), sh=sales.querySelector('.sectionHead'), hist=document.getElementById('history');
+   addInternalTabs('sales',['＋ Log Sale','▤ Sales History'],[
+     p=>{moveNodes(p,[form]);},
+     p=>{moveNodes(p,[sh,hist]);}
+   ]);
+ }
+ // TV FINDER: finder vs price match. The price match block is already moved here by organiseSections().
+ const hub=document.getElementById('hub');
+ if(hub){const nodes=directChildrenAfter(hub,hub.querySelector('.hero')).filter(n=>!n.classList.contains('internalTabs'));const price=hub.querySelector('.combinedSection');
+   const finder=nodes.filter(n=>n!==price);
+   addInternalTabs('hub',['📺 Find a TV','🔎 Price Match'],[p=>moveNodes(p,finder),p=>moveNodes(p,[price])]);
+ }
+ // OFFERS: one focused offer category at a time.
+ const offers=document.getElementById('offers');
+ if(offers){const hero=offers.querySelector('.hero'), search=document.getElementById('offerSearch'), sr=document.getElementById('offerSearchResults');const folds=[...offers.querySelectorAll(':scope > .fold')];
+   addInternalTabs('offers',['💰 Cashback','♻️ Trade-In','🎮 Xbox','🧮 Deal','💳 Finance'],folds.map((fold,i)=>p=>{if(i===0)moveNodes(p,[search,sr]);moveNodes(p,[fold]);}));
+ }
+ // STATS: overview plus the four focused areas.
+ const stats=document.getElementById('stats');
+ if(stats){const hero=stats.querySelector('.hero'), grid=stats.querySelector('.statGrid'), folds=[...stats.querySelectorAll(':scope > .fold')];
+   addInternalTabs('stats',['★ Overview','🎯 Targets','📅 Paydays','🏆 Records','💷 Rates'],[
+     p=>moveNodes(p,[grid]),
+     p=>moveNodes(p,[folds[0]]),
+     p=>moveNodes(p,[folds[1]]),
+     p=>moveNodes(p,[folds[2]]),
+     p=>moveNodes(p,[folds[3]])
+   ]);
+ }
+ // SALES COACH: group the long coach into focused shop-floor tools.
+ const coach=document.getElementById('coach');
+ if(coach){
+   const direct=[...coach.children].filter(n=>!n.classList.contains('hero')&&!n.classList.contains('internalTabs'));
+   const heads=[...coach.querySelectorAll(':scope > .sectionHead')];
+   const groups=[]; heads.forEach((h,idx)=>{const arr=[h];let n=h.nextElementSibling;while(n && !n.classList.contains('sectionHead')){arr.push(n);n=n.nextElementSibling}groups.push({head:h,nodes:arr})});
+   const combined=[...coach.querySelectorAll(':scope > .combinedSection')];
+   const byText=t=>groups.find(g=>g.head.textContent.toLowerCase().includes(t));
+   const cust=byText('customer needs'), deal=byText('deal calculator'), ups=byText('upselling'), comm=byText('commission opportunity'), daily=byText('daily sales target'), pitch=byText('10 / 30 / 60');
+   const obj=combined.find(x=>x.textContent.toLowerCase().includes('objection buster'));
+   const demo=combined.find(x=>x.textContent.toLowerCase().includes('demo coach'));
+   const why=combined.find(x=>x.textContent.toLowerCase().includes('why hisense'));
+   const used=new Set(); [cust,deal,ups,comm,daily,pitch].forEach(g=>g?.nodes.forEach(n=>used.add(n))); [obj,demo,why].forEach(n=>n&&used.add(n));
+   const leftover=direct.filter(n=>!used.has(n));
+   addInternalTabs('coach',['🎯 Customer','💷 Deal & Upsell','🎤 Pitch','⚔️ Objections','📺 Demo','✨ Why Hisense'],[
+     p=>moveNodes(p,cust?.nodes||[]),
+     p=>moveNodes(p,[...(deal?.nodes||[]),...(ups?.nodes||[]),...(comm?.nodes||[])]),
+     p=>moveNodes(p,daily?[...(pitch?.nodes||[]),...daily.nodes]:[...(pitch?.nodes||[])]),
+     p=>moveNodes(p,obj?[obj]:[]),
+     p=>moveNodes(p,demo?[demo]:[]),
+     p=>moveNodes(p,why?[why]:[])
+   ]);
+   leftover.forEach(n=>n.style.display='none');
+ }
+}
 function init(){
  organiseSections();
+ refineInternalNavigation();
  document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
  document.getElementById("homeAdd").onclick=()=>go("sales");
