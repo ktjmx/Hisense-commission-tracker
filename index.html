@@ -43,14 +43,48 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .navIcon svg,.quickIcon svg{stroke:#f4f7f7!important;color:#f4f7f7!important}.quickIcon{color:#f4f7f7!important}
 
 
-.summary-card{background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:18px;margin:14px 0 18px;box-shadow:0 14px 35px rgba(0,0,0,.18)}
-.summary-title{font-size:17px;font-weight:900;letter-spacing:-.02em}
-.summary-sub{font-size:12px;color:var(--muted);margin-top:3px;margin-bottom:14px}
-.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.summary-item{background:rgba(255,255,255,.045);border-radius:14px;padding:12px 7px;text-align:center}
-.summary-item:first-child{grid-column:1/-1}
-.summary-item strong{display:block;font-size:20px;font-weight:900;color:#fff}
-.summary-item span{display:block;font-size:10px;color:var(--muted);margin-top:3px}
+.weekly-summary{padding:17px;margin-bottom:15px}
+.weekly-dates{font-size:11px;color:var(--muted);margin-top:-6px;margin-bottom:13px}
+.weekly-total{display:flex;align-items:baseline;gap:7px;margin-bottom:13px}
+.weekly-total strong{font-family:Manrope,sans-serif;font-size:32px;letter-spacing:-1px}
+.weekly-total span{font-size:12px;color:var(--muted);font-weight:600}
+.mix-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.soundbar-tile{grid-column:1/-1}
+.soundbar-tile b{color:#f1d79e}
+.mix-item{background:#0a1d20;border:1px solid #25484c;border-radius:13px;padding:10px 5px;text-align:center}
+.mix-item b{display:block;font-family:Manrope,sans-serif;font-size:18px}
+.mix-item span{display:block;font-size:9px;color:var(--muted);margin-top:3px;font-weight:700}
+.offer-match{padding:12px;border:1px solid #2d5054;border-radius:14px;background:#10292c;margin-top:8px}
+.offer-match b{display:block;margin-bottom:4px}
+.offer-match button{margin-top:8px;padding:7px 10px;border-radius:9px;border:1px solid #35585c;background:#153337;color:#fff;font-weight:800}
+
+.coach-content{margin-top:14px}
+.coach-block{background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);border-radius:17px;padding:15px;margin-top:10px}
+.coach-kicker{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;color:#8fdce0;margin-bottom:6px}
+.coach-pitch{font-family:Manrope,sans-serif;font-size:16px;line-height:1.45;font-weight:850;letter-spacing:-.015em}
+.coach-copy{font-size:13px;line-height:1.55;color:#d3dfe0}
+.coach-copy strong{color:#fff}
+.coach-list{margin:8px 0 0;padding-left:18px;color:#d3dfe0;font-size:13px;line-height:1.55}
+.coach-tip{border-left:3px solid #f1d79e;padding:9px 11px;background:rgba(241,215,158,.06);border-radius:8px;margin-top:10px;font-size:12px;line-height:1.5}
+.coach-cap{width:34px;height:34px;border:1px solid rgba(255,255,255,.18);border-radius:10px;display:grid;place-items:center;color:#fff;font-size:18px}
+.soundbar-card{padding:13px;border:1px solid #2d5054;border-radius:15px;background:#0d2528;margin-top:8px}
+.soundbar-card .sb-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.soundbar-card b{font-family:Manrope,sans-serif;font-size:14px}
+.soundbar-price{color:#f1d79e;font-family:Manrope,sans-serif;font-weight:900;white-space:nowrap}
+.soundbar-price.missing{color:#9db0b1;font-size:11px;text-align:right;white-space:normal}
+.soundbar-meta{font-size:11px;color:#9db0b1;margin-top:5px;line-height:1.4}
+.soundbar-pitch{font-size:12px;color:#d3dfe0;line-height:1.45;margin-top:8px}
+
+.weekly-stats,.overall-stats{padding:17px}
+.weekly-stat-top{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.weekly-stat-top>div{background:#0a1d20;border:1px solid #25484c;border-radius:14px;padding:12px;text-align:center}
+.weekly-stat-top b,.overall-total b{display:block;font-family:Manrope,sans-serif;font-size:24px}
+.weekly-stat-top span,.overall-total span{display:block;color:var(--muted);font-size:10px;font-weight:700;margin-top:2px}
+.overall-mix{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.overall-mix>div{background:#0a1d20;border:1px solid #25484c;border-radius:13px;padding:10px 5px;text-align:center}
+.overall-mix b{display:block;font-family:Manrope,sans-serif;font-size:17px}
+.overall-mix span{display:block;color:var(--muted);font-size:9px;font-weight:700;margin-top:3px}
+.overall-total{display:flex;align-items:baseline;gap:7px;margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -64,7 +98,18 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="quote">“Don’t sell the TV. Sell what the TV does for their life.”</div>
 
   </div>
-  <div class="grid3" id="homeStats"></div>
+  <div class="card weekly-summary">
+    <div class="section-title">This week</div>
+    <div class="weekly-dates" id="weeklyDates"></div>
+    <div class="weekly-total"><strong id="weeklyUnits">0</strong><span>units sold</span></div>
+    <div class="mix-grid">
+      <div class="mix-item"><b id="weeklyLED">0%</b><span>LED</span></div>
+      <div class="mix-item"><b id="weeklyQLED">0%</b><span>QLED</span></div>
+      <div class="mix-item"><b id="weeklyMiniLED">0%</b><span>Mini LED</span></div>
+      <div class="mix-item"><b id="weeklyRGB">0%</b><span>RGB</span></div>
+      <div class="mix-item soundbar-tile"><b id="weeklySoundbars">0</b><span>Soundbars sold</span></div>
+    </div>
+  </div>
   <div class="section-title">Your shortcuts</div>
   <div class="grid">
     <button class="action" data-go="sales"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="actionCopy"><b>Log a Sale</b><small>Add your commission</small></span></span></button>
@@ -123,17 +168,68 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   </div>
 </section>
 
-<section class="screen" id="coach">
-  <div class="card">
-    <div class="section-title">Sales Coach</div>
-    <div class="field"><label>What do you need?</label><select id="coachTopic">
-      <option value="opening">Opening the conversation</option><option value="oled">Customer comparing OLED</option><option value="price">“It's too expensive”</option><option value="brightness">Why brightness matters</option><option value="gaming">Gaming pitch</option><option value="sport">Sport pitch</option><option value="upsell">Upsell to a better model</option><option value="hisense">Why Hisense?</option>
-    </select></div>
-    <div class="result coach-answer" id="coachAnswer"></div>
+
+<section id="coach" class="screen">
+  <div class="card section">
+    <div class="head">
+      <div>
+        <h2>Sales Coach</h2>
+        <div class="small">Passion, technology and customer-led selling</div>
+      </div>
+      <div class="coach-cap">◈</div>
+    </div>
+
+    <label>What are you selling?</label>
+    <select id="coachModel" onchange="renderCoach()">
+      <option value="UR9">Hisense UR9 — RGB Mini LED</option>
+      <option value="UR8">Hisense UR8 — RGB Mini LED</option>
+      <option value="U8">Hisense U8 — Mini LED</option>
+      <option value="U7PRO">Hisense U7 Pro — Mini LED Pro</option>
+      <option value="U7">Hisense U7 — Mini LED</option>
+      <option value="Q7">Hisense Q7 — QLED</option>
+      <option value="E7PRO">Hisense E7 Pro — QLED Pro</option>
+      <option value="A6">Hisense A6 — LED</option>
+      <option value="SOUNDBAR">Hisense Soundbars</option>
+    </select>
+
+    <div id="coachContent" class="coach-content"></div>
+    
+<div class="card soundbar-catalogue">
+  <div class="section-title">Hisense Soundbars</div>
+  <div class="muted" style="margin-top:-7px;margin-bottom:10px">Current Currys pricing checked 14 Sep 2026. Prices shown are the current standard price where Currys currently lists the model.</div>
+  <div id="soundbarList"></div>
+</div>
+
   </div>
 </section>
 
 <section class="screen" id="stats">
+  <div class="card weekly-stats">
+    <div class="section-title">Weekly sales summary</div>
+    <div class="weekly-dates" id="statsWeeklyDates"></div>
+    <div class="weekly-stat-top">
+      <div><b id="statsWeeklyUnits">0</b><span>TV units</span></div>
+      <div><b id="statsWeeklySoundbars">0</b><span>Soundbars</span></div>
+    </div>
+    <div class="section-title" style="margin-top:14px">Weekly TV mix</div>
+    <div class="overall-mix">
+      <div><b id="statsWeeklyLED">0%</b><span>LED</span></div>
+      <div><b id="statsWeeklyQLED">0%</b><span>QLED</span></div>
+      <div><b id="statsWeeklyMiniLED">0%</b><span>Mini LED</span></div>
+      <div><b id="statsWeeklyRGB">0%</b><span>RGB Mini LED</span></div>
+    </div>
+  </div>
+  <div class="card overall-stats">
+    <div class="section-title">Overall sales mix</div>
+    <div class="muted" style="margin-top:-7px;margin-bottom:11px">All logged TV units</div>
+    <div class="overall-total"><b id="statsOverallUnits">0</b><span>TV units</span></div>
+    <div class="overall-mix">
+      <div><b id="statsOverallLED">0%</b><span>LED</span></div>
+      <div><b id="statsOverallQLED">0%</b><span>QLED</span></div>
+      <div><b id="statsOverallMiniLED">0%</b><span>Mini LED</span></div>
+      <div><b id="statsOverallRGB">0%</b><span>RGB Mini LED</span></div>
+    </div>
+  </div>
   <div class="grid3" id="statCards"></div>
   <div class="card" style="margin-top:12px">
     <div class="section-title">Payday</div><div id="payday"></div>
@@ -220,9 +316,40 @@ function go(id){
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
 function renderHome(){
- document.getElementById("todayText").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})+" • Your sales control centre";
- document.getElementById("homeStats").innerHTML=`<div class="stat"><span class="muted">Commission</span><b>${money(totalComm())}</b></div><div class="stat"><span class="muted">Units</span><b>${totalUnits()}</b></div><div class="stat"><span class="muted">Sales</span><b>${sales.length}</b></div>`;
+ const now=new Date();
+ const day=now.getDay(); // Sunday = 0
+ const startDate=new Date(now);
+ startDate.setHours(12,0,0,0);
+ startDate.setDate(now.getDate()-day);
+ const endDate=new Date(startDate);
+ endDate.setDate(startDate.getDate()+6);
+ const iso=d=>d.toISOString().slice(0,10);
+ const inWeek=sales.filter(x=>x[0]>=iso(startDate)&&x[0]<=iso(endDate));
+ const units=inWeek.reduce((a,x)=>a+Number(x[2]||0),0);
+ let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0;
+ const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"];
+ const isSoundbar=m=>soundbarModels.some(x=>norm(x)===norm(m));
+ inWeek.forEach(x=>{
+   const m=String(x[1]||"").toUpperCase(), q=Number(x[2]||0);
+   if(isSoundbar(m)){soundbars+=q;return}
+   tvUnits+=q;
+   if(/UR8|UR9|UXT|UXQ/.test(m)) rgb+=q;
+   else if(/U7|U8/.test(m)) mini+=q;
+   else if(/Q7|Q8|E7/.test(m)) qled+=q;
+   else led+=q;
+ });
+ const pct=n=>tvUnits?Math.round(n/tvUnits*100):0;
+ const fmt=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"short"});
+ document.getElementById("todayText").textContent=now.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})+" • Your sales control centre";
+ document.getElementById("weeklyDates").textContent=fmt(startDate)+" – "+fmt(endDate)+" • Sunday to Saturday";
+ document.getElementById("weeklyUnits").textContent=tvUnits;
+  document.getElementById("weeklySoundbars").textContent=soundbars;
+ document.getElementById("weeklyLED").textContent=pct(led)+"%";
+ document.getElementById("weeklyQLED").textContent=pct(qled)+"%";
+ document.getElementById("weeklyMiniLED").textContent=pct(mini)+"%";
+ document.getElementById("weeklyRGB").textContent=pct(rgb)+"%";
 }
+
 function fillModels(){
  let vals=[...new Set([...Object.keys(R),...TVs.map(x=>x[0])])].sort();
  document.getElementById("modelList").innerHTML=vals.map(x=>`<option value="${x}">`).join("");
@@ -247,7 +374,7 @@ document.getElementById("saleModel").oninput=()=>document.getElementById("saleRa
 document.getElementById("addSale").onclick=()=>{
  let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rate(model);
  if(!model||r==null){alert("Please enter a model with a commission rate.");return}
- sales.push([date,model,qty,r*qty]);save();document.getElementById("saleModel").value="";document.getElementById("saleRate").textContent="Commission: —";renderCalendar();renderHome();alert("Sale added.");
+ sales.push([date,model,qty,r*qty]);save();document.getElementById("saleModel").value="";document.getElementById("saleRate").textContent="Commission: —";renderCalendar();renderHome();renderStats();alert("Sale added.");
 };
 function findTV(){
  let q=norm(document.getElementById("tvSearch").value),b=document.getElementById("budget").value,s=document.getElementById("size").value,n=document.getElementById("need").value,t=document.getElementById("tech").value;
@@ -268,10 +395,31 @@ document.getElementById("findTv").onclick=findTV;
 ["tvSearch","budget","size","need","tech"].forEach(id=>document.getElementById(id).addEventListener("change",findTV));
 document.getElementById("tvSearch").addEventListener("input",findTV);
 function renderOffer(){
- let m=document.getElementById("offerModel").value.trim(),p=priceOf(m),d=deal(m,p);
- if(!m){document.getElementById("offerResult").innerHTML="";return}
- document.getElementById("offerResult").innerHTML=`<div class="offer"><b>${m}</b><div>TV price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div>Trade-in: ${money(d.trade)} ${d.code?"• "+d.code:""}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div><div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
+ const input=document.getElementById("offerModel");
+ const box=document.getElementById("offerResult");
+ const q=norm(input.value.trim());
+ if(!q){box.innerHTML="";return}
+
+ const matches=TVs.filter(x=>norm(x[0]).includes(q)).slice(0,12);
+ if(!matches.length){
+   box.innerHTML=`<div class="muted" style="padding:10px 2px">No TV models found. Try a model such as 65UR8STUK, 75U8Q or 55E7STUK PRO.</div>`;
+   return;
+ }
+
+ if(matches.length===1 && norm(matches[0][0])===q){
+   const m=matches[0][0],p=matches[0][1],d=deal(m,p);
+   box.innerHTML=`<div class="offer"><b>${m}</b><div>TV price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div>Trade-in: ${money(d.trade)} ${d.code?"• "+d.code:""}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div><div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
+   return;
+ }
+
+ box.innerHTML=`<div class="muted" style="margin:8px 0">TV models matching “${input.value.trim()}”</div>`+
+   matches.map(x=>`<div class="offer-match"><b>${x[0]}</b><span class="muted">${x[1]==null?"Price TBC":money(x[1])}</span><br><button type="button" data-offer-model="${x[0]}">View offers</button></div>`).join("");
+ box.querySelectorAll("[data-offer-model]").forEach(b=>b.onclick=()=>{
+   input.value=b.dataset.offerModel;
+   renderOffer();
+ });
 }
+
 document.getElementById("offerModel").oninput=renderOffer;
 const COACH={
 opening:"“What are you mainly using the TV for — films, sport, gaming or a bit of everything?” Then build the recommendation around their answer.",
@@ -284,36 +432,155 @@ upsell:"“If we step up one level, the main question is whether the customer wi
 hisense:"“Hisense gives you a lot of picture technology for the money, plus strong gaming features, big-screen options and current promotional value.”"
 };
 document.getElementById("coachTopic").onchange=()=>document.getElementById("coachAnswer").textContent=COACH[document.getElementById("coachTopic").value];
+function getSalesMix(list){
+ let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0;
+ const sb=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"];
+ const isSB=m=>sb.some(x=>norm(x)===norm(m));
+ list.forEach(x=>{
+   const m=String(x[1]||""),q=Number(x[2]||0);
+   if(isSB(m)){soundbars+=q;return}
+   tvUnits+=q;
+   if(/UR8|UR9|UXT|UXQ/i.test(m))rgb+=q;
+   else if(/U7|U8/i.test(m))mini+=q;
+   else if(/Q7|Q8|E7/i.test(m))qled+=q;
+   else led+=q;
+ });
+ const p=n=>tvUnits?Math.round(n/tvUnits*100):0;
+ return {tvUnits,soundbars,led,qled,mini,rgb,p};
+}
 function renderStats(){
- document.getElementById("statCards").innerHTML=`<div class="stat"><span class="muted">Commission</span><b>${money(totalComm())}</b></div><div class="stat"><span class="muted">Units</span><b>${totalUnits()}</b></div><div class="stat"><span class="muted">Sales</span><b>${sales.length}</b></div>`;
+ let now=new Date(),day=now.getDay();
+ let st=new Date(now);st.setHours(12,0,0,0);st.setDate(now.getDate()-day);
+ let en=new Date(st);en.setDate(st.getDate()+6);
+ let iso=d=>d.toISOString().slice(0,10);
+ let weekSales=sales.filter(x=>x[0]>=iso(st)&&x[0]<=iso(en));
+ let w=getSalesMix(weekSales),o=getSalesMix(sales);
+ let fmt=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"short"});
+ document.getElementById("statsWeeklyDates").textContent=fmt(st)+" – "+fmt(en)+" • Sunday to Saturday";
+ document.getElementById("statsWeeklyUnits").textContent=w.tvUnits;
+ document.getElementById("statsWeeklySoundbars").textContent=w.soundbars;
+ document.getElementById("statsWeeklyLED").textContent=w.p(w.led)+"%";
+ document.getElementById("statsWeeklyQLED").textContent=w.p(w.qled)+"%";
+ document.getElementById("statsWeeklyMiniLED").textContent=w.p(w.mini)+"%";
+ document.getElementById("statsWeeklyRGB").textContent=w.p(w.rgb)+"%";
+ document.getElementById("statsOverallUnits").textContent=o.tvUnits;
+ document.getElementById("statsOverallLED").textContent=o.p(o.led)+"%";
+ document.getElementById("statsOverallQLED").textContent=o.p(o.qled)+"%";
+ document.getElementById("statsOverallMiniLED").textContent=o.p(o.mini)+"%";
+ document.getElementById("statsOverallRGB").textContent=o.p(o.rgb)+"%";
+ document.getElementById("statCards").innerHTML=`<div class="stat"><span class="muted">Commission</span><b>${money(totalComm())}</b></div><div class="stat"><span class="muted">All units</span><b>${totalUnits()}</b></div><div class="stat"><span class="muted">Sales entries</span><b>${sales.length}</b></div>`;
  let dates=[["WK32–35","25 Sep 2026"],["WK36–39","23 Oct 2026"],["WK40–44","25 Nov 2026"],["WK45–48","TBC"],["WK49–52","25 Jan 2027"]];
  document.getElementById("payday").innerHTML=dates.map(x=>`<div class="sale-row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
 }
+
 document.getElementById("rateSearch").oninput=()=>{let m=document.getElementById("rateSearch").value,r=rate(m);document.getElementById("rateAnswer").innerHTML=m?(r==null?"No current rate found.":`<strong>${m.toUpperCase()}</strong> pays <strong>${money(r)}</strong> commission per unit.`):"Enter a model to see the current rate."};
 document.getElementById("backup").onclick=()=>{let blob=new Blob([JSON.stringify(sales,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="hisense-sales-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};
-fillModels();renderHome();document.getElementById("coachAnswer").textContent=COACH.opening;document.getElementById("saleDate").value=today();renderCalendar();
+fillModels();renderHome();renderStats();document.getElementById("saleDate").value=today();renderCalendar();
 
-
-function updateHomeSummary(){
-  const sales = JSON.parse(localStorage.getItem("hisenseSalesV2") || "[]");
-  let units=0, led=0, qled=0, mini=0, rgb=0;
-  sales.forEach(x=>{
-    const qty=Number(x.qty||1);
-    const model=String(x.model||"").toUpperCase();
-    units+=qty;
-    if(/UR8|UR9|UXT|UXQ/.test(model)) rgb+=qty;
-    else if(/U7|U8|MINI LED/.test(model)) mini+=qty;
-    else if(/Q7|Q8|QLED/.test(model)) qled+=qty;
-    else led+=qty;
-  });
-  const pct=n=>units?Math.round(n/units*100):0;
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  set("homeUnits",units);
-  set("homeLED",pct(led)+"%");
-  set("homeQLED",pct(qled)+"%");
-  set("homeMiniLED",pct(mini)+"%");
-  set("homeRGB",pct(rgb)+"%");
+const COACH={
+UR9:{
+pitch:"“If you want the picture to genuinely jump off the screen, this is the one I’d show you. The UR9 combines RGB colour technology with Mini LED control, so you’re getting incredibly vibrant colour, serious brightness and much tighter control over light and dark scenes. It’s not just a spec sheet — put sport, a film or a game on it and you can actually see what the technology is doing.”",
+tech:"RGB Mini LED uses dedicated red, green and blue light sources rather than relying on a conventional white backlight plus colour filters. Combined with Mini LED backlighting, the TV can control brightness and contrast very precisely while the RGB system is focused on producing vivid, high-purity colour.",
+why:"For the customer, that means colours can look more intense without simply making the whole picture brighter. Mini LED helps keep bright highlights punchy while controlling darker areas, which is especially noticeable in films, HDR, sport and games.",
+points:["RGB colour technology for vivid, high-purity colour","Mini LED backlight for precise light control","High brightness is useful in bright living rooms and HDR","A strong choice when the customer wants a premium, impactful picture"],
+tip:"Demo tip: use a colourful HDR scene first, then a dark scene with bright highlights. Explain that you’re showing both colour and light control — not just brightness."
+},
+UR8:{
+pitch:"“This is where I’d start if you want that premium Mini LED look but still want to keep the conversation about value. The UR8 gives you RGB colour technology, Mini LED backlighting and the kind of brightness that makes HDR and sport really stand out. It’s a TV you can show rather than just talk about — once the customer sees the colour and contrast, the reason for stepping up becomes obvious.”",
+tech:"The UR8 combines RGB colour technology with Mini LED backlighting. The RGB system is designed to produce strong colour purity, while the Mini LED backlight gives the display much finer control over where light is being produced.",
+why:"That combination matters because picture quality is not just about one number. Colour, brightness and contrast work together. For a customer, it can mean more vivid colours, stronger HDR highlights and better separation between bright and dark parts of the image.",
+points:["RGB colour technology","Mini LED backlighting","Strong HDR and brightness performance","Premium picture without jumping straight to OLED"],
+tip:"Ask: “What do you watch most?” Then demonstrate that content. Make the technology relevant instead of listing specifications."
+},
+U8:{
+pitch:"“The U8 is the kind of TV I’d show to someone who wants a proper step up in picture quality. Mini LED gives you much more precise control of the backlight, so you can get bright highlights without washing the whole picture out. Add strong colour and HDR performance and you get a picture that feels much more cinematic and exciting.”",
+tech:"Mini LED uses a large number of much smaller LEDs behind the screen. Those LEDs are grouped into local dimming zones so the TV can brighten and dim different areas of the image independently.",
+why:"The practical benefit is better control of contrast: bright objects can stay bright while surrounding areas can be kept darker. This can make HDR films, sport and games look more dynamic, particularly in scenes with both very bright and very dark content.",
+points:["Mini LED backlight","Local dimming for more precise contrast control","Strong HDR impact","Excellent upgrade path from standard LED/QLED"],
+tip:"Say “more control” rather than just “more LEDs”. Customers understand the benefit faster when you explain what the technology changes on screen."
+},
+U7PRO:{
+pitch:"“If gaming, sport and fast-moving content matter, I’d seriously look at the U7 Pro. You’re getting Mini LED picture technology with the speed and responsiveness you want from a modern gaming TV. It’s bright, punchy and designed to make action feel immediate — this is one where I’d get the controller or sports footage on the screen and let it sell itself.”",
+tech:"Mini LED provides precise backlight control and strong brightness. The higher-performance gaming features are designed to reduce the feeling of delay and keep fast-moving gameplay looking smooth and responsive.",
+why:"For gamers, responsiveness matters because the TV is part of the gaming chain. For sport fans, motion handling and brightness matter because the picture is constantly changing and stadiums can contain both very bright and very dark areas.",
+points:["Mini LED picture technology","Designed with gaming performance in mind","High brightness for HDR and sport","Strong all-rounder for action-heavy content"],
+tip:"Ask whether they game on console or PC. Then demo the feature that answers their actual use case instead of giving a generic gaming speech."
+},
+U7:{
+pitch:"“This is the point where I’d show you what Mini LED can do without taking you right to the top of the range. You get the brightness and backlight control that make HDR really pop, plus a strong picture for sport and gaming. If you want your TV to feel exciting every time you turn it on, this is a very easy one to demonstrate.”",
+tech:"Mini LED places many small LEDs behind the LCD panel and controls them in zones. That gives the TV more precise control over the backlight than a conventional edge-lit or basic direct-lit design.",
+why:"More precise backlight control can improve contrast and help HDR highlights stand out. The customer sees this as a picture that has more depth and impact rather than as a technical specification.",
+points:["Mini LED backlight","Improved backlight control","Strong brightness and HDR impact","Great step-up option from basic LED"],
+tip:"Use a bright HDR scene and point out the highlights, then switch to a darker scene and explain the local control."
+},
+Q7:{
+pitch:"“If you want rich, colourful pictures without moving all the way into the premium Mini LED range, the Q7 is a really strong option. QLED is all about delivering a wider, richer colour experience, so films, sport and entertainment look lively and vibrant. It’s the TV I’d show when the customer says, ‘I want a picture that looks better, but I don’t need the most expensive one.’”",
+tech:"QLED TVs use a quantum-dot layer to help produce a broader and more precise range of colours. The LCD panel and backlight create the image, while the quantum-dot layer helps improve colour performance.",
+why:"For customers, the key benefit is colour volume and vibrancy. It can make bright, colourful content look more energetic than a basic LED TV, while keeping the conversation focused on value.",
+points:["Quantum-dot colour technology","Richer, more vibrant colour","Strong everyday entertainment picture","A clear step up from entry-level LED"],
+tip:"Use colourful animation, sport or nature footage. Avoid saying simply “more colours”; explain that quantum dots help the TV produce stronger, purer-looking colours."
+},
+E7PRO:{
+pitch:"“If the customer wants a premium-looking picture but has a sensible budget, I’d put the E7 Pro straight in the conversation. QLED gives you that richer colour presentation, while the Pro range gives you a clear step up from basic LED. It’s a great example of spending a bit more where the customer can actually see the difference.”",
+tech:"QLED uses quantum dots to improve the colour produced by the LCD display. The Pro positioning adds picture and performance improvements over the more basic range, giving the customer a more premium overall package.",
+why:"The important customer benefit is that the upgrade is visible: richer colour, more engaging HDR and a more polished picture experience than an entry-level LED.",
+points:["QLED quantum-dot colour","More premium picture presentation","Strong value-focused step up","Ideal for films, sport and everyday streaming"],
+tip:"Frame the upgrade as “what you will see every day”, not “what is on the spec sheet”."
+},
+A6:{
+pitch:"“If you mainly want a straightforward, good-value TV, the A6 does exactly what it needs to do. It gives you a solid big-screen experience without paying for technology you might not need. But if the customer tells you they love sport, gaming or HDR, that’s when I’d show them what stepping up gets them.”",
+tech:"Standard LED TVs use an LCD panel illuminated by an LED backlight. The design is proven, efficient and cost-effective, but it generally offers less advanced backlight control and colour technology than the higher ranges.",
+why:"The customer gets a sensible entry point for everyday TV, streaming and general viewing. The sales opportunity is to understand whether their viewing habits justify moving into QLED or Mini LED.",
+points:["Straightforward LED picture","Good-value entry point","Ideal for everyday viewing","Useful baseline for explaining the benefits of stepping up"],
+tip:"Never knock the entry model. Ask what they watch, then show the customer exactly why a higher tier might be worth the extra spend."
+},
+SOUNDBAR:{
+pitch:"“You’ve got the picture sorted — now let’s make the sound match it. A bigger, better TV deserves sound that actually fills the room. Adding a Hisense soundbar gives you a much more immersive experience for films, sport and gaming, and right now there’s an even bigger reason to add one: selected soundbars are 50% off when bought with any Hisense TV.”",
+tech:"A soundbar uses multiple speaker drivers in a compact enclosure to create a wider, more powerful soundstage than the small speakers built into most TVs. Models with dedicated bass or surround-processing can add more depth and immersion.",
+why:"Customers usually notice the difference immediately with dialogue, music, explosions and stadium atmosphere. It also avoids the need for a full separate speaker system.",
+points:["Bigger, fuller sound than typical TV speakers","Improves dialogue, music and cinematic effects","Simple way to upgrade the whole viewing experience","Selected soundbars are currently 50% off with any Hisense TV"],
+tip:"Sell the experience as a package: “Great picture + great sound.” Then use the 50% offer as the reason to make the upgrade today."
 }
-updateHomeSummary();
+};
+
+
+const SOUNDBARS=[
+ {m:"HS214",price:79,meta:"2.1 • 108 W • Built-in subwoofer",pitch:"“A simple, compact upgrade if the customer wants fuller TV sound without adding a separate subwoofer.”"},
+ {m:"HS2000",price:85,meta:"2.1 • 240 W • Built-in subwoofer • DTS Virtual:X",pitch:"“A great value step-up with more power and built-in bass — ideal for films, sport and everyday streaming.”"},
+ {m:"HS2100",price:81,meta:"2.1 • 240 W peak / 120 W RMS • Wireless subwoofer • DTS Virtual:X",pitch:"“This gives you proper bass from a separate wireless subwoofer while keeping the setup simple.”"},
+ {m:"HS3100",price:95,meta:"3.1 • 480 W • Wireless subwoofer • DTS Virtual:X",pitch:"“The extra centre channel is a strong story for dialogue, while the subwoofer gives films and sport much more impact.”"},
+ {m:"AX3120Q",price:499,meta:"3.1.2 • 440 W • Dolby Atmos & DTS Virtual:X • Wireless subwoofer",pitch:"“This is where we start getting serious about home cinema — Dolby Atmos, dedicated bass and room-filling sound.”"},
+ {m:"AX5125H",price:209,meta:"5.1.2 • 500 W • Dolby Atmos & DTS Virtual:X • Wireless subwoofer & rear speakers",pitch:"“You’re getting a genuine step toward surround sound here — rear speakers, a subwoofer and Dolby Atmos for a much more immersive film or gaming experience.”"},
+ {m:"AX5100Q",price:199,meta:"5.1 • 580 W • Dolby Atmos & DTS:X • Wireless subwoofer & rear speakers",pitch:"“This is a powerful all-round cinema package: 580 W, rear speakers, a wireless subwoofer and Dolby Atmos/DTS:X.”"},
+ {m:"AX5140Q",price:599,meta:"5.1.4 • 600 W • Dolby Atmos & DTS:X • Up-firing speakers • Wireless subwoofer & rear speakers",pitch:"“If the customer wants the full cinema experience, this is the serious upgrade — four up-firing channels help create that overhead Atmos effect.”"},
+ {m:"S5120GQ",price:null,meta:"Currys price not currently listed on the live Currys pages checked",pitch:"“A useful option to check in-store if this is the model you have available, but confirm today's selling price before quoting it.”"},
+ {m:"S5120Q",price:null,meta:"Currys price not currently listed on the live Currys pages checked",pitch:"“Position it around the customer's room and sound needs, then confirm the live Currys price before presenting the deal.”"},
+ {m:"HT SATURN",price:1299,meta:"4.1.2 • 720 W • Dolby Atmos & DTS:X • Wireless subwoofer & rear speakers • Room calibration",pitch:"“This is the flagship conversation — 720 W, a 4.1.2 layout, room calibration and Dolby Atmos/DTS:X. If they want cinema sound without compromising, this is the one to demonstrate.”"}
+];
+
+function renderSoundbars(){
+ const el=document.getElementById("soundbarList");
+ if(!el)return;
+ el.innerHTML=SOUNDBARS.map(x=>`<div class="soundbar-card">
+   <div class="sb-head"><b>${x.m}</b><span class="soundbar-price ${x.price==null?"missing":""}">${x.price==null?"Not currently listed on Currys":"£"+x.price.toLocaleString("en-GB")}</span></div>
+   <div class="soundbar-meta">${x.meta}</div>
+   <div class="soundbar-pitch">${x.pitch}</div>
+ </div>`).join("");
+}
+
+function renderCoach(){
+ const key=document.getElementById("coachModel").value;
+ const c=COACH[key];
+ if(!c)return;
+ document.getElementById("coachContent").innerHTML=`
+   <div class="coach-block"><div class="coach-kicker">Passionate pitch</div><div class="coach-pitch">${c.pitch}</div></div>
+   <div class="coach-block"><div class="coach-kicker">Explain the technology</div><div class="coach-copy">${c.tech}</div></div>
+   <div class="coach-block"><div class="coach-kicker">Translate it for the customer</div><div class="coach-copy">${c.why}</div></div>
+   <div class="coach-block"><div class="coach-kicker">Key points to remember</div><ul class="coach-list">${c.points.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <div class="coach-tip"><strong>Shop-floor tip:</strong> ${c.tip}</div>
+ `;
+}
+renderCoach();
+renderSoundbars();
 </script>
 </body></html>
