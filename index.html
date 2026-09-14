@@ -309,9 +309,11 @@ function localDateTime(d=new Date()){return d.toLocaleString("en-GB",{day:"numer
 function fmtDate(s){return new Date(s+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"})}
 function key(s){return s.date+"|"+s.model+"|"+s.qty+"|"+s.total}
 function rateFor(model,date){
-  const m=model.trim().toUpperCase();
+  const entered=model.trim().toUpperCase();
+  const hub=HUB_MODELS.find(x=>[x.m,x.base].filter(Boolean).some(v=>String(v).toUpperCase()===entered));
+  const m=(hub?hub.base:entered).toUpperCase();
   if(date>="2026-09-13" && CURRENT_RATES[m]!=null)return CURRENT_RATES[m];
-  const found=sales.find(s=>s.model.toUpperCase()===m && s.date<"2026-09-13" && s.rate!=null);
+  const found=sales.find(s=>s.model.toUpperCase()===entered && s.date<"2026-09-13" && s.rate!=null);
   return found?Number(found.rate):CURRENT_RATES[m]??null;
 }
 function weekNum(date){const d=new Date(date+"T12:00:00"), start=new Date("2026-08-31T12:00:00");return Math.floor((d-start)/604800000)+36}
@@ -747,7 +749,8 @@ function init(){
      renderHome(); renderStats(); toast("Payday target updated ✓");
    }
  };
- document.getElementById("modelList").innerHTML=Object.keys(CURRENT_RATES).sort().map(m=>`<option value="${escapeHtml(m)}"></option>`).join("");
+ const saleModels=[...new Set([...HUB_MODELS.map(x=>x.m),...Object.keys(CURRENT_RATES)])].sort((a,b)=>a.localeCompare(b));
+document.getElementById("modelList").innerHTML=saleModels.map(m=>`<option value="${escapeHtml(m)}"></option>`).join("");
  renderHome();renderHistory();renderPaydays();renderStats();renderRecords();renderHub();renderRates();renderOffers();renderPrice();renderObjections();renderDemo();renderHisense();renderCoach();
 }
 function preview(){const m=document.getElementById("model").value.trim(),d=document.getElementById("saleDate").value,r=rateFor(m,d);document.getElementById("preview").textContent=r==null?"—":money(r*qty);document.getElementById("previewMeta").textContent=r==null?"Unknown rate — check Rates":"£"+r+" per unit × "+qty}
