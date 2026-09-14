@@ -231,53 +231,20 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <label>What are you selling?</label>
     <select id="coachModel" onchange="renderCoach()">
       <optgroup label="RGB Mini LED">
-        <option value="65UR9STUK">65UR9STUK — UR9</option>
-        <option value="75UR9STUK">75UR9STUK — UR9</option>
-        <option value="85UR9STUK">85UR9STUK — UR9</option>
-        <option value="55UR8STUK">55UR8STUK — UR8</option>
-        <option value="65UR8STUK">65UR8STUK — UR8</option>
-        <option value="75UR8STUK">75UR8STUK — UR8</option>
-        <option value="85UR8STUK">85UR8STUK — UR8</option>
-        <option value="100UR8STUK">100UR8STUK — UR8</option>
+        <option value="UR9">UR9 <span>• 65–85"</span></option>
+        <option value="UR8">UR8 <span>• 55–100"</span></option>
       </optgroup>
-      <optgroup label="Mini LED / Mini LED Pro">
-        <option value="55U8QTUK">55U8QTUK — U8</option>
-        <option value="65U8QTUK">65U8QTUK — U8</option>
-        <option value="75U8QTUK">75U8QTUK — U8</option>
-        <option value="85U8QTUK">85U8QTUK — U8</option>
-        <option value="100U8QTUK">100U8QTUK — U8</option>
-        <option value="50U7STUK">50U7STUK — U7</option>
-        <option value="55U7STUK">55U7STUK — U7</option>
-        <option value="65U7STUK">65U7STUK — U7</option>
-        <option value="75U7STUK">75U7STUK — U7</option>
-        <option value="85U7STUK">85U7STUK — U7</option>
-        <option value="100U7STUK">100U7STUK — U7</option>
-        <option value="55U7STUK PRO">55U7STUK PRO — U7 Pro</option>
-        <option value="65U7STUK PRO">65U7STUK PRO — U7 Pro</option>
-        <option value="75U7STUK PRO">75U7STUK PRO — U7 Pro</option>
-        <option value="85U7STUK PRO">85U7STUK PRO — U7 Pro</option>
-        <option value="100U7STUK PRO">100U7STUK PRO — U7 Pro</option>
+      <optgroup label="Mini LED">
+        <option value="U8">U8 <span>• 55–100"</span></option>
+        <option value="U7PRO">U7 Pro <span>• 55–100"</span></option>
+        <option value="U7">U7 <span>• 50–100"</span></option>
       </optgroup>
-      <optgroup label="QLED / QLED Pro">
-        <option value="43Q7STUK">43Q7STUK — Q7</option>
-        <option value="50Q7STUK">50Q7STUK — Q7</option>
-        <option value="55Q7STUK">55Q7STUK — Q7</option>
-        <option value="65Q7STUK">65Q7STUK — Q7</option>
-        <option value="75Q7STUK">75Q7STUK — Q7</option>
-        <option value="85Q7STUK">85Q7STUK — Q7</option>
-        <option value="43E7STUK PRO">43E7STUK PRO — E7 Pro</option>
-        <option value="50E7STUK PRO">50E7STUK PRO — E7 Pro</option>
-        <option value="55E7STUK PRO">55E7STUK PRO — E7 Pro</option>
-        <option value="65E7STUK PRO">65E7STUK PRO — E7 Pro</option>
-        <option value="75E7STUK PRO">75E7STUK PRO — E7 Pro</option>
-        <option value="85E7STUK PRO">85E7STUK PRO — E7 Pro</option>
-        <option value="100E7STUK PRO">100E7STUK PRO — E7 Pro</option>
+      <optgroup label="QLED">
+        <option value="Q7">Q7 <span>• 43–85"</span></option>
+        <option value="E7PRO">E7 Pro <span>• 43–100"</span></option>
       </optgroup>
-      <optgroup label="Entry LED">
-        <option value="43A6STUK">43A6STUK — A6</option>
-        <option value="50A6STUK">50A6STUK — A6</option>
-        <option value="55A6STUK">55A6STUK — A6</option>
-        <option value="65A6STUK">65A6STUK — A6</option>
+      <optgroup label="LED">
+        <option value="A6">A6 <span>• 43–65"</span></option>
       </optgroup>
       <optgroup label="Soundbars">
         <option value="SOUNDBAR">Hisense Soundbars</option>
@@ -364,6 +331,15 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 </div>
 
 <script>
+function viewOffers(model){
+  const input=document.getElementById("offerModel");
+  if(input) input.value=model;
+  if(typeof showTab==="function") showTab("offers");
+  if(typeof renderOffers==="function") renderOffers();
+  const target=document.getElementById("offerResults") || document.getElementById("offersResults");
+  if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
 const R={
 "100UR8STUK":150,"85UR8STUK":80,"75UR8STUK":60,"65UR8STUK":45,"55UR8STUK":35,
 "65UR9STUK":60,"75UR9STUK":80,"85UR9STUK":120,"116UXTUK":500,"110UXNTUK":200,"100UXTUK":175,
@@ -517,19 +493,62 @@ document.getElementById("addSale").onclick=()=>{
  updateHomeTotalVAL();
 };
 function findTV(){
- let q=norm(document.getElementById("tvSearch").value),b=document.getElementById("budget").value,s=document.getElementById("size").value,n=document.getElementById("need").value,t=document.getElementById("tech").value;
+ let q=norm(document.getElementById("tvSearch").value),
+     b=document.getElementById("budget").value,
+     s=document.getElementById("size").value,
+     n=document.getElementById("need").value,
+     t=document.getElementById("tech").value;
+
  let arr=TVs.filter(x=>{
-  let model=x[0],p=x[1],type=x[2],size=(model.match(/^(43|50|55|65|75|85|100)/)||[])[1];
+  let model=x[0],p=x[1],type=x[2],
+      size=(model.match(/^(43|50|55|65|75|85|100)/)||[])[1];
   if(q&&!norm(model).includes(q))return false;
   if(b&&p!=null&&p>Number(b))return false;
   if(s&&size!==s)return false;
   if(t&&type!==t)return false;
   return p!=null;
  });
- if(!arr.length){document.getElementById("tvResult").innerHTML=`<div class="card"><b>No exact match.</b><div class="muted" style="margin-top:5px">Try Any budget or Any size, then narrow it down from there.</div></div>`;return}
- arr.sort((a,b)=>{let score=(x)=>n==="value"?x[1]:n==="gaming"?(/U7|U8|UR8|UR9/.test(x[0])?0:1):n==="sport"?(/UR8|UR9/.test(x[0])?0:1):n==="picture"||n==="brightness"?(/UR8|UR9|U8/.test(x[0])?0:1):0;return score(a)-score(b)||a[1]-b[1]});
- let x=arr[0],d=deal(x[0],x[1]),r=rate(x[0]);
- document.getElementById("tvResult").innerHTML=`<div class="result"><div class="muted">Best match</div><h3>${x[0]}</h3><div class="price">${money(x[1])}</div><div class="pills"><span class="pill">${x[2]}</span><span class="pill">${(x[0].match(/^(43|50|55|65|75|85|100)/)||[])[1]}" screen</span>${r!=null?`<span class="pill">£${r} commission</span>`:""}</div><div class="offer"><b>Customer deal</b><div>Trade-in: <strong>${money(d.trade)}</strong> ${d.code?`(${d.code})`:""}</div><div>Cashback: <strong>${money(d.cb)}</strong></div><div class="saving">Effective cost: ${money(d.effective)}</div><div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div></div>`;
+
+ if(!arr.length){
+   document.getElementById("tvResult").innerHTML=
+   `<div class="card"><b>No TVs match those filters.</b>
+   <div class="muted" style="margin-top:5px">Try Any budget or Any size, then narrow it down.</div></div>`;
+   return;
+ }
+
+ const score=x=>{
+   if(n==="value")return 0;
+   if(n==="gaming")return /U7|U8|UR8|UR9/.test(x[0])?0:1;
+   if(n==="sport")return /UR8|UR9/.test(x[0])?0:1;
+   if(n==="picture"||n==="brightness")return /UR8|UR9|U8/.test(x[0])?0:1;
+   return 0;
+ };
+ arr.sort((a,b)=>score(a)-score(b)||a[1]-b[1]);
+
+ const sizeOf=m=>(m.match(/^(43|50|55|65|75|85|100)/)||[])[1]||"";
+ const cards=arr.map((x,i)=>{
+   const d=deal(x[0],x[1]),r=rate(x[0]);
+   return `<div class="result" style="margin-top:${i?"10px":"0"}">
+     ${i===0?`<div class="muted">Best match</div>`:""}
+     <h3>${x[0]}</h3>
+     <div class="price">${money(x[1])}</div>
+     <div class="pills">
+       <span class="pill">${x[2]}</span>
+       <span class="pill">${sizeOf(x[0])}" screen</span>
+       ${r!=null?`<span class="pill">£${r} commission</span>`:""}
+     </div>
+     <div class="offer">
+       <b>Customer deal</b>
+       <div>Trade-in: <strong>${money(d.trade)}</strong> ${d.code?`(${d.code})`:""}</div>
+       <div>Cashback: <strong>${money(d.cb)}</strong></div>
+       <div class="saving">Effective cost: ${money(d.effective)}</div>
+       <div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div>
+     </div>
+   </div>`;
+ }).join("");
+
+ document.getElementById("tvResult").innerHTML=
+   `<div class="muted" style="margin-bottom:10px">${arr.length} TV${arr.length===1?"":"s"} match your filters</div>`+cards;
 }
 document.getElementById("findTv").onclick=findTV;
 ["tvSearch","budget","size","need","tech"].forEach(id=>document.getElementById(id).addEventListener("change",findTV));
@@ -658,33 +677,43 @@ function renderCoach(){
  const el=document.getElementById("coachContent");
  if(!el) return;
  const sel=document.getElementById("coachModel");
- const model=sel?.value || "65UR9STUK";
+ const model=sel?.value || "UR9";
  if(model==="SOUNDBAR"){showCoachTab("soundbars");return;}
 
- let key="A6";
- if(/UR9/.test(model)) key="UR9";
- else if(/UR8/.test(model)) key="UR8";
- else if(/U8/.test(model)) key="U8";
- else if(/U7.*PRO/.test(model)) key="U7PRO";
- else if(/U7/.test(model)) key="U7";
- else if(/Q7/.test(model)) key="Q7";
- else if(/E7.*PRO/.test(model)) key="E7PRO";
- else if(/A6/.test(model)) key="A6";
-
- const c=COACH[key];
+ const c=COACH[model];
  if(!c){
    el.innerHTML="<div class='muted'>No sales-coach information is available for this model yet.</div>";
    return;
  }
 
- const label=sel?.selectedOptions?.[0]?.textContent || model;
+ const labels={
+   UR9:"UR9",
+   UR8:"UR8",
+   U8:"U8",
+   U7PRO:"U7 Pro",
+   U7:"U7",
+   Q7:"Q7",
+   E7PRO:"E7 Pro",
+   A6:"A6"
+ };
+ const sizes={
+   UR9:'65–85"',
+   UR8:'55–100"',
+   U8:'55–100"',
+   U7PRO:'55–100"',
+   U7:'50–100"',
+   Q7:'43–85"',
+   E7PRO:'43–100"',
+   A6:'43–65"'
+ };
+ const label=labels[model]||model;
  const points=Array.isArray(c.points)?c.points:[];
 
  el.innerHTML=`
  <div class="coach-hero">
    <div class="eyebrow">SALES COACH</div>
    <h2>${label}</h2>
-   <div class="small" style="margin-bottom:10px">Model: ${model}</div>
+   <div class="small" style="margin-bottom:10px">Size variations: ${sizes[model]||"Various sizes"}</div>
    <p>${c.pitch||""}</p>
  </div>
  <div class="coach-grid">
