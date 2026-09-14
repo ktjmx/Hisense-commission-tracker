@@ -60,7 +60,7 @@ input:focus,select:focus{border-color:var(--accent)}
 .achievement{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:18px;margin-bottom:9px}.badge{width:40px;height:40px;border-radius:14px;background:#18343a;display:grid;place-items:center;font-size:20px}
 .nav{position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:0;width:min(620px,100%);padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(7,16,20,.92);backdrop-filter:blur(18px);border-top:1px solid #1a2c32;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
 .nav button{background:transparent;color:#71868e;font-size:10px;font-weight:750;padding:7px 2px}.nav button span{display:block;font-size:20px;margin-bottom:3px}.nav button.on{color:var(--accent)}
-.toast{position:fixed;z-index:20;left:50%;bottom:95px;transform:translateX(-50%) translateY(20px);background:#f4ffff;color:#061012;padding:12px 16px;border-radius:14px;font-weight:750;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;z-index:20;left:50%;bottom:95px;transform:translateX(-50%) translateY(20px);background:#f4ffff;color:#061012;padding:12px 16px;border-radius:14px;font-weight:750;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.pop{animation:pop .35s ease-out}@keyframes pop{0%{transform:scale(.94)}70%{transform:scale(1.03)}100%{transform:scale(1)}}
 .danger{color:var(--danger)}
 @media(min-width:621px){.nav{border-radius:24px;bottom:15px;border:1px solid #1a2c32}.app{padding-bottom:120px}}
 </style>
@@ -92,6 +92,19 @@ input:focus,select:focus{border-color:var(--accent)}
         <div class="card"><div class="cardTitle">Top model</div><div class="big" id="topModel">—</div><div class="sub" id="topModelMeta"></div></div>
         <div class="card"><div class="cardTitle">Best sale</div><div class="big" id="bestSale">£0</div><div class="sub" id="bestSaleMeta"></div></div>
       </div>
+      <div class="card" style="margin-top:12px">
+        <div class="row"><div><div class="cardTitle">Projected commission</div><div class="big" id="projectedCommission">£0</div></div><div class="pill" id="projectionPill">On track</div></div>
+        <div class="sub" id="projectionText">Based on your current pace this week</div>
+      </div>
+      <div class="card" style="margin-top:12px;border-color:#275b60;background:linear-gradient(145deg,#10292e,#0d191e)">
+        <div class="row"><div><div class="kicker">Commission Coach</div><div class="big" style="font-size:22px">Your next move</div></div><div style="font-size:26px">🧠</div></div>
+        <div id="coachText" style="margin-top:10px;line-height:1.45"></div>
+        <div id="coachPace" class="sub" style="margin-top:9px"></div>
+        <div id="coachPayday" class="sub" style="margin-top:7px"></div>
+        <div id="coachOpportunity" class="sub" style="margin-top:10px"></div>
+      </div>
+      <div class="sectionHead"><h2>Commission by week</h2></div>
+      <div class="card"><div id="commissionChart"></div></div>
       <button class="cta" id="homeAdd">＋ Add a sale</button>
       <div class="sectionHead"><h2>Recent sales</h2><span class="link" data-go="sales">See all</span></div>
       <div id="recent"></div>
@@ -114,6 +127,14 @@ input:focus,select:focus{border-color:var(--accent)}
     <section id="paydays" class="screen"><div id="paydayList"></div></section>
 
     <section id="stats" class="screen">
+      <div class="card" style="margin-bottom:12px">
+        <div class="row"><div><div class="cardTitle">Weekly unit target</div><div class="big" id="targetSettingValue">10</div></div><button class="pill" id="changeTarget">Change</button></div>
+        <div class="sub">Set the number of units you want to sell each week.</div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="row"><div><div class="cardTitle">Payday commission target</div><div class="big" id="paydayTargetSetting">£0</div></div><button class="pill" id="changePaydayTarget">Change</button></div>
+        <div class="sub">Optional — the Coach will calculate what you need per day.</div>
+      </div>
       <div class="statGrid">
         <div class="stat"><small class="cardTitle">TVs</small><b id="tvUnits">0</b></div>
         <div class="stat"><small class="cardTitle">Soundbars</small><b id="barUnits">0</b></div>
@@ -218,27 +239,111 @@ function go(screen){
   if(screen==="home")renderHome(); if(screen==="sales")renderHistory(); if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="rates")renderRates();
 }
 function renderHome(){
-  document.getElementById("totalCommission").textContent=money(total());
-  document.getElementById("unitsPill").textContent=units()+" units";
+  const allTotal=total(), allUnits=units();
+  document.getElementById("totalCommission").textContent=money(allTotal);
+  document.getElementById("unitsPill").textContent=allUnits+" units";
   const latest=new Date().toISOString().slice(0,10), p=paydayFor(latest);
-  document.getElementById("paydayTotal").textContent=money(sales.filter(s=>paydayFor(s.date)[1]===p[1]).reduce((a,s)=>a+s.total,0));
+  const paydaySales=sales.filter(s=>paydayFor(s.date)[1]===p[1]);
+  document.getElementById("paydayTotal").textContent=money(paydaySales.reduce((a,s)=>a+s.total,0));
   document.getElementById("paydayWeeks").textContent=p[0]+" • pays "+p[1];
   const wk=weekNum(latest), ws=sales.filter(s=>weekNum(s.date)===wk);
-  document.getElementById("weekTotal").textContent=money(ws.reduce((a,s)=>a+s.total,0));
-  document.getElementById("weekUnits").textContent=ws.reduce((a,s)=>a+s.qty,0)+" units • WK"+wk;
+  const weekUnits=ws.reduce((a,s)=>a+s.qty,0), weekMoney=ws.reduce((a,s)=>a+s.total,0);
+  document.getElementById("weekTotal").textContent=money(weekMoney);
+  document.getElementById("weekUnits").textContent=weekUnits+" units • WK"+wk;
   document.getElementById("nextPayday").textContent="Next payday "+p[1];
-  document.getElementById("nextPaydaySub").textContent="Current commission period "+p[0];
-  const target=Number(localStorage.getItem("hisenseWeeklyTarget")||10), pct=Math.min(100,Math.round(ws.reduce((a,s)=>a+s.qty,0)/target*100));
-  document.getElementById("targetText").textContent=ws.reduce((a,s)=>a+s.qty,0)+" / "+target;
-  document.getElementById("targetPct").textContent=pct+"%";document.getElementById("targetFill").style.width=pct+"%";
-  document.getElementById("targetHint").textContent=pct>=100?"Target smashed! 🎉":(target-ws.reduce((a,s)=>a+s.qty,0))+" more unit"+(target-ws.reduce((a,s)=>a+s.qty,0)===1?"":"s")+" to hit target";
-  const counts={};sales.forEach(s=>counts[s.model]=(counts[s.model]||0)+s.qty);const tm=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
-  document.getElementById("topModel").textContent=tm?tm[0]:"—";document.getElementById("topModelMeta").textContent=tm?tm[1]+" units sold":"No sales yet";
-  const best=[...sales].sort((a,b)=>b.total-a.total)[0];document.getElementById("bestSale").textContent=best?money(best.total):"£0";document.getElementById("bestSaleMeta").textContent=best?best.model:"No sales yet";
+  const payDate=(p[1]&&p[1]!=="TBC")?new Date(p[1].split("/").reverse().join("-")+"T12:00:00"):null;
+  const daysToPay=payDate?Math.max(0,Math.ceil((payDate-new Date())/86400000)):null;
+  document.getElementById("nextPaydaySub").textContent=payDate
+    ?"Current commission period "+p[0]+" • "+(daysToPay===0?"payday is today":"in "+daysToPay+" day"+(daysToPay===1?"":"s"))
+    :"Current commission period "+p[0];
+
+  const target=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
+  const pct=Math.min(100,Math.round(weekUnits/target*100));
+  document.getElementById("targetText").textContent=weekUnits+" / "+target;
+  document.getElementById("targetPct").textContent=pct+"%";
+  document.getElementById("targetFill").style.width=pct+"%";
+  document.getElementById("targetHint").textContent=pct>=100?"Target smashed! 🎉":(target-weekUnits)+" more unit"+(target-weekUnits===1?"":"s")+" to hit target";
+
+  const counts={}; sales.forEach(s=>counts[s.model]=(counts[s.model]||0)+s.qty);
+  const tm=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById("topModel").textContent=tm?tm[0]:"—";
+  document.getElementById("topModelMeta").textContent=tm?tm[1]+" units sold":"No sales yet";
+
+  const best=[...sales].sort((a,b)=>b.total-a.total)[0];
+  document.getElementById("bestSale").textContent=best?money(best.total):"£0";
+  document.getElementById("bestSaleMeta").textContent=best?best.model:"No sales yet";
+
+  // Project the current week's commission to the end of the week.
+  const today=new Date();
+  const day=today.getDay()===0?7:today.getDay();
+  const daysElapsed=Math.max(1,day);
+  const daysLeft=7-daysElapsed;
+  const projection=weekMoney/daysElapsed*7;
+  document.getElementById("projectedCommission").textContent=money(projection);
+  const projectionPill=document.getElementById("projectionPill");
+  projectionPill.textContent=daysLeft===0?"Week complete":"On track";
+  document.getElementById("projectionText").textContent=daysLeft===0
+    ?"Final figure for the current week"
+    :"Based on your current pace • "+daysLeft+" day"+(daysLeft===1?"":"s")+" left";
+
+  // Commission Coach
+  const remaining=Math.max(0,target-weekUnits);
+  let coach="";
+  if(remaining===0) coach="🎉 You've hit your weekly unit target. Now chase commission — focus on the higher-paying models.";
+  else if(weekUnits===0) coach="Start with one sale today. Your target is "+target+" units this week.";
+  else coach="You've sold "+weekUnits+" unit"+(weekUnits===1?"":"s")+" so far. You need "+remaining+" more to hit your target.";
+  document.getElementById("coachText").textContent=coach;
+
+  // Compare this week's pace with the user's previous completed weeks.
+  const completedWeeks={};
+  sales.forEach(s=>{
+    const w=weekNum(s.date);
+    if(w!==wk) completedWeeks[w]=(completedWeeks[w]||0)+Number(s.total||0);
+  });
+  const past=Object.values(completedWeeks);
+  const avgPast=past.length?past.reduce((a,b)=>a+b,0)/past.length:0;
+  const paceText=document.getElementById("coachPace");
+  if(avgPast>0){
+    const diff=weekMoney-avgPast;
+    paceText.textContent=(diff>=0?"📈 ":"📉 ")+money(Math.abs(diff))+" "+(diff>=0?"ahead of":"behind")+" your average completed week ("+money(avgPast)+").";
+  }else{
+    paceText.textContent="📊 Keep adding sales to build your personal pace history.";
+  }
+
+  // Work out how much is needed per remaining day to hit a user-set payday target.
+  const paydayTarget=Number(localStorage.getItem("hisensePaydayTarget")||0);
+  const paydayEarned=paydaySales.reduce((a,s)=>a+Number(s.total||0),0);
+  const paydayText=document.getElementById("coachPayday");
+  if(paydayTarget>0){
+    const need=Math.max(0,paydayTarget-paydayEarned);
+    const pdDate=(p[1]&&p[1]!=="TBC")?new Date(p[1].split("/").reverse().join("-")+"T12:00:00"):null;
+    const remainingDays=pdDate?Math.max(1,Math.ceil((pdDate-new Date())/86400000)):1;
+    paydayText.textContent=need===0?"💷 Payday target reached!": "💷 "+money(need)+" needed to hit your £"+paydayTarget+" payday target • about "+money(need/remainingDays)+" per day.";
+  }else{
+    paydayText.textContent="💷 Set a payday commission target in Stats to get a daily target.";
+  }
+
+  const opportunities=Object.entries(CURRENT_RATES).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const op=opportunities[0];
+  document.getElementById("coachOpportunity").textContent=op?"💡 Highest current commission: "+op[0]+" • "+money(op[1])+" per unit":"";
+
+  const targetSetting=document.getElementById("targetSettingValue");
+  if(targetSetting) targetSetting.textContent=target;
+
+  // Elegant weekly commission bars.
+  const weeks={}; sales.forEach(s=>{const w=weekNum(s.date);weeks[w]=(weeks[w]||0)+Number(s.total||0)});
+  const entries=Object.entries(weeks).sort((a,b)=>Number(a[0])-Number(b[0])).slice(-6);
+  const max=Math.max(1,...entries.map(x=>x[1]));
+  document.getElementById("commissionChart").innerHTML=entries.length?entries.map(([w,v])=>{
+    const width=Math.max(4,Math.round(v/max*100));
+    return `<div style="display:grid;grid-template-columns:45px 1fr 58px;gap:8px;align-items:center;margin:10px 0">
+      <small style="color:var(--muted);font-weight:700">WK${w}</small>
+      <div class="bar" style="margin:0"><div class="fill" style="width:${width}%"></div></div>
+      <small style="text-align:right;font-weight:800">${money(v)}</small>
+    </div>`;
+  }).join(""):'<div class="tiny">Your weekly commission will appear here.</div>';
+
   document.getElementById("recent").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(saleHTML).join("")||'<div class="empty">No sales yet</div>';
-}
-function saleHTML(s,i){
- return `<div class="sale"><div><div class="saleModel">${escapeHtml(s.model)}</div><div class="saleMeta">${fmtDate(s.date)} • ×${s.qty}</div></div><div class="saleMoney">${money(s.total)}</div></div>`;
 }
 function renderHistory(){
  document.getElementById("history").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).map((s,i)=>`<div class="sale"><div><div class="saleModel">${escapeHtml(s.model)}</div><div class="saleMeta">${fmtDate(s.date)} • ×${s.qty}</div></div><div style="text-align:right"><div class="saleMoney">${money(s.total)}</div><button class="tiny danger del" data-i="${sales.indexOf(s)}">Delete</button></div></div>`).join("")||'<div class="empty">No sales yet</div>';
@@ -252,6 +357,10 @@ function renderPaydays(){
  document.querySelectorAll(".payday").forEach(x=>x.onclick=()=>x.classList.toggle("open"));
 }
 function renderStats(){
+ const targetSetting=document.getElementById("targetSettingValue");
+ if(targetSetting) targetSetting.textContent=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
+ const paydayTargetSetting=document.getElementById("paydayTargetSetting");
+ if(paydayTargetSetting) paydayTargetSetting.textContent=money(Number(localStorage.getItem("hisensePaydayTarget")||0));
  const tv=sales.filter(s=>(CATEGORY[s.model]||"").toLowerCase()!=="soundbars").reduce((a,s)=>a+s.qty,0);
  const sb=sales.filter(s=>CATEGORY[s.model]==="Soundbars").reduce((a,s)=>a+s.qty,0);
  document.getElementById("tvUnits").textContent=tv;document.getElementById("barUnits").textContent=sb;document.getElementById("allUnits").textContent=units();document.getElementById("avgCommission").textContent=money(sales.length?total()/sales.length:0);
@@ -281,6 +390,22 @@ function init(){
  const cats=["All",...new Set(Object.values(CATEGORY))];document.getElementById("chips").innerHTML=cats.map(c=>`<button class="chip ${c==="All"?"on":""}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("");
  document.getElementById("chips").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;categoryFilter=b.dataset.cat;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));renderRates()};
  document.getElementById("backupBtn").onclick=backup;
+ document.getElementById("changeTarget").onclick=()=>{
+   const current=Number(localStorage.getItem("hisenseWeeklyTarget")||10);
+   const next=prompt("What is your weekly unit target?",current);
+   if(next!==null && Number(next)>0){
+     localStorage.setItem("hisenseWeeklyTarget",Math.round(Number(next)));
+     renderHome(); renderStats(); toast("Target updated ✓");
+   }
+ };
+ document.getElementById("changePaydayTarget").onclick=()=>{
+   const current=Number(localStorage.getItem("hisensePaydayTarget")||0);
+   const next=prompt("What payday commission target do you want?",current||"1000");
+   if(next!==null && Number(next)>=0){
+     localStorage.setItem("hisensePaydayTarget",Math.round(Number(next)));
+     renderHome(); renderStats(); toast("Payday target updated ✓");
+   }
+ };
  document.getElementById("modelList").innerHTML=Object.keys(CURRENT_RATES).sort().map(m=>`<option value="${escapeHtml(m)}"></option>`).join("");
  renderHome();renderHistory();renderRates();
 }
