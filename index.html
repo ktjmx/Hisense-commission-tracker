@@ -184,7 +184,7 @@ input:focus,select:focus{border-color:var(--accent)}
       </div>
 
       <div class="card" style="margin-top:14px;border-color:#6d5930;background:linear-gradient(145deg,#292315,#171611)">
-        <div class="row"><div><div class="kicker" style="color:#ffd166">CURRENT PROMOTION</div><b style="font-size:17px">Hisense Cashback</b><div class="tiny" style="margin-top:4px">Valid 9 Sep 2026 – 27 Oct 2026 • use the exact qualifying model shown below</div></div><div style="font-size:27px">🎁</div></div>
+        <div class="row"><div><div class="kicker" style="color:#ffd166">CURRENT PROMOTION</div><b style="font-size:17px">Hisense Cashback</b><div class="tiny" style="margin-top:4px">Cashback 9 Sep 2026 – 27 Oct 2026 • Trade-in 19 Aug 2026 – 29 Sep 2026 • use the exact qualifying model shown below</div></div><div style="font-size:27px">🎁</div></div>
       </div>
       <div class="sectionHead"><h2>Best matches</h2><span class="tiny" id="hubCount"></span></div>
       <div id="hubResults"></div>
@@ -193,7 +193,7 @@ input:focus,select:focus{border-color:var(--accent)}
       <div id="tips"></div>
     </section>
 
-    <section id="offers" class="screen"><div class="hero"><div class="kicker">Customer-facing offers</div><div class="money" style="font-size:36px">Current value</div><div class="sub">Cashback period: 9 Sep 2026 – 27 Oct 2026.</div></div><div class="card" style="margin-top:12px"><b>🎮 Mini LED TVs with a U in the model</b><div class="sub" style="margin-top:6px">Free personalised Xbox controller + 1 month Game Pass, including the UR8. Check exact model eligibility.</div></div><div class="card" style="margin-top:10px"><b>💳 RGB TVs</b><div class="sub" style="margin-top:6px">24 months interest free, subject to finance approval and applicable terms.</div></div><div class="sectionHead"><h2>Cashback models</h2></div><div id="offerList"></div></section><section id="price" class="screen"><div class="hero"><div class="kicker">Customer conversation</div><div class="money" style="font-size:36px">Price Match</div><div class="sub">Verify exact model, retailer, stock and like-for-like specification before quoting.</div></div><label>Model</label><select id="pmModel"></select><div id="pmResult" class="card" style="margin-top:10px"></div><button class="cta" id="pmSearch">🔎 Search UK retailers</button></section><section id="objections" class="screen"><div class="hero"><div class="kicker">Sales Coach</div><div style="font-size:29px;font-weight:900">Objection Buster</div><div class="sub">Keep it positive, ask a question, then demonstrate.</div></div><div id="objectionList"></div><div id="objectionAnswer" class="card" style="margin-top:10px;display:none"></div></section><section id="demo" class="screen"><div class="hero"><div class="kicker">Demo Mode</div><div style="font-size:29px;font-weight:900">A simple winning demo</div><div class="sub">Open → Picture → Sport → Gaming → Sound → Close.</div></div><div id="demoSteps"></div></section><section id="hisense" class="screen"><div class="hero"><div class="kicker">Customer-friendly</div><div style="font-size:29px;font-weight:900">Why Hisense?</div><div class="sub">Compare exact models and focus on what matters to the customer.</div></div><div id="whyList"></div></section>
+    <section id="offers" class="screen"><div class="hero"><div class="kicker">Customer-facing offers</div><div class="money" style="font-size:36px">Today's offers</div><div class="sub">Trade-in offers valid 19 Aug 2026 – 29 Sep 2026 • Cashback valid 9 Sep 2026 – 27 Oct 2026.</div></div><div class="card" style="margin-top:12px;border-color:#6d5930;background:linear-gradient(145deg,#292315,#171611)"><div class="kicker" style="color:#ffd166">📺 TRADE-IN OFFERS</div><b style="font-size:18px">Hand the customer's old TV in and save more</b><div class="sub" style="margin-top:7px">Use the exact qualifying voucher code at checkout. The offers shown below are the codes from your supplied promotion sheet.</div><div style="margin-top:12px" id="tradeInList"></div><div class="tiny" style="margin-top:10px">Voucher sheet validity: 19/08/2026 – 29/09/2026. Barcode fallback codes shown exactly as supplied.</div></div><div class="card" style="margin-top:10px"><b>🎮 Free personalised Xbox controller + 1 month Game Pass</b><div class="sub" style="margin-top:6px">Qualifying Mini LED TVs with a U in the model, including UR8. Check exact model eligibility and promotion dates.</div></div><div class="card" style="margin-top:10px"><b>💳 Finance</b><div class="sub" style="margin-top:6px">24 months interest free where applicable, subject to finance approval and terms.</div></div><div class="sectionHead"><h2>Cashback models</h2></div><div id="offerList"></div></section><section id="price" class="screen"><div class="hero"><div class="kicker">Customer conversation</div><div class="money" style="font-size:36px">Price Match</div><div class="sub">Verify exact model, retailer, stock and like-for-like specification before quoting.</div></div><label>Model</label><select id="pmModel"></select><div id="pmResult" class="card" style="margin-top:10px"></div><button class="cta" id="pmSearch">🔎 Search UK retailers</button></section><section id="objections" class="screen"><div class="hero"><div class="kicker">Sales Coach</div><div style="font-size:29px;font-weight:900">Objection Buster</div><div class="sub">Keep it positive, ask a question, then demonstrate.</div></div><div id="objectionList"></div><div id="objectionAnswer" class="card" style="margin-top:10px;display:none"></div></section><section id="demo" class="screen"><div class="hero"><div class="kicker">Demo Mode</div><div style="font-size:29px;font-weight:900">A simple winning demo</div><div class="sub">Open → Picture → Sport → Gaming → Sound → Close.</div></div><div id="demoSteps"></div></section><section id="hisense" class="screen"><div class="hero"><div class="kicker">Customer-friendly</div><div style="font-size:29px;font-weight:900">Why Hisense?</div><div class="sub">Compare exact models and focus on what matters to the customer.</div></div><div id="whyList"></div></section>
 
 <section id="rates" class="screen">
       <input class="search" id="rateSearch" placeholder="🔎  Search models or categories…">
@@ -279,7 +279,7 @@ function go(screen){
   document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===screen));
   document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.screen===screen));
   const titles={home:"Good morning",sales:"Add a sale",paydays:"Paydays",stats:"My Stats",records:"Records",hub:"Sales Hub",offers:"Offers",price:"Price Match",objections:"Objection Buster",demo:"Demo Mode",hisense:"Why Hisense?",commission:"My Commission",rates:"Commission Rates"};
-  document.getElementById("pageTitle").textContent=titles[screen];
+  document.getElementById("pageTitle").textContent=titles[screen]||"Hisense Sales App";
   if(screen==="commission")renderHome(); if(screen==="home"){} if(screen==="sales")renderHistory(); if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="records")renderRecords(); if(screen==="hub")renderHub(); if(screen==="offers")renderOffers(); if(screen==="price")renderPrice(); if(screen==="objections")renderObjections(); if(screen==="demo")renderDemo(); if(screen==="hisense")renderHisense(); if(screen==="rates")renderRates();
 }
 function renderHome(){
@@ -398,12 +398,35 @@ function renderHistory(){
  document.getElementById("history").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).map((s,i)=>`<div class="sale"><div><div class="saleModel">${escapeHtml(s.model)}</div><div class="saleMeta">${fmtDate(s.date)} • ×${s.qty}</div></div><div style="text-align:right"><div class="saleMoney">${money(s.total)}</div><button class="tiny danger del" data-i="${sales.indexOf(s)}">Delete</button></div></div>`).join("")||'<div class="empty">No sales yet</div>';
 }
 function renderPaydays(){
- const groups=PAYDAYS.map(p=>({p,s:sales.filter(s=>paydayFor(s.date)[1]===p[1])})).filter(g=>g.s.length||g.p[1]!=="TBC");
- document.getElementById("paydayList").innerHTML=groups.map((g,i)=>{
-   const sum=g.s.reduce((a,s)=>a+s.total,0), u=g.s.reduce((a,s)=>a+s.qty,0), curr=g.p[0].includes("36");
-   return `<div class="payday ${curr?"current":""}" data-open="${i}"><div class="row"><div><div class="kicker">${curr?"CURRENT • ":""}${g.p[0]}</div><div class="paydayTotal">${money(sum)}</div><div class="tiny">${u} units • pays ${g.p[1]}</div></div><div class="pill">${g.s.length} sales</div></div><div class="details">${g.s.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(s=>saleHTML(s)).join("")||'<div class="tiny">No sales recorded</div>'}</div></div>`
- }).join("");
- document.querySelectorAll(".payday").forEach(x=>x.onclick=()=>x.classList.toggle("open"));
+ const el=document.getElementById("paydayList");
+ if(!el)return;
+ const now=new Date();
+ const today=now.toISOString().slice(0,10);
+ const current=PAYDAYS.findIndex(p=>{
+   const m=p[0].match(/(\d+)[–-](\d+)/);
+   if(!m)return false;
+   const w=weekNum(today);
+   return w>=Number(m[1]) && w<=Number(m[2]);
+ });
+ el.innerHTML=`
+ <div class="sectionHead"><div><div class="eyebrow">PAY CALENDAR</div><h2>Commission paydays</h2><p class="sub">Your sales are grouped into the correct payday automatically.</p></div></div>
+ ${PAYDAYS.map((p,i)=>{
+   const rows=sales.filter(x=>paydayFor(x.date)[1]===p[1]).sort((a,b)=>b.date.localeCompare(a.date));
+   const sum=rows.reduce((a,x)=>a+Number(x.total||0),0);
+   const u=rows.reduce((a,x)=>a+Number(x.qty||0),0);
+   const isCurrent=i===current;
+   return `<details class="card" ${isCurrent?"open":""} style="margin-bottom:10px">
+    <summary style="list-style:none;cursor:pointer">
+      <div class="row">
+       <div><div class="kicker">${isCurrent?"CURRENT PAY PERIOD • ":""}${escapeHtml(p[0])}</div>
+       <div class="paydayTotal">${money(sum)}</div>
+       <div class="tiny">${u} units • pays ${escapeHtml(p[1])}</div></div>
+       <div class="pill">${rows.length} sale${rows.length===1?"":"s"}</div>
+      </div>
+    </summary>
+    <div style="margin-top:12px">${rows.length?rows.map(saleHTML).join(""):'<div class="empty">No sales recorded for this payday yet.</div>'}</div>
+   </details>`;
+ }).join("")}`;
 }
 function renderStats(){
  const targetSetting=document.getElementById("targetSettingValue");
@@ -420,6 +443,7 @@ function renderStats(){
  document.getElementById("achievements").innerHTML=ach.map(a=>`<div class="achievement" style="opacity:${a[2]?1:.45}"><div class="badge">${a[0]}</div><div><b>${a[1]}</b><div class="tiny">${a[2]?"Unlocked":"Keep selling to unlock"}</div></div></div>`).join("");
 }
 function renderRecords(){
+  if(!document.getElementById("recordBest")) return;
   const best=[...sales].sort((a,b)=>Number(b.total)-Number(a.total))[0];
   document.getElementById("recordBest").textContent=best?money(best.total):"£0";
 
@@ -518,6 +542,27 @@ const HUB_PRICE_CHECKED = "14 Sep 2026"; const HUB_MODELS=[
  {m:"85UR9STUK",base:"85UR9STUK",size:85,price:3499,type:"UR9 • RGB Mini LED",refresh:"120 Hz (up to 180 Hz)",features:["RGB Mini LED","Hi-View AI Engine RGB","180 Hz","HDMI 2.1 x 3","Freely","5 year guarantee","Free personalised Xbox controller + 1 month Game Pass*"],needs:["gaming","sport","bright","films"],pitch:"The 85-inch premium RGB option: huge scale with RGB Mini LED colour, brightness and 180 Hz motion.",demo:"Show a full-screen sports scene, then a high-contrast movie scene and let the picture sell itself.",url:"https://www.currys.co.uk/products/hisense-85ur9stuk-85-smart-4k-ultra-hd-hdr-rgb-mini-led-tv-10300468.html"}
 ];
 
+const TRADEIN_PERIOD = '19 Aug 2026 – 29 Sep 2026';
+const TRADEIN = {
+  rgb:[
+    {min:1999,max:Infinity,off:300,code:'TRADERGB300',label:'£300 off RGB TVs £1,999+'},
+    {min:1499,max:1998.99,off:200,code:'TRADERGB200',label:'£200 off RGB TVs £1,499–£1,998.99'},
+    {min:999,max:1498.99,off:150,code:'TRADERGB150',label:'£150 off RGB TVs £999–£1,498.99'}
+  ],
+  selected:[
+    {min:1999,max:Infinity,off:250,code:'TRADETV250',label:'£250 off selected TVs £1,999+'},
+    {min:1499,max:1998.99,off:150,code:'TRADETV150',label:'£150 off selected TVs £1,499–£1,998.99'},
+    {min:999,max:1498.99,off:100,code:'TRADETV100',label:'£100 off selected TVs £999–£1,498.99'},
+    {min:649,max:998.99,off:50,code:'TRADETV50',label:'£50 off selected TVs £649–£998.99'}
+  ]
+};
+function tradeInOffer(x){
+  if(x.price==null)return null;
+  const isRGB=/RGB/i.test(x.type);
+  const pool=isRGB?TRADEIN.rgb:TRADEIN.selected;
+  return pool.find(o=>x.price>=o.min && x.price<=o.max)||null;
+}
+
 const CASHBACK = {'116UXQTUK': 1000, '100UXQTUK': 500, '85UR9STUK': 300, '75UR9STUK': 300, '65UR9STUK': 200, '100UR8STUK': 500, '85UR8STUK': 300, '75UR8STUK': 200, '65UR8STUK': 200, '55UR8STUK': 200, '100U7STUK': 500, '85U7STUK': 300, '75U7STUK': 200, '65U7STUK': 200, '55U7STUK': 100, '50U7STUK': 50, '85Q8STUK': 300, '75Q8STUK': 200, '65Q8STUK': 200, '55Q8STUK': 100, '50Q8STUK': 50, '100E7STUK PRO': 300, '85E7STUK PRO': 300, '75E7STUK PRO': 100, '65E7STUK PRO': 100, '55E7STUK PRO': 50, '50E7STUK PRO': 50, '43E7STUK PRO': 50, '85Q7STUK': 100, '75Q7STUK': 50, '65Q7STUK': 50, '55Q7STUK': 25, '50Q7STUK': 25, '43Q7STUK': 25, 'L9QTUK PRO': 200, 'L9QTUK': 200, 'XR10TUK': 200, 'PX4TUK PRO': 100, 'P1TUK': 50, 'C3TUK ULTRA MAX': 200, 'C3TUK ULTRA': 100, 'C3TUK PRO': 100};
 const CASHBACK_PERIOD = '9 Sep 2026 – 27 Oct 2026';
 const HUB_TIPS=[
@@ -559,6 +604,7 @@ function renderHub(){
      <div class="row"><div><div class="kicker">${escapeHtml(x.type)} • ${x.size}"</div><div class="big" style="font-size:22px">${escapeHtml(x.base)}</div></div><div style="text-align:right">${best}<div class="saleMoney" style="margin-top:8px">${x.price==null?"Price check":money(x.price)}</div><div class="tiny">${money(comm)} commission</div></div></div>
      <div class="sub" style="margin-top:9px">${escapeHtml(x.refresh)} • ${escapeHtml(x.features.slice(0,2).join(" • "))}</div>
      ${CASHBACK[x.base]!=null?`<div style="margin-top:12px;padding:11px 12px;border-radius:14px;background:#292315;border:1px solid #6d5930"><div class="row"><div><b style="color:#ffd166">🎁 Cashback</b><div class="tiny">Promo ends 27 Oct 2026</div></div><b style="color:#ffd166;font-size:20px">${money(CASHBACK[x.base])}</b></div></div>`:""}
+     ${tradeInOffer(x)?`<div style="margin-top:9px;padding:11px 12px;border-radius:14px;background:#20291f;border:1px solid #4d6b45"><div class="row"><div><b style="color:#9be27d">♻️ TRADE-IN</b><div class="tiny">${escapeHtml(tradeInOffer(x).label)} • ${escapeHtml(tradeInOffer(x).code)}</div></div><b style="color:#9be27d;font-size:20px">-${money(tradeInOffer(x).off)}</b></div></div>`:""}
      <details style="margin-top:12px"><summary style="cursor:pointer;color:var(--accent);font-weight:800">Open sales cheat sheet</summary>
        <div style="margin-top:12px"><b>🗣️ Pitch</b><div class="sub" style="margin-top:5px;color:var(--text)">${escapeHtml(x.pitch)}</div>
        <div style="margin-top:12px"><b>📺 Demo</b><div class="sub" style="margin-top:5px;color:var(--text)">${escapeHtml(x.demo)}</div>
@@ -620,7 +666,7 @@ function init(){
    }
  };
  document.getElementById("modelList").innerHTML=Object.keys(CURRENT_RATES).sort().map(m=>`<option value="${escapeHtml(m)}"></option>`).join("");
- renderHome();renderHistory();renderRecords();renderHub();renderRates();
+ renderHome();renderHistory();renderPaydays();renderStats();renderRecords();renderHub();renderRates();
 }
 function preview(){const m=document.getElementById("model").value.trim(),d=document.getElementById("saleDate").value,r=rateFor(m,d);document.getElementById("preview").textContent=r==null?"—":money(r*qty);document.getElementById("previewMeta").textContent=r==null?"Unknown rate — check Rates":"£"+r+" per unit × "+qty}
 function addSale(){
@@ -634,7 +680,7 @@ function backup(){
 }
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function renderOffers(){const el=document.getElementById("offerList");if(el)el.innerHTML=Object.entries(CASHBACK).map(([m,v])=>`<div class="rate"><span><b style="color:var(--text)">${escapeHtml(m)}</b><small>Cashback • ${CASHBACK_PERIOD}</small></span><b>${money(v)}</b></div>`).join("")}
+function renderOffers(){const el=document.getElementById("offerList");if(el)el.innerHTML=Object.entries(CASHBACK).map(([m,v])=>`<div class="rate"><span><b style="color:var(--text)">${escapeHtml(m)}</b><small>Cashback • ${CASHBACK_PERIOD}</small></span><b>${money(v)}</b></div>`).join("");const t=document.getElementById("tradeInList");if(t)t.innerHTML=[...TRADEIN.rgb,...TRADEIN.selected].map(o=>`<div class="rate" style="margin-top:7px"><span><b style="color:var(--text)">${escapeHtml(o.label)}</b><small>Trade in any old TV • Code ${escapeHtml(o.code)}</small></span><b>${money(o.off)} OFF</b></div>`).join("")}
 function renderPrice(){const opts=["65UR8STUK","65UR9STUK","65U7STUK","75UR8STUK","75UR9STUK","85UR9STUK","100E7STUK PRO","85Q7STUK","75Q7STUK","65Q7STUK","55U7STUK","50U7STUK"];document.getElementById("pmModel").innerHTML=opts.map(m=>`<option>${m}</option>`).join("");updatePrice()}
 function updatePrice(){const m=document.getElementById("pmModel").value;const p={"65UR8STUK":1699,"65UR9STUK":1999,"65U7STUK":1199,"75UR8STUK":2299,"75UR9STUK":2799}[m];document.getElementById("pmResult").innerHTML=`<b>${escapeHtml(m)}</b><div class="big">${p?money(p):"Check current price"}</div><div class="sub">Use exact-model retailer checks before a price-match conversation.</div>`}
 function renderObjections(){const data={"I want Samsung.":"Samsung is a strong brand. Ask what they like most about it, then compare that exact priority against the Hisense model.","I want OLED.":"OLED is excellent. Ask whether they mainly want deep blacks or also want a very bright, colourful picture, then demonstrate the difference.","That's too expensive.":"Ask what they feel is too expensive, then break down the picture technology, refresh rate, sound and current offers.","TCL is cheaper.":"Compare like-for-like size, picture, brightness, gaming, warranty and today's offers — not just the ticket price.","I'll think about it.":"Ask what they are unsure about: picture, price, size or model. Solve the specific concern.","I'll buy it online.":"Make sure they compare the exact model and full deal, including cashback, bundles, finance and retailer terms.","I've never heard of Hisense.":"Don't sell the badge. Show what the exact model does and why it fits what they told you.","Is Hisense as good?":"Compare the exact TVs on the things that matter to them rather than making a blanket brand claim."};const el=document.getElementById("objectionList");el.innerHTML=Object.entries(data).map(([q,a])=>`<button class="card" data-objection="${escapeHtml(q)}" style="width:100%;text-align:left;margin-bottom:8px"><b>${escapeHtml(q)}</b></button>`).join("");el.onclick=e=>{const b=e.target.closest("[data-objection]");if(!b)return;document.getElementById("objectionAnswer").style.display="block";document.getElementById("objectionAnswer").innerHTML='<b>🗣️ Say this:</b><br>'+data[b.dataset.objection]}}
