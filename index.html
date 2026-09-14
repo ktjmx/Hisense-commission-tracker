@@ -112,6 +112,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .coach-tab{flex:1;border:0;border-radius:10px;padding:11px 12px;background:transparent;color:#9eb0b2;font-weight:800;font-size:13px;cursor:pointer}
 .coach-tab.active{background:#e51b23;color:#fff}
 .coach-tab-panel{margin-top:4px}
+.stat-card{background:#101d20;border:1px solid #20383b;border-radius:14px;padding:12px;margin-bottom:10px}.stat-label{font-size:12px;color:#9eb0b2;font-weight:800}.stat-value{font-size:25px;font-weight:900;margin-top:3px}.stat-sub{font-size:11px;color:#789092;margin-top:2px}
 </style>
 </head>
 <body>
@@ -154,6 +155,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 <label>Model</label>
 <div class="autocomplete-wrap">
 <input id="saleModel" autocomplete="off" placeholder="Start typing a model…">
+<div class="field"><label>Sale price</label><input id="salePrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="£0.00"></div>
 <div id="saleModelPopup" class="autocomplete-popup"></div>
 </div>
 </div>
@@ -356,7 +358,8 @@ function go(id){
  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.screen===id));
  const names={home:"Home",sales:"Sell",hub:"TV Finder",offers:"Offers",coach:"Sales Coach",stats:"Stats"};
  document.getElementById("pageTitle").textContent=names[id];
- if(id==="home")renderHome(); if(id==="sales")renderCalendar(); if(id==="stats")renderStats();
+ if(id==="home")renderHome(); if(id==="sales")renderCalendar(); if(id==="stats")updateHomeSalesValue();
+renderStats();
 }
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
@@ -449,9 +452,11 @@ saleModelInput.addEventListener("input",()=>{updateSaleRate();showSaleModelPopup
 saleModelInput.addEventListener("focus",()=>showSaleModelPopup());
 saleModelInput.addEventListener("blur",()=>setTimeout(hideSaleModelPopup,180));
 document.getElementById("addSale").onclick=()=>{
+ const price=Number(document.getElementById("salePrice").value||0);
  let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rate(model);
  if(!model||r==null){alert("Please enter a model with a commission rate.");return}
- sales.push([date,model,qty,r*qty]);save();document.getElementById("saleModel").value="";document.getElementById("saleRate").textContent="";document.getElementById("saleRate").classList.remove("show");hideSaleModelPopup();renderCalendar();renderHome();renderStats();alert("Sale added.");
+ sales.push([date,model,qty,r*qty]);save();document.getElementById("saleModel").value="";
+ document.getElementById("salePrice").value="";document.getElementById("saleRate").textContent="";document.getElementById("saleRate").classList.remove("show");hideSaleModelPopup();renderCalendar();renderHome();renderStats();alert("Sale added.");
 };
 function findTV(){
  let q=norm(document.getElementById("tvSearch").value),b=document.getElementById("budget").value,s=document.getElementById("size").value,n=document.getElementById("need").value,t=document.getElementById("tech").value;
@@ -617,6 +622,11 @@ function isoWeekNumber(dateString){
 function payPeriodCommission(a,b){
  return sales.filter(s=>{const w=isoWeekNumber(s[0]);return w>=a&&w<=b})
    .reduce((sum,s)=>sum+Number(s[3]||0),0);
+}
+function updateHomeSalesValue(){
+ const total=sales.reduce((sum,s)=>sum+(Number(s[4])||0)*Number(s[2]||0),0);
+ const el=document.getElementById("homeSalesValue");
+ if(el) el.textContent=money(total);
 }
 function renderStats(){
  const now=new Date(),day=now.getDay();
