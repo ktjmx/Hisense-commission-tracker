@@ -20,6 +20,8 @@ main{max-width:720px;margin:auto;padding:14px 14px 104px}.stats{display:grid;gri
 .note{font-size:11px;color:var(--muted);line-height:1.45}.empty{text-align:center;color:var(--muted);padding:22px 8px;font-size:13px}.hidden{display:none!important}
 .nav{position:fixed;z-index:10;left:0;right:0;bottom:0;background:#fffffff2;backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}.nav button{border:0;background:none;color:var(--muted);font-weight:750;font-size:11px;border-radius:12px;padding:7px 13px}.nav button.active{background:#e4f6f5;color:var(--t)}
 @media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}.grid{grid-template-columns:1fr 110px 100px}.grid .full{grid-column:auto}.grid .preview{grid-column:1/-1}.primary{grid-column:1/-1}}
+
+.targetHit{display:none;margin-top:10px;padding:10px 12px;border-radius:12px;background:#e8f7f6;color:var(--t);font-weight:900;font-size:13px}
 </style>
 </head>
 <body>
@@ -50,7 +52,7 @@ main{max-width:720px;margin:auto;padding:14px 14px 104px}.stats{display:grid;gri
  <div class="card section">
   <div class="head"><h2>📈 Weekly progress</h2></div>
   <div class="target"><span class="small">Weekly unit target</span><input id="target" type="number" min="1" value="10" onchange="saveTarget()"></div>
-  <div id="progressText" class="small"></div><div class="progress"><div id="progressBar" style="width:0%"></div></div>
+  <div id="progressText" class="small"></div><div class="progress"><div id="progressBar" style="width:0%"></div></div><div id="targetHit" class="targetHit">🎉 Weekly target smashed!</div>
   <div id="chart" style="margin-top:12px"></div>
  </div>
 
@@ -83,6 +85,8 @@ const R=[
 ["2025 TVs","43E7Q",5],["2025 TVs","50E7Q",5],["2025 TVs","55E7Q",5],["2025 TVs","65E7Q",10],["2025 TVs","75E7Q",10],["2025 TVs","85E7Q",10],["2025 TVs","43E7Q PRO",5],["2025 TVs","50E7Q PRO",5],["2025 TVs","55E7Q PRO",5],["2025 TVs","65E7Q PRO",10],["2025 TVs","75E7Q PRO",10],["2025 TVs","85E7Q PRO",15],["2025 TVs","100E7Q PRO",20],
 ["2025 TVs","50U7QTUK",5],["2025 TVs","55U7QTUK",5],["2025 TVs","65U7QTUK",10],["2025 TVs","75U7QTUK",10],["2025 TVs","85U7QTUK",10],["2025 TVs","100U7QTUK",20],["2025 TVs","55U7Q PRO",10],["2025 TVs","65U7Q PRO",10],["2025 TVs","75U7Q PRO",10],["2025 TVs","85U7Q PRO",20],["2025 TVs","100U7Q PRO",30],["2025 TVs","55A85Q",10],["2025 TVs","65A85Q",10],["2025 TVs",'55" Canvas',10],["2025 TVs",'65" Canvas',10],["2025 TVs","55U8Q",10],["2025 TVs","65U8Q",10],["2025 TVs","75U8Q",10],["2025 TVs","85U8Q",20],["2025 TVs","100U8Q",30]
 ];
+
+
 const P=[["25/05/2026","16 | 17",16,17],["25/06/2026","18 | 19 | 20 | 21 | 22",18,22],["24/07/2026","23 | 24 | 25 | 26",23,26],["25/08/2026","27 | 28 | 29 | 30 | 31",27,31],["25/09/2026","32 | 33 | 34 | 35",32,35],["23/10/2026","36 | 37 | 38 | 39",36,39],["25/11/2026","40 | 41 | 42 | 43 | 44",40,44],["TBC","45 | 46 | 47 | 48",45,48],["25/01/2027","49 | 50 | 51 | 52",49,52]];
 const M=Object.fromEntries(R.map(x=>[x[1],x[2]]));
 const INITIAL_SALES=[{"id":1,"date":"2026-09-03","model":"50E7Q","qty":1,"rate":5,"total":5},{"id":2,"date":"2026-09-03","model":"75UR8S","qty":1,"rate":80,"total":80},{"id":3,"date":"2026-09-04","model":"43A6Q","qty":3,"rate":0,"total":0},{"id":4,"date":"2026-09-04","model":"43E7Q","qty":3,"rate":5,"total":15},{"id":5,"date":"2026-09-04","model":"50U7S","qty":2,"rate":20,"total":40},{"id":6,"date":"2026-09-04","model":"55UR8S","qty":1,"rate":50,"total":50},{"id":7,"date":"2026-09-04","model":"65E7Q PRO","qty":1,"rate":10,"total":10},{"id":8,"date":"2026-09-04","model":"65UR9S","qty":1,"rate":80,"total":80},{"id":9,"date":"2026-09-04","model":"85E7Q PRO","qty":2,"rate":20,"total":40},{"id":10,"date":"2026-09-05","model":"100U7Q PRO","qty":1,"rate":35,"total":35},{"id":11,"date":"2026-09-05","model":"HT SATURN","qty":1,"rate":40,"total":40},{"id":12,"date":"2026-09-06","model":"43E7Q","qty":1,"rate":5,"total":5},{"id":13,"date":"2026-09-06","model":"50U7Q","qty":1,"rate":5,"total":5},{"id":14,"date":"2026-09-06","model":"55A6Q","qty":1,"rate":0,"total":0},{"id":15,"date":"2026-09-06","model":"55E7Q PRO","qty":1,"rate":5,"total":5},{"id":16,"date":"2026-09-06","model":"55UR8S","qty":1,"rate":50,"total":50},{"id":17,"date":"2026-09-06","model":"65E7Q PRO","qty":1,"rate":10,"total":10},{"id":18,"date":"2026-09-06","model":"65UR9S","qty":1,"rate":80,"total":80},{"id":19,"date":"2026-09-12","model":"55UR8STUK","qty":1,"rate":50,"total":50}];
@@ -102,6 +106,16 @@ try {
   sales=saved?JSON.parse(saved):INITIAL_SALES.slice();
 } catch(e) { sales=INITIAL_SALES.slice(); }
 let targetValue=+(localStorage.getItem("hisenseWeeklyTarget")||10);
+const MISSED_SALES=[{"id":2001,"date":"2026-09-12","model":"100E7STUK PRO","qty":1,"rate":60,"total":60},{"id":2002,"date":"2026-09-12","model":"HT SATURN","qty":1,"rate":40,"total":40},{"id":2003,"date":"2026-09-12","model":"43E7Q","qty":1,"rate":5,"total":5},{"id":2004,"date":"2026-09-13","model":"55UR8STUK","qty":1,"rate":50,"total":50},{"id":2005,"date":"2026-09-11","model":"65Q7STUK","qty":1,"rate":15,"total":15},{"id":2006,"date":"2026-09-13","model":"43E7Q","qty":1,"rate":5,"total":5},{"id":2007,"date":"2026-09-13","model":"50U7STUK","qty":1,"rate":20,"total":20},{"id":2008,"date":"2026-09-12","model":"55UR8STUK","qty":1,"rate":50,"total":50}];
+try{
+  const existingKeys=new Set(sales.map(s=>`${s.date}|${s.model}|${s.qty}|${s.total}`));
+  MISSED_SALES.forEach(s=>{
+    const k=`${s.date}|${s.model}|${s.qty}|${s.total}`;
+    if(!existingKeys.has(k)){ sales.push(s); existingKeys.add(k); }
+  });
+  localStorage.setItem("hisenseCommissionSales",JSON.stringify(sales));
+}catch(e){}
+
 
 function week(s){
   let d=new Date(s+"T12:00:00"),day=d.getDay()||7;
@@ -160,7 +174,7 @@ function renderChart(){
   chart.innerHTML=data.map(x=>`<div class="barRow"><div class="weekLab">WK${x.w}</div><div class="barBg"><div class="bar" style="width:${Math.min(100,x.u/max*100)}%"></div></div><div class="barVal">${x.u} • ${gbp(x.c)}</div></div>`).join("");
   let thisW=sales.filter(s=>week(s.date)===cw).reduce((a,s)=>a+s.qty,0);
   progressText.textContent=`This week: ${thisW} / ${targetValue} units (${Math.min(100,Math.round(thisW/targetValue*100))}%)`;
-  progressBar.style.width=Math.min(100,thisW/targetValue*100)+"%";
+  progressBar.style.width=Math.min(100,thisW/targetValue*100)+"%"; if($("targetHit")) $("targetHit").style.display=thisW>=targetValue?"block":"none";
 }
 function renderPay(){
   payList.innerHTML=P.map(p=>{
