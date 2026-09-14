@@ -261,6 +261,38 @@ nav,.bottom-nav,.tab-bar,.navbar{
   #genericHome .generic-home-btn{min-height:105px!important}
 }
 </style>
+
+<style id="customer-mode-v1">
+#customerModeOverlay{position:fixed;inset:0;z-index:99999;background:linear-gradient(180deg,#f7f8fa,#e9edf2);color:#101722;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
+#customerModeOverlay.active{display:block}
+.cm-wrap{max-width:680px;margin:0 auto;padding:22px 16px 100px}
+.cm-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cm-brand{font-weight:950;letter-spacing:.08em;font-size:12px;color:#29466e}
+.cm-exit{border:1px solid #c8d0da;background:#fff;color:#182231;border-radius:12px;padding:9px 12px;font-weight:900}
+.cm-hero{margin-top:18px;padding:26px 22px;border-radius:28px;background:linear-gradient(135deg,#17345e,#0e1b30);color:#fff;box-shadow:0 18px 40px rgba(20,42,72,.2)}
+.cm-hero h2{margin:0;font-size:30px;letter-spacing:-.04em}.cm-hero p{margin:7px 0 0;opacity:.78;font-size:14px}
+.cm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}
+.cm-btn{min-height:96px;border:1px solid #d7dde5;background:#fff;border-radius:19px;text-align:left;padding:16px;color:#101722;font-weight:900;box-shadow:0 7px 18px rgba(16,23,34,.06)}
+.cm-btn small{display:block;margin-top:5px;font-weight:600;color:#697586}
+.cm-panel{display:none;margin-top:13px;padding:18px;border-radius:21px;background:#fff;border:1px solid #d7dde5;box-shadow:0 7px 18px rgba(16,23,34,.06)}
+.cm-panel.active{display:block}.cm-panel h3{margin:0 0 8px;font-size:21px}.cm-panel p{line-height:1.5;color:#4c5969;font-size:14px}
+.cm-close{margin-top:12px;width:100%;padding:12px;border:0;border-radius:13px;background:#17345e;color:#fff;font-weight:900}
+@media(max-width:430px){.cm-wrap{padding-left:13px;padding-right:13px}.cm-hero h2{font-size:27px}}
+</style>
+
+<style id="ultimate-sales-suite-v5">
+.sales-suite{margin:14px 16px;padding:18px;border-radius:25px;background:linear-gradient(145deg,#111d30,#0b1320);border:1px solid rgba(214,179,106,.16);box-shadow:0 18px 42px rgba(0,0,0,.22)}
+.sales-suite h3{margin:0;font-size:21px}.sales-suite-sub{font-size:13px;opacity:.65;margin:4px 0 13px}
+.ss-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ss-btn{min-height:82px;border:1px solid rgba(223,230,239,.1);border-radius:17px;background:rgba(255,255,255,.045);color:#fff;font-weight:900;font-size:14px}.ss-btn span{display:block;font-size:11px;font-weight:600;opacity:.55;margin-top:4px}
+.ss-panel{display:none;margin-top:12px;padding:15px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}.ss-panel.active{display:block}
+.ss-panel h4{margin:0 0 8px;font-size:18px}.ss-panel p{font-size:13px;line-height:1.5;opacity:.78}
+.ss-option{width:100%;margin:5px 0;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:inherit;text-align:left;font-weight:800}
+.ss-answer{margin-top:10px;padding:12px;border-radius:13px;background:rgba(214,179,106,.09);border:1px solid rgba(214,179,106,.13);font-size:13px;line-height:1.45}
+.ss-close{width:100%;margin-top:10px;padding:11px;border:0;border-radius:12px;background:#c9a85e;color:#101722;font-weight:900}
+.ss-demo-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.ss-demo{padding:11px;border-radius:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);font-size:12px}
+.ss-deal{padding:14px;border-radius:16px;background:linear-gradient(135deg,rgba(214,179,106,.13),rgba(255,255,255,.035));border:1px solid rgba(214,179,106,.18)}
+.ss-deal strong{font-size:20px}
+</style>
 </head>
 <body>
 <section id="genericHome" style="padding:18px 16px 100px;">
@@ -276,7 +308,7 @@ nav,.bottom-nav,.tab-bar,.navbar{
   <div style="font-size:12px;opacity:.62;margin-top:7px;">One customer at a time. Ask good questions, listen, and earn the sale.</div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:14px;">
-    <button class="generic-home-btn" data-open="sales" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🛍️<br>Sales Hub<br><span style='font-size:11px;opacity:.55;font-weight:600'>Pitch & sell</span></button>
+    <button class="generic-home-btn" data-open="sales" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🛍️<br>Sales Hub<br><span style='font-size:11px;opacity:.55;font-weight:600'>Pitch & sell</span></button><button class="generic-home-btn" id="customerModeHome" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">👤<br>Customer Mode<br><span style="font-size:11px;opacity:.55;font-weight:600">Safe to show customers</span></button>
     <button class="generic-home-btn" data-open="finder" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">📺<br>TV Finder<br><span style='font-size:11px;opacity:.55;font-weight:600'>Find the right TV</span></button>
     <button class="generic-home-btn" data-open="promos" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">🎁<br>Promotions<br><span style='font-size:11px;opacity:.55;font-weight:600'>Cashback & offers</span></button>
     <button class="generic-home-btn" data-open="rates" style="padding:20px 12px;border:0;border-radius:19px;background:rgba(255,255,255,.07);color:inherit;font-weight:900;font-size:15px;">💷<br>Commission Rates<br><span style='font-size:11px;opacity:.55;font-weight:600'>View rates</span></button>
@@ -285,6 +317,16 @@ nav,.bottom-nav,.tab-bar,.navbar{
   </div>
   <div style="margin-top:14px;padding:13px 15px;border-radius:16px;background:rgba(255,255,255,.045);font-size:12px;opacity:.65;text-align:center;">Customer-facing home screen • Private commission is not shown here</div>
 </section>
+<div id="privateDayPlan" class="sales-suite" style="margin-top:12px;">
+  <h3>🔥 My Day</h3>
+  <div class="sales-suite-sub">Private motivation for your shift.</div>
+  <div style="padding:12px;border-radius:15px;background:rgba(214,179,106,.08);border:1px solid rgba(214,179,106,.12);">
+    <b>Today's mission</b><br>
+    Ask better questions • Demonstrate the picture • Make the value clear • Ask for the sale.
+  </div>
+  <div style="margin-top:10px;font-size:13px;opacity:.7;">🏆 Your personal records and commission remain in the private area.</div>
+</div>
+
 
 <div id="private-commission-note" style="margin:14px 16px 0;padding:14px 16px;border-radius:18px;background:linear-gradient(145deg,#151b2b,#202a43);border:1px solid rgba(255,255,255,.10);">
   <div style="font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;opacity:.7;">SHOP FLOOR MODE</div>
@@ -895,6 +937,71 @@ init();
   <button class="saw-btn" id="sawGo">Find my best recommendation</button>
   <div class="saw-result" id="sawResult"></div>
 </section>
+<section class="sales-suite" id="ultimateSalesSuite">
+  <h3>🚀 Sales Toolkit</h3>
+  <div class="sales-suite-sub">Everything you need to move from conversation to close.</div>
+  <div class="ss-grid">
+    <button class="ss-btn" data-suite="coach">🧠 Sales Coach<span>Recommendation + pitch</span></button>
+    <button class="ss-btn" data-suite="objections">⚔️ Objection Buster<span>Know what to say next</span></button>
+    <button class="ss-btn" data-suite="demo">🎤 Demo Mode<span>Follow a winning demo</span></button>
+    <button class="ss-btn" data-suite="deal">💰 Customer Deal<span>Show the full value</span></button>
+  </div>
+
+  <div class="ss-panel" id="suite-coach">
+    <h4>🧠 Sales Coach</h4>
+    <p>Start with what the customer actually wants. Pick their main priority:</p>
+    <button class="ss-option" data-coach="sport">⚽ Mainly sport</button>
+    <button class="ss-option" data-coach="gaming">🎮 Mainly gaming</button>
+    <button class="ss-option" data-coach="films">🎬 Films & picture quality</button>
+    <button class="ss-option" data-coach="bright">☀️ Bright room</button>
+    <button class="ss-option" data-coach="everyday">📺 Everyday viewing</button>
+    <div id="coachAnswer" class="ss-answer" style="display:none"></div>
+  </div>
+
+  <div class="ss-panel" id="suite-objections">
+    <h4>⚔️ Objection Buster</h4>
+    <p>Tap what the customer says. Keep it positive, ask a question, then demonstrate.</p>
+    <button class="ss-option" data-objection="samsung">“I want Samsung.”</button>
+    <button class="ss-option" data-objection="oled">“I want OLED.”</button>
+    <button class="ss-option" data-objection="expensive">“That's too expensive.”</button>
+    <button class="ss-option" data-objection="tcl">“TCL is cheaper.”</button>
+    <button class="ss-option" data-objection="think">“I'll think about it.”</button>
+    <button class="ss-option" data-objection="online">“I'll buy it online.”</button>
+    <button class="ss-option" data-objection="unknown">“I've never heard of Hisense.”</button>
+    <button class="ss-option" data-objection="quality">“Is Hisense as good?”</button>
+    <div id="objectionAnswer" class="ss-answer" style="display:none"></div>
+  </div>
+
+  <div class="ss-panel" id="suite-demo">
+    <h4>🎤 Demo Mode</h4>
+    <p>Use this simple sequence when you have the customer in front of the TV.</p>
+    <div class="ss-demo-row">
+      <div class="ss-demo"><b>1. OPEN</b><br>“What do you watch most?”</div>
+      <div class="ss-demo"><b>2. PICTURE</b><br>Show brightness, colour and contrast.</div>
+      <div class="ss-demo"><b>3. SPORT</b><br>Show fast movement and detail.</div>
+      <div class="ss-demo"><b>4. GAMING</b><br>Show refresh rate and HDMI 2.1.</div>
+      <div class="ss-demo"><b>5. SOUND</b><br>Demonstrate clarity and immersion.</div>
+      <div class="ss-demo"><b>6. CLOSE</b><br>Confirm the right size, budget and offer.</div>
+    </div>
+  </div>
+
+  <div class="ss-panel" id="suite-deal">
+    <h4>💰 Customer Deal Card</h4>
+    <div class="ss-deal">
+      <div style="opacity:.65;font-size:11px;font-weight:900;letter-spacing:.08em">EXAMPLE CUSTOMER VALUE</div>
+      <strong>65UR8STUK</strong>
+      <div style="margin-top:7px">£1,699 TV</div>
+      <div class="ss-pills" style="margin-top:10px">
+        <span class="saw-pill">💰 £200 cashback</span>
+        <span class="saw-pill">🎮 FREE personalised Xbox controller</span>
+        <span class="saw-pill">🕹️ 1 month Game Pass</span>
+        <span class="saw-pill">💳 24 months interest free*</span>
+      </div>
+      <div style="font-size:11px;opacity:.55;margin-top:9px">*Subject to finance approval and applicable terms. Promotional eligibility and prices can change.</div>
+    </div>
+  </div>
+</section>
+
 
 <script>
 (function(){
@@ -1068,6 +1175,100 @@ document.addEventListener('DOMContentLoaded',function(){
   ];
   const d=new Date();
   q.textContent=quotes[(Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000)))%quotes.length];
+});
+</script>
+
+<div id="customerModeOverlay" aria-hidden="true">
+  <div class="cm-wrap">
+    <div class="cm-top">
+      <div class="cm-brand">HISENSE SALES ASSISTANT</div>
+      <button class="cm-exit" id="cmExit">🔒 Exit</button>
+    </div>
+    <div class="cm-hero">
+      <h2>Find your perfect TV</h2>
+      <p>Let's find the right picture, size and features for the way you watch.</p>
+    </div>
+    <div class="cm-grid">
+      <button class="cm-btn" data-cm="finder">📺 TV Finder<small>Find the right TV</small></button>
+      <button class="cm-btn" data-cm="compare">⚖️ Compare TVs<small>Compare features</small></button>
+      <button class="cm-btn" data-cm="promos">🎁 Current Offers<small>Cashback & bundles</small></button>
+      <button class="cm-btn" data-cm="hisense">✨ Why Hisense?<small>Key benefits</small></button>
+    </div>
+    <div class="cm-panel" id="cmFinder"><h3>📺 What matters most?</h3><p>Tell me your screen size, budget and what you watch most. We can then use the TV Finder in the app to narrow down the best options.</p><button class="cm-close" data-cm-jump="finder">Open TV Finder</button></div>
+    <div class="cm-panel" id="cmCompare"><h3>⚖️ Compare TVs</h3><p>Compare picture technology, brightness, refresh rate, gaming features and other customer-relevant differences — without showing private sales information.</p><button class="cm-close" data-cm-jump="compare">Open comparison</button></div>
+    <div class="cm-panel" id="cmPromos"><h3>🎁 Current offers</h3><p>See the current cashback, Xbox bundle and other promotional information available on qualifying Hisense models.</p><button class="cm-close" data-cm-jump="promos">Open promotions</button></div>
+    <div class="cm-panel" id="cmHisense"><h3>✨ Why Hisense?</h3><p>Explore the picture, gaming, sport, smart TV and value points that can help you choose between models.</p><button class="cm-close" data-cm-jump="hisense">Open Why Hisense</button></div>
+  </div>
+</div>
+
+<script id="customer-mode-js">
+document.addEventListener('DOMContentLoaded',function(){
+  const overlay=document.getElementById('customerModeOverlay');
+  if(!overlay)return;
+  function openCM(){overlay.classList.add('active');overlay.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function closeCM(){overlay.classList.remove('active');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  const buttons=[...document.querySelectorAll('button,a')];
+  const customerTrigger=buttons.find(el=>/customer mode/i.test((el.textContent||'')));
+  if(customerTrigger) customerTrigger.addEventListener('click',function(e){e.preventDefault();openCM();});
+
+  document.getElementById('cmExit').addEventListener('click',closeCM);
+  overlay.addEventListener('click',function(e){
+    const b=e.target.closest('[data-cm]');
+    if(b){
+      document.querySelectorAll('.cm-panel').forEach(x=>x.classList.remove('active'));
+      const id={'finder':'cmFinder','compare':'cmCompare','promos':'cmPromos','hisense':'cmHisense'}[b.dataset.cm];
+      if(id)document.getElementById(id).classList.add('active');
+    }
+    const j=e.target.closest('[data-cm-jump]');
+    if(j){
+      const target=j.dataset.cmJump;
+      closeCM();
+      const candidates=[...document.querySelectorAll('button,a,[role="button"]')];
+      const re={'finder':/tv finder|finder/,'compare':/compare/,'promos':/promotion|offers/,'hisense':/why choose hisense|why hisense/}[target];
+      const hit=candidates.find(x=>re&&re.test((x.textContent||'').toLowerCase()));
+      if(hit) setTimeout(()=>hit.click(),80);
+    }
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  const b=document.getElementById('customerModeHome'),o=document.getElementById('customerModeOverlay');
+  if(b&&o)b.addEventListener('click',function(){o.classList.add('active');o.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';});
+});
+</script>
+
+<script id="ultimate-sales-suite-js">
+document.addEventListener('DOMContentLoaded',function(){
+  const suite=document.getElementById('ultimateSalesSuite'); if(!suite)return;
+  const answers={
+    samsung:"“Samsung is a strong brand. What do you like most about Samsung — the picture, the smart features or the brand itself?” Then match that priority against the exact Hisense model.",
+    oled:"“OLED is excellent. Is the main thing you're after deep blacks, or do you also want a very bright and colourful picture?” Then demonstrate the difference rather than arguing about brands.",
+    expensive:"“I understand. Before we rule it out, can I show you exactly what you're getting for the extra money?” Then link the picture technology, refresh rate, sound and current offers to what they actually need.",
+    tcl:"“TCL is definitely worth comparing. Let's compare the exact size and specification — picture, brightness, gaming, warranty and today's offers — rather than just the ticket price.”",
+    think:"“Of course. What part are you unsure about — the picture, the price, the size or the model?” Solve the specific concern instead of pushing.",
+    online:"“Absolutely, it's worth checking. Before you do, let me make sure you're comparing the exact model and the full deal, including cashback, bundles and finance.”",
+    unknown:"“That's fair. Rather than asking you to buy on the badge, let me show you what this exact model does and why it fits what you've told me.”",
+    quality:"“The best way to answer that is to compare the exact TVs. Tell me what matters most to you and I'll show you where each model is strongest.”"
+  };
+  const coach={
+    sport:["65UR8STUK","RGB Mini LED • up to 180 Hz • strong brightness and motion","Show fast football footage, then say: “This is where the colour, brightness and high refresh rate really come into their own.”"],
+    gaming:["65UR8STUK","RGB Mini LED • up to 180 Hz • HDMI 2.1 on the model","“If gaming is your priority, the high refresh rate and gaming connections are the things I'd focus on.”"],
+    films:["65UR9STUK","RGB Mini LED • premium picture performance","“Let's focus on the picture first — colour, contrast and detail — then compare the exact price and offer.”"],
+    bright:["65UR8STUK","RGB Mini LED • high brightness focus","“In a bright room, I'd prioritise a TV that can keep the picture punchy rather than looking washed out.”"],
+    everyday:["65U7STUK","Mini LED • 144 Hz • strong all-round specification","“This gives you a strong step up in picture and gaming features without automatically jumping to the premium price point.”"]
+  };
+  suite.querySelectorAll('[data-suite]').forEach(b=>b.addEventListener('click',()=>{
+    suite.querySelectorAll('.ss-panel').forEach(p=>p.classList.remove('active'));
+    const p=document.getElementById('suite-'+b.dataset.suite);if(p)p.classList.add('active');
+  }));
+  suite.querySelectorAll('[data-objection]').forEach(b=>b.addEventListener('click',()=>{
+    const a=document.getElementById('objectionAnswer');a.style.display='block';a.innerHTML='<b>🗣️ Say this:</b><br>'+answers[b.dataset.objection];
+  }));
+  suite.querySelectorAll('[data-coach]').forEach(b=>b.addEventListener('click',()=>{
+    const a=document.getElementById('coachAnswer'),x=coach[b.dataset.coach];a.style.display='block';a.innerHTML='<b>🥇 Recommend:</b> '+x[0]+'<br><br><b>Why:</b> '+x[1]+'<br><br><b>🎤 Say this:</b> '+x[2];
+  }));
 });
 </script>
 </body>
