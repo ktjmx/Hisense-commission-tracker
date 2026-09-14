@@ -155,9 +155,9 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 <label>Model</label>
 <div class="autocomplete-wrap">
 <input id="saleModel" autocomplete="off" placeholder="Start typing a model…">
-<div class="field"><label>Sale price</label><input id="salePrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="£0.00"></div>
 <div id="saleModelPopup" class="autocomplete-popup"></div>
 </div>
+<div class="field"><label>Sale value (£)</label><input id="salePrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Enter selling price"></div>
 </div>
 <div id="saleRate" class="sale-rate-pop"></div>
 <datalist id="modelList"></datalist>
@@ -460,6 +460,7 @@ document.getElementById("addSale").onclick=()=>{
  const price=Number(document.getElementById("salePrice").value||0);
  let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rate(model);
  if(!model||r==null){alert("Please enter a model with a commission rate.");return}
+ if(price<=0){alert("Please enter the sale value (£).");return}
  sales.push([date,model,qty,r*qty,price]);save();document.getElementById("saleModel").value="";
  document.getElementById("salePrice").value="";document.getElementById("saleRate").textContent="";document.getElementById("saleRate").classList.remove("show");hideSaleModelPopup();renderCalendar();renderHome();renderStats();alert("Sale added.");
 };
@@ -601,6 +602,21 @@ function showCoachTab(tab){
  if(b) b.classList.toggle("active",sound);
  if(sound) renderSoundbars();
 }
+function renderCoach(){
+ const el=document.getElementById("coachContent");
+ if(!el) return;
+ const key=document.getElementById("coachTopic")?.value || Object.keys(COACH)[0];
+ const c=COACH[key];
+ if(!c) return;
+ el.innerHTML=`
+ <div class="coach-hero"><div class="eyebrow">SALES COACH</div><h2>${c.title||key}</h2><p>${c.passion||c.pitch||""}</p></div>
+ <div class="coach-grid">
+  <div class="coach-card"><div class="coach-card-title">Explain the technology</div><div>${c.tech||""}</div></div>
+  <div class="coach-card"><div class="coach-card-title">Translate it for the customer</div><div>${c.customer||""}</div></div>
+  <div class="coach-card"><div class="coach-card-title">Key points</div><ul>${(c.points||[]).map(x=>`<li>${x}</li>`).join("")}</ul></div>
+  <div class="coach-card"><div class="coach-card-title">Shop-floor tip</div><div>${c.tip||""}</div></div>
+ </div>`;
+}
 function renderSoundbars(){
  const el=document.getElementById("soundbarCatalogue");
  if(!el) return;
@@ -636,56 +652,45 @@ function payPeriodCommission(a,b){
    .reduce((sum,s)=>sum+Number(s[3]||0),0);
 }
 function updateHomeSalesValue(){
- const total=sales.reduce((sum,s)=>sum+(Number(s[4])||0)*Number(s[2]||0),0);
+ const total=sales.reduce((sum,s)=>sum+(Number(s[4])||0)*(Number(s[2])||0),0);
  const el=document.getElementById("homeSalesValue");
  if(el) el.textContent=money(total);
 }
 function renderStats(){
- const now=new Date(),day=now.getDay();
- const st=new Date(now);st.setHours(12,0,0,0);st.setDate(now.getDate()-day);
- const en=new Date(st);en.setDate(st.getDate()+6);
- const iso=d=>d.toISOString().slice(0,10);
- const weekSales=sales.filter(x=>x[0]>=iso(st)&&x[0]<=iso(en));
- const w=getSalesMix(weekSales),o=getSalesMix(sales);
- const fmt=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"short"});
- document.getElementById("statsWeeklyDates").textContent=fmt(st)+" – "+fmt(en)+" • Sunday to Saturday";
- document.getElementById("statsWeeklyUnits").textContent=w.tvUnits;
- document.getElementById("statsWeeklySoundbars").textContent=w.soundbars;
- document.getElementById("statsWeeklyLED").textContent=w.p(w.led)+"%";
- document.getElementById("statsWeeklyQLED").textContent=w.p(w.qled)+"%";
- document.getElementById("statsWeeklyMiniLED").textContent=w.p(w.mini)+"%";
- document.getElementById("statsWeeklyRGB").textContent=w.p(w.rgb)+"%";
- document.getElementById("statsOverallUnits").textContent=o.tvUnits;
- document.getElementById("statsOverallLED").textContent=o.p(o.led)+"%";
- document.getElementById("statsOverallQLED").textContent=o.p(o.qled)+"%";
- document.getElementById("statsOverallMiniLED").textContent=o.p(o.mini)+"%";
- document.getElementById("statsOverallRGB").textContent=o.p(o.rgb)+"%";
-
- const total=totalComm(),units=totalUnits();
- document.getElementById("statsTotalCommission").textContent=money(total);
- document.getElementById("statsCommissionUnits").textContent=units;
- document.getElementById("statsCommissionEntries").textContent=sales.length;
- document.getElementById("statsAverageCommission").textContent=money(units?total/units:0);
+ const total=typeof totalComm==="function"?totalComm():sales.reduce((a,s)=>a+Number(s[3]||0),0);
+ const units=typeof totalUnits==="function"?totalUnits():sales.reduce((a,s)=>a+Number(s[2]||0),0);
+ const avg=units?total/units:0;
+ const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+ set("statsTotalCommission",money(total));
+ set("statsCommissionUnits",units);
+ set("statsCommissionEntries",sales.length);
+ set("statsAverageCommission",money(avg));
 
  const periods=[
-  {weeks:[32,35],label:"WK32–35",date:"25 Sep 2026"},
-  {weeks:[36,39],label:"WK36–39",date:"23 Oct 2026"},
-  {weeks:[40,44],label:"WK40–44",date:"25 Nov 2026"},
-  {weeks:[45,48],label:"WK45–48",date:"TBC"},
-  {weeks:[49,52],label:"WK49–52",date:"25 Jan 2027"}
+  {a:32,b:35,date:"25 September 2026"},
+  {a:36,b:39,date:"23 October 2026"},
+  {a:40,b:44,date:"25 November 2026"},
+  {a:45,b:48,date:"TBC"},
+  {a:49,b:52,date:"25 January 2027"}
  ];
- const commFor=(a,b)=>sales.filter(s=>{const w=isoWeekNumber(s[0]);return w>=a&&w<=b}).reduce((sum,s)=>sum+Number(s[3]||0),0);
- const unitsFor=(a,b)=>sales.filter(s=>{const w=isoWeekNumber(s[0]);return w>=a&&w<=b}).reduce((sum,s)=>sum+Number(s[2]||0),0);
- const currentWeek=isoWeekNumber(iso(now));
- document.getElementById("payday").innerHTML=periods.map(x=>{
-   const comm=commFor(x.start,x.end),u=unitsFor(x.start,x.end);
-   const status=currentWeek>=x.start&&currentWeek<=x.end?"Current pay period":(currentWeek<x.start?"Upcoming":"Past");
+ const week=d=>isoWeekNumber(d);
+ const comm=(a,b)=>sales.filter(s=>{let w=week(s[0]);return w>=a&&w<=b;}).reduce((n,s)=>n+Number(s[3]||0),0);
+ const qty=(a,b)=>sales.filter(s=>{let w=week(s[0]);return w>=a&&w<=b;}).reduce((n,s)=>n+Number(s[2]||0),0);
+ const current=week(new Date().toISOString().slice(0,10));
+ const box=document.getElementById("payday");
+ if(!box)return;
+ box.innerHTML=periods.map((x,i)=>{
+   const c=comm(x.a,x.b),q=qty(x.a,x.b);
+   let status=current<x.a?"Upcoming":(current<=x.b?"Current pay period":"Past");
    return `<div class="pay-estimate">
     <div class="pay-head">
-      <div><div class="pay-date">${x.date}</div><div class="pay-sub">WK${x.start}–${x.end} • ${status}</div></div>
-      <div class="pay-amount">${money(comm)}</div>
+      <div>
+       <div class="pay-date">${x.date}</div>
+       <div class="pay-sub">WK${x.a}–${x.b} • ${status}</div>
+      </div>
+      <div class="pay-amount">${money(c)}</div>
     </div>
-    <div class="pay-sub" style="margin-top:5px">${u} units • Commission earned in this pay period</div>
+    <div class="pay-sub" style="margin-top:6px">${q} units • Commission earned for this pay period</div>
    </div>`;
  }).join("");
 }renderCoach();
