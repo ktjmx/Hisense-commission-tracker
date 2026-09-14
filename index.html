@@ -526,7 +526,7 @@ function findTV(){
     if(n==="picture"||n==="brightness") return /UR8|UR9|U8/i.test(model)?0:1;
     return 0;
   };
-  matches.sort((a,z)=>rank(a)-rank(z)||Number(a[1])-Number(z[1]));
+  matches.sort((a,z)=>rank(a)-rank(z)||Number(z[1])-Number(a[1]));
 
   if(!matches.length){
     out.innerHTML=`<div class="card"><b>No TVs match those filters.</b>
@@ -836,6 +836,13 @@ renderStats();
 
 updateHomeTotalVAL();
 
-document.getElementById("findTv").onclick=findTV;
+document.addEventListener("DOMContentLoaded",function(){
+  const btn=document.getElementById("findTv");
+  if(btn) btn.addEventListener("click",function(e){
+    e.preventDefault();
+    findTV();
+  });
+});
+
 </script>
 </body></html>
