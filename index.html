@@ -64,6 +64,17 @@ input:focus,select:focus{border-color:var(--accent)}
 .danger{color:var(--danger)}
 @media(min-width:621px){.nav{border-radius:24px;bottom:15px;border:1px solid #1a2c32}.app{padding-bottom:120px}}
 </style>
+
+<style>
+.sales-assistant-workflow{margin:16px;padding:18px;border-radius:22px;background:linear-gradient(145deg,#121827,#1b2538);border:1px solid rgba(255,255,255,.09);box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.sales-assistant-workflow h3{margin:0 0 5px;font-size:21px}.sales-assistant-workflow .sub{opacity:.7;font-size:13px;margin-bottom:14px}
+.saw-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.saw-grid label{font-size:11px;opacity:.7;display:block;margin-bottom:4px}
+.saw-grid select,.saw-grid input{width:100%;box-sizing:border-box;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0d1320;color:inherit}
+.saw-full{grid-column:1/-1}.saw-btn{margin-top:12px;width:100%;padding:13px;border:0;border-radius:14px;font-weight:900;font-size:15px;cursor:pointer}
+.saw-result{margin-top:14px;padding:14px;border-radius:16px;background:rgba(255,255,255,.055);display:none}.saw-result.show{display:block}
+.saw-pills{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.saw-pill{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px}
+.saw-pitch{padding:11px;border-left:3px solid currentColor;background:rgba(255,255,255,.035);border-radius:8px;font-size:14px;line-height:1.4}
+</style>
 </head>
 <body>
 
@@ -634,6 +645,77 @@ function backup(){
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 init();
+</script>
+
+<section id="sales-assistant-workflow" class="sales-assistant-workflow">
+  <h3>🎯 Close the Sale</h3>
+  <div class="sub">Customer → needs → recommendation → offers → pitch</div>
+  <div class="saw-grid">
+    <div>
+      <label>Screen size</label>
+      <select id="sawSize"><option value="43">43"</option><option value="50">50"</option><option value="55">55"</option><option value="65" selected>65"</option><option value="75">75"</option><option value="85">85"</option><option value="100">100"</option></select>
+    </div>
+    <div>
+      <label>Budget</label>
+      <select id="sawBudget"><option value="500">Up to £500</option><option value="1000">Up to £1,000</option><option value="1500" selected>Up to £1,500</option><option value="2500">Up to £2,500</option><option value="99999">Flexible</option></select>
+    </div>
+    <div class="saw-full">
+      <label>What matters most?</label>
+      <select id="sawNeed">
+        <option value="sport">⚽ Sport</option><option value="gaming">🎮 Gaming</option><option value="films">🎬 Films & picture quality</option><option value="bright">☀️ Bright room</option><option value="everyday">📺 Everyday TV</option>
+      </select>
+    </div>
+  </div>
+  <button class="saw-btn" id="sawGo">Find my best recommendation</button>
+  <div class="saw-result" id="sawResult"></div>
+</section>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const cb={
+    "65UR8STUK":200,"75UR8STUK":200,"85UR8STUK":300,"55UR8STUK":200,
+    "65UR9STUK":200,"75UR9STUK":300,"85UR9STUK":300,
+    "65U7STUK":200,"75U7STUK":200,"85U7STUK":300,"55U7STUK":100,"50U7STUK":50,
+    "65Q7STUK":50,"75Q7STUK":50,"85Q7STUK":100,"55Q7STUK":25,"50Q7STUK":25,"43Q7STUK":25,
+    "100E7STUK PRO":300,"85E7STUK PRO":300,"75E7STUK PRO":100,"65E7STUK PRO":100,"55E7STUK PRO":50
+  };
+  const commission={
+    "50U7STUK":15,"55U7STUK":20,"65U7STUK":25,"75U7STUK":30,"85U7STUK":40,
+    "55UR8STUK":35,"65UR8STUK":45,"75UR8STUK":60,"85UR8STUK":80,
+    "65UR9STUK":60,"75UR9STUK":80,"85UR9STUK":120,
+    "43Q7STUK":5,"50Q7STUK":5,"55Q7STUK":10,"65Q7STUK":15,"75Q7STUK":20,"85Q7STUK":25,
+    "43E7Q PRO":10,"50E7STUK PRO":10,"55E7STUK PRO":15,"65E7STUK PRO":20,"75E7STUK PRO":25,"85E7STUK PRO":30,"100E7STUK PRO":40
+  };
+  const models=[
+    {m:"43E7QTUK",base:"43E7Q",s:43,p:269,t:"QLED",needs:["everyday"]},
+    {m:"55E7QTUK",base:"55E7Q",s:55,p:329,t:"QLED",needs:["everyday"]},
+    {m:"50U7STUK",base:"50U7STUK",s:50,p:null,t:"Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"65U7STUK",base:"65U7STUK",s:65,p:1199,t:"Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"55UR8STUK",base:"55UR8STUK",s:55,p:1299,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"65UR8STUK",base:"65UR8STUK",s:65,p:1699,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"75UR8STUK",base:"75UR8STUK",s:75,p:2299,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"65UR9STUK",base:"65UR9STUK",s:65,p:1999,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"75UR9STUK",base:"75UR9STUK",s:75,p:2799,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]},
+    {m:"85UR9STUK",base:"85UR9STUK",s:85,p:null,t:"RGB Mini LED",needs:["sport","gaming","bright","films"]}
+  ];
+  function recommend(){
+    const size=+$("sawSize").value,budget=+$("sawBudget").value,need=$("sawNeed").value;
+    let candidates=models.filter(x=>x.s===size && x.needs.includes(need) && (x.p===null || x.p<=budget));
+    if(!candidates.length) candidates=models.filter(x=>x.s===size && (x.p===null || x.p<=budget));
+    if(!candidates.length) candidates=models.filter(x=>x.p!==null && x.p<=budget);
+    if(!candidates.length){$("sawResult").innerHTML="<strong>Try widening the budget or screen size.</strong>";$("sawResult").classList.add("show");return;}
+    candidates.sort((a,b)=>(b.t==="RGB Mini LED")-(a.t==="RGB Mini LED") || (b.p||0)-(a.p||0));
+    const x=candidates[0], c=commission[x.base]||0, cash=cb[x.base]||0;
+    const xbox=/U7|UR8|UR9/.test(x.base);
+    const pitch=x.t==="RGB Mini LED"
+      ? `“If picture quality and sport are important, I'd show you this ${x.s}-inch RGB Mini LED. It gives you a really bright, colourful picture and strong motion performance. And you've got ${cash?"£"+cash+" cashback, ":""}${xbox?"the free personalised Xbox controller and 1-month Game Pass offer, ":""}plus 24 months interest free on qualifying RGB TVs.”`
+      : `“For what you've told me, this ${x.s}-inch ${x.t} is a strong fit. It gives you the features you need without pushing you beyond your budget.”`;
+    $("sawResult").innerHTML=`<div style="font-size:12px;opacity:.7">BEST FIT</div><div style="font-size:22px;font-weight:900;margin:3px 0">${x.m}</div><div>${x.t}${x.p?" · £"+x.p:""}</div><div class="saw-pills"><span class="saw-pill">💷 Commission £${c}</span>${cash?`<span class="saw-pill">💰 Cashback £${cash}</span>`:""}${xbox?'<span class="saw-pill">🎮 Xbox bundle</span>':''}${x.t==="RGB Mini LED"?'<span class="saw-pill">💳 24 months interest free</span>':''}</div><div class="saw-pitch"><strong>🗣️ Say this:</strong><br>${pitch}</div>`;
+    $("sawResult").classList.add("show");
+  }
+  if($("sawGo")) $("sawGo").addEventListener("click",recommend);
+})();
 </script>
 </body>
 </html>
