@@ -68,7 +68,7 @@ input:focus,select:focus{border-color:var(--accent)}
 <body>
 <div class="app">
   <header class="top">
-    <div><div class="brand">HISENSE • SALES</div><div class="title" id="pageTitle">Today</div></div>
+    <div><div class="brand">HISENSE • SALES</div><div class="title" id="pageTitle">Today</div><div class="tiny" id="liveDateTime" style="margin-top:3px">Loading date…</div></div>
     <button class="iconbtn" id="backupBtn" aria-label="Backup">↥</button>
   </header>
 
@@ -110,13 +110,13 @@ input:focus,select:focus{border-color:var(--accent)}
       <div id="recent"></div>
     </section>
 
-    <section id="home" class="screen active"><div class="hero"><div class="kicker">HISENSE • SALES ASSISTANT</div><div style="font-size:29px;font-weight:900;margin-top:7px">Sell with confidence.</div><div class="sub" style="margin-top:7px">Your shop-floor assistant for recommendations, offers, objections and product knowledge.</div><button class="cta" id="customerModeBtn">👤 Customer Mode</button></div><div class="sectionHead"><h2>What do you need?</h2></div><div class="grid2"><button class="card" data-go="hub" style="text-align:left"><b>📺 Sell a TV</b><div class="sub">Find the right model</div></button><button class="card" data-go="objections" style="text-align:left"><b>⚔️ Handle an objection</b><div class="sub">Quick responses</div></button><button class="card" data-go="offers" style="text-align:left"><b>🎁 Offers & bundles</b><div class="sub">Cashback • Xbox • finance</div></button><button class="card" data-go="price" style="text-align:left"><b>🔎 Price Match</b><div class="sub">UK retailer check</div></button><button class="card" data-go="demo" style="text-align:left"><b>🎤 Demo Mode</b><div class="sub">Follow a winning demo</div></button><button class="card" data-go="hisense" style="text-align:left"><b>✨ Why Hisense?</b><div class="sub">Customer talking points</div></button></div><div class="card" style="margin-top:12px"><div class="kicker">☀️ TODAY'S MINDSET</div><div style="font-weight:850;margin-top:7px">“Ask better questions. Demonstrate the difference. Make the value clear.”</div><div class="sub" style="margin-top:9px">Your working week: <b style="color:var(--text)">Thursday – Sunday</b></div></div><div class="card" style="margin-top:12px"><div class="row"><div><div class="cardTitle">Private area</div><div class="big" style="font-size:20px">My commission & stats</div></div><span class="pill">🔒 PRIVATE</span></div><button class="cta" data-go="commission">Open private area</button></div></section>
+    <section id="home" class="screen active"><div class="hero"><div class="kicker">HISENSE • SALES ASSISTANT</div><div style="font-size:29px;font-weight:900;margin-top:7px">Sell with confidence.</div><div class="sub" style="margin-top:7px">Your shop-floor assistant for recommendations, offers, objections and product knowledge.</div></div><div class="sectionHead"><h2>What do you need?</h2></div><div class="grid2"><button class="card" data-go="hub" style="text-align:left"><b>📺 Sell a TV</b><div class="sub">Find the right model</div></button><button class="card" data-go="objections" style="text-align:left"><b>⚔️ Handle an objection</b><div class="sub">Quick responses</div></button><button class="card" data-go="offers" style="text-align:left"><b>🎁 Offers & bundles</b><div class="sub">Cashback • Xbox • finance</div></button><button class="card" data-go="price" style="text-align:left"><b>🔎 Price Match</b><div class="sub">UK retailer check</div></button><button class="card" data-go="demo" style="text-align:left"><b>🎤 Demo Mode</b><div class="sub">Follow a winning demo</div></button><button class="card" data-go="hisense" style="text-align:left"><b>✨ Why Hisense?</b><div class="sub">Customer talking points</div></button></div><div class="card" style="margin-top:12px"><div class="kicker">☀️ TODAY'S MINDSET</div><div style="font-weight:850;margin-top:7px">“Ask better questions. Demonstrate the difference. Make the value clear.”</div><div class="sub" style="margin-top:9px">Your working week: <b style="color:var(--text)">Thursday – Sunday</b></div></div><div class="card" style="margin-top:12px"><div class="row"><div><div class="cardTitle">Private area</div><div class="big" style="font-size:20px">My commission & stats</div></div><span class="pill">🔒 PRIVATE</span></div><button class="cta" data-go="commission">Open private area</button></div></section>
 
 <section id="sales" class="screen">
       <div class="formCard">
         <div class="kicker">Quick entry</div>
         <h2 style="margin:5px 0 0">Add a sale</h2>
-        <label>Date</label><input type="date" id="saleDate">
+        <label>Date</label><input type="date" id="saleDate"><div class="tiny" style="margin-top:6px">📅 Automatically set to today. The app uses your phone’s local date and time.</div>
         <label>Model</label><input list="modelList" id="model" placeholder="Start typing a model…"><datalist id="modelList"></datalist>
         <label>Quantity</label><div class="stepper"><button id="minus">−</button><div class="qty" id="qty">1</div><button id="plus">＋</button></div>
         <div class="preview"><div class="kicker">Commission preview</div><div class="p" id="preview">£0</div><div class="sub" id="previewMeta">Select a model</div></div>
@@ -273,6 +273,8 @@ function loadSales(){
 }
 function save(){localStorage.setItem("hisenseCommissionSales",JSON.stringify(sales))}
 function money(n){return "£"+Number(n||0).toFixed(2).replace(".00","")}
+function localDateKey(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
+function localDateTime(d=new Date()){return d.toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"})}
 function fmtDate(s){return new Date(s+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"})}
 function key(s){return s.date+"|"+s.model+"|"+s.qty+"|"+s.total}
 function rateFor(model,date){
@@ -284,7 +286,7 @@ function rateFor(model,date){
 function weekNum(date){const d=new Date(date+"T12:00:00"), start=new Date("2026-08-31T12:00:00");return Math.floor((d-start)/604800000)+36}
 function total(){return sales.reduce((a,s)=>a+Number(s.total||0),0)}
 function units(){return sales.reduce((a,s)=>a+Number(s.qty||0),0)}
-function currentWeek(){const now=new Date();return now.getDay()===0?weekNum(now.toISOString().slice(0,10)):weekNum(now.toISOString().slice(0,10))}
+function currentWeek(){return weekNum(localDateKey())}
 function paydayFor(date){
   const w=weekNum(date);
   return PAYDAYS.find(p=>{const r=p[0].replace("WK","").split("–").map(Number);return w>=r[0]&&w<=r[1]})||PAYDAYS[5];
@@ -294,13 +296,13 @@ function go(screen){
   document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.screen===screen));
   const titles={home:"Good morning",sales:"Add a sale",paydays:"Paydays",stats:"My Stats",records:"Records",hub:"Sales Hub",offers:"Offers",price:"Price Match",objections:"Objection Buster",demo:"Demo Mode",hisense:"Why Hisense?",commission:"My Commission",rates:"Commission Rates"};
   document.getElementById("pageTitle").textContent=titles[screen]||"Hisense Sales App";
-  if(screen==="commission")renderHome(); if(screen==="home"){} if(screen==="sales")renderHistory(); if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="records")renderRecords(); if(screen==="hub")renderHub(); if(screen==="offers")renderOffers(); if(screen==="price")renderPrice(); if(screen==="objections")renderObjections(); if(screen==="demo")renderDemo(); if(screen==="hisense")renderHisense(); if(screen==="rates")renderRates();
+  if(screen==="commission")renderHome(); if(screen==="home"){} if(screen==="sales"){document.getElementById("saleDate").value=localDateKey();renderHistory();} if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="records")renderRecords(); if(screen==="hub")renderHub(); if(screen==="offers")renderOffers(); if(screen==="price")renderPrice(); if(screen==="objections")renderObjections(); if(screen==="demo")renderDemo(); if(screen==="hisense")renderHisense(); if(screen==="rates")renderRates();
 }
 function renderHome(){
   const allTotal=total(), allUnits=units();
   document.getElementById("totalCommission").textContent=money(allTotal);
   document.getElementById("unitsPill").textContent=allUnits+" units";
-  const latest=new Date().toISOString().slice(0,10), p=paydayFor(latest);
+  const latest=localDateKey(), p=paydayFor(latest);
   const paydaySales=sales.filter(s=>paydayFor(s.date)[1]===p[1]);
   document.getElementById("paydayTotal").textContent=money(paydaySales.reduce((a,s)=>a+s.total,0));
   document.getElementById("paydayWeeks").textContent=p[0]+" • pays "+p[1];
@@ -409,13 +411,13 @@ function renderHome(){
   document.getElementById("recent").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(saleHTML).join("")||'<div class="empty">No sales yet</div>';
 }
 function renderHistory(){
- document.getElementById("history").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).map((s,i)=>`<div class="sale"><div><div class="saleModel">${escapeHtml(s.model)}</div><div class="saleMeta">${fmtDate(s.date)} • ×${s.qty}</div></div><div style="text-align:right"><div class="saleMoney">${money(s.total)}</div><button class="tiny danger del" data-i="${sales.indexOf(s)}">Delete</button></div></div>`).join("")||'<div class="empty">No sales yet</div>';
+ document.getElementById("history").innerHTML=sales.slice().sort((a,b)=>b.date.localeCompare(a.date)).map((s,i)=>`<div class="sale"><div><div class="saleModel">${escapeHtml(s.model)}</div><div class="saleMeta">${fmtDate(s.date)} • ×${s.qty}${s.loggedAt?" • logged "+new Date(s.loggedAt).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):""}</div></div><div style="text-align:right"><div class="saleMoney">${money(s.total)}</div><button class="tiny danger del" data-i="${sales.indexOf(s)}">Delete</button></div></div>`).join("")||'<div class="empty">No sales yet</div>';
 }
 function renderPaydays(){
  const el=document.getElementById("paydayList");
  if(!el)return;
  const now=new Date();
- const today=now.toISOString().slice(0,10);
+ const today=localDateKey(now);
  const w=weekNum(today);
  const current=PAYDAYS.findIndex(p=>{const m=p[0].match(/(\d+)[–-](\d+)/);return m && w>=Number(m[1]) && w<=Number(m[2]);});
  el.innerHTML=`<div class="sectionHead"><div><div class="kicker">PAY CALENDAR</div><h2>Commission paydays</h2><p class="sub">Sales are grouped into the correct payday automatically.</p></div></div>` + PAYDAYS.map((p,i)=>{
@@ -628,7 +630,8 @@ function init(){
  document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
  document.getElementById("homeAdd").onclick=()=>go("sales");
- document.getElementById("saleDate").value=new Date().toISOString().slice(0,10);
+ document.getElementById("saleDate").value=localDateKey();
+ const updateLive=()=>{const el=document.getElementById("liveDateTime");if(el)el.textContent="Today • "+localDateTime()}; updateLive(); setInterval(updateLive,1000);
  document.getElementById("minus").onclick=()=>{qty=Math.max(1,qty-1);document.getElementById("qty").textContent=qty;preview()};
  document.getElementById("plus").onclick=()=>{qty++;document.getElementById("qty").textContent=qty;preview()};
  document.getElementById("model").oninput=preview;document.getElementById("saleDate").onchange=preview;
@@ -675,7 +678,7 @@ function addSale(){
  const d=document.getElementById("saleDate").value,m=document.getElementById("model").value.trim(),r=rateFor(m,d);
  if(!d||!m)return toast("Choose a date and model");
  if(r==null)return toast("I can't find a rate for that model");
- sales.push({date:d,model:m,qty,total:r*qty,rate:r});save();document.getElementById("model").value="";qty=1;document.getElementById("qty").textContent="1";preview();renderHistory();renderHome();toast("✓ Sale added");go("home");
+ sales.push({date:d,model:m,qty,total:r*qty,rate:r,loggedAt:new Date().toISOString()});save();document.getElementById("model").value="";qty=1;document.getElementById("qty").textContent="1";preview();renderHistory();renderHome();toast("✓ Sale added");go("home");
 }
 function backup(){
  const blob=new Blob([JSON.stringify(sales,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="hisense-sales-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("Backup created");
@@ -688,7 +691,7 @@ function updatePrice(){const m=document.getElementById("pmModel").value;const p=
 function renderObjections(){const data={"I want Samsung.":"Samsung is a strong brand. Ask what they like most about it, then compare that exact priority against the Hisense model.","I want OLED.":"OLED is excellent. Ask whether they mainly want deep blacks or also want a very bright, colourful picture, then demonstrate the difference.","That's too expensive.":"Ask what they feel is too expensive, then break down the picture technology, refresh rate, sound and current offers.","TCL is cheaper.":"Compare like-for-like size, picture, brightness, gaming, warranty and today's offers — not just the ticket price.","I'll think about it.":"Ask what they are unsure about: picture, price, size or model. Solve the specific concern.","I'll buy it online.":"Make sure they compare the exact model and full deal, including cashback, bundles, finance and retailer terms.","I've never heard of Hisense.":"Don't sell the badge. Show what the exact model does and why it fits what they told you.","Is Hisense as good?":"Compare the exact TVs on the things that matter to them rather than making a blanket brand claim."};const el=document.getElementById("objectionList");el.innerHTML=Object.entries(data).map(([q,a])=>`<button class="card" data-objection="${escapeHtml(q)}" style="width:100%;text-align:left;margin-bottom:8px"><b>${escapeHtml(q)}</b></button>`).join("");el.onclick=e=>{const b=e.target.closest("[data-objection]");if(!b)return;document.getElementById("objectionAnswer").style.display="block";document.getElementById("objectionAnswer").innerHTML='<b>🗣️ Say this:</b><br>'+data[b.dataset.objection]}}
 function renderDemo(){document.getElementById("demoSteps").innerHTML=["Ask what they watch most.","Show picture: brightness, colour and contrast.","Show sport: motion and detail.","Show gaming: refresh rate and HDMI 2.1 where applicable.","Show sound: clarity and immersion.","Close: confirm size, budget and the offer."].map((x,i)=>`<div class="card" style="margin-bottom:8px"><b>${i+1}.</b> ${x}</div>`).join("")}
 function renderHisense(){document.getElementById("whyList").innerHTML=["RGB Mini LED: red, green and blue LEDs create colour at source on qualifying models.","Gaming: selected models offer high refresh rates and HDMI 2.1.","Sport: brightness, colour and motion are the key demo points.","Smart TV: current models include Freely and streaming/catch-up features.","Value: compare the exact picture technology, features, offers and price rather than the badge alone.","Always verify the exact model's guarantee and promotional eligibility."].map(x=>`<div class="card" style="margin-bottom:8px">${x}</div>`).join("")}
-document.getElementById("customerModeBtn").onclick=()=>toast("Customer Mode: use the customer-safe Sales Hub and Offers screens");document.getElementById("pmModel").onchange=updatePrice;
+document.getElementById("pmModel").onchange=updatePrice;
 init();
 </script>
 </body>
