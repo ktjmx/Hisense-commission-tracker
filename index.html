@@ -493,66 +493,78 @@ document.getElementById("addSale").onclick=()=>{
  updateHomeTotalVAL();
 };
 function findTV(){
- let q=norm(document.getElementById("tvSearch").value),
-     b=document.getElementById("budget").value,
-     s=document.getElementById("size").value,
-     n=document.getElementById("need").value,
-     t=document.getElementById("tech").value;
+  const q=norm(document.getElementById("tvSearch")?.value||"");
+  const b=document.getElementById("budget")?.value||"";
+  const s=document.getElementById("size")?.value||"";
+  const n=document.getElementById("need")?.value||"";
+  const t=document.getElementById("tech")?.value||"";
+  const out=document.getElementById("tvResult");
+  if(!out)return;
 
- let arr=TVs.filter(x=>{
-  let model=x[0],p=x[1],type=x[2],
-      size=(model.match(/^(43|50|55|65|75|85|100)/)||[])[1];
-  if(q&&!norm(model).includes(q))return false;
-  if(b&&p!=null&&p>Number(b))return false;
-  if(s&&size!==s)return false;
-  if(t&&type!==t)return false;
-  return p!=null;
- });
+  const getSize=m=>{
+    const z=String(m).match(/^(43|50|55|65|75|85|100)/);
+    return z?z[1]:"";
+  };
 
- if(!arr.length){
-   document.getElementById("tvResult").innerHTML=
-   `<div class="card"><b>No TVs match those filters.</b>
-   <div class="muted" style="margin-top:5px">Try Any budget or Any size, then narrow it down.</div></div>`;
-   return;
- }
+  const matches=TVs.filter(x=>{
+    const model=String(x[0]||"");
+    const price=Number(x[1]);
+    const type=String(x[2]||"");
+    if(q && !norm(model).includes(q)) return false;
+    if(b && (!Number.isFinite(price) || price>Number(b))) return false;
+    if(s && getSize(model)!==String(s)) return false;
+    if(t && type!==String(t)) return false;
+    return Number.isFinite(price);
+  });
 
- const score=x=>{
-   if(n==="value")return 0;
-   if(n==="gaming")return /U7|U8|UR8|UR9/.test(x[0])?0:1;
-   if(n==="sport")return /UR8|UR9/.test(x[0])?0:1;
-   if(n==="picture"||n==="brightness")return /UR8|UR9|U8/.test(x[0])?0:1;
-   return 0;
- };
- arr.sort((a,b)=>score(a)-score(b)||a[1]-b[1]);
+  // Keep the customer's "need" as a ranking preference only. Never use it
+  // to hide otherwise matching TVs.
+  const rank=m=>{
+    const model=String(m[0]||"");
+    if(n==="gaming") return /U7|U8|UR8|UR9/i.test(model)?0:1;
+    if(n==="sport") return /UR8|UR9|U8/i.test(model)?0:1;
+    if(n==="picture"||n==="brightness") return /UR8|UR9|U8/i.test(model)?0:1;
+    return 0;
+  };
+  matches.sort((a,z)=>rank(a)-rank(z)||Number(a[1])-Number(z[1]));
 
- const sizeOf=m=>(m.match(/^(43|50|55|65|75|85|100)/)||[])[1]||"";
- const cards=arr.map((x,i)=>{
-   const d=deal(x[0],x[1]),r=rate(x[0]);
-   return `<div class="result" style="margin-top:${i?"10px":"0"}">
-     ${i===0?`<div class="muted">Best match</div>`:""}
-     <h3>${x[0]}</h3>
-     <div class="price">${money(x[1])}</div>
-     <div class="pills">
-       <span class="pill">${x[2]}</span>
-       <span class="pill">${sizeOf(x[0])}" screen</span>
-       ${r!=null?`<span class="pill">£${r} commission</span>`:""}
-     </div>
-     <div class="offer">
-       <b>Customer deal</b>
-       <div>Trade-in: <strong>${money(d.trade)}</strong> ${d.code?`(${d.code})`:""}</div>
-       <div>Cashback: <strong>${money(d.cb)}</strong></div>
-       <div class="saving">Effective cost: ${money(d.effective)}</div>
-       <div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div>
-     </div>
-   </div>`;
- }).join("");
+  if(!matches.length){
+    out.innerHTML=`<div class="card"><b>No TVs match those filters.</b>
+      <div class="muted" style="margin-top:6px">Try widening the budget or screen-size filter.</div></div>`;
+    return;
+  }
 
- document.getElementById("tvResult").innerHTML=
-   `<div class="muted" style="margin-bottom:10px">${arr.length} TV${arr.length===1?"":"s"} match your filters</div>`+cards;
+  const cards=matches.map((x,i)=>{
+    const model=String(x[0]);
+    const price=Number(x[1]);
+    const type=String(x[2]||"TV");
+    const d=typeof deal==="function"?deal(model,price):{trade:0,cb:0,effective:price};
+    const r=typeof rate==="function"?rate(model):null;
+    const trade=Number(d.trade)||0, cb=Number(d.cb)||0;
+    const effective=Number.isFinite(Number(d.effective))?Number(d.effective):price-trade-cb;
+
+    return `<div class="result" style="margin-top:${i?10:0}px">
+      ${i===0?`<div class="muted" style="margin-bottom:4px">Best match</div>`:""}
+      <h3>${model}</h3>
+      <div class="price">${money(price)}</div>
+      <div class="pills">
+        <span class="pill">${type}</span>
+        <span class="pill">${getSize(model)}" screen</span>
+        ${r!=null?`<span class="pill">£${r} commission</span>`:""}
+      </div>
+      <div class="offer">
+        <b>Customer deal</b>
+        <div>Trade-in: <strong>${money(trade)}</strong>${d.code?` (${d.code})`:""}</div>
+        <div>Cashback: <strong>${money(cb)}</strong></div>
+        <div class="saving">Effective cost: ${money(effective)}</div>
+        <button class="offer-btn" data-offer-model="${model.replace(/"/g,'&quot;')}">View offers</button>
+      </div>
+    </div>`;
+  }).join("");
+
+  out.innerHTML=`<div class="muted" style="margin-bottom:10px">${matches.length} TV${matches.length===1?"":"s"} match your filters</div>${cards}`;
 }
-document.getElementById("findTv").onclick=findTV;
-["tvSearch","budget","size","need","tech"].forEach(id=>document.getElementById(id).addEventListener("change",findTV));
-document.getElementById("tvSearch").addEventListener("input",findTV);
+
 function renderOffer(){
  const input=document.getElementById("offerModel");
  const box=document.getElementById("offerResult");
@@ -823,5 +835,7 @@ renderSoundbars();
 renderStats();
 
 updateHomeTotalVAL();
+
+document.getElementById("findTv").onclick=findTV;
 </script>
 </body></html>
