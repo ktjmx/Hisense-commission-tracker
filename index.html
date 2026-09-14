@@ -58,7 +58,7 @@ input:focus,select:focus{border-color:var(--accent)}
 .statGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px}.stat b{display:block;font-size:24px;margin-top:6px}
 .rate{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.rate b{color:var(--accent)}.rate small{color:var(--muted)}
 .achievement{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:18px;margin-bottom:9px}.badge{width:40px;height:40px;border-radius:14px;background:#18343a;display:grid;place-items:center;font-size:20px}
-.nav{position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:0;width:min(620px,100%);padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(7,16,20,.92);backdrop-filter:blur(18px);border-top:1px solid #1a2c32;display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+.nav{position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:0;width:min(620px,100%);padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(7,16,20,.92);backdrop-filter:blur(18px);border-top:1px solid #1a2c32;display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
 .nav button{background:transparent;color:#71868e;font-size:10px;font-weight:750;padding:7px 2px}.nav button span{display:block;font-size:20px;margin-bottom:3px}.nav button.on{color:var(--accent)}
 .toast{position:fixed;z-index:20;left:50%;bottom:95px;transform:translateX(-50%) translateY(20px);background:#f4ffff;color:#061012;padding:12px 16px;border-radius:14px;font-weight:750;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.pop{animation:pop .35s ease-out}@keyframes pop{0%{transform:scale(.94)}70%{transform:scale(1.03)}100%{transform:scale(1)}}
 .danger{color:var(--danger)}
@@ -112,7 +112,7 @@ input:focus,select:focus{border-color:var(--accent)}
       <div id="recent"></div>
     </section>
 
-    <section id="home" class="screen active"><div class="hero"><div class="kicker">HISENSE • SALES ASSISTANT</div><div style="font-size:29px;font-weight:900;margin-top:7px">Sell with confidence.</div><div class="sub" style="margin-top:7px">Your shop-floor assistant for recommendations, offers, objections and product knowledge.</div></div><div class="sectionHead"><h2>What do you need?</h2></div><div class="grid2"><button class="card" data-go="hub" style="text-align:left"><b>📺 Sell a TV</b><div class="sub">Find the right model</div></button><button class="card" data-go="objections" style="text-align:left"><b>⚔️ Handle an objection</b><div class="sub">Quick responses</div></button><button class="card" data-go="offers" style="text-align:left"><b>🎁 Offers & bundles</b><div class="sub">Cashback • Xbox • finance</div></button><button class="card" data-go="price" style="text-align:left"><b>🔎 Price Match</b><div class="sub">UK retailer check</div></button><button class="card" data-go="demo" style="text-align:left"><b>🎤 Demo Mode</b><div class="sub">Follow a winning demo</div></button><button class="card" data-go="hisense" style="text-align:left"><b>✨ Why Hisense?</b><div class="sub">Customer talking points</div></button></div><div class="card" style="margin-top:12px"><div class="kicker">☀️ TODAY'S MINDSET</div><div style="font-weight:850;margin-top:7px">“Ask better questions. Demonstrate the difference. Make the value clear.”</div><div class="sub" style="margin-top:9px">Your working week: <b style="color:var(--text)">Thursday – Sunday</b></div></div><div class="card" style="margin-top:12px"><div class="row"><div><div class="cardTitle">Private area</div><div class="big" style="font-size:20px">My commission & stats</div></div><span class="pill">🔒 PRIVATE</span></div><button class="cta" data-go="commission">Open private area</button></div></section>
+    <section id="home" class="screen active"><div class="hero"><div class="kicker">HISENSE • SALES ASSISTANT</div><div style="font-size:29px;font-weight:900;margin-top:7px">Sell with confidence.</div><div class="sub" style="margin-top:7px">Your shop-floor assistant for recommendations, offers, objections and product knowledge.</div></div><div class="sectionHead"><h2>What do you need?</h2></div><div class="grid2"><button class="card" data-go="hub" style="text-align:left"><b>📺 Sell a TV</b><div class="sub">Find the right model</div></button><button class="card" data-go="coach" style="text-align:left"><b>⚔️ Handle an objection</b><div class="sub">Quick responses</div></button><button class="card" data-go="offers" style="text-align:left"><b>🎁 Offers & bundles</b><div class="sub">Cashback • Xbox • finance</div></button><button class="card" data-go="hub" style="text-align:left"><b>🔎 Price Match</b><div class="sub">UK retailer check</div></button><button class="card" data-go="coach" style="text-align:left"><b>🎤 Demo Mode</b><div class="sub">Follow a winning demo</div></button><button class="card" data-go="coach" style="text-align:left"><b>✨ Why Hisense?</b><div class="sub">Customer talking points</div></button></div><div class="card" style="margin-top:12px"><div class="kicker">☀️ TODAY'S MINDSET</div><div style="font-weight:850;margin-top:7px">“Ask better questions. Demonstrate the difference. Make the value clear.”</div><div class="sub" style="margin-top:9px">Your working week: <b style="color:var(--text)">Thursday – Sunday</b></div></div><div class="card" style="margin-top:12px"><div class="row"><div><div class="cardTitle">Private area</div><div class="big" style="font-size:20px">My commission & stats</div></div><span class="pill">🔒 PRIVATE</span></div><button class="cta" data-go="commission">Open private area</button></div></section>
 
 <section id="sales" class="screen">
       <div class="formCard">
@@ -250,7 +250,7 @@ input:focus,select:focus{border-color:var(--accent)}
     </section>
   </main>
 
-  <nav class="nav"><button class="on" data-screen="home"><span>⌂</span>Home</button><button data-screen="sales"><span>＋</span>Sell</button><button data-screen="hub"><span>📺</span>Hub</button><button data-screen="offers"><span>🎁</span>Offers</button><button data-screen="price"><span>🔎</span>Price</button><button data-screen="commission"><span>£</span>Private</button><button data-screen="stats"><span>★</span>Stats</button><button data-screen="paydays"><span>◷</span>Paydays</button><button data-screen="coach"><span>🧠</span>Coach</button><button data-screen="rates"><span>▤</span>Rates</button></nav>
+  <nav class="nav"><button class="on" data-screen="home"><span>⌂</span>Home</button><button data-screen="sales"><span>＋</span>Sell</button><button data-screen="hub"><span>📺</span>TV Finder</button><button data-screen="offers"><span>🎁</span>Offers</button><button data-screen="coach"><span>🧠</span>Sales Coach</button><button data-screen="stats"><span>★</span>Stats</button></nav>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -334,10 +334,15 @@ function paydayFor(date){
 function go(screen){
   document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===screen));
   document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.screen===screen));
-  const titles={home:"Good morning",sales:"Add a sale",paydays:"Paydays",stats:"My Stats",records:"Records",hub:"Sales Hub",offers:"Offers",price:"Price Match",objections:"Objection Buster",demo:"Demo Mode",hisense:"Why Hisense?",commission:"My Commission",rates:"Commission Rates"};
+  const titles={home:"Today",sales:"Add a sale",stats:"My Stats",hub:"TV Finder",offers:"Offers",coach:"Sales Coach",commission:"My Commission"};
   document.getElementById("pageTitle").textContent=titles[screen]||"Hisense Sales App";
-  if(screen==="commission")renderHome(); if(screen==="home"){} if(screen==="sales"){document.getElementById("saleDate").value=localDateKey();renderHistory();} if(screen==="paydays")renderPaydays(); if(screen==="stats")renderStats(); if(screen==="records")renderRecords(); if(screen==="hub")renderHub(); if(screen==="offers")renderOffers(); if(screen==="price")renderPrice(); if(screen==="objections")renderObjections(); if(screen==="demo")renderDemo(); if(screen==="hisense")renderHisense(); if(screen==="coach")renderCoach();
- if(screen==="rates")renderRates();
+  if(screen==="home")renderHome();
+  if(screen==="commission")renderHome();
+  if(screen==="sales"){document.getElementById("saleDate").value=localDateKey();renderHistory();}
+  if(screen==="stats"){renderStats();renderPaydays();renderRecords();renderRates();}
+  if(screen==="hub"){renderHub();renderPrice();}
+  if(screen==="offers")renderOffers();
+  if(screen==="coach"){renderCoach();renderObjections();renderDemo();renderHisense();}
 }
 function renderHome(){
   const allTotal=total(), allUnits=units();
@@ -712,7 +717,28 @@ function renderCoach(){
  document.querySelectorAll('.pitchBtn').forEach(b=>b.onclick=()=>{pitchSeconds=Number(b.dataset.sec);document.querySelectorAll('.pitchBtn').forEach(x=>x.classList.toggle('on',x===b));renderPitch();});
  document.getElementById('findCustomer').onclick=findModelsForCustomer; renderDeal();renderCommissionOpportunity();renderDailyTarget();renderPitch();
 }
+function organiseSections(){
+  const move=(fromId,toId,title)=>{
+    const from=document.getElementById(fromId), to=document.getElementById(toId);
+    if(!from||!to)return;
+    const wrap=document.createElement("div"); wrap.className="combinedSection";
+    const h=document.createElement("div"); h.className="sectionHead"; h.innerHTML=`<h2>${title}</h2>`; wrap.appendChild(h);
+    while(from.firstChild) wrap.appendChild(from.firstChild);
+    to.appendChild(wrap); from.classList.remove("active"); from.style.display="none";
+  };
+  // Price Match lives inside TV Finder
+  move("price","hub","🔎 Price Match");
+  // Objections, demos and Why Hisense live inside Sales Coach
+  move("objections","coach","⚔️ Objection Buster");
+  move("demo","coach","🎤 Demo Coach");
+  move("hisense","coach","✨ Why Hisense?");
+  // Paydays, records and rates live inside Stats
+  move("paydays","stats","◷ Paydays");
+  move("records","stats","🏆 Personal Records");
+  move("rates","stats","▤ Commission Rates");
+}
 function init(){
+ organiseSections();
  document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.screen));
  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
  document.getElementById("homeAdd").onclick=()=>go("sales");
@@ -770,7 +796,7 @@ modelInput.onfocus=showModelSuggestions;
 modelInput.oninput=()=>{preview();showModelSuggestions()};
 modelSuggestions.onclick=e=>{const b=e.target.closest('[data-model]');if(!b)return;modelInput.value=b.dataset.model;modelSuggestions.style.display='none';preview();};
 document.addEventListener('click',e=>{if(!e.target.closest('.modelSuggest'))modelSuggestions.style.display='none'});
- renderHome();renderHistory();renderPaydays();renderStats();renderRecords();renderHub();renderRates();renderOffers();renderPrice();renderObjections();renderDemo();renderHisense();renderCoach();
+ renderHome();renderHistory();renderStats();renderPaydays();renderRecords();renderHub();renderOffers();renderPrice();renderObjections();renderDemo();renderHisense();renderCoach();
 }
 function preview(){const m=document.getElementById("model").value.trim(),d=document.getElementById("saleDate").value,r=rateFor(m,d);document.getElementById("preview").textContent=r==null?"—":money(r*qty);document.getElementById("previewMeta").textContent=r==null?"Unknown rate — check Rates":"£"+r+" per unit × "+qty}
 function addSale(){
