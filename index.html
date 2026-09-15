@@ -117,6 +117,21 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .home-total-val{background:#101d20;border:1px solid #20383b;border-radius:14px;padding:14px}.home-total-val .stat-label{font-size:12px;color:#9eb0b2;font-weight:800}.home-total-val .stat-value{font-size:30px;font-weight:900;margin-top:3px}.home-total-val .stat-sub{font-size:11px;color:#789092;margin-top:2px}
 .weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
 .weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
+</style><style id="statsVisibilityFix">
+#stats .stat-card{
+  background:#101d20 !important;
+  border:1px solid #31575b !important;
+  color:#f4f7f7 !important;
+  box-shadow:none !important;
+}
+#stats .stat-card span{color:#9db0b1 !important;opacity:1 !important}
+#stats .stat-card strong{color:#f4f7f7 !important}
+#stats .stats-hero h1{color:#f4f7f7 !important}
+#stats .stats-hero p{color:#b6c2c3 !important}
+#stats .pay-estimate{border-bottom-color:#31575b !important}
+#stats .pay-date{color:#f4f7f7 !important}
+#stats .pay-sub{color:#9db0b1 !important}
+#stats .pay-amount{color:#f1d79e !important}
 </style><style id="coachPanelPositionFix">
 #coach{scroll-margin-top:0}
 #coach .coach-panel{position:relative;top:auto;transform:none;margin-top:0}
@@ -1161,4 +1176,10 @@ document.addEventListener("DOMContentLoaded",function(){
   });
 });
 </script>
-</body></html>
+<script id="statsViewportFix">
+document.addEventListener("DOMContentLoaded",function(){
+ document.querySelectorAll('.nav button[data-screen="stats"]').forEach(function(btn){
+  btn.addEventListener("click",function(){setTimeout(function(){window.scrollTo(0,0)},0)},false);
+ });
+});
+</script></body></html>
