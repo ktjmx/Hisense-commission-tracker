@@ -763,6 +763,21 @@ function renderOffer(){
 }
 
 document.getElementById("offerModel").oninput=renderOffer;
+
+// View-offers buttons are created dynamically by TV Finder, so use one
+// delegated handler rather than binding only to the initial DOM.
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-offer-model]");
+  if(!b)return;
+  const model=b.dataset.offerModel;
+  if(!model)return;
+  e.preventDefault();
+  viewOffers(model);
+});
+
+// Populate the Offers model picker once the TV catalogue is defined.
+fillModels();
+
 const COACH={
 UR9:{
 pitch:"“If you want the picture to genuinely jump off the screen, this is the one I’d show you. The UR9 combines RGB colour technology with Mini LED control, so you’re getting incredibly vibrant colour, serious brightness and much tighter control over light and dark scenes. It’s not just a spec sheet — put sport, a film or a game on it and you can actually see what the technology is doing.”",
