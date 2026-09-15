@@ -376,8 +376,6 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   <div class="card">
     <div class="section-title">Check a model's deal</div>
     <div class="field"><label>Model</label><input id="offerModel" list="modelList" placeholder="e.g. 65UR8STUK"></div>
-    <div class="muted" style="margin:10px 0 6px">Quick U7 STUK deals</div>
-    <div id="u7OfferQuick" style="display:grid;gap:8px"></div>
     <div id="offerResult"></div>
   </div>
 
@@ -506,9 +504,9 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 function viewOffers(model){
   const input=document.getElementById("offerModel");
   if(input) input.value=model;
-  if(typeof showTab==="function") showTab("offers");
-  if(typeof renderOffers==="function") renderOffers();
-  const target=document.getElementById("offerResults") || document.getElementById("offersResults");
+  if(typeof go==="function") go("offers");
+  if(typeof renderOffer==="function") renderOffer();
+  const target=document.getElementById("offerResult");
   if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
@@ -765,25 +763,6 @@ function renderOffer(){
 }
 
 document.getElementById("offerModel").oninput=renderOffer;
-
-function renderU7OfferQuick(){
- const box=document.getElementById("u7OfferQuick");
- if(!box)return;
- const models=TVs.filter(x=>/^\d+U7STUK(?: PRO)?$/i.test(String(x[0])));
- box.innerHTML=models.map(x=>{
-   const d=deal(x[0],x[1]);
-   return `<button type="button" class="offer-match" style="text-align:left" data-u7-offer="${x[0]}"><b>${x[0]}</b><span class="muted">${x[1]==null?"Price TBC":money(x[1])} • Cashback ${money(d.cb)} • Trade-in ${money(d.trade)}</span></button>`;
- }).join("");
- box.querySelectorAll("[data-u7-offer]").forEach(b=>b.onclick=()=>{
-   const input=document.getElementById("offerModel");
-   input.value=b.dataset.u7Offer;
-   renderOffer();
-   input.scrollIntoView({behavior:"smooth",block:"center"});
- });
-}
-
-fillModels();
-renderU7OfferQuick();
 const COACH={
 UR9:{
 pitch:"“If you want the picture to genuinely jump off the screen, this is the one I’d show you. The UR9 combines RGB colour technology with Mini LED control, so you’re getting incredibly vibrant colour, serious brightness and much tighter control over light and dark scenes. It’s not just a spec sheet — put sport, a film or a game on it and you can actually see what the technology is doing.”",
@@ -1298,6 +1277,7 @@ const PMF_RETAILERS=[
   ["Hughes","https://www.google.com/search?q=site%3Ahughes.co.uk+Hisense+MODEL"],
   ["Marks Electrical","https://www.google.com/search?q=site%3Amarkselectrical.co.uk+Hisense+MODEL"],
   ["Peter Tyson","https://petertyson.co.uk/hisense-MODEL"],
+  ["Amazon UK","https://www.google.com/search?q=site%3Aamazon.co.uk+Hisense+MODEL"]
 ];
 const PMF_SNAPSHOT={
   "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799,note:"Latest verified web snapshot: £2,799 at Currys, John Lewis and Richer Sounds."},
@@ -1369,7 +1349,7 @@ function pmfPriceForRetailer(prices,name){
 }
 function pmfRetailerRows(model,snap){
   const livePrices=pmfLivePrices(model);
-  const names=[...new Set([...Object.keys(livePrices),...PMF_RETAILERS.map(x=>x[0])])].filter(name=>name!=="Amazon UK" && name!=="Amazon.co.uk");
+  const names=[...new Set([...Object.keys(livePrices),...PMF_RETAILERS.map(x=>x[0])])];
   return names.map(name=>{
     const price=pmfPriceForRetailer(livePrices,name);
     const snapPrice=snap[name]!=null?Number(snap[name]):null;
