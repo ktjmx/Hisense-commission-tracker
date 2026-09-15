@@ -171,14 +171,14 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 </style>
 
 <style id="priceMatchFinderStyles">
-.price-match-finder{margin-bottom:14px}
+.price-match-finder{margin-bottom:14px;overflow:visible}
 .pmf-input{width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:14px;margin:6px 0 8px;color:inherit}
-.pmf-autocomplete,.commission-autocomplete{position:relative}
-.pmf-suggestions{position:absolute;left:0;right:0;top:calc(100% - 3px);z-index:30;display:none;max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:0 0 14px 14px;background:var(--card);box-shadow:0 12px 30px rgba(0,0,0,.16)}
-.pmf-suggestion{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;color:inherit;padding:12px 13px;font-size:14px;font-weight:750}
+.pmf-autocomplete,.commission-autocomplete{position:relative;z-index:10}
+.pmf-suggestions{position:relative;left:auto;right:auto;top:auto;z-index:20;display:none;max-height:260px;overflow-y:auto;overflow-x:hidden;margin-top:-8px;border:1px solid #3a666a;border-top:0;border-radius:0 0 14px 14px;background:#0b2023 !important;color:#f5f8f7;box-shadow:0 16px 30px rgba(0,0,0,.35)}
+.pmf-suggestion{display:block;width:100%;min-height:52px;text-align:left;border:0;border-bottom:1px solid #244448;background:#0b2023 !important;color:#f5f8f7 !important;padding:11px 13px;font-size:14px;font-weight:750;line-height:1.25}
 .pmf-suggestion:last-child{border-bottom:0}
-.pmf-suggestion small{display:block;margin-top:2px;font-size:11px;font-weight:500;opacity:.65}
-.pmf-suggestion:active,.pmf-suggestion:hover{background:var(--soft)}
+.pmf-suggestion small{display:block;margin-top:4px;font-size:11px;font-weight:600;color:#b8c9ca;opacity:1}
+.pmf-suggestion:active,.pmf-suggestion:hover{background:#15383b !important}
 .pmf-btn{width:100%;padding:12px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;font-size:14px}
 .pmf-result{margin-top:10px;padding:12px;border-radius:14px;background:var(--soft);line-height:1.45}
 .pmf-good{font-weight:800}
@@ -1181,7 +1181,7 @@ let PMF_LIVE_DATA={};
 let PMF_LAST_UPDATED="";
 const PMF_DATA_URL="price-data.json";
 function pmfModelList(){
-  const isCurrentModel=m=>!normaliseModel(m).endsWith("QTUK");
+  const isCurrentModel=m=>{const n=normaliseModel(m);return !n.endsWith("QTUK")&&!/Q(?:PRO)?$/.test(n);};
   const source=(typeof TVs!=="undefined"?TVs:[]).map(x=>String(x[0]||"")).filter(Boolean).filter(isCurrentModel);
   const commission=(typeof R!=="undefined"?Object.keys(R):[]).filter(isCurrentModel);
   return [...new Set([...source,...commission])].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
@@ -1245,8 +1245,20 @@ async function loadPmfLiveData(){
     PMF_LAST_UPDATED="";
   }
 }
+function pmfBaseModel(model){
+  const exact=PMF_LIVE_DATA[model];
+  if(exact && exact.prices && typeof exact.prices==="object" && Object.keys(exact.prices).length) return model;
+  // Some current catalogue entries are labelled "PRO" while Price4 lists the
+  // same underlying retail model without the PRO suffix. Only use this fallback
+  // when the exact base model has real retailer prices in the feed.
+  const base=normaliseModel(model).replace(/\\s+PRO$/,"").trim();
+  const candidate=PMF_LIVE_DATA[base];
+  if(candidate && candidate.prices && typeof candidate.prices==="object" && Object.keys(candidate.prices).length) return base;
+  return model;
+}
 function pmfLivePrices(model){
-  const live=PMF_LIVE_DATA[model]||{};
+  const key=pmfBaseModel(model);
+  const live=PMF_LIVE_DATA[key]||{};
   return (live.prices && typeof live.prices === "object") ? live.prices : {};
 }
 function pmfPriceForRetailer(prices,name){
@@ -1271,21 +1283,23 @@ function checkPriceMatch(){
   const input=document.getElementById("pmfModel"),out=document.getElementById("pmfResult");
   const model=normaliseModel(input&&input.value);
   if(!model){out.innerHTML="Please choose a Hisense model first.";return;}
-  if(model.endsWith("QTUK")){
-    out.innerHTML="2025/QTUK models are excluded from Price Match Finder. Please choose a current STUK model.";
+  if(model.endsWith("QTUK")||/Q(?:PRO)?$/.test(model)){
+    out.innerHTML="2025/QTUK and Q-series models are excluded from Price Match Finder. Please choose a current STUK model.";
     return;
   }
   const source=(typeof TVs!=="undefined"?TVs:[]),item=source.find(x=>normaliseModel(x[0])===model);
   const hisense=item&&item[1]!=null?Number(item[1]):null;
   const snap=PMF_SNAPSHOT[model]||{};
+  const liveKey=pmfBaseModel(model);
   const livePrices=pmfLivePrices(model);
   const merged={...snap,...livePrices};
   const verified=Object.values(merged).filter(v=>typeof v==="number" && Number.isFinite(v)).length;
   const retailerRows=pmfRetailerRows(model,snap);
+  const baseNote=(liveKey!==model)?`<div class="pmf-note" style="margin-top:7px;opacity:.9"><strong>Price comparison matched to ${liveKey}</strong> — Price4 lists this retail model without the PRO label.</div>`:"";
   const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>Hisense app price</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
   const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:(verified?"Using the latest saved retailer prices":"No saved retailer price found yet");
   const feedNote=PMF_LAST_UPDATED?"Daily price feed loaded. Retailer stock, promotions and voucher prices can change, so confirm the retailer price before promising a match.":"This GitHub copy does not currently contain the optional daily price-data file. The retailer buttons below open live retailer searches; saved prices are shown where available.";
-  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div><div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
+  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div>${baseNote}<div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
 }
 function initPriceMatchFinder(){
   setupModelAutocomplete("pmfModel","pmfSuggestions",()=>{});
