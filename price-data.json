@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-15T11:54:28.879301+00:00",
+  "updatedAt": "2026-09-15T12:02:58.309697+00:00",
   "source": "Price4 UK price comparison",
   "models": {
     "43A6STUK": {
@@ -9,18 +9,30 @@
       "status": "not_found_on_price4"
     },
     "55A6STUK": {
-      "status": "no_prices_found",
-      "bestPrice": null,
-      "retailerCount": 0,
-      "prices": {},
+      "status": "ok",
+      "bestPrice": {
+        "retailer": "and",
+        "price": 180.0
+      },
+      "retailerCount": 2,
+      "prices": {
+        "and": 180.0,
+        "on RRP": 579.0
+      },
       "price4Updated": "14 September 2026 16:44 BST",
       "sourceUrl": "https://www.price4.co.uk/hisense-55a6stuk-61001.aspx"
     },
     "65A6STUK": {
-      "status": "no_prices_found",
-      "bestPrice": null,
-      "retailerCount": 0,
-      "prices": {},
+      "status": "ok",
+      "bestPrice": {
+        "retailer": "and",
+        "price": 300.0
+      },
+      "retailerCount": 2,
+      "prices": {
+        "and": 300.0,
+        "on RRP": 799.0
+      },
       "price4Updated": "15 September 2026 12:06 BST",
       "sourceUrl": "https://www.price4.co.uk/hisense-65a6stuk-60979.aspx"
     },
@@ -116,10 +128,16 @@
       "sourceUrl": "https://www.price4.co.uk/hisense-75u7stuk-60991.aspx"
     },
     "85U7STUK": {
-      "status": "no_prices_found",
-      "bestPrice": null,
-      "retailerCount": 0,
-      "prices": {},
+      "status": "ok",
+      "bestPrice": {
+        "retailer": "and",
+        "price": 1000.0
+      },
+      "retailerCount": 2,
+      "prices": {
+        "and": 1000.0,
+        "on RRP": 2999.0
+      },
       "price4Updated": "14 September 2026 16:43 BST",
       "sourceUrl": "https://www.price4.co.uk/hisense-85u7stuk-60992.aspx"
     },
