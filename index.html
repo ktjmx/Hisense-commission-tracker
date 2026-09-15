@@ -1181,10 +1181,17 @@ let PMF_LIVE_DATA={};
 let PMF_LAST_UPDATED="";
 const PMF_DATA_URL="price-data.json";
 function pmfModelList(){
-  const isCurrentModel=m=>{const n=normaliseModel(m);return !n.endsWith("QTUK")&&!/Q(?:PRO)?$/.test(n);};
-  const source=(typeof TVs!=="undefined"?TVs:[]).map(x=>String(x[0]||"")).filter(Boolean).filter(isCurrentModel);
-  const commission=(typeof R!=="undefined"?Object.keys(R):[]).filter(isCurrentModel);
-  return [...new Set([...source,...commission])].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  // Price Match Finder uses the current TV catalogue only.
+  // Do not pull from R (commission history), which contains legacy models.
+  const isCurrentModel=m=>{
+    const n=normaliseModel(m);
+    return Boolean(n) && !n.endsWith("QTUK");
+  };
+  const source=(typeof TVs!=="undefined"?TVs:[])
+    .map(x=>String(x[0]||""))
+    .filter(Boolean)
+    .filter(isCurrentModel);
+  return [...new Set(source)].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
 }
 function normaliseModel(v){return String(v||"").trim().toUpperCase();}
 function showPmfSuggestions(inputId,listId,onPick){
@@ -1288,6 +1295,10 @@ function checkPriceMatch(){
     return;
   }
   const source=(typeof TVs!=="undefined"?TVs:[]),item=source.find(x=>normaliseModel(x[0])===model);
+  if(!item || model.endsWith("QTUK")){
+    out.innerHTML="That model is not in the current Price Match Finder catalogue. Please choose a current STUK model.";
+    return;
+  }
   const hisense=item&&item[1]!=null?Number(item[1]):null;
   const snap=PMF_SNAPSHOT[model]||{};
   const liveKey=pmfBaseModel(model);
