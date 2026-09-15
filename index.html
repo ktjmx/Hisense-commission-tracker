@@ -171,14 +171,14 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 </style>
 
 <style id="priceMatchFinderStyles">
-.price-match-finder{margin-bottom:14px;overflow:visible}
+.price-match-finder{margin-bottom:14px}
 .pmf-input{width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:14px;margin:6px 0 8px;color:inherit}
-.pmf-autocomplete,.commission-autocomplete{position:relative;z-index:10}
-.pmf-suggestions{position:relative;left:auto;right:auto;top:auto;z-index:20;display:none;max-height:260px;overflow-y:auto;overflow-x:hidden;margin-top:-8px;border:1px solid #3a666a;border-top:0;border-radius:0 0 14px 14px;background:#0b2023 !important;color:#f5f8f7;box-shadow:0 16px 30px rgba(0,0,0,.35)}
-.pmf-suggestion{display:block;width:100%;min-height:52px;text-align:left;border:0;border-bottom:1px solid #244448;background:#0b2023 !important;color:#f5f8f7 !important;padding:11px 13px;font-size:14px;font-weight:750;line-height:1.25}
+.pmf-autocomplete,.commission-autocomplete{position:relative}
+.pmf-suggestions{position:absolute;left:0;right:0;top:calc(100% - 3px);z-index:30;display:none;max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:0 0 14px 14px;background:var(--card);box-shadow:0 12px 30px rgba(0,0,0,.16)}
+.pmf-suggestion{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;color:inherit;padding:12px 13px;font-size:14px;font-weight:750}
 .pmf-suggestion:last-child{border-bottom:0}
-.pmf-suggestion small{display:block;margin-top:4px;font-size:11px;font-weight:600;color:#b8c9ca;opacity:1}
-.pmf-suggestion:active,.pmf-suggestion:hover{background:#15383b !important}
+.pmf-suggestion small{display:block;margin-top:2px;font-size:11px;font-weight:500;opacity:.65}
+.pmf-suggestion:active,.pmf-suggestion:hover{background:var(--soft)}
 .pmf-btn{width:100%;padding:12px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;font-size:14px}
 .pmf-result{margin-top:10px;padding:12px;border-radius:14px;background:var(--soft);line-height:1.45}
 .pmf-good{font-weight:800}
@@ -225,57 +225,6 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .xbox-offer{margin-top:10px;padding:11px 12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055);border-radius:12px}
 .xbox-offer b{display:block;margin-bottom:3px}
 .xbox-offer span{display:block;font-size:12px;opacity:.82;line-height:1.4}
-</style>
-
-
-<style id="sellFormMobileFix">
-/* Keep the Sell form inputs inside the card on iPhone */
-#sales .card{overflow:visible}
-#sales .field{min-width:0}
-#sales .autocomplete-wrap{min-width:0;width:100%}
-#sales input,#sales select{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0}
-#sales input[type="date"]{-webkit-appearance:auto;appearance:auto}
-</style>
-
-
-<style id="sellDateFinalFix">
-/* Final iPhone fix: keep the Date field completely inside the Log a sale card */
-#sales .card{
-  box-sizing:border-box;
-  width:100%;
-  max-width:100%;
-  overflow:hidden;
-}
-#sales .field,
-#sales .field > input,
-#sales .field > .autocomplete-wrap{
-  box-sizing:border-box;
-  min-width:0;
-  max-width:100%;
-}
-#sales .field > input[type="date"]{
-  display:block;
-  width:100% !important;
-  max-width:100% !important;
-  min-width:0 !important;
-  inline-size:100% !important;
-  box-sizing:border-box !important;
-  margin-left:0 !important;
-  margin-right:0 !important;
-  padding-left:12px;
-  padding-right:12px;
-  font-size:16px;
-}
-@media (max-width: 600px){
-  #sales .card{
-    padding-left:16px;
-    padding-right:16px;
-  }
-  #sales .field > input[type="date"]{
-    width:100% !important;
-    max-width:100% !important;
-  }
-}
 </style>
 
 </head>
@@ -330,8 +279,8 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 <input id="saleModel" list="salesModelList" autocomplete="off" placeholder="Start typing a model…">
 <div id="saleModelPopup" class="autocomplete-popup"></div>
 </div>
-</div>
 <div class="field"><label>Sale value (£)</label><input id="salePrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Enter selling price"></div>
+</div>
 <div id="saleRate" class="sale-rate-pop"></div>
 <datalist id="salesModelList"><option value="43A6STUK"></option><option value="50A6STUK"></option><option value="55A6STUK"></option><option value="65A6STUK"></option><option value="43Q7STUK"></option><option value="50Q7STUK"></option><option value="55Q7STUK"></option><option value="65Q7STUK"></option><option value="75Q7STUK"></option><option value="85Q7STUK"></option><option value="43E7STUK PRO"></option><option value="50E7STUK PRO"></option><option value="55E7STUK PRO"></option><option value="65E7STUK PRO"></option><option value="75E7STUK PRO"></option><option value="85E7STUK PRO"></option><option value="100E7STUK PRO"></option><option value="50U7STUK"></option><option value="55U7STUK"></option><option value="65U7STUK"></option><option value="75U7STUK"></option><option value="85U7STUK"></option><option value="100U7STUK"></option><option value="55U7STUK PRO"></option><option value="65U7STUK PRO"></option><option value="75U7STUK PRO"></option><option value="85U7STUK PRO"></option><option value="100U7STUK PRO"></option><option value="55U8QTUK"></option><option value="65U8QTUK"></option><option value="75U8QTUK"></option><option value="85U8QTUK"></option><option value="100U8QTUK"></option><option value="55UR8STUK"></option><option value="65UR8STUK"></option><option value="75UR8STUK"></option><option value="85UR8STUK"></option><option value="100UR8STUK"></option><option value="65UR9STUK"></option><option value="75UR9STUK"></option><option value="85UR9STUK"></option></datalist>
 <datalist id="modelList"></datalist>
@@ -1232,17 +1181,9 @@ let PMF_LIVE_DATA={};
 let PMF_LAST_UPDATED="";
 const PMF_DATA_URL="price-data.json";
 function pmfModelList(){
-  // Price Match Finder uses the current TV catalogue only.
-  // Do not pull from R (commission history), which contains legacy models.
-  const isCurrentModel=m=>{
-    const n=normaliseModel(m);
-    return Boolean(n) && !n.endsWith("QTUK");
-  };
-  const source=(typeof TVs!=="undefined"?TVs:[])
-    .map(x=>String(x[0]||""))
-    .filter(Boolean)
-    .filter(isCurrentModel);
-  return [...new Set(source)].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  const source=(typeof TVs!=="undefined"?TVs:[]).map(x=>String(x[0]||"")).filter(Boolean);
+  const commission=(typeof R!=="undefined"?Object.keys(R):[]);
+  return [...new Set([...source,...commission])].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
 }
 function normaliseModel(v){return String(v||"").trim().toUpperCase();}
 function showPmfSuggestions(inputId,listId,onPick){
@@ -1280,23 +1221,18 @@ const PMF_RETAILERS=[
   ["Amazon UK","https://www.google.com/search?q=site%3Aamazon.co.uk+Hisense+MODEL"]
 ];
 const PMF_SNAPSHOT={
-  "43A6STUK":{"Richer Sounds":279,note:"Verified Richer Sounds snapshot: £279."},
-  "50A6STUK":{"Richer Sounds":329,note:"Verified Richer Sounds snapshot: £329."},
+  "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799,note:"Latest verified web snapshot: £2,799 at Currys, John Lewis and Richer Sounds."},
+  "65UR9STUK":{"Richer Sounds":1999,note:"Latest verified web snapshot: £1,999 at Richer Sounds."},
   "55A6STUK":{"Amazon UK":399,"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399,note:"Latest verified web snapshot showed £399 at the listed retailers."},
-  "43Q7STUK":{"Richer Sounds":349,note:"Verified Richer Sounds snapshot: £349."},
-  "55Q7STUK":{"Richer Sounds":499,note:"Latest verified web snapshot: £499 at Richer Sounds."},
-  "75Q7STUK":{"Richer Sounds":899,note:"Verified Richer Sounds snapshot: £899."},
   "55U7STUK":{"Richer Sounds":899,note:"Latest verified web snapshot: £899 at Richer Sounds."},
+  "55Q7STUK":{"Richer Sounds":499,note:"Latest verified web snapshot: £499 at Richer Sounds."},
   "65U7STUK":{"Currys":1199,note:"Latest verified web snapshot: £1,199 at Currys."},
-  "55U7STUK PRO":{"AO":999,"Argos":999,"Currys":999,"Hughes":999,"John Lewis":999,"Marks Electrical":999,"Richer Sounds":999,note:"Verified retailer snapshot: £999 at the listed UK retailers."},
-  "65U7STUK PRO":{"AO":1299,"Argos":1299,"Currys":1299,"Hughes":1299,"John Lewis":1299,"Peter Tyson":1299,"Richer Sounds":1299,"Marks Electrical":1799,note:"Verified retailer snapshot: £1,299 at most listed retailers; Marks Electrical £1,799."},
-  "75U7STUK PRO":{"Argos":1499,"Hughes":1499,"John Lewis":1499,"Marks Electrical":1499,"Richer Sounds":1499,note:"Verified retailer snapshot: £1,499 at the listed UK retailers."},
-  "85U7STUK PRO":{"Richer Sounds":1999,note:"Verified Richer Sounds snapshot: £1,999."},
-  "100U7STUK PRO":{"Richer Sounds":3799,note:"Verified Richer Sounds snapshot: £3,799."},
-  "55UR8STUK":{"Currys":1299,"John Lewis":1299,"Richer Sounds":1299,note:"Verified retailer snapshot: £1,299 at the listed UK retailers."},
-  "65UR9STUK":{"Currys":1999,"John Lewis":1999,"Richer Sounds":1999,note:"Verified retailer snapshot: £1,999 at the listed UK retailers."},
-  "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799,note:"Verified retailer snapshot: £2,799 at the listed UK retailers."},
-  "85UR9STUK":{"Currys":3499,"John Lewis":3499,"Richer Sounds":3499,note:"Verified retailer snapshot: £3,499 at the listed UK retailers."}
+
+  /* Peter Tyson fallback prices — used even when price-data.json is missing. */
+  "55U7STUK PRO":{"Peter Tyson":999,note:"Peter Tyson verified price: £999.00."},
+  "65U7STUK PRO":{"Peter Tyson":1299,note:"Peter Tyson verified price: £1,299.00."},
+  "85U7STUK PRO":{"Peter Tyson":1999,note:"Peter Tyson verified price: £1,999.00."},
+  "100U7STUK PRO":{"Peter Tyson":3799,note:"Peter Tyson verified price: £3,799.00."}
 };
 function retailerSearchUrl(template,model){return template.replace("MODEL",encodeURIComponent(model));}
 async function loadPmfLiveData(){
@@ -1314,65 +1250,32 @@ async function loadPmfLiveData(){
     PMF_LAST_UPDATED="";
   }
 }
-function pmfBaseModel(model){
-  const exact=PMF_LIVE_DATA[model];
-  if(exact && exact.prices && typeof exact.prices==="object" && Object.keys(exact.prices).length) return model;
-  // Some current catalogue entries are labelled "PRO" while Price4 lists the
-  // same underlying retail model without the PRO suffix. Only use this fallback
-  // when the exact base model has real retailer prices in the feed.
-  const base=normaliseModel(model).replace(/\\s+PRO$/,"").trim();
-  const candidate=PMF_LIVE_DATA[base];
-  if(candidate && candidate.prices && typeof candidate.prices==="object" && Object.keys(candidate.prices).length) return base;
-  return model;
-}
-function pmfLivePrices(model){
-  const key=pmfBaseModel(model);
-  const live=PMF_LIVE_DATA[key]||{};
-  return (live.prices && typeof live.prices === "object") ? live.prices : {};
-}
-function pmfPriceForRetailer(prices,name){
-  if(prices[name]!=null) return Number(prices[name]);
-  const aliases={"Amazon UK":"Amazon.co.uk","Amazon.co.uk":"Amazon UK"};
-  const alias=aliases[name];
-  return alias && prices[alias]!=null ? Number(prices[alias]) : null;
-}
 function pmfRetailerRows(model,snap){
-  const livePrices=pmfLivePrices(model);
-  const names=[...new Set([...Object.keys(livePrices),...PMF_RETAILERS.map(x=>x[0])])];
+  const live=PMF_LIVE_DATA[model]||{};
+  const merged={...snap,...live};
+  const names=[...new Set([...Object.keys(live),...PMF_RETAILERS.map(x=>x[0])])];
   return names.map(name=>{
-    const price=pmfPriceForRetailer(livePrices,name);
-    const snapPrice=snap[name]!=null?Number(snap[name]):null;
-    const shownPrice=price!=null?price:snapPrice;
+    const price=merged[name];
     const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
-    const priceText=shownPrice!=null?`£${shownPrice.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
-    return `<div class="pmf-retailer"><span>${name}${shownPrice!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
+    const priceText=price!=null?`£${Number(price).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
+    return `<div class="pmf-retailer"><span>${name}${price!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
   }).join("");
 }
 function checkPriceMatch(){
   const input=document.getElementById("pmfModel"),out=document.getElementById("pmfResult");
   const model=normaliseModel(input&&input.value);
   if(!model){out.innerHTML="Please choose a Hisense model first.";return;}
-  if(model.endsWith("QTUK")||/Q(?:PRO)?$/.test(model)){
-    out.innerHTML="2025/QTUK and Q-series models are excluded from Price Match Finder. Please choose a current STUK model.";
-    return;
-  }
   const source=(typeof TVs!=="undefined"?TVs:[]),item=source.find(x=>normaliseModel(x[0])===model);
-  if(!item || model.endsWith("QTUK")){
-    out.innerHTML="That model is not in the current Price Match Finder catalogue. Please choose a current STUK model.";
-    return;
-  }
   const hisense=item&&item[1]!=null?Number(item[1]):null;
   const snap=PMF_SNAPSHOT[model]||{};
-  const liveKey=pmfBaseModel(model);
-  const livePrices=pmfLivePrices(model);
-  const merged={...snap,...livePrices};
+  const live=PMF_LIVE_DATA[model]||{};
+  const merged={...snap,...live};
   const verified=Object.values(merged).filter(v=>typeof v==="number" && Number.isFinite(v)).length;
   const retailerRows=pmfRetailerRows(model,snap);
-  const baseNote=(liveKey!==model)?`<div class="pmf-note" style="margin-top:7px;opacity:.9"><strong>Price comparison matched to ${liveKey}</strong> — Price4 lists this retail model without the PRO label.</div>`:"";
   const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>Hisense app price</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
   const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:(verified?"Using the latest saved retailer prices":"No saved retailer price found yet");
   const feedNote=PMF_LAST_UPDATED?"Daily price feed loaded. Retailer stock, promotions and voucher prices can change, so confirm the retailer price before promising a match.":"This GitHub copy does not currently contain the optional daily price-data file. The retailer buttons below open live retailer searches; saved prices are shown where available.";
-  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div>${baseNote}<div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
+  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div><div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
 }
 function initPriceMatchFinder(){
   setupModelAutocomplete("pmfModel","pmfSuggestions",()=>{});
