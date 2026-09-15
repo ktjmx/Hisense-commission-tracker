@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-09-15T13:37:02.749493+00:00",
-  "source": "Price4 UK price comparison + Richer Sounds fallback",
+  "updatedAt": "2026-09-15T13:54:05.225084+00:00",
+  "source": "Price4 UK price comparison + Richer Sounds direct fallback",
   "models": {
     "43A6STUK": {
-      "status": "not_found_on_price4",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -14,7 +14,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-43a6stuk/"
     },
     "50A6STUK": {
-      "status": "not_found_on_price4",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -78,7 +78,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-65a6stuk/"
     },
     "43Q7STUK": {
-      "status": "not_found_on_price4",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -160,7 +160,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-65q7stuk/"
     },
     "75Q7STUK": {
-      "status": "not_found_on_price4",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -194,7 +194,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-85q7stuk/"
     },
     "43E7STUK PRO": {
-      "status": "no_prices_found",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -445,7 +445,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-100u7stuk/"
     },
     "55U7STUK PRO": {
-      "status": "no_prices_found",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -472,7 +472,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-65u7stuk-pro/"
     },
     "75U7STUK PRO": {
-      "status": "no_prices_found",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -499,7 +499,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-85u7stuk-pro/"
     },
     "100U7STUK PRO": {
-      "status": "no_prices_found",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -510,7 +510,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-100u7stuk-pro/"
     },
     "55UR8STUK": {
-      "status": "not_found_on_price4",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -625,7 +625,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-65ur9stuk/"
     },
     "75UR9STUK": {
-      "status": "not_found_on_price4",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
@@ -636,7 +636,7 @@
       "richerUrl": "https://www.richersounds.com/hisense-75ur9stuk/"
     },
     "85UR9STUK": {
-      "status": "not_found_on_price4",
+      "status": "not_found",
       "bestPrice": null,
       "retailerCount": 0,
       "prices": {},
