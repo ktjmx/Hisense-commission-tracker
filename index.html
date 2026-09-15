@@ -1181,8 +1181,9 @@ let PMF_LIVE_DATA={};
 let PMF_LAST_UPDATED="";
 const PMF_DATA_URL="price-data.json";
 function pmfModelList(){
-  const source=(typeof TVs!=="undefined"?TVs:[]).map(x=>String(x[0]||"")).filter(Boolean);
-  const commission=(typeof R!=="undefined"?Object.keys(R):[]);
+  const isCurrentModel=m=>!normaliseModel(m).endsWith("QTUK");
+  const source=(typeof TVs!=="undefined"?TVs:[]).map(x=>String(x[0]||"")).filter(Boolean).filter(isCurrentModel);
+  const commission=(typeof R!=="undefined"?Object.keys(R):[]).filter(isCurrentModel);
   return [...new Set([...source,...commission])].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
 }
 function normaliseModel(v){return String(v||"").trim().toUpperCase();}
@@ -1244,26 +1245,41 @@ async function loadPmfLiveData(){
     PMF_LAST_UPDATED="";
   }
 }
-function pmfRetailerRows(model,snap){
+function pmfLivePrices(model){
   const live=PMF_LIVE_DATA[model]||{};
-  const merged={...snap,...live};
-  const names=[...new Set([...Object.keys(live),...PMF_RETAILERS.map(x=>x[0])])];
+  return (live.prices && typeof live.prices === "object") ? live.prices : {};
+}
+function pmfPriceForRetailer(prices,name){
+  if(prices[name]!=null) return Number(prices[name]);
+  const aliases={"Amazon UK":"Amazon.co.uk","Amazon.co.uk":"Amazon UK"};
+  const alias=aliases[name];
+  return alias && prices[alias]!=null ? Number(prices[alias]) : null;
+}
+function pmfRetailerRows(model,snap){
+  const livePrices=pmfLivePrices(model);
+  const names=[...new Set([...Object.keys(livePrices),...PMF_RETAILERS.map(x=>x[0])])];
   return names.map(name=>{
-    const price=merged[name];
+    const price=pmfPriceForRetailer(livePrices,name);
+    const snapPrice=snap[name]!=null?Number(snap[name]):null;
+    const shownPrice=price!=null?price:snapPrice;
     const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
-    const priceText=price!=null?`£${Number(price).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
-    return `<div class="pmf-retailer"><span>${name}${price!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
+    const priceText=shownPrice!=null?`£${shownPrice.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
+    return `<div class="pmf-retailer"><span>${name}${shownPrice!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
   }).join("");
 }
 function checkPriceMatch(){
   const input=document.getElementById("pmfModel"),out=document.getElementById("pmfResult");
   const model=normaliseModel(input&&input.value);
   if(!model){out.innerHTML="Please choose a Hisense model first.";return;}
+  if(model.endsWith("QTUK")){
+    out.innerHTML="2025/QTUK models are excluded from Price Match Finder. Please choose a current STUK model.";
+    return;
+  }
   const source=(typeof TVs!=="undefined"?TVs:[]),item=source.find(x=>normaliseModel(x[0])===model);
   const hisense=item&&item[1]!=null?Number(item[1]):null;
   const snap=PMF_SNAPSHOT[model]||{};
-  const live=PMF_LIVE_DATA[model]||{};
-  const merged={...snap,...live};
+  const livePrices=pmfLivePrices(model);
+  const merged={...snap,...livePrices};
   const verified=Object.values(merged).filter(v=>typeof v==="number" && Number.isFinite(v)).length;
   const retailerRows=pmfRetailerRows(model,snap);
   const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>Hisense app price</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
