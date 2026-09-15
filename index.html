@@ -839,76 +839,76 @@ const STANDARD_COMPARE_CATEGORIES=[
 
 const HISENSE_COMPARE_SPECS={
  "UR9":{
-  "Display type":"RGB Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"180Hz","Backlight":"RGB Mini LED","HDR":"Dolby Vision 2 / HDR10+ / HLG","Colour":"RGB Mini LED","Audio output":"90W","Speaker system":"4.1.2-channel surround","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / ≤7ms input lag","Anti-reflection":"Anti-Reflection & Glare-Free","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+  "Display type":"RGB Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"180Hz","Backlight":"RGB Mini LED","HDR":"Dolby Vision 2 / HDR10+ / HLG","Colour":"RGB Mini LED","Audio output":"90W","Speaker system":"4.1.2-channel","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / VRR / ≤7ms input lag","Anti-reflection":"Anti-Reflection & Glare-Free","HDMI":"4 × HDMI 2.1"
  },
  "UR8":{
-  "Display type":"RGB Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"180Hz","Backlight":"RGB Mini LED","HDR":"Dolby Vision 2 / HDR10+ / HLG","Colour":"RGB Mini LED","Audio output":"50W","Speaker system":"2.1.2-channel surround","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / ≤7ms input lag","Anti-reflection":"Anti-Reflection & Glare-Free","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+  "Display type":"RGB Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"180Hz","Backlight":"RGB Mini LED","HDR":"Dolby Vision 2 / HDR10+ / HLG","Colour":"RGB Mini LED","Audio output":"50W","Speaker system":"2.1.2-channel","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / VRR / ≤7ms input lag","Anti-reflection":"Anti-Reflection & Glare-Free","HDMI":"4 × HDMI 2.1"
  },
  "U8":{
-  "Display type":"Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"Up to 165Hz (size/model dependent)","Backlight":"Mini LED local dimming","HDR":"Dolby Vision IQ / HDR10+ / HLG","Colour":"Quantum Dot Colour","Audio output":"70W (65-inch reference)","Speaker system":"2.1.2-channel surround","Dolby Atmos":"Yes","Gaming":"High refresh gaming / VRR","Anti-reflection":"Model dependent","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+  "Display type":"Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"165Hz","Backlight":"Mini LED local dimming","HDR":"Dolby Vision IQ / HDR10+ / HLG","Colour":"Quantum Dot Colour","Audio output":"70W (65-inch reference)","Speaker system":"2.1.2-channel","Dolby Atmos":"Yes","Gaming":"4K 144Hz VRR / ALLM","Anti-reflection":"Model/size dependent","HDMI":"4 × HDMI 2.1"
  },
  "U7 Pro":{
-  "Display type":"Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"165Hz","Backlight":"Mini LED","HDR":"HDR10+ / Dolby Vision / HLG","Colour":"Quantum Dot Colour","Audio output":"50W","Speaker system":"2.1.2-channel surround","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / up to 165Hz VRR","Anti-reflection":"Anti-Reflection & Glare-Free","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+  "Display type":"Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"165Hz","Backlight":"Mini LED","HDR":"HDR10+ / Dolby Vision IQ / HLG","Colour":"Quantum Dot Colour","Audio output":"50W","Speaker system":"2.1.2-channel","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / up to 165Hz VRR","Anti-reflection":"Anti-Reflection & Glare-Free","HDMI":"4 × HDMI 2.1"
  },
  "U7":{
-  "Display type":"Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"Up to 144Hz (size/model dependent)","Backlight":"Mini LED","HDR":"HDR10+ / Dolby Vision / HLG","Colour":"Quantum Dot Colour","Audio output":"40W","Speaker system":"2.1-channel","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / ≤4ms input lag on supported model","Anti-reflection":"Model dependent","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+  "Display type":"Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"144Hz","Backlight":"Mini LED","HDR":"HDR10+ / Dolby Vision IQ / HLG","Colour":"Quantum Dot Colour","Audio output":"40W (model/size dependent)","Speaker system":"2.1-channel with built-in subwoofer","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / 144Hz VRR / ≤4ms input lag on supported model","Anti-reflection":"Model/size dependent","HDMI":"4 × HDMI 2.1"
  }
 };
 
-const COMPETITOR_AUDIO={
- "Samsung S95F OLED":["70W","4.2.2CH","Yes"],
- "Samsung S90F OLED":["Not verified for this comparison","Not verified","Yes"],
- "Samsung QN90F Neo QLED":["40W on 50-inch reference","2.2CH","Yes"],
- "LG C6 OLED":["40W","2.2-channel","Yes"],
- "LG G6 OLED":["Not verified for this comparison","Not verified","Yes"],
- "LG QNED range":["Model dependent","Model dependent","Model dependent"],
- "Sony Bravia 9 II True RGB":["Not verified for this comparison","Acoustic Multi-Audio+","Not verified"],
- "Sony Bravia 7 II True RGB":["Not verified for this comparison","Acoustic Multi-Audio+","Not verified"],
- "Sony Bravia 8 II OLED":["Not verified for this comparison","Built-in TV audio","Not verified"],
- "Sony Bravia 5 Mini LED":["Not verified for this comparison","Built-in TV audio","Not verified"],
- "TCL C8K QD-Mini LED":["Model/size dependent","Model/size dependent","Yes"],
- "TCL C7K QD-Mini LED":["60W on 65-inch reference","2.0-channel on 50-inch / higher configurations on larger sizes","Yes"],
- "TCL X11L SQD Mini LED":["Model/size dependent","Model/size dependent","Yes"]
+/* Manufacturer-verified comparison data. Values marked model/size dependent are used where the named range has different specifications across sizes. */
+const COMPETITOR_COMPARE_SPECS={
+ "Samsung S95F OLED":{
+  "Display type":"OLED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"100Hz / up to 165Hz","Backlight":"Self-illuminating OLED pixels","HDR":"OLED HDR Pro / HDR10+","Colour":"OLED colour / 100% colour volume","Audio output":"70W","Speaker system":"4.2.2CH / OTS+","Dolby Atmos":"Yes","Gaming":"4K 165Hz / VRR / FreeSync Premium Pro / ALLM","Anti-reflection":"OLED Glare Free","HDMI":"4 × HDMI 2.1"
+ },
+ "Samsung S90F OLED":{
+  "Display type":"OLED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"100Hz / up to 144Hz","Backlight":"Self-illuminating OLED pixels","HDR":"OLED HDR+ / HDR10+","Colour":"OLED colour / wide colour volume","Audio output":"40W","Speaker system":"2.1CH / OTS Lite","Dolby Atmos":"Yes","Gaming":"4K 144Hz / VRR / FreeSync Premium Pro / ALLM","Anti-reflection":"Yes","HDMI":"4 × HDMI 2.1"
+ },
+ "Samsung QN90F Neo QLED":{
+  "Display type":"Neo QLED / Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"120Hz / up to 165Hz","Backlight":"Quantum Matrix Mini LED","HDR":"Neo Quantum HDR / HDR10+","Colour":"Quantum Dot / Color Booster Pro","Audio output":"40W","Speaker system":"2.2CH / OTS Lite","Dolby Atmos":"Yes","Gaming":"4K 165Hz / VRR / FreeSync Premium Pro / ALLM","Anti-reflection":"Glare Free","HDMI":"4 × HDMI 2.1"
+ },
+ "LG C6 OLED":{
+  "Display type":"4K OLED evo","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"120Hz native / VRR up to 165Hz","Backlight":"Pixel-level OLED dimming","HDR":"Dolby Vision / HDR10 / HLG","Colour":"Perfect Colour / wide colour gamut","Audio output":"40W","Speaker system":"2.2-channel","Dolby Atmos":"Yes","Gaming":"4K 120Hz / VRR up to 165Hz / G-Sync / FreeSync","Anti-reflection":"OLED screen finish","HDMI":"4 × HDMI 2.1"
+ },
+ "LG G6 OLED":{
+  "Display type":"4K OLED evo","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"120Hz native / VRR up to 165Hz","Backlight":"Pixel-level OLED dimming","HDR":"Dolby Vision / HDR10 / HLG","Colour":"Perfect Colour / wide colour gamut","Audio output":"60W","Speaker system":"4.2-channel","Dolby Atmos":"Yes","Gaming":"4K 120Hz / VRR up to 165Hz / G-Sync / FreeSync","Anti-reflection":"OLED screen finish","HDMI":"4 × HDMI 2.1"
+ },
+ "LG QNED range":{
+  "Display type":"QNED LCD / Mini LED on selected models","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"Model/size dependent — up to 144Hz+ on selected models","Backlight":"Model/size dependent — Mini LED on selected models","HDR":"Dolby Vision / HDR10 / HLG — model dependent","Colour":"Quantum Dot / NanoCell colour — model dependent","Audio output":"Model/size dependent","Speaker system":"Model/size dependent","Dolby Atmos":"Model dependent","Gaming":"4K 120Hz+ / VRR / ALLM on selected models","Anti-reflection":"Model/size dependent","HDMI":"4 × HDMI — model dependent"
+ },
+ "Sony Bravia 9 II True RGB":{
+  "Display type":"LCD / True RGB Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"120Hz","Backlight":"RGB LED / Mini LED local dimming","HDR":"HDR10 / HLG / Dolby Vision","Colour":"Independently driven RGB LEDs / TRILUMINOS Max","Audio output":"80W","Speaker system":"Acoustic Multi-Audio+ / 8 speaker units","Dolby Atmos":"Yes","Gaming":"4K 120Hz / VRR / ALLM / SBTM","Anti-reflection":"Immersive Black Screen Pro / low reflection","HDMI":"4 × HDMI 2.1"
+ },
+ "Sony Bravia 7 II True RGB":{
+  "Display type":"LCD / True RGB Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"120Hz","Backlight":"RGB LED / Mini LED local dimming","HDR":"HDR10 / HLG / Dolby Vision","Colour":"Independently driven RGB LEDs / TRILUMINOS Max","Audio output":"40W","Speaker system":"Acoustic Multi-Audio+ / X-Balanced speakers","Dolby Atmos":"Yes","Gaming":"4K 120Hz / VRR / ALLM / SBTM","Anti-reflection":"New anti-glare and reflection screen","HDMI":"4 × HDMI 2.1"
+ },
+ "Sony Bravia 8 II OLED":{
+  "Display type":"OLED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"120Hz","Backlight":"Self-emitting OLED pixels","HDR":"HDR10 / HLG / Dolby Vision","Colour":"TRILUMINOS Max / Live Colour","Audio output":"50W","Speaker system":"Acoustic Surface Audio+","Dolby Atmos":"Yes","Gaming":"4K 120Hz / VRR / ALLM","Anti-reflection":"OLED screen finish","HDMI":"4 × HDMI 2.1"
+ },
+ "Sony Bravia 5 Mini LED":{
+  "Display type":"Mini LED LCD","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"100/120Hz","Backlight":"Full Array Mini LED / local dimming","HDR":"HDR10 / HLG / Dolby Vision","Colour":"TRILUMINOS Pro / Live Colour","Audio output":"40W","Speaker system":"Acoustic Multi-Audio / X-Balanced speakers","Dolby Atmos":"Yes","Gaming":"4K 120Hz / VRR / ALLM","Anti-reflection":"Standard screen finish","HDMI":"4 × HDMI 2.1"
+ },
+ "TCL C8K QD-Mini LED":{
+  "Display type":"QD-Mini LED / QLED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"144Hz native","Backlight":"Full Array Local Dimming Mini LED","HDR":"HDR 4500 nits / HDR10+ / Dolby Vision","Colour":"Quantum Dot / wide colour gamut","Audio output":"90W (65-inch reference)","Speaker system":"ONKYO / Bang & Olufsen audio system","Dolby Atmos":"Yes","Gaming":"4K 144Hz / VRR / ALLM / Game Master","Anti-reflection":"Model/size dependent","HDMI":"4 × HDMI 2.1"
+ },
+ "TCL C7K QD-Mini LED":{
+  "Display type":"QD-Mini LED / QLED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"144Hz native","Backlight":"Full Array Local Dimming Mini LED","HDR":"HDR up to 2600–3000 nits / HDR10+ / Dolby Vision","Colour":"Quantum Dot / CrystGlow HVA panel","Audio output":"60W (65-inch reference)","Speaker system":"ONKYO / Bang & Olufsen audio system","Dolby Atmos":"Yes","Gaming":"4K 144Hz / VRR / ALLM / Game Master","Anti-reflection":"Model/size dependent","HDMI":"4 × HDMI 2.1"
+ },
+ "TCL X11L SQD Mini LED":{
+  "Display type":"SQD-Mini LED / Super QLED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"Model/size dependent high-refresh gaming panel","Backlight":"SQD Mini LED / up to 14,400 dimming zones","HDR":"Up to 10,000 nits HDR","Colour":"Up to 100% BT.2020 wide colour gamut","Audio output":"Model/size dependent","Speaker system":"Bang & Olufsen premium audio","Dolby Atmos":"Yes","Gaming":"High-refresh 4K gaming / VRR / ALLM","Anti-reflection":"Model/size dependent","HDMI":"4 × HDMI 2.1"
+ }
 };
+
+/* Keep this separate for any older code paths that reference competitor audio. */
+const COMPETITOR_AUDIO=Object.fromEntries(Object.entries(COMPETITOR_COMPARE_SPECS).map(([name,x])=>[name,[x["Audio output"],x["Speaker system"],x["Dolby Atmos"]]]));
 
 function competitorValue(name,key,x){
- const aliases={
-  "Display type":["Display","Type"],
-  "Resolution":["Resolution"],
-  "Refresh rate":["Refresh rate","Frequency"],
-  "Backlight":["Backlight"],
-  "HDR":["HDR"],
-  "Colour":["Colour","Display","Wide Colour Gamut"],
-  "Audio output":["Audio"],
-  "Speaker system":["Audio"],
-  "Dolby Atmos":["Audio"],
-  "Gaming":["Gaming"],
-  "Anti-reflection":["Anti Reflection","Anti-reflection"],
-  "HDMI":["HDMI"]
- };
- if(key==="Resolution")return "4K Ultra HD (3840 × 2160)";
- if(key==="Audio output")return (COMPETITOR_AUDIO[name]||[])[0]||"Not listed";
- if(key==="Speaker system")return (COMPETITOR_AUDIO[name]||[])[1]||"Not listed";
- if(key==="Dolby Atmos")return (COMPETITOR_AUDIO[name]||[])[2]||"Not listed";
- if(key==="Backlight" && x?.specs){
-   const d=x.specs.find(r=>r[0]==="Backlight"); if(d)return d[1];
- }
- if(key==="Anti-reflection")return "Not listed";
- if(key==="Colour" && x?.specs){
-   const d=x.specs.find(r=>r[0]==="Colour"); if(d)return d[1];
- }
- if(x?.specs){
-   for(const a of aliases[key]||[]){
-    const d=x.specs.find(r=>String(r[0]).toLowerCase()===a.toLowerCase());
-    if(d)return d[1];
-   }
- }
- return "Not listed";
+ const specs=COMPETITOR_COMPARE_SPECS[name]||{};
+ return specs[key] || "Model/size dependent";
 }
 
 function renderComparisonRows(name,model,x){
  const h=HISENSE_COMPARE_SPECS[model]||{};
- return STANDARD_COMPARE_CATEGORIES.map(cat=>`<div class="compare-row"><div class="compare-category">${cat}</div><div class="compare-value">${competitorValue(name,cat,x)}</div><div class="compare-value hisense-value">${h[cat]||"Not listed"}</div></div>`).join("");
+ return STANDARD_COMPARE_CATEGORIES.map(cat=>`<div class="compare-row"><div class="compare-category">${cat}</div><div class="compare-value">${competitorValue(name,cat,x)}</div><div class="compare-value hisense-value">${h[cat]||"Model/size dependent"}</div></div>`).join("");
 }
 
 function renderExactCompetitor(){
@@ -923,7 +923,7 @@ function renderExactCompetitor(){
  </div>
  <h3 style="margin-top:14px">Why go for Hisense?</h3>
  <ul id="hisenseReasons">${(x.reasons[model]||[]).map(r=>`<li>${r}</li>`).join("")}</ul>
- <p class="compare-note">Where a specification varies by screen size or the exact model is not verified, the app labels it rather than guessing.</p>`;
+ <p class="compare-note">Specs are aligned category-for-category. Values are based on manufacturer specifications; where a range genuinely varies by size/model, the app says so rather than presenting one size as universal.</p>`;
 }
 function renderHisenseAgainstCompetitor(){
  const name=document.getElementById("competitorModelSelect").value,model=document.getElementById("hisenseCompareSelect").value,x=EXACT_COMPETITOR_SPECS[name],out=document.getElementById("exactCompetitorResult");
@@ -1230,13 +1230,19 @@ const PMF_SNAPSHOT={
 };
 function retailerSearchUrl(template,model){return template.replace("MODEL",encodeURIComponent(model));}
 async function loadPmfLiveData(){
+  // GitHub Pages serves the app as a static site. If the optional daily
+  // price-data.json file has not been uploaded alongside index.html, fall
+  // back to the built-in verified snapshots instead of showing an empty feed.
   try{
     const res=await fetch(`${PMF_DATA_URL}?v=${Date.now()}`,{cache:"no-store"});
     if(!res.ok)throw new Error("price-data unavailable");
     const data=await res.json();
     PMF_LIVE_DATA=data.models||{};
     PMF_LAST_UPDATED=data.updatedAt||"";
-  }catch(e){PMF_LIVE_DATA={};PMF_LAST_UPDATED="";}
+  }catch(e){
+    PMF_LIVE_DATA={};
+    PMF_LAST_UPDATED="";
+  }
 }
 function pmfRetailerRows(model,snap){
   const live=PMF_LIVE_DATA[model]||{};
@@ -1258,11 +1264,12 @@ function checkPriceMatch(){
   const snap=PMF_SNAPSHOT[model]||{};
   const live=PMF_LIVE_DATA[model]||{};
   const merged={...snap,...live};
-  const verified=Object.keys(merged).length;
+  const verified=Object.values(merged).filter(v=>typeof v==="number" && Number.isFinite(v)).length;
   const retailerRows=pmfRetailerRows(model,snap);
   const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>Hisense app price</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
-  const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:"Live price file not available yet";
-  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} found</span></div><div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">Prices are automatically refreshed once a day from the app's UK price-comparison feed. Retailer stock, promotions and voucher prices can change between updates, so use the retailer link to confirm before promising a price match.</div></div>`;
+  const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:(verified?"Using the latest saved retailer prices":"No saved retailer price found yet");
+  const feedNote=PMF_LAST_UPDATED?"Daily price feed loaded. Retailer stock, promotions and voucher prices can change, so confirm the retailer price before promising a match.":"This GitHub copy does not currently contain the optional daily price-data file. The retailer buttons below open live retailer searches; saved prices are shown where available.";
+  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div><div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
 }
 function initPriceMatchFinder(){
   setupModelAutocomplete("pmfModel","pmfSuggestions",()=>{});
