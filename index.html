@@ -118,6 +118,18 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
 .weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
 </style>
+
+<style id="salesCoachRefinedTabs">
+.coach-tabs{display:flex;gap:8px;overflow-x:auto;padding:5px 2px 11px;margin-top:14px;scrollbar-width:none}
+.coach-tabs::-webkit-scrollbar{display:none}
+.coach-tab{white-space:nowrap;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045);color:inherit;border-radius:12px;padding:10px 13px;font-weight:700;font-size:12px;cursor:pointer}
+.coach-tab.active{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);box-shadow:0 5px 18px rgba(0,0,0,.12)}
+.coach-tab-panel{margin-top:4px}
+.coach-tab-panel .coach-grid{margin-top:12px}
+.coach-tab-panel .coach-card{height:100%}
+.coach-tab-panel .coach-card p{margin:7px 0 0;line-height:1.45}
+.coach-tab-panel .small{opacity:.8}
+</style>
 </head>
 <body>
 <div class="app">
@@ -251,11 +263,18 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
       </optgroup>
     </select>
 
-    <div id="coachContent" class="coach-content"></div><div class="coach-tabs">
-      <button id="coachMainTab" class="coach-tab active" onclick="showCoachTab('main')">TV Sales Pitches</button>
-      <button id="soundbarCoachTab" class="coach-tab" onclick="showCoachTab('soundbars')">Soundbars</button>
-    </div>
-    <div id="soundbarCoachPanel" class="coach-tab-panel" style="display:none;">
+    <div id="coachContent" class="coach-content"></div>
+     <div class="coach-tabs">
+       <button id="coachMainTab" class="coach-tab active" onclick="showCoachTab('main')">TV Sales Pitches</button>
+       <button id="competitionCoachTab" class="coach-tab" onclick="showCoachTab('competition')">Beat the Competition</button>
+       <button id="objectionsCoachTab" class="coach-tab" onclick="showCoachTab('objections')">Head-to-Head</button>
+       <button id="needsCoachTab" class="coach-tab" onclick="showCoachTab('needs')">Customer Wants X</button>
+       <button id="soundbarCoachTab" class="coach-tab" onclick="showCoachTab('soundbars')">Soundbars</button>
+     </div>
+     <div id="competitionCoachPanel" class="coach-tab-panel" style="display:none;"></div>
+     <div id="objectionsCoachPanel" class="coach-tab-panel" style="display:none;"></div>
+     <div id="needsCoachPanel" class="coach-tab-panel" style="display:none;"></div>
+     <div id="soundbarCoachPanel" class="coach-tab-panel" style="display:none;">
   <div class="section-title">Soundbar Coach</div>
   <div class="section-subtitle">Choose a soundbar to see the key information and an easy customer pitch.</div>
   <select id="soundbarSelect" class="coach-select" onchange="renderSoundbarDetail()">
@@ -526,7 +545,7 @@ function findTV(){
     if(n==="picture"||n==="brightness") return /UR8|UR9|U8/i.test(model)?0:1;
     return 0;
   };
-  matches.sort((a,z)=>Number(z[1])-Number(a[1]));
+  matches.sort((a,z)=>rank(a)-rank(z)||Number(z[1])-Number(a[1]));
 
   if(!matches.length){
     out.innerHTML=`<div class="card"><b>No TVs match those filters.</b>
@@ -556,8 +575,7 @@ function findTV(){
         <b>Customer deal</b>
         <div>Trade-in: <strong>${money(trade)}</strong>${d.code?` (${d.code})`:""}</div>
         <div>Cashback: <strong>${money(cb)}</strong></div>
-        <div class="saving">Total savings: <strong>${money(trade+cb)}</strong></div>
-       <div class="saving">Effective cost: <strong>${money(effective)}</strong></div>
+        <div class="saving">Effective cost: ${money(effective)}</div>
         <button class="offer-btn" data-offer-model="${model.replace(/"/g,'&quot;')}">View offers</button>
       </div>
     </div>`;
@@ -674,17 +692,63 @@ const SOUNDBARS=[
  {m:"HT SATURN",meta:"4.1.2 • 720 W • Dolby Atmos & DTS:X • Wireless subwoofer & rear speakers • Room calibration",pitch:"“This is the flagship conversation — 720 W, a 4.1.2 layout, room calibration and Dolby Atmos/DTS:X. If they want cinema sound without compromising, this is the one to demonstrate.”"}
 ];
 
+const COMPETITOR_COACH=[
+["UR9","Samsung OLED","High brightness, vivid RGB colour and no OLED burn-in concern.","If you like the premium picture, the UR9 gives you premium impact with very high brightness and RGB colour. It is especially strong for bright rooms, sport and HDR."],
+["UR9","LG OLED","Brightness, vivid colour and freedom from OLED burn-in concerns.","OLED is fantastic for blacks, but if you want a really bright, colourful picture for everyday TV, sport and HDR, the UR9 is a very strong alternative."],
+["UR9","Sony Mini LED","RGB colour technology plus a premium brightness-and-colour story.","Sony is excellent for processing, but let me show you what the UR9 does with brightness and RGB colour. The difference is easy to see side by side."],
+["UR9","TCL Mini LED","Premium RGB proposition with a strong all-round picture story.","TCL gives you a lot of picture technology for the money. The UR9 is the step-up option when you want premium RGB colour and a more refined overall package."],
+["UR8","Samsung Neo QLED","RGB colour, strong brightness and a premium Mini LED proposition.","If you are looking at Neo QLED, the UR8 is worth seeing because you are getting a premium Mini LED picture with RGB colour as a major part of the story."],
+["UR8","LG QNED / OLED","Strong brightness and vivid colour, with Mini LED benefits.","If you want punchy colour but do not want to compromise brightness, the UR8 is one I would compare directly."],
+["UR8","TCL Mini LED","RGB colour proposition and premium positioning.","TCL is great value, but the UR8 is where I would look if you want to step into RGB and a more premium overall picture experience."],
+["U8","Samsung Neo QLED","Mini LED brightness and a strong gaming-focused proposition.","The U8 is a strong alternative if you want that bright Mini LED look without paying purely for the badge."],
+["U7 Pro","TCL Mini LED","Strong gaming proposition and high-performance Mini LED.","If gaming is important, do not just compare the screens. Compare the gaming features and how each TV handles fast action. The U7 Pro is built for that conversation."],
+["U7","Samsung QLED","Mini LED performance at a value-focused price point.","If you like QLED but want a step up in contrast and brightness, the U7 is where I would take you next."],
+["E7 Pro","Samsung QLED","QLED value proposition with a strong feature-to-price story.","If you like the Samsung QLED picture, let me show you the E7 Pro. You can get a rich colour experience while keeping the value strong."],
+["Q7","Samsung QLED","Simple value-led QLED alternative.","If QLED is what you are after, the Q7 gives you an easy alternative to compare on picture, size and price."],
+["A6","Samsung / LG entry-level","Straightforward everyday TV proposition.","If you mainly want an everyday screen for streaming and normal TV, the A6 is the sensible value option without paying for features you may not use."]
+];
+
+const OBJECTION_COACH=[
+["I prefer Samsung.","Absolutely — Samsung makes good TVs. What is it about Samsung you particularly like: picture, brand, gaming or price? Let me show you the closest Hisense alternative so you can compare the two properly."],
+["I prefer LG.","LG is a strong choice. Is it the OLED picture you like, or the brand itself? If it is the picture, I would put the UR9 or UR8 next to it and let the brightness and colour do the talking."],
+["Sony is better quality.","Sony has a great reputation for processing. The question is what matters most to you. If brightness, colour, gaming and value are important, let us compare the actual TVs rather than just the badge."],
+["TCL has better Mini LED.","TCL is definitely worth comparing. The question is which features you will actually notice every day. Let us compare Mini LED performance, colour, gaming and price side by side."],
+["OLED is better.","OLED has excellent blacks, absolutely. But it is not automatically better for every customer. If you have a bright room, watch lots of sport or want a really bright HDR picture, I would compare it with the UR9 or UR8 before deciding."],
+["Hisense isn't as good.","I understand why you might think that — brand reputation matters. But the technology has moved on a lot. Give me two minutes to show you the picture and features against the TV you were considering."],
+["I've seen it cheaper elsewhere.","That is worth checking. Let us make sure we are comparing the exact same model and size, then I can take you through the current offers and what you are getting with it."]
+];
+
+const NEEDS_COACH=[
+["Brightest picture","UR9 / UR8","Premium RGB Mini LED picture and a strong brightness story.","If brightness is the thing you notice most, this is the one I would demo first."],
+["Best gaming","U7 Pro / U8 / UR range","High-performance picture and gaming-focused features.","Tell me what console you use and I will show you the best match."],
+["Best value","U7 / Q7 / E7 Pro","Strong picture technology without moving straight into flagship pricing.","This is where I would spend the money on the picture rather than the badge."],
+["Premium picture","UR9 / UR8","Top-end RGB Mini LED positioning.","If picture quality is the priority, these are the two I would put in front of you."],
+["Biggest screen for the budget","U7 / U8 / UR8","Broad size ranges make it easier to step up screen size.","Let us see how much bigger we can go without blowing the budget."],
+["OLED alternative","UR8 / UR9","Premium brightness and RGB colour without choosing OLED.","If you like the OLED idea but want more brightness, these are the ones to compare."],
+["Best sound","TV + Hisense soundbar","A soundbar gives a much bigger audio upgrade than TV speakers alone.","Once we have picked the TV, I can match a soundbar to the room and budget."]
+];
+
+function renderCompetitionCoach(){
+ const el=document.getElementById("competitionCoachPanel"); if(!el)return;
+ el.innerHTML=`<div class="coach-hero"><div class="eyebrow">BEAT THE COMPETITION</div><h2>Hisense vs the competition</h2><p>Pick the closest competitor. Acknowledge first, then bring the conversation back to what the customer actually values.</p></div><div class="coach-grid">${COMPETITOR_COACH.map(x=>`<div class="coach-card"><div class="coach-card-title">${x[0]} <span class="muted">vs</span> ${x[1]}</div><div class="small"><b>Where Hisense wins</b></div><p>${x[2]}</p><div class="small" style="margin-top:10px"><b>What to say</b></div><p>“${x[3]}”</p></div>`).join("")}</div>`;
+}
+function renderObjectionCoach(){
+ const el=document.getElementById("objectionsCoachPanel"); if(!el)return;
+ el.innerHTML=`<div class="coach-hero"><div class="eyebrow">QUICK RESPONSES</div><h2>Handle the objection</h2><p>Keep it calm and conversational. Do not attack the competitor — move the customer back to needs, features and the demo.</p></div><div class="coach-grid">${OBJECTION_COACH.map(x=>`<div class="coach-card"><div class="coach-card-title">${x[0]}</div><p>“${x[1]}”</p></div>`).join("")}</div>`;
+}
+function renderCustomerNeeds(){
+ const el=document.getElementById("needsCoachPanel"); if(!el)return;
+ el.innerHTML=`<div class="coach-hero"><div class="eyebrow">CUSTOMER NEEDS</div><h2>Customer wants X → sell Y</h2><p>Use the customer's priority to decide which Hisense range to demonstrate first.</p></div><div class="coach-grid">${NEEDS_COACH.map(x=>`<div class="coach-card"><div class="coach-card-title">${x[0]}</div><div class="small"><b>Move to: ${x[1]}</b></div><p>${x[2]}</p><div class="small" style="margin-top:10px"><b>Close</b></div><p>“${x[3]}”</p></div>`).join("")}</div>`;
+}
 function showCoachTab(tab){
- const main=document.getElementById("coachContent");
- const sb=document.getElementById("soundbarCoachPanel");
- const a=document.getElementById("coachMainTab");
- const b=document.getElementById("soundbarCoachTab");
- const sound=tab==="soundbars";
- if(main) main.style.display=sound?"none":"block";
- if(sb) sb.style.display=sound?"block":"none";
- if(a) a.classList.toggle("active",!sound);
- if(b) b.classList.toggle("active",sound);
- if(sound) renderSoundbars();
+ const panels={main:"coachContent",competition:"competitionCoachPanel",objections:"objectionsCoachPanel",needs:"needsCoachPanel",soundbars:"soundbarCoachPanel"};
+ const tabs={main:"coachMainTab",competition:"competitionCoachTab",objections:"objectionsCoachTab",needs:"needsCoachTab",soundbars:"soundbarCoachTab"};
+ Object.keys(panels).forEach(k=>{const p=document.getElementById(panels[k]);if(p)p.style.display=(k===tab)?"block":"none";});
+ Object.keys(tabs).forEach(k=>{const b=document.getElementById(tabs[k]);if(b)b.classList.toggle("active",k===tab);});
+ if(tab==="soundbars"&&typeof renderSoundbars==="function")renderSoundbars();
+ if(tab==="competition")renderCompetitionCoach();
+ if(tab==="objections")renderObjectionCoach();
+ if(tab==="needs")renderCustomerNeeds();
 }
 function renderCoach(){
  const el=document.getElementById("coachContent");
