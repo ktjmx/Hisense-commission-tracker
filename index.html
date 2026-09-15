@@ -117,6 +117,12 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .home-total-val{background:#101d20;border:1px solid #20383b;border-radius:14px;padding:14px}.home-total-val .stat-label{font-size:12px;color:#9eb0b2;font-weight:800}.home-total-val .stat-value{font-size:30px;font-weight:900;margin-top:3px}.home-total-val .stat-sub{font-size:11px;color:#789092;margin-top:2px}
 .weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
 .weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
+</style><style id="coachPanelPositionFix">
+#coach{scroll-margin-top:0}
+#coach .coach-panel{position:relative;top:auto;transform:none;margin-top:0}
+#coach .coach-panel-head{position:relative}
+</style><style id="statsStyles">
+.stats-hero{margin-bottom:14px}.stats-hero .eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;opacity:.65}.stats-hero h1{margin:3px 0}.stats-hero p{margin:4px 0 0;opacity:.7}.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.stat-card{padding:16px;border-radius:18px;background:var(--card,#fff);border:1px solid var(--line,#ddd);box-shadow:0 6px 18px rgba(0,0,0,.05)}.stat-card span{display:block;font-size:11px;opacity:.65}.stat-card strong{display:block;font-size:24px;margin-top:5px}.pay-estimate{padding:14px 0;border-bottom:1px solid var(--line,#ddd)}.pay-estimate:last-child{border-bottom:0}.pay-head{display:flex;justify-content:space-between;gap:10px}.pay-date{font-weight:800}.pay-sub{font-size:11px;opacity:.65}.pay-amount{font-size:20px;font-weight:900}.section-title{display:flex;justify-content:space-between;align-items:end;gap:8px}.section-title h2{margin:0}.section-title span{font-size:11px;opacity:.6}@media(max-width:390px){.stats-grid{grid-template-columns:1fr 1fr}.stat-card strong{font-size:20px}}
 </style><style id="coachComparisonGrid">.comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.comparison-grid>div{border:1px solid var(--line);border-radius:13px;padding:10px}.comparison-grid h4{margin:0 0 7px;font-size:13px}.coach-spec-row{font-size:11px}@media(max-width:390px){.comparison-grid{grid-template-columns:1fr}}</style>
 <style id="polishedCoachStyles">
 .coach-hero{padding:4px 2px 14px}.coach-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;opacity:.55}.coach-hero h1{margin:3px 0 4px;font-size:27px}.coach-hero p{margin:0;opacity:.7}
@@ -331,8 +337,6 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     </div>
     <div id="technologyDetail" class="coach-detail-card"><span>Choose a technology above.</span></div>
   </div>
-  </div>
-
   <div id="coachPanelCompetitor" class="coach-panel" style="display:none">
     <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Competitor</b><small>Choose a specific TV</small></div></div>
     <select id="competitorModelSelect" class="coach-select" onchange="renderExactCompetitor()">
@@ -360,6 +364,24 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Soundbars</b><small>Choose a model</small></div></div>
     <select id="soundbarSelect" class="coach-select" onchange="renderSelectedSoundbar()"><option value="">Choose a soundbar…</option></select>
     <div id="coachSoundbarResult" class="coach-detail-card"><span>Choose a soundbar to see the current information and pitch.</span></div>
+  </div>
+</section>
+
+<section class="screen" id="stats">
+  <div class="stats-hero">
+    <div class="eyebrow">YOUR PERFORMANCE</div>
+    <h1>Stats</h1>
+    <p>Commission, units and pay-period progress.</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><span>Total commission</span><strong id="statsTotalCommission">£0.00</strong></div>
+    <div class="stat-card"><span>Units sold</span><strong id="statsCommissionUnits">0</strong></div>
+    <div class="stat-card"><span>Sales entries</span><strong id="statsCommissionEntries">0</strong></div>
+    <div class="stat-card"><span>Average commission</span><strong id="statsAverageCommission">£0.00</strong></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><h2>Paydays</h2><span>Commission by pay period</span></div>
+    <div id="payday"><div class="muted">Loading your pay periods…</div></div>
   </div>
 </section>
 
@@ -1096,12 +1118,12 @@ function showCoachPanel(panel){
  const el=document.getElementById("coachPanel"+panel.charAt(0).toUpperCase()+panel.slice(1));
  if(el)el.style.display="block";
  document.querySelectorAll(".coach-tile").forEach(x=>x.style.display="none");
- window.scrollTo({top:0,behavior:"smooth"});
+ document.getElementById("coach")?.scrollIntoView({block:"start",behavior:"auto"});
 }
 function closeCoachPanel(){
  document.querySelectorAll(".coach-panel").forEach(x=>x.style.display="none");
  document.querySelectorAll(".coach-tile").forEach(x=>x.style.display="grid");
- window.scrollTo({top:0,behavior:"smooth"});
+ document.getElementById("coach")?.scrollIntoView({block:"start",behavior:"auto"});
 }
 function showTechDetail(name){
  const x=TECHNOLOGY_INFO[name],out=document.getElementById("technologyDetail");
@@ -1123,4 +1145,20 @@ function initCoachShortcuts(){
 }
 document.addEventListener("DOMContentLoaded",initCoachShortcuts);
 </script>
-<script id="statsNavigationFix">document.addEventListener("DOMContentLoaded",function(){const btn=document.querySelector('[data-go="stats"]'),screen=document.getElementById("stats");if(btn&&screen){btn.addEventListener("click",function(e){e.preventDefault();document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));screen.classList.add("active");document.querySelectorAll("[data-go]").forEach(b=>b.classList.remove("active"));btn.classList.add("active");try{if(typeof renderStats==="function")renderStats();else if(typeof updateStats==="function")updateStats();}catch(err){console.warn(err)}} ,true)}});</script><script id="objectionInitFix">document.addEventListener("DOMContentLoaded",function(){const s=document.getElementById("objectionSelect");if(s&&typeof OBJECTIONS!=="undefined"){s.innerHTML='<option value="">Choose an objection</option>'+Object.keys(OBJECTIONS).map(k=>`<option value="${k}">${k}</option>`).join("")}});</script><script id="statsHardFix">document.addEventListener("DOMContentLoaded",function(){const buttons=[...document.querySelectorAll("[data-go]")].filter(b=>String(b.getAttribute("data-go")).toLowerCase().includes("stat"));buttons.forEach(btn=>btn.addEventListener("click",function(e){e.preventDefault();e.stopImmediatePropagation();const id=btn.getAttribute("data-go"),screen=document.getElementById(id)||document.getElementById("stats")||document.querySelector('[id*="stat" i]');if(!screen)return;document.querySelectorAll(".screen,.tab-panel,.page").forEach(x=>x.classList.remove("active"));screen.classList.add("active");document.querySelectorAll("[data-go]").forEach(x=>x.classList.remove("active"));btn.classList.add("active");try{if(typeof renderStats==="function")renderStats();if(typeof updateStats==="function")updateStats()}catch(err){console.warn("Stats:",err)}window.scrollTo(0,0)},true))});</script></body></html>
+<script id="statsNavigationFix">document.addEventListener("DOMContentLoaded",function(){const btn=document.querySelector('[data-go="stats"]'),screen=document.getElementById("stats");if(btn&&screen){btn.addEventListener("click",function(e){e.preventDefault();document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));screen.classList.add("active");document.querySelectorAll("[data-go]").forEach(b=>b.classList.remove("active"));btn.classList.add("active");try{if(typeof renderStats==="function")renderStats();else if(typeof updateStats==="function")updateStats();}catch(err){console.warn(err)}} ,true)}});</script><script id="objectionInitFix">document.addEventListener("DOMContentLoaded",function(){const s=document.getElementById("objectionSelect");if(s&&typeof OBJECTIONS!=="undefined"){s.innerHTML='<option value="">Choose an objection</option>'+Object.keys(OBJECTIONS).map(k=>`<option value="${k}">${k}</option>`).join("")}});</script><script id="statsHardFix">document.addEventListener("DOMContentLoaded",function(){const buttons=[...document.querySelectorAll("[data-go]")].filter(b=>String(b.getAttribute("data-go")).toLowerCase().includes("stat"));buttons.forEach(btn=>btn.addEventListener("click",function(e){e.preventDefault();e.stopImmediatePropagation();const id=btn.getAttribute("data-go"),screen=document.getElementById(id)||document.getElementById("stats")||document.querySelector('[id*="stat" i]');if(!screen)return;document.querySelectorAll(".screen,.tab-panel,.page").forEach(x=>x.classList.remove("active"));screen.classList.add("active");document.querySelectorAll("[data-go]").forEach(x=>x.classList.remove("active"));btn.classList.add("active");try{if(typeof renderStats==="function")renderStats();if(typeof updateStats==="function")updateStats()}catch(err){console.warn("Stats:",err)}window.scrollTo(0,0)},true))});</script><script id="statsNavFix">
+document.addEventListener("DOMContentLoaded",function(){
+  document.querySelectorAll(".nav button[data-screen]").forEach(function(btn){
+    btn.addEventListener("click",function(e){
+      const id=btn.dataset.screen,screen=document.getElementById(id);
+      if(!screen)return;
+      document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x===screen));
+      document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x===btn));
+      const names={home:"Home",sales:"Sell",hub:"TV Finder",offers:"Offers",coach:"Sales Coach",stats:"Stats"};
+      const title=document.getElementById("pageTitle");if(title)title.textContent=names[id]||"";
+      if(id==="stats"&&typeof renderStats==="function")renderStats();
+      window.scrollTo(0,0);
+    },true);
+  });
+});
+</script>
+</body></html>
