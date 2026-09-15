@@ -117,7 +117,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .home-total-val{background:#101d20;border:1px solid #20383b;border-radius:14px;padding:14px}.home-total-val .stat-label{font-size:12px;color:#9eb0b2;font-weight:800}.home-total-val .stat-value{font-size:30px;font-weight:900;margin-top:3px}.home-total-val .stat-sub{font-size:11px;color:#789092;margin-top:2px}
 .weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
 .weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
-</style>
+</style><style id="coachComparisonGrid">.comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.comparison-grid>div{border:1px solid var(--line);border-radius:13px;padding:10px}.comparison-grid h4{margin:0 0 7px;font-size:13px}.coach-spec-row{font-size:11px}@media(max-width:390px){.comparison-grid{grid-template-columns:1fr}}</style>
 <style id="polishedCoachStyles">
 .coach-hero{padding:4px 2px 14px}.coach-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;opacity:.55}.coach-hero h1{margin:3px 0 4px;font-size:27px}.coach-hero p{margin:0;opacity:.7}
 .coach-tile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.coach-tile{display:grid;grid-template-columns:34px 1fr 14px;align-items:center;gap:8px;text-align:left;padding:13px 11px;min-height:88px;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,.04)}.coach-tile-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--soft);font-weight:900}.coach-tile b{display:block;font-size:13px}.coach-tile small{display:block;margin-top:3px;font-size:10px;line-height:1.25;opacity:.62}.coach-tile>strong{font-size:22px;opacity:.4}
@@ -263,15 +263,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 </section>
 
 <section class="screen" id="offers">
-<div class="card price-match-finder">
-  <h2>Price Match Finder</h2>
-  <p class="muted">Enter a Hisense model and the competitor's advertised price to see the price difference.</p>
-  <input id="pmfModel" class="pmf-input" list="pmfModels" placeholder="Enter or choose a Hisense model">
-  <datalist id="pmfModels"></datalist>
-  <input id="pmfCompetitor" class="pmf-input" inputmode="decimal" placeholder="Competitor price (£)">
-  <button class="pmf-btn" onclick="checkPriceMatch()">Check price match</button>
-  <div id="pmfResult" class="pmf-result">Enter the model and competitor price to check.</div>
-</div>
+
 
   <div class="card">
     <div class="section-title">Current offers</div>
@@ -285,6 +277,16 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="field"><label>Model</label><input id="offerModel" list="modelList" placeholder="e.g. 65UR8STUK"></div>
     <div id="offerResult"></div>
   </div>
+
+<div class="card price-match-finder">
+  <h2>Price Match Finder</h2>
+  <p class="muted">Enter a Hisense model and the competitor's advertised price to see the price difference.</p>
+  <input id="pmfModel" class="pmf-input" list="pmfModels" placeholder="Enter or choose a Hisense model">
+  <datalist id="pmfModels"></datalist>
+  <input id="pmfCompetitor" class="pmf-input" inputmode="decimal" placeholder="Competitor price (£)">
+  <button class="pmf-btn" onclick="checkPriceMatch()">Check price match</button>
+  <div id="pmfResult" class="pmf-result">Enter the model and competitor price to check.</div>
+</div>
 </section>
 
 
@@ -325,8 +327,11 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
       <button onclick="showTechDetail('Mini LED')"><b>Mini LED</b><small>U8 • U7 Pro • U7</small></button>
       <button onclick="showTechDetail('QLED')"><b>QLED</b><small>Q7 • E7 Pro</small></button>
       <button onclick="showTechDetail('LED')"><b>LED</b><small>A6</small></button>
+      <button onclick="showTechDetail('OLED')"><b>OLED</b><small>Competitor technology</small></button>
+      <button onclick="showTechDetail('Matte Screens')"><b>Matte Screens</b><small>U7 Pro • selected RGB</small></button>
     </div>
     <div id="technologyDetail" class="coach-detail-card"><span>Choose a technology above.</span></div>
+  </div>
   </div>
 
   <div id="coachPanelCompetitor" class="coach-panel" style="display:none">
@@ -753,16 +758,28 @@ function renderCompetitionCoach(){
  const el=document.getElementById("competitionCoachPanel"); if(!el)return;
  el.innerHTML=`<div class="coach-hero"><div class="eyebrow">BEAT THE COMPETITION</div><h2>Hisense vs the competition</h2><p>Pick the closest competitor. Acknowledge first, then bring the conversation back to what the customer actually values.</p></div><div class="coach-grid">${COMPETITOR_COACH.map(x=>`<div class="coach-card"><div class="coach-card-title">${x[0]} <span class="muted">vs</span> ${x[1]}</div><div class="small"><b>Where Hisense wins</b></div><p>${x[2]}</p><div class="small" style="margin-top:10px"><b>What to say</b></div><p>“${x[3]}”</p></div>`).join("")}</div>`;
 }
+function getHisenseComparisonSpecs(model){
+ const m={
+ "UR9":[["Display","RGB Mini LED"],["Refresh rate","180Hz"],["Resolution","4K UHD"],["HDR","Dolby Vision 2 / HDR10+ / HLG"],["Gaming","4K 120Hz input / ≤7ms input lag"],["Colour","RGB Mini LED"]].filter(Boolean),
+ "UR8":[["Display","RGB Mini LED"],["Resolution","4K UHD"],["HDR","Dolby Vision 2 / HDR10+ / HLG"],["Gaming","High refresh gaming"],["Colour","RGB Mini LED"]],
+ "U8":[["Display","Mini LED"],["Resolution","4K UHD"],["HDR","Premium HDR"],["Gaming","High refresh gaming"],["Backlight","Mini LED"]],
+ "U7 Pro":[["Display","Mini LED"],["Resolution","4K UHD"],["HDR","HDR support"],["Gaming","High refresh gaming"],["Backlight","Mini LED"]],
+ "U7":[["Display","Mini LED"],["Resolution","4K UHD"],["HDR","HDR support"],["Gaming","High refresh gaming"],["Backlight","Mini LED"]]
+ };
+ return m[model]||[];
+}
+function renderSpecRows(rows){return rows.map(s=>`<div class="coach-spec-row"><span>${s[0]}</span><b>${s[1]}</b></div>`).join("");}
 function renderExactCompetitor(){
  const name=document.getElementById("competitorModelSelect").value,out=document.getElementById("exactCompetitorResult"),x=EXACT_COMPETITOR_SPECS[name];
  if(!x){out.innerHTML="<span>Choose a competitor to see the Hisense models to compare.</span>";return}
- const options=x.options.map(m=>`<option value="${m}">${m}</option>`).join("");
- const model=x.options[0];
- out.innerHTML=`<h3>${name}</h3><p><strong>Choose the Hisense TV to compare:</strong></p><select class="coach-select" id="hisenseCompareSelect" onchange="renderHisenseAgainstCompetitor()">${options}</select><div class="coach-spec-title">Competitor specifications</div><div>${x.specs.map(s=>`<div class="coach-spec-row"><span>${s[0]}</span><b>${s[1]}</b></div>`).join("")}</div><h3 style="margin-top:14px">Why go for Hisense?</h3><ul id="hisenseReasons">${(x.reasons[model]||[]).map(r=>`<li>${r}</li>`).join("")}</ul>`;
+ const options=x.options.map(m=>`<option value="${m}">${m}</option>`).join(""),model=x.options[0];
+ out.innerHTML=`<h3>${name}</h3><p><strong>Choose the Hisense TV:</strong></p><select class="coach-select" id="hisenseCompareSelect" onchange="renderHisenseAgainstCompetitor()">${options}</select><div class="comparison-grid"><div><h4>${name}</h4>${renderSpecRows(x.specs)}</div><div><h4>${model}</h4>${renderSpecRows(getHisenseComparisonSpecs(model))}</div></div><h3 style="margin-top:14px">Why go for Hisense?</h3><ul id="hisenseReasons">${(x.reasons[model]||[]).map(r=>`<li>${r}</li>`).join("")}</ul>`;
 }
 function renderHisenseAgainstCompetitor(){
- const name=document.getElementById("competitorModelSelect").value,model=document.getElementById("hisenseCompareSelect").value,x=EXACT_COMPETITOR_SPECS[name],out=document.getElementById("hisenseReasons");
- if(x&&out)out.innerHTML=(x.reasons[model]||[]).map(r=>`<li>${r}</li>`).join("");
+ const name=document.getElementById("competitorModelSelect").value,model=document.getElementById("hisenseCompareSelect").value,x=EXACT_COMPETITOR_SPECS[name],out=document.getElementById("exactCompetitorResult");
+ if(!x||!out)return;
+ out.querySelector(".comparison-grid").innerHTML=`<div><h4>${name}</h4>${renderSpecRows(x.specs)}</div><div><h4>${model}</h4>${renderSpecRows(getHisenseComparisonSpecs(model))}</div>`;
+ const r=out.querySelector("#hisenseReasons"); if(r)r.innerHTML=(x.reasons[model]||[]).map(v=>`<li>${v}</li>`).join("");
 }
 function renderObjectionCoach(){
  const el=document.getElementById("objectionsCoachPanel"); if(!el)return;
@@ -1045,32 +1062,13 @@ document.addEventListener("DOMContentLoaded",initPriceMatchFinder);
 
 <script id="coachShortcutJS">
 const TECHNOLOGY_INFO={
- "RGB Mini LED":{
-  summary:"RGB Mini LED combines independently controlled red, green and blue light in the backlight with Mini LED control of brightness and contrast. Hisense says its RGB MiniLED can achieve up to 100% BT.2020 colour coverage.",
-  why:"For the customer: richer, more saturated colour, high brightness and strong contrast in one premium picture. It is especially easy to demonstrate with sport, HDR films, colourful games and bright rooms.",
-  benefits:["Richer colour","High brightness","Strong contrast","HDR impact","Great for sport & gaming","Premium large-screen option"],
-  models:"UR9 • UR8"
- },
- "Mini LED":{
-  summary:"Mini LED uses many smaller LEDs in the backlight, allowing much finer control of bright and dark areas than conventional LED.",
-  why:"For the customer: a brighter, punchier picture with better contrast and HDR impact. It is particularly useful for sport, gaming, films and rooms with lots of daylight.",
-  benefits:["High brightness","Better light control","Stronger contrast","More impactful HDR","Great for sport","Great for gaming"],
-  models:"U8 • U7 Pro • U7"
- },
- "QLED":{
-  summary:"QLED uses a quantum-dot layer to improve the colour performance of an LED/LCD display, helping it produce brighter and more vivid colours.",
-  why:"For the customer: a clear step up from basic LED for streaming, live TV and sport, with strong colour and brightness without paying for flagship technology.",
-  benefits:["Vivid colour","Good brightness","Strong everyday picture","Great for streaming","Great for sport","Strong value"],
-  models:"Q7 • E7 Pro"
- },
- "LED":{
-  summary:"LED TVs use an LCD panel with an LED backlight. It is the straightforward option for customers who want reliable everyday TV without paying for advanced backlighting.",
-  why:"For the customer: simple 4K smart-TV viewing for live TV, streaming, YouTube and family entertainment, while keeping the price down.",
-  benefits:["Straightforward 4K","Reliable everyday viewing","Simple choice","Good value","Ideal for bedrooms","Budget friendly"],
-  models:"A6"
- }
-};
-const EXACT_COMPETITOR_SPECS={
+"RGB Mini LED":{summary:"RGB Mini LED uses independently controlled red, green and blue LEDs in the backlight alongside Mini LED control of brightness and contrast.",why:"Customers get richer colour, high brightness and strong contrast. It is especially easy to demonstrate with sport, HDR films, colourful games and bright rooms.",benefits:["Richer colour","High brightness","Strong contrast","HDR impact","Sport & gaming","Premium large screens"],models:"UR9 • UR8"},
+"Mini LED":{summary:"Mini LED uses many smaller LEDs in the backlight, allowing finer control of bright and dark areas than conventional LED.",why:"Customers get a brighter, punchier picture with stronger contrast and HDR impact — especially useful for sport, gaming, films and bright rooms.",benefits:["High brightness","Better light control","Stronger contrast","HDR impact","Sport","Gaming"],models:"U8 • U7 Pro • U7"},
+"QLED":{summary:"QLED uses a quantum-dot layer to improve the colour performance of an LED/LCD display.",why:"Customers get brighter, more vivid colour and a strong everyday picture for streaming, live TV and sport without paying for flagship technology.",benefits:["Vivid colour","Good brightness","Strong everyday picture","Streaming","Sport","Value"],models:"Q7 • E7 Pro"},
+"LED":{summary:"LED TVs use an LCD panel with an LED backlight. It is the straightforward option for customers who want reliable everyday TV.",why:"Customers get simple 4K smart-TV viewing for live TV, streaming and family entertainment while keeping the price down.",benefits:["4K","Reliable","Simple","Good value","Bedrooms","Budget friendly"],models:"A6"},
+"OLED":{summary:"OLED pixels are self-emissive, so each pixel can switch itself off. That gives OLED its famous deep blacks and excellent contrast.",why:"OLED can look spectacular in a dark room, but it is not automatically the best choice for every customer. OLEDs can be more vulnerable to permanent burn-in from long-term static content, and some OLED types can show raised blacks or reflections with ambient light.",benefits:["Perfect-looking blacks","Excellent dark-room contrast","Excellent motion","No backlight haloing","Potential burn-in risk with static content","Best suited to darker viewing"],models:"Competitor technology"},
+"Matte Screens":{summary:"A matte or anti-reflection finish scatters reflected light rather than presenting it as a sharp mirror-like reflection.",why:"For customers with windows, lamps or strong daylight facing the TV, a matte/low-reflection screen can make the picture easier and more comfortable to view.",benefits:["Less distracting glare","Fewer sharp reflections","Better for bright rooms","More comfortable daytime viewing","Useful for windows/lights"],models:"U7 Pro • selected RGB models — verify exact size/model"}
+};const EXACT_COMPETITOR_SPECS={
  "Samsung S95F OLED":{options:["UR9","UR8"],specs:[["Display","OLED"],["Refresh rate","100Hz / up to 165Hz"],["HDR","OLED HDR Pro / HDR10+"],["Gaming","4K 165Hz / VRR / FreeSync Premium Pro"],["Audio","70W 4.2.2CH / Dolby Atmos"]],reasons:{UR9:["Premium RGB Mini LED alternative with high brightness and rich colour.","Strong option for customers wanting a premium large-screen experience without automatically choosing OLED.","Lead with RGB colour, brightness, gaming and the complete package."],UR8:["RGB Mini LED gives a premium colour and brightness story.","Large-screen choice is a strong reason to consider it.","Ideal when the customer wants premium picture technology without going straight to OLED."]}},
  "Samsung S90F OLED":{options:["UR9","UR8"],specs:[["Display","OLED"],["Refresh rate","100Hz / up to 144Hz"],["HDR","HDR10+ / HDR10 / HLG"],["Gaming","High refresh gaming"],["HDMI","4 HDMI inputs"]],reasons:{UR9:["High-brightness RGB Mini LED alternative.","Strong premium picture and large-screen proposition."],UR8:["RGB colour plus Mini LED brightness.","Very strong option when screen size and value matter."]}},
  "Samsung QN90F Neo QLED":{options:["UR8","U8"],specs:[["Display","Neo QLED / Mini LED"],["Backlight","Mini LED"],["Refresh rate","Up to 165Hz, size dependent"],["Gaming","High refresh gaming"],["HDR","HDR10+ / HDR / HLG"]],reasons:{UR8:["Direct premium Mini LED conversation, with RGB adding a strong colour story.","Compare brightness, contrast and colour side by side."],U8:["Strong Mini LED alternative for brightness, contrast and gaming.","A compelling value-focused comparison."]}},
@@ -1108,7 +1106,7 @@ function closeCoachPanel(){
 }
 function showTechDetail(name){
  const x=TECHNOLOGY_INFO[name],out=document.getElementById("technologyDetail");
- out.innerHTML=`<h3>${name}</h3><p><strong>How it works:</strong> ${x.summary}</p><p><strong>Customer benefit:</strong> ${x.why}</p><div>${x.benefits.map(b=>`<span class="coach-pill">${b}</span>`).join("")}</div><p><strong>Hisense models:</strong> ${x.models}</p>`;
+ out.innerHTML=`<h3>${name}</h3><p><strong>How it works:</strong> ${x.summary}</p><p><strong>Customer benefit:</strong> ${x.why}</p><div>${x.benefits.map(b=>`<span class="coach-pill">${b}</span>`).join("")}</div><p><strong>Models / use:</strong> ${x.models}</p>`;
 }
 function renderObjection(){
  const name=document.getElementById("objectionSelect").value,out=document.getElementById("objectionResult"),x=OBJECTIONS[name];
@@ -1126,4 +1124,4 @@ function initCoachShortcuts(){
 }
 document.addEventListener("DOMContentLoaded",initCoachShortcuts);
 </script>
-</body></html>
+<script id="statsNavigationFix">document.addEventListener("DOMContentLoaded",function(){const btn=document.querySelector('[data-go="stats"]'),screen=document.getElementById("stats");if(btn&&screen){btn.addEventListener("click",function(e){e.preventDefault();document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));screen.classList.add("active");document.querySelectorAll("[data-go]").forEach(b=>b.classList.remove("active"));btn.classList.add("active");try{if(typeof renderStats==="function")renderStats();else if(typeof updateStats==="function")updateStats();}catch(err){console.warn(err)}} ,true)}});</script></body></html>
