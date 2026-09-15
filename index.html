@@ -1277,7 +1277,6 @@ const PMF_RETAILERS=[
   ["Hughes","https://www.google.com/search?q=site%3Ahughes.co.uk+Hisense+MODEL"],
   ["Marks Electrical","https://www.google.com/search?q=site%3Amarkselectrical.co.uk+Hisense+MODEL"],
   ["Peter Tyson","https://petertyson.co.uk/hisense-MODEL"],
-  ["Amazon UK","https://www.google.com/search?q=site%3Aamazon.co.uk+Hisense+MODEL"]
 ];
 const PMF_SNAPSHOT={
   "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799,note:"Latest verified web snapshot: £2,799 at Currys, John Lewis and Richer Sounds."},
@@ -1349,7 +1348,7 @@ function pmfPriceForRetailer(prices,name){
 }
 function pmfRetailerRows(model,snap){
   const livePrices=pmfLivePrices(model);
-  const names=[...new Set([...Object.keys(livePrices),...PMF_RETAILERS.map(x=>x[0])])];
+  const names=[...new Set([...Object.keys(livePrices),...PMF_RETAILERS.map(x=>x[0])])].filter(name=>name!=="Amazon UK" && name!=="Amazon.co.uk");
   return names.map(name=>{
     const price=pmfPriceForRetailer(livePrices,name);
     const snapPrice=snap[name]!=null?Number(snap[name]):null;
