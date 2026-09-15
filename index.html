@@ -117,6 +117,17 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .home-total-val{background:#101d20;border:1px solid #20383b;border-radius:14px;padding:14px}.home-total-val .stat-label{font-size:12px;color:#9eb0b2;font-weight:800}.home-total-val .stat-value{font-size:30px;font-weight:900;margin-top:3px}.home-total-val .stat-sub{font-size:11px;color:#789092;margin-top:2px}
 .weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
 .weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
+</style><style id="comparisonTableStyles">
+.comparison-table{margin-top:12px;border:1px solid #31575b;border-radius:14px;overflow:hidden}
+.compare-header,.compare-row{display:grid;grid-template-columns:105px minmax(0,1fr) minmax(0,1fr);gap:0}
+.compare-header{background:#173236;color:#f4f7f7;font-weight:800;font-size:10px}
+.compare-row{border-top:1px solid #29494c;font-size:10px}
+.compare-category,.compare-value{padding:9px 7px;min-width:0}
+.compare-category{font-weight:800;color:#aebfc0;background:#102326}
+.compare-value{color:#e7eeee;word-break:normal}
+.compare-value.hisense-value{background:#102a2e;color:#f1d79e;font-weight:700}
+.compare-note{font-size:10px;opacity:.6;margin:10px 0 0}
+@media(max-width:390px){.compare-header,.compare-row{grid-template-columns:82px minmax(0,1fr) minmax(0,1fr)}.compare-category,.compare-value{padding:8px 5px;font-size:9px}}
 </style><style id="statsVisibilityFix">
 #stats .stat-card{
   background:#101d20 !important;
@@ -161,10 +172,28 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 
 <style id="priceMatchFinderStyles">
 .price-match-finder{margin-bottom:14px}
-.pmf-input{width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:14px;margin:6px 0 8px}
+.pmf-input{width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:14px;margin:6px 0 8px;color:inherit}
+.pmf-autocomplete,.commission-autocomplete{position:relative}
+.pmf-suggestions{position:absolute;left:0;right:0;top:calc(100% - 3px);z-index:30;display:none;max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:0 0 14px 14px;background:var(--card);box-shadow:0 12px 30px rgba(0,0,0,.16)}
+.pmf-suggestion{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;color:inherit;padding:12px 13px;font-size:14px;font-weight:750}
+.pmf-suggestion:last-child{border-bottom:0}
+.pmf-suggestion small{display:block;margin-top:2px;font-size:11px;font-weight:500;opacity:.65}
+.pmf-suggestion:active,.pmf-suggestion:hover{background:var(--soft)}
 .pmf-btn{width:100%;padding:12px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;font-size:14px}
 .pmf-result{margin-top:10px;padding:12px;border-radius:14px;background:var(--soft);line-height:1.45}
 .pmf-good{font-weight:800}
+.pmf-price-card{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.pmf-price-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.pmf-price-head b{font-size:14px}
+.pmf-price-value{font-size:18px;font-weight:900}
+.pmf-retailers{display:grid;gap:7px;margin-top:10px}
+.pmf-retailer{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px;border-radius:10px;background:var(--soft)}
+.pmf-retailer span{font-size:13px;font-weight:700}
+.pmf-retailer a{font-size:12px;font-weight:800;color:var(--accent);text-decoration:none}
+.pmf-note{font-size:11px;opacity:.65;margin-top:10px}
+.pmf-live{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:8px;font-size:11px;opacity:.75}.pmf-live strong{opacity:1}.pmf-live-btn{border:1px solid var(--line);background:var(--card);color:inherit;border-radius:9px;padding:5px 8px;font-size:11px;font-weight:800}
+.commission-search-card{margin-top:14px}
+@media(max-width:520px){.pmf-price-head{align-items:flex-start}.pmf-retailer{padding:10px}.pmf-retailer a{white-space:nowrap}}
 </style>
 
 <style id="salesQuoteCoachStyles">
@@ -300,13 +329,14 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   </div>
 
 <div class="card price-match-finder">
-  <h2>Price Match Finder</h2>
-  <p class="muted">Enter a Hisense model and the competitor's advertised price to see the price difference.</p>
-  <input id="pmfModel" class="pmf-input" list="pmfModels" placeholder="Enter or choose a Hisense model">
-  <datalist id="pmfModels"></datalist>
-  <input id="pmfCompetitor" class="pmf-input" inputmode="decimal" placeholder="Competitor price (£)">
-  <button class="pmf-btn" onclick="checkPriceMatch()">Check price match</button>
-  <div id="pmfResult" class="pmf-result">Enter the model and competitor price to check.</div>
+  <div class="section-title"><h2>Price Match Finder</h2><span>UK retailer check</span></div>
+  <p class="muted">Start typing a Hisense model. Pick the exact model, then check the latest UK retailer comparison available.</p>
+  <div class="pmf-autocomplete">
+    <input id="pmfModel" class="pmf-input" autocomplete="off" autocapitalize="characters" placeholder="Start typing a model e.g. 75UR9STUK" aria-label="Hisense model">
+    <div id="pmfSuggestions" class="pmf-suggestions" role="listbox"></div>
+  </div>
+  <button class="pmf-btn" onclick="checkPriceMatch()">Check UK retailer prices</button>
+  <div id="pmfResult" class="pmf-result">Choose a model above to see the Hisense price and UK price-comparison options.</div>
 </div>
 </section>
 
@@ -397,6 +427,15 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   <div class="card">
     <div class="section-title"><h2>Paydays</h2><span>Commission by pay period</span></div>
     <div id="payday"><div class="muted">Loading your pay periods…</div></div>
+  </div>
+  <div class="card commission-search-card">
+    <div class="section-title"><h2>Commission Search</h2><span>Current rates</span></div>
+    <p class="muted">Pick a model to instantly see the current commission value.</p>
+    <div class="commission-autocomplete">
+      <input id="commissionModel" class="pmf-input" autocomplete="off" autocapitalize="characters" placeholder="Start typing a model e.g. 75UR9STUK" aria-label="Commission model">
+      <div id="commissionSuggestions" class="pmf-suggestions" role="listbox"></div>
+    </div>
+    <div id="commissionSearchResult" class="pmf-result">Choose a model to see its current commission.</div>
   </div>
 </section>
 
@@ -794,28 +833,104 @@ function renderCompetitionCoach(){
  const el=document.getElementById("competitionCoachPanel"); if(!el)return;
  el.innerHTML=`<div class="coach-hero"><div class="eyebrow">BEAT THE COMPETITION</div><h2>Hisense vs the competition</h2><p>Pick the closest competitor. Acknowledge first, then bring the conversation back to what the customer actually values.</p></div><div class="coach-grid">${COMPETITOR_COACH.map(x=>`<div class="coach-card"><div class="coach-card-title">${x[0]} <span class="muted">vs</span> ${x[1]}</div><div class="small"><b>Where Hisense wins</b></div><p>${x[2]}</p><div class="small" style="margin-top:10px"><b>What to say</b></div><p>“${x[3]}”</p></div>`).join("")}</div>`;
 }
-function getHisenseComparisonSpecs(model){
- const m={
- "UR9":[["Display","RGB Mini LED"],["Refresh rate","180Hz"],["Resolution","4K UHD"],["HDR","Dolby Vision 2 / HDR10+ / HLG"],["Gaming","4K 120Hz input / ≤7ms input lag"],["Colour","RGB Mini LED"]].filter(Boolean),
- "UR8":[["Display","RGB Mini LED"],["Resolution","4K UHD"],["HDR","Dolby Vision 2 / HDR10+ / HLG"],["Gaming","High refresh gaming"],["Colour","RGB Mini LED"]],
- "U8":[["Display","Mini LED"],["Resolution","4K UHD"],["HDR","Premium HDR"],["Gaming","High refresh gaming"],["Backlight","Mini LED"]],
- "U7 Pro":[["Display","Mini LED"],["Resolution","4K UHD"],["HDR","HDR support"],["Gaming","High refresh gaming"],["Backlight","Mini LED"]],
- "U7":[["Display","Mini LED"],["Resolution","4K UHD"],["HDR","HDR support"],["Gaming","High refresh gaming"],["Backlight","Mini LED"]]
+const STANDARD_COMPARE_CATEGORIES=[
+ "Display type","Resolution","Refresh rate","Backlight","HDR","Colour","Audio output","Speaker system","Dolby Atmos","Gaming","Anti-reflection","HDMI"
+];
+
+const HISENSE_COMPARE_SPECS={
+ "UR9":{
+  "Display type":"RGB Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"180Hz","Backlight":"RGB Mini LED","HDR":"Dolby Vision 2 / HDR10+ / HLG","Colour":"RGB Mini LED","Audio output":"90W","Speaker system":"4.1.2-channel surround","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / ≤7ms input lag","Anti-reflection":"Anti-Reflection & Glare-Free","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+ },
+ "UR8":{
+  "Display type":"RGB Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"180Hz","Backlight":"RGB Mini LED","HDR":"Dolby Vision 2 / HDR10+ / HLG","Colour":"RGB Mini LED","Audio output":"50W","Speaker system":"2.1.2-channel surround","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / ≤7ms input lag","Anti-reflection":"Anti-Reflection & Glare-Free","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+ },
+ "U8":{
+  "Display type":"Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"Up to 165Hz (size/model dependent)","Backlight":"Mini LED local dimming","HDR":"Dolby Vision IQ / HDR10+ / HLG","Colour":"Quantum Dot Colour","Audio output":"70W (65-inch reference)","Speaker system":"2.1.2-channel surround","Dolby Atmos":"Yes","Gaming":"High refresh gaming / VRR","Anti-reflection":"Model dependent","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+ },
+ "U7 Pro":{
+  "Display type":"Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"165Hz","Backlight":"Mini LED","HDR":"HDR10+ / Dolby Vision / HLG","Colour":"Quantum Dot Colour","Audio output":"50W","Speaker system":"2.1.2-channel surround","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / up to 165Hz VRR","Anti-reflection":"Anti-Reflection & Glare-Free","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+ },
+ "U7":{
+  "Display type":"Mini LED","Resolution":"4K Ultra HD (3840 × 2160)","Refresh rate":"Up to 144Hz (size/model dependent)","Backlight":"Mini LED","HDR":"HDR10+ / Dolby Vision / HLG","Colour":"Quantum Dot Colour","Audio output":"40W","Speaker system":"2.1-channel","Dolby Atmos":"Yes","Gaming":"4K 120Hz input / ≤4ms input lag on supported model","Anti-reflection":"Model dependent","HDMI":"4 × HDMI 2.1; VRR / ALLM"
+ }
+};
+
+const COMPETITOR_AUDIO={
+ "Samsung S95F OLED":["70W","4.2.2CH","Yes"],
+ "Samsung S90F OLED":["Not verified for this comparison","Not verified","Yes"],
+ "Samsung QN90F Neo QLED":["40W on 50-inch reference","2.2CH","Yes"],
+ "LG C6 OLED":["40W","2.2-channel","Yes"],
+ "LG G6 OLED":["Not verified for this comparison","Not verified","Yes"],
+ "LG QNED range":["Model dependent","Model dependent","Model dependent"],
+ "Sony Bravia 9 II True RGB":["Not verified for this comparison","Acoustic Multi-Audio+","Not verified"],
+ "Sony Bravia 7 II True RGB":["Not verified for this comparison","Acoustic Multi-Audio+","Not verified"],
+ "Sony Bravia 8 II OLED":["Not verified for this comparison","Built-in TV audio","Not verified"],
+ "Sony Bravia 5 Mini LED":["Not verified for this comparison","Built-in TV audio","Not verified"],
+ "TCL C8K QD-Mini LED":["Model/size dependent","Model/size dependent","Yes"],
+ "TCL C7K QD-Mini LED":["60W on 65-inch reference","2.0-channel on 50-inch / higher configurations on larger sizes","Yes"],
+ "TCL X11L SQD Mini LED":["Model/size dependent","Model/size dependent","Yes"]
+};
+
+function competitorValue(name,key,x){
+ const aliases={
+  "Display type":["Display","Type"],
+  "Resolution":["Resolution"],
+  "Refresh rate":["Refresh rate","Frequency"],
+  "Backlight":["Backlight"],
+  "HDR":["HDR"],
+  "Colour":["Colour","Display","Wide Colour Gamut"],
+  "Audio output":["Audio"],
+  "Speaker system":["Audio"],
+  "Dolby Atmos":["Audio"],
+  "Gaming":["Gaming"],
+  "Anti-reflection":["Anti Reflection","Anti-reflection"],
+  "HDMI":["HDMI"]
  };
- return m[model]||[];
+ if(key==="Resolution")return "4K Ultra HD (3840 × 2160)";
+ if(key==="Audio output")return (COMPETITOR_AUDIO[name]||[])[0]||"Not listed";
+ if(key==="Speaker system")return (COMPETITOR_AUDIO[name]||[])[1]||"Not listed";
+ if(key==="Dolby Atmos")return (COMPETITOR_AUDIO[name]||[])[2]||"Not listed";
+ if(key==="Backlight" && x?.specs){
+   const d=x.specs.find(r=>r[0]==="Backlight"); if(d)return d[1];
+ }
+ if(key==="Anti-reflection")return "Not listed";
+ if(key==="Colour" && x?.specs){
+   const d=x.specs.find(r=>r[0]==="Colour"); if(d)return d[1];
+ }
+ if(x?.specs){
+   for(const a of aliases[key]||[]){
+    const d=x.specs.find(r=>String(r[0]).toLowerCase()===a.toLowerCase());
+    if(d)return d[1];
+   }
+ }
+ return "Not listed";
 }
-function renderSpecRows(rows){return rows.map(s=>`<div class="coach-spec-row"><span>${s[0]}</span><b>${s[1]}</b></div>`).join("");}
+
+function renderComparisonRows(name,model,x){
+ const h=HISENSE_COMPARE_SPECS[model]||{};
+ return STANDARD_COMPARE_CATEGORIES.map(cat=>`<div class="compare-row"><div class="compare-category">${cat}</div><div class="compare-value">${competitorValue(name,cat,x)}</div><div class="compare-value hisense-value">${h[cat]||"Not listed"}</div></div>`).join("");
+}
+
 function renderExactCompetitor(){
  const name=document.getElementById("competitorModelSelect").value,out=document.getElementById("exactCompetitorResult"),x=EXACT_COMPETITOR_SPECS[name];
- if(!x){out.innerHTML="<span>Choose a competitor to see the Hisense models to compare.</span>";return}
+ if(!x){out.innerHTML="<span>Choose a competitor to see the comparison.</span>";return}
  const options=x.options.map(m=>`<option value="${m}">${m}</option>`).join(""),model=x.options[0];
- out.innerHTML=`<h3>${name}</h3><p><strong>Choose the Hisense TV:</strong></p><select class="coach-select" id="hisenseCompareSelect" onchange="renderHisenseAgainstCompetitor()">${options}</select><div class="comparison-grid"><div><h4>${name}</h4>${renderSpecRows(x.specs)}</div><div><h4>${model}</h4>${renderSpecRows(getHisenseComparisonSpecs(model))}</div></div><h3 style="margin-top:14px">Why go for Hisense?</h3><ul id="hisenseReasons">${(x.reasons[model]||[]).map(r=>`<li>${r}</li>`).join("")}</ul>`;
+ out.innerHTML=`<h3>${name} vs Hisense</h3>
+ <select class="coach-select" id="hisenseCompareSelect" onchange="renderHisenseAgainstCompetitor()">${options}</select>
+ <div class="comparison-table">
+   <div class="compare-header"><div>Specification</div><div>${name}</div><div>${model}</div></div>
+   ${renderComparisonRows(name,model,x)}
+ </div>
+ <h3 style="margin-top:14px">Why go for Hisense?</h3>
+ <ul id="hisenseReasons">${(x.reasons[model]||[]).map(r=>`<li>${r}</li>`).join("")}</ul>
+ <p class="compare-note">Where a specification varies by screen size or the exact model is not verified, the app labels it rather than guessing.</p>`;
 }
 function renderHisenseAgainstCompetitor(){
  const name=document.getElementById("competitorModelSelect").value,model=document.getElementById("hisenseCompareSelect").value,x=EXACT_COMPETITOR_SPECS[name],out=document.getElementById("exactCompetitorResult");
  if(!x||!out)return;
- out.querySelector(".comparison-grid").innerHTML=`<div><h4>${name}</h4>${renderSpecRows(x.specs)}</div><div><h4>${model}</h4>${renderSpecRows(getHisenseComparisonSpecs(model))}</div>`;
- const r=out.querySelector("#hisenseReasons"); if(r)r.innerHTML=(x.reasons[model]||[]).map(v=>`<li>${v}</li>`).join("");
+ const table=out.querySelector(".comparison-table");
+ if(table)table.innerHTML=`<div class="compare-header"><div>Specification</div><div>${name}</div><div>${model}</div></div>${renderComparisonRows(name,model,x)}`;
+ const r=out.querySelector("#hisenseReasons");if(r)r.innerHTML=(x.reasons[model]||[]).map(v=>`<li>${v}</li>`).join("");
 }
 function renderObjectionCoach(){
  const el=document.getElementById("objectionsCoachPanel"); if(!el)return;
@@ -1062,35 +1177,110 @@ document.addEventListener("DOMContentLoaded",function(){
 </script>
 
 <script id="priceMatchFinderJS">
-function initPriceMatchFinder(){
-  const dl=document.getElementById("pmfModels");
-  if(!dl) return;
-  const source=(typeof TVs!=="undefined"?TVs:[]);
-  dl.innerHTML=[...new Set(source.map(x=>x[0]).filter(Boolean))]
-    .map(n=>`<option value="${n}"></option>`).join("");
+let PMF_LIVE_DATA={};
+let PMF_LAST_UPDATED="";
+const PMF_DATA_URL="price-data.json";
+function pmfModelList(){
+  const source=(typeof TVs!=="undefined"?TVs:[]).map(x=>String(x[0]||"")).filter(Boolean);
+  const commission=(typeof R!=="undefined"?Object.keys(R):[]);
+  return [...new Set([...source,...commission])].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+}
+function normaliseModel(v){return String(v||"").trim().toUpperCase();}
+function showPmfSuggestions(inputId,listId,onPick){
+  const input=document.getElementById(inputId), box=document.getElementById(listId);
+  if(!input||!box)return;
+  const q=normaliseModel(input.value);
+  const list=pmfModelList().filter(m=>!q||normaliseModel(m).includes(q)).slice(0,12);
+  if(!list.length){box.style.display="none";box.innerHTML="";return;}
+  box.innerHTML=list.map(m=>{
+    const item=(typeof TVs!=="undefined"?TVs.find(x=>normaliseModel(x[0])===normaliseModel(m)):null);
+    const price=item&&item[1]!=null?`£${Number(item[1]).toLocaleString("en-GB")}`:"Catalogue price not set";
+    const comm=(typeof R!=="undefined"&&R[m]!=null)?` • Commission £${Number(R[m]).toFixed(2)}`:"";
+    return `<button type="button" class="pmf-suggestion" data-model="${m.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${m}<small>${price}${comm}</small></button>`;
+  }).join("");
+  box.style.display="block";
+  box.querySelectorAll(".pmf-suggestion").forEach(btn=>btn.addEventListener("click",()=>{input.value=btn.dataset.model;box.style.display="none";onPick&&onPick(btn.dataset.model);}));
+}
+function setupModelAutocomplete(inputId,listId,onPick){
+  const input=document.getElementById(inputId), box=document.getElementById(listId);
+  if(!input||!box)return;
+  input.addEventListener("input",()=>showPmfSuggestions(inputId,listId,onPick));
+  input.addEventListener("focus",()=>showPmfSuggestions(inputId,listId,onPick));
+  input.addEventListener("keydown",e=>{if(e.key==="Escape")box.style.display="none";});
+  document.addEventListener("click",e=>{if(!input.contains(e.target)&&!box.contains(e.target))box.style.display="none";});
+}
+const PMF_RETAILERS=[
+  ["Currys","https://www.google.com/search?q=site%3Acurrys.co.uk+Hisense+MODEL"],
+  ["AO","https://www.google.com/search?q=site%3Aao.com+Hisense+MODEL"],
+  ["John Lewis","https://www.google.com/search?q=site%3Ajohnlewis.com+Hisense+MODEL"],
+  ["Richer Sounds","https://www.google.com/search?q=site%3Arichersounds.com+Hisense+MODEL"],
+  ["Argos","https://www.google.com/search?q=site%3Aargos.co.uk+Hisense+MODEL"],
+  ["Hughes","https://www.google.com/search?q=site%3Ahughes.co.uk+Hisense+MODEL"],
+  ["Marks Electrical","https://www.google.com/search?q=site%3Amarkselectrical.co.uk+Hisense+MODEL"],
+  ["Peter Tyson","https://www.google.com/search?q=site%3Apetertyson.co.uk+Hisense+MODEL"],
+  ["Amazon UK","https://www.google.com/search?q=site%3Aamazon.co.uk+Hisense+MODEL"]
+];
+const PMF_SNAPSHOT={
+  "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799,note:"Latest verified web snapshot: £2,799 at Currys, John Lewis and Richer Sounds."},
+  "65UR9STUK":{"Richer Sounds":1999,note:"Latest verified web snapshot: £1,999 at Richer Sounds."},
+  "55A6STUK":{"Amazon UK":399,"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399,note:"Latest verified web snapshot showed £399 at the listed retailers."},
+  "55U7STUK":{"Richer Sounds":899,note:"Latest verified web snapshot: £899 at Richer Sounds."},
+  "55Q7STUK":{"Richer Sounds":499,note:"Latest verified web snapshot: £499 at Richer Sounds."},
+  "65U7STUK":{"Currys":1199,note:"Latest verified web snapshot: £1,199 at Currys."}
+};
+function retailerSearchUrl(template,model){return template.replace("MODEL",encodeURIComponent(model));}
+async function loadPmfLiveData(){
+  try{
+    const res=await fetch(`${PMF_DATA_URL}?v=${Date.now()}`,{cache:"no-store"});
+    if(!res.ok)throw new Error("price-data unavailable");
+    const data=await res.json();
+    PMF_LIVE_DATA=data.models||{};
+    PMF_LAST_UPDATED=data.updatedAt||"";
+  }catch(e){PMF_LIVE_DATA={};PMF_LAST_UPDATED="";}
+}
+function pmfRetailerRows(model,snap){
+  const live=PMF_LIVE_DATA[model]||{};
+  const merged={...snap,...live};
+  const names=[...new Set([...Object.keys(live),...PMF_RETAILERS.map(x=>x[0])])];
+  return names.map(name=>{
+    const price=merged[name];
+    const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
+    const priceText=price!=null?`£${Number(price).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
+    return `<div class="pmf-retailer"><span>${name}${price!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
+  }).join("");
 }
 function checkPriceMatch(){
-  const model=(document.getElementById("pmfModel")||{}).value?.trim().toUpperCase();
-  const raw=(document.getElementById("pmfCompetitor")||{}).value?.replace(/£/g,"").replace(/,/g,"").trim();
-  const out=document.getElementById("pmfResult"), price=Number(raw);
-  if(!model || !Number.isFinite(price) || price<=0){
-    out.innerHTML="Please enter a Hisense model and a valid competitor price.";
-    return;
-  }
-  const source=(typeof TVs!=="undefined"?TVs:[]);
-  const item=source.find(x=>String(x[0]).toUpperCase()===model);
-  if(!item || item[1]==null){
-    out.innerHTML="I can't find a current price for that model in the app catalogue.";
-    return;
-  }
-  const hisense=Number(item[1]), diff=hisense-price;
-  if(diff>0){
-    out.innerHTML=`<span class="pmf-good">Competitor is £${diff.toFixed(2)} cheaper.</span><br>Hisense: £${hisense.toFixed(2)} • Competitor: £${price.toFixed(2)}<br><span>Use the store's current Price Match policy/approval process before promising a match.</span>`;
-  }else if(diff<0){
-    out.innerHTML=`<span class="pmf-good">Hisense is £${Math.abs(diff).toFixed(2)} cheaper.</span><br>Hisense: £${hisense.toFixed(2)} • Competitor: £${price.toFixed(2)}<br><span>This is already a strong value conversation.</span>`;
-  }else{
-    out.innerHTML=`<span class="pmf-good">Same price.</span><br>Hisense: £${hisense.toFixed(2)} • Competitor: £${price.toFixed(2)}`;
-  }
+  const input=document.getElementById("pmfModel"),out=document.getElementById("pmfResult");
+  const model=normaliseModel(input&&input.value);
+  if(!model){out.innerHTML="Please choose a Hisense model first.";return;}
+  const source=(typeof TVs!=="undefined"?TVs:[]),item=source.find(x=>normaliseModel(x[0])===model);
+  const hisense=item&&item[1]!=null?Number(item[1]):null;
+  const snap=PMF_SNAPSHOT[model]||{};
+  const live=PMF_LIVE_DATA[model]||{};
+  const merged={...snap,...live};
+  const verified=Object.keys(merged).length;
+  const retailerRows=pmfRetailerRows(model,snap);
+  const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>Hisense app price</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
+  const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:"Live price file not available yet";
+  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} found</span></div><div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">Prices are automatically refreshed once a day from the app's UK price-comparison feed. Retailer stock, promotions and voucher prices can change between updates, so use the retailer link to confirm before promising a price match.</div></div>`;
+}
+function initPriceMatchFinder(){
+  setupModelAutocomplete("pmfModel","pmfSuggestions",()=>{});
+  setupModelAutocomplete("commissionModel","commissionSuggestions",()=>renderCommissionSearch());
+  const c=document.getElementById("commissionModel");
+  if(c)c.addEventListener("input",renderCommissionSearch);
+  if(c)c.addEventListener("focus",renderCommissionSearch);
+  loadPmfLiveData();
+}
+function renderCommissionSearch(){
+  const input=document.getElementById("commissionModel"),out=document.getElementById("commissionSearchResult");
+  if(!input||!out)return;
+  const model=normaliseModel(input.value);
+  if(!model){out.innerHTML="Choose a model to see its current commission.";return;}
+  const key=Object.keys(R||{}).find(k=>normaliseModel(k)===model);
+  if(!key){out.innerHTML=`<strong>${model}</strong><br><span class="muted">No current commission is listed for this model.</span>`;return;}
+  const value=Number(R[key]);
+  out.innerHTML=`<div class="pmf-price-card" style="margin-top:0"><div class="pmf-price-head"><b>${key}</b><span class="pmf-price-value">£${value.toFixed(2)}</span></div><div class="pmf-note">Current commission per unit from the app's commission table.</div></div>`;
 }
 document.addEventListener("DOMContentLoaded",initPriceMatchFinder);
 </script>
