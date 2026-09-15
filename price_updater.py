@@ -14,7 +14,17 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"
 }
-TIMEOUT = 12
+TIMEOUT = 10
+
+# Known current Richer Sounds product pages for models that Price4 does not reliably index.
+RICHER_EXACT = {
+    "55U7STUK PRO": "https://www.richersounds.com/hisense-55u7stuk-pro/",
+    "75U7STUK PRO": "https://www.richersounds.com/hisense-75u7stuk-pro/",
+    "85U7STUK PRO": "https://www.richersounds.com/hisense-85u7stuk-pro/",
+    "55UR8STUK": "https://www.richersounds.com/hisense-55ur8stuk/",
+    "100UR8STUK": "https://www.richersounds.com/hisense-100ur8stuk/",
+    "75UR9STUK": "https://www.richersounds.com/hisense-75ur9stuk/",
+}
 
 
 def norm(s):
@@ -151,9 +161,9 @@ def parse_price4(url):
 
 def parse_richer(model):
     slug = re.sub(r"[^a-z0-9]+", "-", model.lower()).strip("-")
-    url = RICHER_BASE + slug + "/"
+    url = RICHER_EXACT.get(model) or (RICHER_BASE + slug + "/")
     try:
-        r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+        r = requests.get(url, headers={**HEADERS, "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language": "en-GB,en;q=0.9"}, timeout=TIMEOUT)
         if r.status_code != 200:
             return None, url
 
@@ -205,6 +215,14 @@ def main():
     models = get_models()
     print(f"Checking {len(models)} current STUK models.")
 
+    # Keep the last good data if a retailer temporarily blocks or times out.
+    # A temporary scrape failure must never turn a working price into £0/empty.
+    try:
+        existing = json.loads(Path("price-data.json").read_text(encoding="utf-8"))
+        existing_models = existing.get("models", {})
+    except Exception:
+        existing_models = {}
+
     price4_links = collect_price4_links()
     wanted = {norm(m): m for m in models}
     links = {wanted[k]: v for k, v in price4_links.items() if k in wanted}
@@ -249,6 +267,16 @@ def main():
         richer_price, richer_url = parse_richer(model)
         if richer_price is not None:
             prices["Richer Sounds"] = richer_price
+
+        # If today's scrape found nothing, retain the previous good prices.
+        if not prices:
+            old = existing_models.get(model, {})
+            old_prices = old.get("prices") or {}
+            if isinstance(old_prices, dict) and old_prices:
+                prices = old_prices.copy()
+                if not price4_url:
+                    price4_url = old.get("price4Url") or old.get("sourceUrl")
+                richer_url = old.get("richerUrl") or richer_url
 
         prices = dict(sorted(prices.items(), key=lambda x: (x[1], x[0].lower())))
         best = None
