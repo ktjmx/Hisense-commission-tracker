@@ -118,6 +118,16 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
 .weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
 </style>
+<style id="polishedCoachStyles">
+.coach-hero{padding:4px 2px 14px}.coach-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;opacity:.55}.coach-hero h1{margin:3px 0 4px;font-size:27px}.coach-hero p{margin:0;opacity:.7}
+.coach-tile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.coach-tile{display:grid;grid-template-columns:34px 1fr 14px;align-items:center;gap:8px;text-align:left;padding:13px 11px;min-height:88px;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,.04)}.coach-tile-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--soft);font-weight:900}.coach-tile b{display:block;font-size:13px}.coach-tile small{display:block;margin-top:3px;font-size:10px;line-height:1.25;opacity:.62}.coach-tile>strong{font-size:22px;opacity:.4}
+.coach-panel{margin-bottom:14px}.coach-panel-head{display:flex;align-items:center;gap:12px;margin:2px 2px 12px}.coach-panel-head button{border:0;background:transparent;font-weight:800;padding:7px 0}.coach-panel-head b{display:block;font-size:18px}.coach-panel-head small{display:block;opacity:.6;font-size:11px;margin-top:2px}
+.tech-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.tech-choice-grid button{padding:14px 10px;text-align:left;border:1px solid var(--line);border-radius:14px;background:var(--card)}.tech-choice-grid b{display:block}.tech-choice-grid small{display:block;margin-top:4px;opacity:.6}
+.coach-select{width:100%;box-sizing:border-box;padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--card);font-size:14px;margin-bottom:10px}
+.coach-detail-card{padding:14px;border:1px solid var(--line);border-radius:15px;background:var(--card);line-height:1.45}.coach-detail-card h3{margin:0 0 8px}.coach-detail-card p{margin:6px 0}.coach-pill{display:inline-block;padding:5px 8px;border-radius:999px;background:var(--soft);font-size:11px;font-weight:800;margin:0 5px 5px 0}.coach-spec-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}.coach-spec-row:last-child{border-bottom:0}.coach-spec-row span{opacity:.62}.coach-spec-row b{text-align:right}
+@media(max-width:380px){.coach-tile-grid{grid-template-columns:1fr}.tech-choice-grid{grid-template-columns:1fr 1fr}.coach-tile{min-height:76px}}
+</style>
+
 <style id="coachShortcutStyles">
 .coach-shortcut-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
 .coach-shortcut{padding:13px 9px;border:1px solid var(--line);border-radius:13px;background:var(--card);font-weight:800;font-size:13px}
@@ -279,109 +289,73 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 
 
 <section id="coach" class="screen">
-  <div class="card coach-shortcuts">
-    <h2>Sales Coach</h2>
-    <p class="muted">Quick shop-floor tools — tap the section you need.</p>
-    <div class="coach-shortcut-grid">
-      <button class="coach-shortcut active" data-coach-panel="technology" onclick="showCoachPanel('technology')">Technology</button>
-      <button class="coach-shortcut" data-coach-panel="competitor" onclick="showCoachPanel('competitor')">Competitor</button>
-      <button class="coach-shortcut" data-coach-panel="objections" onclick="showCoachPanel('objections')">Objection Handling</button>
-      <button class="coach-shortcut" data-coach-panel="soundbars" onclick="showCoachPanel('soundbars')">Soundbars</button>
-    </div>
+  <div class="coach-hero">
+    <div class="coach-kicker">SALES COACH</div>
+    <h1>What do you need?</h1>
+    <p>Quick tools for the shop floor. Pick a section below.</p>
   </div>
 
-  <div id="coachPanelTechnology" class="coach-panel">
-    <div class="card">
-      <h2>Technology</h2>
-      <p class="muted">Quick explanation + customer benefits.</p>
-      <div class="tech-info-card"><h3>RGB Mini LED</h3><b>What it is</b><p>RGB Mini LED combines red, green and blue light control with Mini LED backlighting.</p><b>Benefits</b><p>Premium colour, high brightness, strong contrast and a great story for sport, HDR films and bright rooms.</p></div>
-      <div class="tech-info-card"><h3>Mini LED</h3><b>What it is</b><p>Many small LEDs give the backlight much finer control over bright and dark areas.</p><b>Benefits</b><p>High brightness, strong contrast and HDR impact — ideal for sport, gaming and films.</p></div>
-      <div class="tech-info-card"><h3>QLED</h3><b>What it is</b><p>A quantum-dot layer helps produce a wider and more vivid range of colours from an LED/LCD display.</p><b>Benefits</b><p>Bright, colourful everyday viewing and a strong step up from basic LED.</p></div>
-      <div class="tech-info-card"><h3>LED</h3><b>What it is</b><p>An LCD panel using an LED backlight.</p><b>Benefits</b><p>Simple, reliable everyday viewing and a good-value option.</p></div>
+  <div class="coach-tile-grid">
+    <button class="coach-tile" onclick="showCoachPanel('technology')">
+      <span class="coach-tile-icon">✦</span>
+      <span><b>Technology</b><small>Learn the tech &amp; benefits</small></span>
+      <strong>›</strong>
+    </button>
+    <button class="coach-tile" onclick="showCoachPanel('competitor')">
+      <span class="coach-tile-icon">⇄</span>
+      <span><b>Competitor</b><small>Compare TVs side by side</small></span>
+      <strong>›</strong>
+    </button>
+    <button class="coach-tile" onclick="showCoachPanel('objections')">
+      <span class="coach-tile-icon">↯</span>
+      <span><b>Objection Handling</b><small>Responses &amp; solutions</small></span>
+      <strong>›</strong>
+    </button>
+    <button class="coach-tile" onclick="showCoachPanel('soundbars')">
+      <span class="coach-tile-icon">♫</span>
+      <span><b>Soundbars</b><small>Models, features &amp; pitches</small></span>
+      <strong>›</strong>
+    </button>
+  </div>
+
+  <div id="coachPanelTechnology" class="coach-panel" style="display:none">
+    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Technology</b><small>Pick a technology</small></div></div>
+    <div class="tech-choice-grid">
+      <button onclick="showTechDetail('RGB Mini LED')"><b>RGB Mini LED</b><small>UR9 • UR8</small></button>
+      <button onclick="showTechDetail('Mini LED')"><b>Mini LED</b><small>U8 • U7 Pro • U7</small></button>
+      <button onclick="showTechDetail('QLED')"><b>QLED</b><small>Q7 • E7 Pro</small></button>
+      <button onclick="showTechDetail('LED')"><b>LED</b><small>A6</small></button>
     </div>
+    <div id="technologyDetail" class="coach-detail-card"><span>Choose a technology above.</span></div>
   </div>
 
   <div id="coachPanelCompetitor" class="coach-panel" style="display:none">
-    <div class="card">
-      <h2>Competitor</h2>
-      <p class="muted">Choose a specific TV for a like-for-like specification comparison.</p>
-      <select id="competitorModelSelect" class="quote-select" onchange="renderExactCompetitor()">
-        <option value="">Choose a competitor TV…</option>
-        <optgroup label="Samsung"><option>Samsung S95F OLED</option><option>Samsung S90F OLED</option><option>Samsung QN90F Neo QLED</option></optgroup>
-        <optgroup label="LG"><option>LG C6 OLED</option><option>LG G6 OLED</option><option>LG QNED range</option></optgroup>
-        <optgroup label="Sony"><option>Sony Bravia 9 II True RGB</option><option>Sony Bravia 7 II True RGB</option><option>Sony Bravia 8 II OLED</option><option>Sony Bravia 5 Mini LED</option></optgroup>
-        <optgroup label="TCL"><option>TCL C8K QD-Mini LED</option><option>TCL C7K QD-Mini LED</option><option>TCL X11L SQD Mini LED</option></optgroup>
-      </select>
-      <div id="exactCompetitorResult" class="pmf-result">Choose a competitor to see the comparison.</div>
-    </div>
+    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Competitor</b><small>Choose a specific TV</small></div></div>
+    <select id="competitorModelSelect" class="coach-select" onchange="renderExactCompetitor()">
+      <option value="">Choose a competitor TV…</option>
+      <optgroup label="Samsung"><option>Samsung S95F OLED</option><option>Samsung S90F OLED</option><option>Samsung QN90F Neo QLED</option></optgroup>
+      <optgroup label="LG"><option>LG C6 OLED</option><option>LG G6 OLED</option><option>LG QNED range</option></optgroup>
+      <optgroup label="Sony"><option>Sony Bravia 9 II True RGB</option><option>Sony Bravia 7 II True RGB</option><option>Sony Bravia 8 II OLED</option><option>Sony Bravia 5 Mini LED</option></optgroup>
+      <optgroup label="TCL"><option>TCL C8K QD-Mini LED</option><option>TCL C7K QD-Mini LED</option><option>TCL X11L SQD Mini LED</option></optgroup>
+    </select>
+    <div id="exactCompetitorResult" class="coach-detail-card"><span>Choose a competitor to see the comparison.</span></div>
   </div>
 
   <div id="coachPanelObjections" class="coach-panel" style="display:none">
-    <div class="card">
-      <h2>Objection Handling</h2>
-      <div class="objection-card"><b>“I prefer Samsung.”</b><p><strong>Response:</strong> “Absolutely — let me show you the equivalent Hisense and you can compare them side by side.”</p><p><strong>Solution:</strong> Demo the same content and compare picture, size, features and price.</p></div>
-      <div class="objection-card"><b>“I prefer LG.”</b><p><strong>Response:</strong> “LG is a strong choice. Let's see whether a brighter Hisense Mini LED or RGB screen gives you more of what you actually watch.”</p><p><strong>Solution:</strong> Focus on brightness, colour, size and viewing habits.</p></div>
-      <div class="objection-card"><b>“Sony is better quality.”</b><p><strong>Response:</strong> “Sony is excellent, so let's compare the actual picture rather than just the badge.”</p><p><strong>Solution:</strong> Same content, then compare picture, processing, gaming, sound and value.</p></div>
-      <div class="objection-card"><b>“TCL has better Mini LED.”</b><p><strong>Response:</strong> “TCL is very strong in Mini LED. Let's compare the two properly and see which you prefer.”</p><p><strong>Solution:</strong> Compare brightness, contrast, gaming, processing, size and price.</p></div>
-      <div class="objection-card"><b>“OLED is better.”</b><p><strong>Response:</strong> “OLED has fantastic blacks. If brightness, larger screens and HDR impact matter, Mini LED/RGB is worth seeing.”</p><p><strong>Solution:</strong> Demo the Hisense in the customer's real viewing scenario.</p></div>
-      <div class="objection-card"><b>“Hisense isn't as good.”</b><p><strong>Response:</strong> “I understand. The best thing is to judge this model on the picture and features rather than the logo.”</p><p><strong>Solution:</strong> Demonstrate and link features to what they want.</p></div>
-      <div class="objection-card"><b>“I've seen it cheaper elsewhere.”</b><p><strong>Response:</strong> “Let's check exactly what price and model you've seen — I can also check our Price Match Finder and current offers.”</p><p><strong>Solution:</strong> Use Price Match Finder in Offers.</p></div>
-    </div>
+    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Objection Handling</b><small>Quick responses on the shop floor</small></div></div>
+    <select id="objectionSelect" class="coach-select" onchange="renderObjection()">
+      <option value="">Choose an objection…</option>
+      <option>“I prefer Samsung.”</option><option>“I prefer LG.”</option><option>“Sony is better quality.”</option>
+      <option>“TCL has better Mini LED.”</option><option>“OLED is better.”</option><option>“Hisense isn't as good.”</option>
+      <option>“I've seen it cheaper elsewhere.”</option>
+    </select>
+    <div id="objectionResult" class="coach-detail-card"><span>Choose an objection to see what to say and what to do next.</span></div>
   </div>
 
   <div id="coachPanelSoundbars" class="coach-panel" style="display:none">
-    <div class="card"><h2>Soundbars</h2><p class="muted">Current soundbar information from the app.</p><div id="coachSoundbarList"></div></div>
-  </div>
-<section class="screen" id="stats">
-  <div class="card commission-summary">
-    <div class="section-title">Total commission summary</div>
-    <div class="commission-main">
-      <div><span class="muted">Total commission</span><strong id="statsTotalCommission">£0</strong></div>
-      <div class="commission-side"><span class="muted">Units sold</span><b id="statsCommissionUnits">0</b></div>
-    </div>
-    <div class="commission-details">
-      <div><span class="muted">Sales entries</span><b id="statsCommissionEntries">0</b></div>
-      <div><span class="muted">Average per unit</span><b id="statsAverageCommission">£0</b></div>
-    </div>
-  </div>
-  <div class="card weekly-stats">
-    <div class="section-title">Weekly sales summary</div>
-    <div class="weekly-dates" id="statsWeeklyDates"></div>
-    <div class="weekly-stat-top">
-      <div><b id="statsWeeklyUnits">0</b><span>TV units</span></div>
-      <div><b id="statsWeeklySoundbars">0</b><span>Soundbars</span></div>
-    </div>
-    <div class="section-title" style="margin-top:14px">Weekly TV mix</div>
-    <div class="overall-mix">
-      <div><b id="statsWeeklyLED">0%</b><span>LED</span></div>
-      <div><b id="statsWeeklyQLED">0%</b><span>QLED</span></div>
-      <div><b id="statsWeeklyMiniLED">0%</b><span>Mini LED</span></div>
-      <div><b id="statsWeeklyRGB">0%</b><span>RGB Mini LED</span></div>
-    </div>
-  </div>
-  <div class="card overall-stats">
-    <div class="section-title">Overall sales mix</div>
-    <div class="muted" style="margin-top:-7px;margin-bottom:11px">All logged TV units</div>
-    <div class="overall-total"><b id="statsOverallUnits">0</b><span>TV units</span></div>
-    <div class="overall-mix">
-      <div><b id="statsOverallLED">0%</b><span>LED</span></div>
-      <div><b id="statsOverallQLED">0%</b><span>QLED</span></div>
-      <div><b id="statsOverallMiniLED">0%</b><span>Mini LED</span></div>
-      <div><b id="statsOverallRGB">0%</b><span>RGB Mini LED</span></div>
-    </div>
-  </div>
-  <div class="grid3" id="statCards"></div>
-  <div class="card" style="margin-top:12px">
-    <div class="section-title">Payday</div><div id="payday"></div>
-  </div>
-  <div class="card">
-    <div class="section-title">Commission rate lookup</div>
-    <div class="field"><input id="rateSearch" list="modelList" placeholder="Type a model"></div>
-    <div id="rateAnswer" class="muted">Enter a model to see the current rate.</div>
-  </div>
-  <div class="card">
-    <div class="section-title">Backup</div>
-    <button class="secondary" id="backup">Download my sales backup</button>
+    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Soundbars</b><small>Choose a model</small></div></div>
+    <select id="soundbarSelect" class="coach-select" onchange="renderSelectedSoundbar()"><option value="">Choose a soundbar…</option></select>
+    <div id="coachSoundbarResult" class="coach-detail-card"><span>Choose a soundbar to see the current information and pitch.</span></div>
   </div>
 </section>
 
@@ -1057,38 +1031,53 @@ function checkPriceMatch(){
 document.addEventListener("DOMContentLoaded",initPriceMatchFinder);
 </script>
 
+
 <script id="coachShortcutJS">
-const EXACT_COMPETITOR_SPECS={
-"Samsung S95F OLED":{hisense:"UR9 / UR8",specs:[["Display","OLED"],["Refresh rate","Up to 165Hz"],["HDR","HDR10+ / HDR10 / HLG"],["Gaming","High refresh gaming features"],["Hisense angle","RGB Mini LED, high brightness and large-screen choice"]],note:"Premium OLED comparison — demo both and compare the complete package."},
-"Samsung S90F OLED":{hisense:"UR9 / UR8",specs:[["Display","OLED"],["Refresh rate","Up to 144Hz"],["HDR","HDR10+ / HDR10 / HLG"],["Gaming","High refresh gaming features"],["Hisense angle","RGB Mini LED, high brightness and large-screen choice"]],note:"Compare picture, brightness, gaming, size and overall price."},
-"Samsung QN90F Neo QLED":{hisense:"UR8 / U8",specs:[["Display","Neo QLED / Mini LED"],["Refresh rate","Up to 165Hz (size dependent)"],["HDR","HDR10+ / HDR / HLG"],["Gaming","High refresh gaming features"],["Backlight","Mini LED local dimming"],["Hisense angle","Mini LED with strong brightness and contrast"]],note:"Exact figures vary by size, so use the matching screen size."},
-"LG C6 OLED":{hisense:"UR9 / UR8",specs:[["Display","OLED evo"],["Refresh rate","Up to 165Hz"],["HDR","Dolby Vision / HDR10 / HLG"],["Gaming","High refresh gaming features"],["Smart TV","webOS"],["Hisense angle","RGB Mini LED, high brightness and large-screen choice"]],note:"Compare the same size and use case."},
-"LG G6 OLED":{hisense:"UR9",specs:[["Display","Premium OLED evo"],["Refresh rate","Up to 165Hz"],["HDR","Dolby Vision / HDR10 / HLG"],["Gaming","High refresh gaming features"],["Design","Premium gallery-style design"],["Hisense angle","UR9 RGB Mini LED premium alternative"]],note:"Flagship comparison — picture, brightness, gaming, sound, design and value."},
-"LG QNED range":{hisense:"UR8 / U8",specs:[["Display","QNED LCD (model dependent)"],["Backlight","Model dependent"],["HDR","Model dependent"],["Gaming","Model dependent"],["Smart TV","webOS"],["Hisense angle","Mini LED options with strong brightness and contrast"]],note:"QNED is a range, so exact specs depend on the model."},
-"Sony Bravia 9 II True RGB":{hisense:"UR9",specs:[["Display","True RGB Mini LED"],["Backlight","Mini LED"],["Colour","RGB LED backlight"],["Gaming","High refresh gaming features"],["HDR","Premium HDR support"],["Hisense angle","Direct RGB Mini LED comparison"]],note:"The closest technology match — use the same size and same content."},
-"Sony Bravia 7 II True RGB":{hisense:"UR8 / UR9",specs:[["Display","True RGB Mini LED"],["Backlight","Mini LED"],["Colour","RGB LED backlight"],["Gaming","High refresh gaming features"],["HDR","Premium HDR support"],["Hisense angle","RGB Mini LED alternative"]],note:"Check exact size before quoting detailed figures."},
-"Sony Bravia 8 II OLED":{hisense:"UR8 / UR9",specs:[["Display","OLED"],["Refresh rate","High refresh"],["HDR","Premium HDR support"],["Gaming","High refresh gaming features"],["Audio","Premium built-in TV audio"],["Hisense angle","RGB Mini LED alternative with high brightness"]],note:"Picture-led comparison based on room and viewing habits."},
-"Sony Bravia 5 Mini LED":{hisense:"U8 / U7 Pro",specs:[["Display","Mini LED LCD"],["Backlight","Mini LED local dimming"],["Refresh rate","High refresh on supported sizes"],["HDR","HDR support"],["Gaming","Gaming features"],["Hisense angle","Mini LED alternative with strong brightness and value"]],note:"Exact specifications vary by size."},
-"TCL C8K QD-Mini LED":{hisense:"UR8 / U8",specs:[["Display","QD-Mini LED"],["Backlight","Mini LED local dimming"],["Refresh rate","High refresh gaming support"],["HDR","Premium HDR support"],["Gaming","High refresh / gaming features"],["Hisense angle","Mini LED/RGB options with large-screen choice"]],note:"Confirm size before quoting detailed figures."},
-"TCL C7K QD-Mini LED":{hisense:"U7 Pro / U8",specs:[["Display","QD-Mini LED"],["Backlight","Mini LED local dimming"],["Refresh rate","High refresh gaming support"],["HDR","Premium HDR support"],["Gaming","High refresh / gaming features"],["Hisense angle","Mini LED alternative with strong gaming/value story"]],note:"Close price/performance comparison — demo the same content."},
-"TCL X11L SQD Mini LED":{hisense:"UR9",specs:[["Display","SQD Mini LED"],["Backlight","Premium Mini LED local dimming"],["Refresh rate","High refresh gaming support"],["HDR","Premium HDR support"],["Gaming","High refresh / gaming features"],["Hisense angle","UR9 RGB Mini LED flagship alternative"]],note:"Flagship comparison — judge the whole package."}
+const TECHNOLOGY_INFO={
+ "RGB Mini LED":{summary:"RGB Mini LED combines RGB light control with Mini LED backlighting.",benefits:["Premium colour","High brightness","Strong contrast","Excellent for sport, HDR and bright rooms"],models:"UR9 • UR8"},
+ "Mini LED":{summary:"Mini LED uses many small backlight LEDs for finer control of bright and dark areas.",benefits:["High brightness","Strong contrast","Great HDR impact","Excellent for sport, gaming and films"],models:"U8 • U7 Pro • U7"},
+ "QLED":{summary:"QLED uses quantum-dot technology to produce a wider, more vivid range of colours.",benefits:["Bright colour","Strong everyday picture","Good step up from basic LED","Great for streaming and sport"],models:"Q7 • E7 Pro"},
+ "LED":{summary:"LED TVs use an LED backlight behind an LCD panel.",benefits:["Straightforward viewing","Reliable everyday performance","Good value","Simple customer choice"],models:"A6"}
+};
+const OBJECTIONS={
+"“I prefer Samsung.”":{response:"“Absolutely — Samsung makes great TVs. Let me show you the equivalent Hisense and you can compare them side by side.”",solution:"Demo the same content and compare picture, size, features and price."},
+"“I prefer LG.”":{response:"“LG is a strong choice. Let's see whether a brighter Hisense Mini LED or RGB screen gives you more of what you actually watch.”",solution:"Focus on brightness, colour, screen size and viewing habits."},
+"“Sony is better quality.”":{response:"“Sony is excellent, so let's compare the actual picture rather than just the badge.”",solution:"Use the same content and compare picture, processing, gaming, sound and value."},
+"“TCL has better Mini LED.”":{response:"“TCL is very strong in Mini LED. Let's compare the two properly and see which you prefer.”",solution:"Compare brightness, contrast, gaming, processing, size and price."},
+"“OLED is better.”":{response:"“OLED has fantastic blacks. If brightness, larger screens and HDR impact matter, Mini LED/RGB is worth seeing.”",solution:"Demo the Hisense in the customer's real viewing scenario."},
+"“Hisense isn't as good.”":{response:"“I understand. The best thing is to judge this model on the picture and features rather than the logo.”",solution:"Demonstrate the TV and link features directly to what the customer wants."},
+"“I've seen it cheaper elsewhere.”":{response:"“Let's check exactly what price and model you've seen — I can also check our Price Match Finder and current offers.”",solution:"Use Price Match Finder in Offers and check the current promotion."}
 };
 function showCoachPanel(panel){
- document.querySelectorAll(".coach-shortcut").forEach(b=>b.classList.toggle("active",b.dataset.coachPanel===panel));
- document.querySelectorAll(".coach-panel").forEach(p=>p.style.display="none");
+ document.querySelectorAll(".coach-panel").forEach(x=>x.style.display="none");
  const el=document.getElementById("coachPanel"+panel.charAt(0).toUpperCase()+panel.slice(1));
- if(el) el.style.display="block";
- if(panel==="soundbars") renderCoachSoundbars();
+ if(el)el.style.display="block";
+ document.querySelectorAll(".coach-tile").forEach(x=>x.style.display="none");
+ window.scrollTo({top:0,behavior:"smooth"});
 }
-function renderExactCompetitor(){
- const name=document.getElementById("competitorModelSelect").value,out=document.getElementById("exactCompetitorResult"),x=EXACT_COMPETITOR_SPECS[name];
- if(!x){out.innerHTML="Choose a competitor to see the comparison.";return}
- out.innerHTML=`<b>${name}</b><div style="margin:6px 0 10px"><strong>Hisense to compare:</strong> ${x.hisense}</div><div class="spec-table">${x.specs.map(s=>`<div class="spec-row"><span>${s[0]}</span><b>${s[1]}</b></div>`).join("")}</div><p style="margin-top:10px"><strong>How we compete:</strong> ${x.note}</p>`;
+function closeCoachPanel(){
+ document.querySelectorAll(".coach-panel").forEach(x=>x.style.display="none");
+ document.querySelectorAll(".coach-tile").forEach(x=>x.style.display="grid");
+ window.scrollTo({top:0,behavior:"smooth"});
 }
-function renderCoachSoundbars(){
- const out=document.getElementById("coachSoundbarList");if(!out||typeof SOUNDBARS==="undefined")return;
- out.innerHTML=SOUNDBARS.map(s=>`<div class="coach-soundbar"><b>${s.m}</b><span>${s.meta}</span><p>${s.pitch}</p></div>`).join("");
+function showTechDetail(name){
+ const x=TECHNOLOGY_INFO[name],out=document.getElementById("technologyDetail");
+ out.innerHTML=`<h3>${name}</h3><p>${x.summary}</p><div>${x.benefits.map(b=>`<span class="coach-pill">${b}</span>`).join("")}</div><p><strong>Hisense models:</strong> ${x.models}</p>`;
 }
-document.addEventListener("DOMContentLoaded",()=>showCoachPanel("technology"));
+function renderObjection(){
+ const name=document.getElementById("objectionSelect").value,out=document.getElementById("objectionResult"),x=OBJECTIONS[name];
+ if(!x){out.innerHTML="<span>Choose an objection to see what to say and what to do next.</span>";return}
+ out.innerHTML=`<h3>${name}</h3><p><strong>What to say:</strong><br>${x.response}</p><p><strong>Solution:</strong><br>${x.solution}</p>`;
+}
+function renderSelectedSoundbar(){
+ const i=Number(document.getElementById("soundbarSelect").value),out=document.getElementById("coachSoundbarResult");
+ if(!Number.isInteger(i)||typeof SOUNDBARS==="undefined"||!SOUNDBARS[i]){out.innerHTML="<span>Choose a soundbar to see the current information and pitch.</span>";return}
+ const s=SOUNDBARS[i];out.innerHTML=`<h3>${s.m}</h3><p><strong>Details:</strong> ${s.meta}</p><p><strong>Shop-floor pitch:</strong><br>${s.pitch}</p>`;
+}
+function initCoachShortcuts(){
+ const sel=document.getElementById("soundbarSelect");
+ if(sel&&typeof SOUNDBARS!=="undefined")sel.innerHTML='<option value="">Choose a soundbar…</option>'+SOUNDBARS.map((s,i)=>`<option value="${i}">${s.m}</option>`).join("");
+}
+document.addEventListener("DOMContentLoaded",initCoachShortcuts);
 </script>
 </body></html>
