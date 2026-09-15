@@ -504,9 +504,9 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 function viewOffers(model){
   const input=document.getElementById("offerModel");
   if(input) input.value=model;
-  if(typeof go==="function") go("offers");
-  if(typeof renderOffer==="function") renderOffer();
-  const target=document.getElementById("offerResult");
+  if(typeof showTab==="function") showTab("offers");
+  if(typeof renderOffers==="function") renderOffers();
+  const target=document.getElementById("offerResults") || document.getElementById("offersResults");
   if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
@@ -763,21 +763,6 @@ function renderOffer(){
 }
 
 document.getElementById("offerModel").oninput=renderOffer;
-
-// View-offers buttons are created dynamically by TV Finder, so use one
-// delegated handler rather than binding only to the initial DOM.
-document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-offer-model]");
-  if(!b)return;
-  const model=b.dataset.offerModel;
-  if(!model)return;
-  e.preventDefault();
-  viewOffers(model);
-});
-
-// Populate the Offers model picker once the TV catalogue is defined.
-fillModels();
-
 const COACH={
 UR9:{
 pitch:"“If you want the picture to genuinely jump off the screen, this is the one I’d show you. The UR9 combines RGB colour technology with Mini LED control, so you’re getting incredibly vibrant colour, serious brightness and much tighter control over light and dark scenes. It’s not just a spec sheet — put sport, a film or a game on it and you can actually see what the technology is doing.”",
@@ -1166,6 +1151,13 @@ renderStats();
 
 updateHomeTotalVAL();
 
+document.addEventListener("click",function(e){
+  const btn=e.target.closest(".offer-btn");
+  if(!btn) return;
+  const model=btn.getAttribute("data-offer-model");
+  if(model && typeof viewOffers==="function") viewOffers(model);
+});
+
 document.addEventListener("DOMContentLoaded",function(){
   const btn=document.getElementById("findTv");
   if(btn) btn.addEventListener("click",function(e){
@@ -1292,12 +1284,11 @@ const PMF_RETAILERS=[
   ["Hughes","https://www.google.com/search?q=site%3Ahughes.co.uk+Hisense+MODEL"],
   ["Marks Electrical","https://www.google.com/search?q=site%3Amarkselectrical.co.uk+Hisense+MODEL"],
   ["Peter Tyson","https://petertyson.co.uk/hisense-MODEL"],
-  ["Amazon UK","https://www.google.com/search?q=site%3Aamazon.co.uk+Hisense+MODEL"]
 ];
 const PMF_SNAPSHOT={
   "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799,note:"Latest verified web snapshot: £2,799 at Currys, John Lewis and Richer Sounds."},
   "65UR9STUK":{"Richer Sounds":1999,note:"Latest verified web snapshot: £1,999 at Richer Sounds."},
-  "55A6STUK":{"Amazon UK":399,"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399,note:"Latest verified web snapshot showed £399 at the listed retailers."},
+  "55A6STUK":{"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399,note:"Latest verified web snapshot showed £399 at the listed retailers."},
   "55U7STUK":{"Richer Sounds":899,note:"Latest verified web snapshot: £899 at Richer Sounds."},
   "55Q7STUK":{"Richer Sounds":499,note:"Latest verified web snapshot: £499 at Richer Sounds."},
   "65U7STUK":{"Currys":1199,note:"Latest verified web snapshot: £1,199 at Currys."},
