@@ -1315,7 +1315,9 @@ async function loadPmfLiveData(){
     allModels.forEach(k=>{
       const snapModel=PMF_SNAPSHOT[k]||{};
       const liveModel=liveModels[k]||{};
-      PMF_LIVE_DATA[k]={...liveModel,prices:{...(snapModel||{}),...(liveModel.prices||{})}};
+      const snapPrices={...(snapModel||{})};
+      delete snapPrices.note;
+      PMF_LIVE_DATA[k]={...liveModel,prices:{...snapPrices,...(liveModel.prices||{})}};
     });
     PMF_LAST_UPDATED=data.updatedAt||"";
   }catch(e){
