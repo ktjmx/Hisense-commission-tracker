@@ -1,7 +1,10 @@
-import json, re, time
+import json
+import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -11,6 +14,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                   "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"
 }
+TIMEOUT = 12
 
 
 def norm(s):
@@ -22,19 +26,27 @@ def get_models():
     m = re.search(r"const\s+TVs\s*=\s*\[(.*?)\];", html, re.S)
     if not m:
         raise RuntimeError("Could not find TVs catalogue in index.html")
-    models = list(dict.fromkeys(
+
+    raw = list(dict.fromkeys(
         re.findall(r'\[\s*["\']([^"\']+)["\']\s*,', m.group(1))
     ))
-    # Only current 2026 STUK models are included. QTUK/Q models are excluded.
-    current = []
-    for model in models:
+
+    # Price feed = current STUK generation only.
+    # This deliberately keeps current STUK PRO models and removes old QTUK/Q models.
+    models = []
+    for model in raw:
         code = re.sub(r"\s+", "", model.upper())
         if code.endswith("QTUK"):
             continue
-        if re.search(r"STUK(?:PRO)?$", code, re.I):
-            current.append(model)
-    print(f"Price matching: {len(current)} current STUK models.")
-    return current
+        if re.search(r"STUK(?:PRO)?$", code):
+            models.append(model)
+    return models
+
+
+def get(url, timeout=TIMEOUT):
+    r = requests.get(url, headers=HEADERS, timeout=timeout)
+    r.raise_for_status()
+    return r
 
 
 def extract_product_code(href):
@@ -42,42 +54,32 @@ def extract_product_code(href):
     return norm(m.group(1)) if m else None
 
 
-def collect_product_links(models):
-    wanted = {norm(m): m for m in models}
-    found = {}
-    all_links = {}
-    for page in range(1, 11):
-        url = BASE + "departments/televisions/brand/hisense" + ("" if page == 1 else f"/{page}")
-        try:
-            r = requests.get(url, headers=HEADERS, timeout=40)
-            r.raise_for_status()
-        except Exception:
-            continue
-        soup = BeautifulSoup(r.text, "html.parser")
-        for a in soup.find_all("a", href=True):
-            code = extract_product_code(a["href"])
-            if not code:
-                continue
-            href = urljoin(BASE, a["href"])
-            all_links[code] = href
-            if code in wanted:
-                found[wanted[code]] = href
-        if len(found) == len(wanted):
-            break
-        time.sleep(0.3)
+def collect_price4_links():
+    links = {}
+    # Price4 currently exposes the Hisense catalogue over several pages.
+    # Fetch them concurrently so a slow page cannot make the whole job hang.
+    urls = [BASE + "departments/televisions/brand/hisense"] + [
+        BASE + f"departments/televisions/brand/hisense/{p}" for p in range(2, 11)
+    ]
 
-    # Price4 often uses the non-PRO URL even when its product page's model
-    # number is actually the PRO model. Map each current PRO catalogue item
-    # explicitly to its base STUK listing rather than dropping it.
-    for model in models:
-        if model in found:
-            continue
-        n = norm(model)
-        if n.endswith("pro"):
-            base = n[:-3]
-            if base in all_links:
-                found[model] = all_links[base]
-    return found
+    def fetch(url):
+        try:
+            r = get(url)
+            soup = BeautifulSoup(r.text, "html.parser")
+            found = {}
+            for a in soup.find_all("a", href=True):
+                code = extract_product_code(a["href"])
+                if code:
+                    found[code] = urljoin(BASE, a["href"])
+            return found
+        except Exception as exc:
+            print(f"Price4 catalogue page skipped: {url} ({exc})")
+            return {}
+
+    with ThreadPoolExecutor(max_workers=5) as pool:
+        for found in pool.map(fetch, urls):
+            links.update(found)
+    return links
 
 
 def money_values(text):
@@ -92,156 +94,161 @@ def retailer_from_cell(cell):
         alt = re.sub(r"^Image:\s*", "", alt, flags=re.I).strip()
         if alt and alt.lower() != "image":
             return alt
+
     for tag in cell.find_all(["a", "span"], attrs={"title": True}):
-        text = re.sub(r"\s+", " ", tag.get("title", "")).strip()
-        if text:
-            return text
-    text = re.sub(r"\s+", " ", cell.get_text(" ", strip=True)).strip()
-    return re.sub(r"^Image:\s*", "", text, flags=re.I).strip()
+        title = re.sub(r"\s+", " ", tag.get("title", "")).strip()
+        if title:
+            return title
+
+    return re.sub(r"^Image:\s*", "", cell.get_text(" ", strip=True), flags=re.I).strip()
 
 
 def parse_price4(url):
-    r = requests.get(url, headers=HEADERS, timeout=40)
-    r.raise_for_status()
+    r = get(url)
     soup = BeautifulSoup(r.text, "html.parser")
     body = soup.get_text(" ", strip=True)
-    last_updated = None
-    m = re.search(r"Last updated:\s*([^|]+?)(?:\s+An asterisk|\s+ℹ️|\s+Comparing prices)", body)
+
+    updated = None
+    m = re.search(
+        r"Last updated:\s*([^|]+?)(?:\s+An asterisk|\s+ℹ️|\s+Comparing prices)",
+        body,
+    )
     if m:
-        last_updated = m.group(1).strip()
+        updated = m.group(1).strip()
 
     retailers = {}
     for tr in soup.find_all("tr"):
         cells = tr.find_all(["td", "th"])
         if len(cells) < 2:
             continue
+
         prices = []
         for cell in cells[1:]:
             prices.extend(money_values(cell.get_text(" ", strip=True)))
         if not prices:
             continue
+
         store = retailer_from_cell(cells[0])
         low = store.lower()
         if not store or low in {"store", "total", "visit store", "and", "from"}:
             continue
         if low.startswith("visit store") or "rrp" in low or len(store) > 80:
             continue
+
         retailers[store] = round(prices[0], 2)
+
     model_number = None
-    mm = re.search(r"Model Number:\s*([A-Za-z0-9\s]+?)(?:\s+Screen Size|\s+Screen|\s+Product|\s+About|\s+Specifications|$)", body, re.I)
+    mm = re.search(
+        r"Model Number:\s*([A-Za-z0-9\s]+?)(?:\s+Screen Size|\s+Screen|\s+Product|\s+About|\s+Specifications|$)",
+        body,
+        re.I,
+    )
     if mm:
         model_number = re.sub(r"\s+", " ", mm.group(1)).strip()
-    return retailers, last_updated, model_number
 
-
-def extract_jsonld_prices(soup):
-    prices = []
-    for script in soup.find_all("script", type="application/ld+json"):
-        raw = script.string or script.get_text()
-        if not raw:
-            continue
-        try:
-            data = json.loads(raw)
-        except Exception:
-            continue
-        stack = data if isinstance(data, list) else [data]
-        while stack:
-            item = stack.pop()
-            if isinstance(item, list):
-                stack.extend(item)
-            elif isinstance(item, dict):
-                offers = item.get("offers")
-                if offers:
-                    stack.extend(offers if isinstance(offers, list) else [offers])
-                if isinstance(item.get("price"), (int, float, str)):
-                    try:
-                        p = float(str(item["price"]).replace(",", ""))
-                        if 100 <= p <= 20000:
-                            prices.append(p)
-                    except Exception:
-                        pass
-    return prices
+    return retailers, updated, model_number
 
 
 def parse_richer(model):
     slug = re.sub(r"[^a-z0-9]+", "-", model.lower()).strip("-")
     url = RICHER_BASE + slug + "/"
     try:
-        r = requests.get(url, headers=HEADERS, timeout=40)
+        r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
         if r.status_code != 200:
-            return None, None
+            return None, url
+
         soup = BeautifulSoup(r.text, "html.parser")
         text = soup.get_text(" ", strip=True)
-        # Confirm this really is the requested model, not a generic 404 page.
         if norm(model) not in norm(text):
-            return None, None
-        prices = extract_jsonld_prices(soup)
-        if not prices:
-            # Richer pages visibly repeat the current price near the product title.
-            title_pos = text.lower().find(model.lower())
-            window = text[title_pos:title_pos + 2500] if title_pos >= 0 else text[:2500]
-            prices = money_values(window)
-            prices = [p for p in prices if 100 <= p <= 20000]
-        if not prices:
             return None, url
-        # Prefer the first structured offer; dedupe and choose the lowest current
-        # product price, avoiding finance amounts and tiny voucher/cashback values.
-        price = min(prices)
-        return round(price, 2), url
-    except Exception:
+
+        # Product structured data is the safest source on Richer Sounds.
+        prices = []
+        for script in soup.find_all("script", type="application/ld+json"):
+            raw = script.string or script.get_text()
+            if not raw:
+                continue
+            try:
+                data = json.loads(raw)
+            except Exception:
+                continue
+            stack = data if isinstance(data, list) else [data]
+            while stack:
+                item = stack.pop()
+                if isinstance(item, list):
+                    stack.extend(item)
+                elif isinstance(item, dict):
+                    offers = item.get("offers")
+                    if offers:
+                        stack.extend(offers if isinstance(offers, list) else [offers])
+                    value = item.get("price")
+                    if isinstance(value, (int, float, str)):
+                        try:
+                            p = float(str(value).replace(",", ""))
+                            if 100 <= p <= 20000:
+                                prices.append(p)
+                        except Exception:
+                            pass
+
+        if not prices:
+            pos = text.lower().find(model.lower())
+            window = text[pos:pos + 1800] if pos >= 0 else text[:1800]
+            prices = [p for p in money_values(window) if 100 <= p <= 20000]
+
+        return (round(min(prices), 2), url) if prices else (None, url)
+    except Exception as exc:
+        print(f"Richer skipped for {model}: {exc}")
         return None, url
 
 
 def main():
     models = get_models()
-    links = collect_product_links(models)
+    print(f"Checking {len(models)} current STUK models.")
+
+    price4_links = collect_price4_links()
+    wanted = {norm(m): m for m in models}
+    links = {wanted[k]: v for k, v in price4_links.items() if k in wanted}
+
+    # PRO models often share the Price4 URL of the base STUK listing.
+    for model in models:
+        if model in links:
+            continue
+        n = norm(model)
+        if n.endswith("pro"):
+            base = n[:-3]
+            if base in price4_links:
+                links[model] = price4_links[base]
+
     result = {
         "updatedAt": datetime.now(timezone.utc).isoformat(),
         "source": "Price4 UK price comparison + Richer Sounds fallback",
-        "models": {}
+        "models": {},
     }
 
-    for model in models:
+    def process(model):
         prices = {}
-        price4_url = links.get(model)
         price4_updated = None
         model_number = None
-        source_url = price4_url
+        price4_url = links.get(model)
+        richer_url = None
 
         if price4_url:
             try:
                 prices, price4_updated, model_number = parse_price4(price4_url)
-                # Never use a base-model Price4 page as a PRO price unless the
-                # page itself identifies the PRO model.
+                # Never assign base-model Price4 prices to a PRO model unless
+                # Price4 itself identifies the page as PRO.
                 if re.search(r"PRO$", model, re.I):
                     if not model_number or "PRO" not in model_number.upper():
                         prices = {}
             except Exception as exc:
-                print(f"Price4 failed for {model}: {exc}")
+                print(f"Price4 skipped for {model}: {exc}")
                 prices = {}
 
-        # Richer Sounds fallback. Try the exact model first, then a small set of
-        # safe URL variants. All failures are swallowed so one retailer can never
-        # break the whole GitHub Actions run.
-        richer_candidates = [
-            model,
-            re.sub(r"\s+PRO$", "-PRO", model, flags=re.I),
-            re.sub(r"\s+PRO$", "", model, flags=re.I),
-        ]
-        richer_price = None
-        richer_url = None
-        for candidate in dict.fromkeys(richer_candidates):
-            try:
-                p, u = parse_richer(candidate)
-                if p is not None:
-                    richer_price, richer_url = p, u
-                    break
-            except Exception as exc:
-                print(f"Richer Sounds failed for {model} ({candidate}): {exc}")
-
+        # Only one lightweight fallback request per model. It is isolated and
+        # cannot fail the whole job.
+        richer_price, richer_url = parse_richer(model)
         if richer_price is not None:
             prices["Richer Sounds"] = richer_price
-            source_url = source_url or richer_url
 
         prices = dict(sorted(prices.items(), key=lambda x: (x[1], x[0].lower())))
         best = None
@@ -249,30 +256,58 @@ def main():
             retailer, price = next(iter(prices.items()))
             best = {"retailer": retailer, "price": price}
 
-        result["models"][model] = {
-            "status": "ok" if prices else ("no_prices_found" if price4_url else "not_found_on_price4"),
+        if prices:
+            status = "ok"
+        elif price4_url:
+            status = "no_prices_found"
+        else:
+            status = "not_found_on_price4"
+
+        return model, {
+            "status": status,
             "bestPrice": best,
             "retailerCount": len(prices),
             "prices": prices,
             "price4Updated": price4_updated,
             "price4ModelNumber": model_number,
-            "sourceUrl": source_url,
+            "sourceUrl": price4_url or richer_url,
             "price4Url": price4_url,
             "richerUrl": richer_url,
         }
-        time.sleep(0.15)
+
+    # Keep the fallback requests parallel so the daily job stays comfortably
+    # inside GitHub Actions' normal runtime even if a retailer is slow.
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        futures = [pool.submit(process, model) for model in models]
+        for future in as_completed(futures):
+            model, data = future.result()
+            result["models"][model] = data
+
+    # Restore catalogue order for a stable JSON file.
+    result["models"] = {m: result["models"].get(m, {"status": "error"}) for m in models}
 
     Path("price-data.json").write_text(
         json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8"
     )
+
     ok = sum(v.get("status") == "ok" for v in result["models"].values())
     total = sum(len(v.get("prices", {})) for v in result["models"].values())
-    pro_ok = sum(v.get("status") == "ok" for k, v in result["models"].items() if re.search(r"PRO$", k, re.I))
-    ur_ok = sum(v.get("status") == "ok" for k, v in result["models"].items() if re.search(r"UR[89]", k, re.I))
+    pro_ok = sum(
+        v.get("status") == "ok"
+        for k, v in result["models"].items()
+        if re.search(r"PRO$", k, re.I)
+    )
+    ur_ok = sum(
+        v.get("status") == "ok"
+        for k, v in result["models"].items()
+        if re.search(r"UR[89]", k, re.I)
+    )
+
     print(f"Updated {ok}/{len(models)} current models.")
     print(f"Collected {total} retailer prices.")
     print(f"PRO models with prices: {pro_ok}")
     print(f"UR8/UR9 models with prices: {ur_ok}")
+
 
 if __name__ == "__main__":
     main()
