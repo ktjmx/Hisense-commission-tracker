@@ -1286,12 +1286,19 @@ const PMF_SNAPSHOT={
   "55U7STUK":{"Richer Sounds":899,note:"Latest verified web snapshot: £899 at Richer Sounds."},
   "55Q7STUK":{"Richer Sounds":499,note:"Latest verified web snapshot: £499 at Richer Sounds."},
   "65U7STUK":{"Currys":1199,note:"Latest verified web snapshot: £1,199 at Currys."},
-  "55U7STUK PRO":{"Peter Tyson":999,note:"Peter Tyson verified price: £999."},
-  "65U7STUK PRO":{"Peter Tyson":1299,note:"Peter Tyson verified price: £1,299."},
-  "85U7STUK PRO":{"Peter Tyson":1999,note:"Peter Tyson verified price: £1,999."},
-  "100U7STUK PRO":{"Peter Tyson":3799,note:"Peter Tyson verified price: £3,799."}
+  "55U7STUK PRO":{"AO":999,"Argos":999,"Currys":999,"Hughes":999,"John Lewis":999,"Marks Electrical":999,"Peter Tyson":999,"Richer Sounds":999,note:"Verified retailer snapshot: £999 at the listed UK retailers."},
+  "65U7STUK PRO":{"AO":1299,"Argos":1299,"Currys":1299,"Hughes":1299,"John Lewis":1299,"Marks Electrical":1799,"Peter Tyson":1299,"Richer Sounds":1299,note:"Verified retailer snapshot: £1,299 at most listed retailers; Marks Electrical £1,799."},
+  "75U7STUK PRO":{"Argos":1499,"Hughes":1499,"John Lewis":1499,"Marks Electrical":1499,"Peter Tyson":1499,"Richer Sounds":1499,note:"Verified retailer snapshot: £1,499 at the listed UK retailers."},
+  "85U7STUK PRO":{"Peter Tyson":1999,"Richer Sounds":1999,note:"Verified retailer snapshot: £1,999 at the listed retailers."},
+  "100U7STUK PRO":{"Peter Tyson":3799,"Richer Sounds":3799,note:"Verified retailer snapshot: £3,799 at the listed retailers."}
 };
-function retailerSearchUrl(template,model){return template.replace("MODEL",encodeURIComponent(model));}
+function retailerSearchUrl(template,model){
+  if(template.includes("petertyson.co.uk")){
+    const slug=String(model||"").trim().toLowerCase().replace(/\s+/g,"-");
+    return template.replace("MODEL",slug);
+  }
+  return template.replace("MODEL",encodeURIComponent(model));
+}
 async function loadPmfLiveData(){
   // GitHub Pages serves the app as a static site. If the optional daily
   // price-data.json file has not been uploaded alongside index.html, fall
@@ -1300,7 +1307,16 @@ async function loadPmfLiveData(){
     const res=await fetch(`${PMF_DATA_URL}?v=${Date.now()}`,{cache:"no-store"});
     if(!res.ok)throw new Error("price-data unavailable");
     const data=await res.json();
-    PMF_LIVE_DATA=data.models||{};
+    const liveModels=data.models||{};
+    // Keep the built-in verified retailer snapshot as the fallback for any
+    // retailer missing from the optional daily feed. Live feed values win.
+    PMF_LIVE_DATA={};
+    const allModels=new Set([...Object.keys(PMF_SNAPSHOT||{}),...Object.keys(liveModels)]);
+    allModels.forEach(k=>{
+      const snapModel=PMF_SNAPSHOT[k]||{};
+      const liveModel=liveModels[k]||{};
+      PMF_LIVE_DATA[k]={...liveModel,prices:{...(snapModel||{}),...(liveModel.prices||{})}};
+    });
     PMF_LAST_UPDATED=data.updatedAt||"";
   }catch(e){
     PMF_LIVE_DATA={};
