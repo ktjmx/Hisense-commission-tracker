@@ -25,9 +25,16 @@ def get_models():
     models = list(dict.fromkeys(
         re.findall(r'\[\s*["\']([^"\']+)["\']\s*,', m.group(1))
     ))
-    # Price Match / daily feed is for the current STUK generation only.
-    return [m for m in models if re.search(r"STUK(?:\s*PRO)?$", m, re.I)
-            and not re.sub(r"\s+", "", m.upper()).endswith("QTUK")]
+    # Only current 2026 STUK models are included. QTUK/Q models are excluded.
+    current = []
+    for model in models:
+        code = re.sub(r"\s+", "", model.upper())
+        if code.endswith("QTUK"):
+            continue
+        if re.search(r"STUK(?:PRO)?$", code, re.I):
+            current.append(model)
+    print(f"Price matching: {len(current)} current STUK models.")
+    return current
 
 
 def extract_product_code(href):
@@ -196,29 +203,45 @@ def main():
 
     for model in models:
         prices = {}
-        source_url = None
+        price4_url = links.get(model)
         price4_updated = None
         model_number = None
-        price4_url = links.get(model)
+        source_url = price4_url
+
         if price4_url:
             try:
                 prices, price4_updated, model_number = parse_price4(price4_url)
-                # A PRO catalogue item may use the base Price4 URL. Only trust that
-                # fallback when the Price4 page itself identifies the requested PRO
-                # model number; otherwise do not mix base-model pricing into PRO.
-                if " PRO" in model.upper() and model_number and "PRO" not in model_number.upper():
-                    prices = {}
-                source_url = price4_url
-            except Exception:
+                # Never use a base-model Price4 page as a PRO price unless the
+                # page itself identifies the PRO model.
+                if re.search(r"PRO$", model, re.I):
+                    if not model_number or "PRO" not in model_number.upper():
+                        prices = {}
+            except Exception as exc:
+                print(f"Price4 failed for {model}: {exc}")
                 prices = {}
 
-        # Always try Richer Sounds as a second source. This fills gaps where
-        # Price4 has no listing, including current UR8/UR9 and U7S PRO models.
-        richer_price, richer_url = parse_richer(model)
+        # Richer Sounds fallback. Try the exact model first, then a small set of
+        # safe URL variants. All failures are swallowed so one retailer can never
+        # break the whole GitHub Actions run.
+        richer_candidates = [
+            model,
+            re.sub(r"\s+PRO$", "-PRO", model, flags=re.I),
+            re.sub(r"\s+PRO$", "", model, flags=re.I),
+        ]
+        richer_price = None
+        richer_url = None
+        for candidate in dict.fromkeys(richer_candidates):
+            try:
+                p, u = parse_richer(candidate)
+                if p is not None:
+                    richer_price, richer_url = p, u
+                    break
+            except Exception as exc:
+                print(f"Richer Sounds failed for {model} ({candidate}): {exc}")
+
         if richer_price is not None:
             prices["Richer Sounds"] = richer_price
-            if not source_url:
-                source_url = richer_url
+            source_url = source_url or richer_url
 
         prices = dict(sorted(prices.items(), key=lambda x: (x[1], x[0].lower())))
         best = None
@@ -226,15 +249,8 @@ def main():
             retailer, price = next(iter(prices.items()))
             best = {"retailer": retailer, "price": price}
 
-        if prices:
-            status = "ok"
-        elif price4_url:
-            status = "no_prices_found"
-        else:
-            status = "not_found_on_price4"
-
         result["models"][model] = {
-            "status": status,
+            "status": "ok" if prices else ("no_prices_found" if price4_url else "not_found_on_price4"),
             "bestPrice": best,
             "retailerCount": len(prices),
             "prices": prices,
@@ -244,15 +260,15 @@ def main():
             "price4Url": price4_url,
             "richerUrl": richer_url,
         }
-        time.sleep(0.2)
+        time.sleep(0.15)
 
     Path("price-data.json").write_text(
         json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8"
     )
     ok = sum(v.get("status") == "ok" for v in result["models"].values())
     total = sum(len(v.get("prices", {})) for v in result["models"].values())
-    pro_ok = sum(v.get("status") == "ok" for k, v in result["models"].items() if " PRO" in k)
-    ur_ok = sum(v.get("status") == "ok" for k, v in result["models"].items() if "UR8" in k or "UR9" in k)
+    pro_ok = sum(v.get("status") == "ok" for k, v in result["models"].items() if re.search(r"PRO$", k, re.I))
+    ur_ok = sum(v.get("status") == "ok" for k, v in result["models"].items() if re.search(r"UR[89]", k, re.I))
     print(f"Updated {ok}/{len(models)} current models.")
     print(f"Collected {total} retailer prices.")
     print(f"PRO models with prices: {pro_ok}")
