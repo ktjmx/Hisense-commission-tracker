@@ -1,5 +1,186 @@
 {
-  "updatedAt": null,
+  "updatedAt": "2026-09-15T11:11:52.210237+00:00",
   "source": "Price4 UK price comparison",
-  "models": {}
+  "models": {
+    "43A6STUK": {
+      "status": "not_found_on_price4"
+    },
+    "50A6STUK": {
+      "status": "not_found_on_price4"
+    },
+    "55A6STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:44 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-55a6stuk-61001.aspx"
+    },
+    "65A6STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "15 September 2026 12:06 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-65a6stuk-60979.aspx"
+    },
+    "43Q7STUK": {
+      "status": "not_found_on_price4"
+    },
+    "50Q7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:43 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-50q7stuk-60995.aspx"
+    },
+    "55Q7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:43 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-55q7stuk-60994.aspx"
+    },
+    "65Q7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:43 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-65q7stuk-60996.aspx"
+    },
+    "75Q7STUK": {
+      "status": "not_found_on_price4"
+    },
+    "85Q7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:44 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-85q7stuk-60997.aspx"
+    },
+    "43E7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "50E7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "55E7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "65E7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "75E7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "85E7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "100E7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "50U7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:38 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-50u7stuk-60988.aspx"
+    },
+    "55U7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:42 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-55u7stuk-60989.aspx"
+    },
+    "65U7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:42 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-65u7stuk-60990.aspx"
+    },
+    "75U7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:42 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-75u7stuk-60991.aspx"
+    },
+    "85U7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:43 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-85u7stuk-60992.aspx"
+    },
+    "100U7STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:43 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-100u7stuk-60993.aspx"
+    },
+    "55U7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "65U7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "75U7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "85U7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "100U7STUK PRO": {
+      "status": "not_found_on_price4"
+    },
+    "55U8QTUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "15 September 2026 10:03 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-55u8qtuk-58533.aspx"
+    },
+    "65U8QTUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:18 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-65u8qtuk-58725.aspx"
+    },
+    "75U8QTUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "15 September 2026 08:27 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-75u8qtuk-58978.aspx"
+    },
+    "85U8QTUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 21:58 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-85u8qtuk-59116.aspx"
+    },
+    "100U8QTUK": {
+      "status": "not_found_on_price4"
+    },
+    "55UR8STUK": {
+      "status": "not_found_on_price4"
+    },
+    "65UR8STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:44 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-65ur8stuk-61000.aspx"
+    },
+    "75UR8STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:44 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-75ur8stuk-60999.aspx"
+    },
+    "85UR8STUK": {
+      "status": "no_prices_found",
+      "prices": {},
+      "price4Updated": "14 September 2026 16:44 BST",
+      "sourceUrl": "https://www.price4.co.uk/hisense-85ur8stuk-60998.aspx"
+    },
+    "100UR8STUK": {
+      "status": "not_found_on_price4"
+    },
+    "65UR9STUK": {
+      "status": "not_found_on_price4"
+    },
+    "75UR9STUK": {
+      "status": "not_found_on_price4"
+    },
+    "85UR9STUK": {
+      "status": "not_found_on_price4"
+    }
+  }
 }
