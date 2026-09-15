@@ -1227,23 +1227,34 @@ const PMF_SNAPSHOT={
   "55U7STUK":{"Richer Sounds":899,note:"Latest verified web snapshot: £899 at Richer Sounds."},
   "55Q7STUK":{"Richer Sounds":499,note:"Latest verified web snapshot: £499 at Richer Sounds."},
   "65U7STUK":{"Currys":1199,note:"Latest verified web snapshot: £1,199 at Currys."},
-
-  /* Peter Tyson fallback prices — used even when price-data.json is missing. */
-  "55U7STUK PRO":{"Peter Tyson":999,note:"Peter Tyson verified price: £999.00."},
-  "65U7STUK PRO":{"Peter Tyson":1299,note:"Peter Tyson verified price: £1,299.00."},
-  "85U7STUK PRO":{"Peter Tyson":1999,note:"Peter Tyson verified price: £1,999.00."},
-  "100U7STUK PRO":{"Peter Tyson":3799,note:"Peter Tyson verified price: £3,799.00."}
+  "55U7STUK PRO":{"Peter Tyson":999,note:"Verified Peter Tyson price: £999."},
+  "65U7STUK PRO":{"Peter Tyson":1299,note:"Verified Peter Tyson price: £1,299."},
+  "85U7STUK PRO":{"Peter Tyson":1999,note:"Verified Peter Tyson price: £1,999."},
+  "100U7STUK PRO":{"Peter Tyson":3799,note:"Verified Peter Tyson price: £3,799."}
 };
 function retailerSearchUrl(template,model){return template.replace("MODEL",encodeURIComponent(model));}
 async function loadPmfLiveData(){
-  // GitHub Pages serves the app as a static site. If the optional daily
-  // price-data.json file has not been uploaded alongside index.html, fall
-  // back to the built-in verified snapshots instead of showing an empty feed.
+  // GitHub Pages serves the app as a static site. The daily feed uses
+  // {models:{MODEL:{prices:{Retailer:price}}}}. Older/simple feeds that
+  // contain retailer prices directly are also supported.
   try{
     const res=await fetch(`${PMF_DATA_URL}?v=${Date.now()}`,{cache:"no-store"});
     if(!res.ok)throw new Error("price-data unavailable");
     const data=await res.json();
-    PMF_LIVE_DATA=data.models||{};
+    const models=data&&data.models&&typeof data.models==="object"?data.models:{};
+    const cleaned={};
+    Object.keys(models).forEach(model=>{
+      const entry=models[model];
+      if(!entry || typeof entry!=="object") return;
+      const prices=(entry.prices&&typeof entry.prices==="object")?entry.prices:entry;
+      const retailerPrices={};
+      Object.keys(prices).forEach(name=>{
+        const value=prices[name];
+        if(typeof value==="number" && Number.isFinite(value)) retailerPrices[name]=value;
+      });
+      cleaned[model]=retailerPrices;
+    });
+    PMF_LIVE_DATA=cleaned;
     PMF_LAST_UPDATED=data.updatedAt||"";
   }catch(e){
     PMF_LIVE_DATA={};
@@ -1253,12 +1264,18 @@ async function loadPmfLiveData(){
 function pmfRetailerRows(model,snap){
   const live=PMF_LIVE_DATA[model]||{};
   const merged={...snap,...live};
-  const names=[...new Set([...Object.keys(live),...PMF_RETAILERS.map(x=>x[0])])];
+  const names=[...new Set([
+    ...Object.keys(snap).filter(k=>k!=="note"),
+    ...Object.keys(live),
+    ...PMF_RETAILERS.map(x=>x[0])
+  ])];
   return names.map(name=>{
     const price=merged[name];
     const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
-    const priceText=price!=null?`£${Number(price).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
-    return `<div class="pmf-retailer"><span>${name}${price!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
+    const priceText=(typeof price==="number" && Number.isFinite(price))
+      ?`£${price.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`
+      :"Check live";
+    return `<div class="pmf-retailer"><span>${name}${priceText!=="Check live"?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
   }).join("");
 }
 function checkPriceMatch(){
@@ -1270,7 +1287,7 @@ function checkPriceMatch(){
   const snap=PMF_SNAPSHOT[model]||{};
   const live=PMF_LIVE_DATA[model]||{};
   const merged={...snap,...live};
-  const verified=Object.values(merged).filter(v=>typeof v==="number" && Number.isFinite(v)).length;
+  const verified=Object.entries(merged).filter(([k,v])=>k!=="note"&&typeof v==="number"&&Number.isFinite(v)).length;
   const retailerRows=pmfRetailerRows(model,snap);
   const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>Hisense app price</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
   const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:(verified?"Using the latest saved retailer prices":"No saved retailer price found yet");
