@@ -118,6 +118,19 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
 .weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
 </style>
+<style id="salesQuoteCoachStyles">
+.sales-quote-coach{margin-bottom:14px}
+.quote-tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
+.quote-tech{padding:11px 8px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-weight:800;font-size:13px}
+.quote-tech.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,0,0,.05)}
+.quote-select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:14px;margin:5px 0 10px}
+.quote-result{padding:12px;border-radius:14px;background:var(--soft);margin-top:8px}
+.quote-result b{display:block;margin-bottom:4px}
+.quote-competitor{border-top:1px solid var(--line);margin-top:14px;padding-top:14px}
+.quote-label{font-size:12px;font-weight:800;opacity:.7;text-transform:uppercase;letter-spacing:.04em}
+.quote-say{margin-top:8px;padding:11px;border-left:3px solid var(--accent);background:var(--card);border-radius:10px;font-weight:700}
+</style>
+
 
 <style id="salesCoachRefinedTabs">
 .coach-tabs{display:flex;gap:8px;overflow-x:auto;padding:5px 2px 11px;margin-top:14px;scrollbar-width:none}
@@ -135,6 +148,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .xbox-offer b{display:block;margin-bottom:3px}
 .xbox-offer span{display:block;font-size:12px;opacity:.82;line-height:1.4}
 </style>
+
 </head>
 <body>
 <div class="app">
@@ -177,6 +191,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 </section>
 
 <section class="screen" id="sales">
+  
   <div class="card">
     <div class="section-title">Log a sale</div>
     <div class="field"><label>Date</label><input type="date" id="saleDate"></div>
@@ -236,6 +251,52 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 
 
 <section id="coach" class="screen">
+<div class="card sales-quote-coach">
+  <h2>Sales Quote</h2>
+  <p class="muted">Pick the technology, choose the TV, then see how to position it against the competition.</p>
+
+  <div class="quote-label">Technology</div>
+  <div class="quote-tech-grid">
+    <button class="quote-tech active" data-qtech="RGB Mini LED" onclick="selectCoachQuoteTech('RGB Mini LED')">RGB Mini LED</button>
+    <button class="quote-tech" data-qtech="Mini LED" onclick="selectCoachQuoteTech('Mini LED')">Mini LED</button>
+    <button class="quote-tech" data-qtech="QLED" onclick="selectCoachQuoteTech('QLED')">QLED</button>
+    <button class="quote-tech" data-qtech="LED" onclick="selectCoachQuoteTech('LED')">LED</button>
+  </div>
+
+  <div class="quote-label">Hisense TV</div>
+  <select id="coachQuoteModel" class="quote-select" onchange="renderCoachQuote()"></select>
+  <div id="coachQuoteResult" class="quote-result"></div>
+
+  <div class="quote-competitor">
+    <div class="quote-label">Competitor</div>
+    <select id="coachQuoteCompetitor" class="quote-select" onchange="renderCoachCompetitor()">
+      <option value="">Choose a competitor model…</option>
+      <optgroup label="Samsung">
+        <option>Samsung S95F OLED</option>
+        <option>Samsung S90F OLED</option>
+        <option>Samsung QN90F Neo QLED</option>
+      </optgroup>
+      <optgroup label="LG">
+        <option>LG C6 OLED</option>
+        <option>LG G6 OLED</option>
+        <option>LG QNED range</option>
+      </optgroup>
+      <optgroup label="Sony">
+        <option>Sony Bravia 9 II True RGB</option>
+        <option>Sony Bravia 7 II True RGB</option>
+        <option>Sony Bravia 8 II OLED</option>
+        <option>Sony Bravia 5 Mini LED</option>
+      </optgroup>
+      <optgroup label="TCL">
+        <option>TCL C8K QD-Mini LED</option>
+        <option>TCL C7K QD-Mini LED</option>
+        <option>TCL X11L SQD Mini LED</option>
+      </optgroup>
+    </select>
+    <div id="coachCompetitorResult" class="quote-result"></div>
+  </div>
+</div>
+
   <div class="card section">
     <div class="head">
       <div>
@@ -587,6 +648,7 @@ function findTV(){
   out.innerHTML=`<div class="muted" style="margin-bottom:10px">${matches.length} TV${matches.length===1?"":"s"} match your filters</div>${cards}`;
 }
 
+
 function renderOffer(){
  const input=document.getElementById("offerModel");
  const box=document.getElementById("offerResult");
@@ -911,5 +973,71 @@ document.addEventListener("DOMContentLoaded",function(){
   });
 });
 
+</script>
+
+<script id="salesQuoteCoachJS">
+const COACH_QUOTE_MODELS = {
+  "RGB Mini LED":[
+    ["UR9","65–85\"", "RGB Mini LED","Premium picture, sports, gaming and customers wanting the flagship Hisense picture story."],
+    ["UR8","55–100\"", "RGB Mini LED","Large screens, bright rooms and customers wanting RGB colour without moving straight to OLED."]
+  ],
+  "Mini LED":[
+    ["U8","55–100\"", "Mini LED","High brightness, strong contrast, sport and home cinema."],
+    ["U7 Pro","55–100\"", "Mini LED","Gaming, sport and customers wanting a high-performance Mini LED at a strong price."],
+    ["U7","50–100\"", "Mini LED","Big-screen value, gaming and customers wanting Mini LED without the flagship price."]
+  ],
+  "QLED":[
+    ["Q7","43–85\"", "QLED","Everyday entertainment, colour and customers wanting an affordable step up."],
+    ["E7 Pro","43–100\"", "QLED","Large-screen value, colour and customers wanting a more premium QLED package."]
+  ],
+  "LED":[
+    ["A6","43–65\"", "LED","Straightforward everyday TV for customers focused on value and essentials."]
+  ]
+};
+
+const COACH_COMPETITORS = {
+ "Samsung S95F OLED":{type:"Premium OLED",hisense:"UR9 / UR8",where:"Premium picture quality, brightness and a non-OLED alternative.",sell:"Don't attack OLED — show the customer what Hisense gives them: RGB colour, high brightness, large-screen options and a strong overall package.",say:"“Let's put the same content on both. Then you can judge the brightness, colour and overall picture for yourself.”"},
+ "Samsung S90F OLED":{type:"Premium OLED",hisense:"UR9 / UR8",where:"Premium OLED alternative with a strong Hisense brightness and RGB story.",sell:"Focus on the customer's actual room and viewing habits, then demonstrate the Hisense picture rather than relying on specs alone.",say:"“If you like the OLED picture, have a look at what the Hisense can do with brightness and colour while keeping that premium feel.”"},
+ "Samsung QN90F Neo QLED":{type:"Neo QLED / Mini LED",hisense:"UR8 / U8",where:"Bright-room viewing, contrast, sport and gaming.",sell:"Compare brightness, contrast, gaming features, screen size and price together.",say:"“This is where I'd compare the two side by side — same content, same conditions, then we can see which gives you the picture you prefer for the money.”"},
+ "LG C6 OLED":{type:"OLED",hisense:"UR9 / UR8",where:"Premium picture, gaming and customers considering OLED.",sell:"Position Hisense around brightness, RGB colour, screen-size choice and the customer's real-world viewing.",say:"“OLED is excellent, but if you want a brighter, bigger-screen option with RGB colour, this is the one I'd demo alongside it.”"},
+ "LG G6 OLED":{type:"Premium OLED",hisense:"UR9",where:"High-end picture and premium TV shoppers.",sell:"UR9 is the direct premium Hisense conversation. Demonstrate the full package rather than making a blanket 'better' claim.",say:"“At this level I'd forget the badge for a minute and compare the actual picture, brightness, gaming and sound — that's where the UR9 makes its case.”"},
+ "LG QNED range":{type:"QNED / LCD",hisense:"UR8 / U8",where:"Bright-room viewing, colour and large-screen value.",sell:"Show the customer the picture and then compare size, features and price.",say:"“Let's compare them on the things you'll actually notice every day — brightness, colour, motion and screen size.”"},
+ "Sony Bravia 9 II True RGB":{type:"True RGB",hisense:"UR9",where:"Direct RGB-to-RGB premium comparison.",sell:"This is a genuine head-to-head. Be confident but fair: use the demo to show colour, brightness, processing, gaming, sound and value.",say:"“This is the one I'd compare directly because both are RGB. Let's put the same content on and see which package works best for you.”"},
+ "Sony Bravia 7 II True RGB":{type:"True RGB",hisense:"UR8 / UR9",where:"Premium Sony picture versus Hisense RGB Mini LED.",sell:"Focus on what the customer values most, then demonstrate the Hisense strengths and overall package.",say:"“Sony is a serious option, so let's compare the actual picture and the features you're paying for rather than just the badge.”"},
+ "Sony Bravia 8 II OLED":{type:"OLED",hisense:"UR8 / UR9",where:"Premium cinema and OLED shoppers.",sell:"Show brightness, RGB colour, screen size and gaming alongside the Sony.",say:"“If cinema picture is the priority, let's compare them side by side — then you can see whether the extra spend actually gives you what you want.”"},
+ "Sony Bravia 5 Mini LED":{type:"Mini LED",hisense:"U8 / U7 Pro",where:"Mid/high-range Mini LED, sport and gaming.",sell:"Compare brightness, local contrast, gaming, size and value.",say:"“Both are Mini LED, so this is about which gives you the best combination of picture, gaming features and value.”"},
+ "TCL C8K QD-Mini LED":{type:"QD-Mini LED",hisense:"UR8 / U8",where:"Premium Mini LED, brightness and gaming.",sell:"Compare the whole package: picture, processing, gaming, sound, size and price.",say:"“TCL is strong on Mini LED, so let's compare the two properly and see which picture and feature set suits you.”"},
+ "TCL C7K QD-Mini LED":{type:"QD-Mini LED",hisense:"U7 Pro / U8",where:"Strong Mini LED value, gaming and large screens.",sell:"This is a price-and-performance battle. Demonstrate picture quality and features rather than just quoting specs.",say:"“These are very close on paper — the best thing is to put the same game or film on both and see which one you prefer.”"},
+ "TCL X11L SQD Mini LED":{type:"Premium SQD Mini LED",hisense:"UR9",where:"Flagship Mini LED shoppers.",sell:"Position UR9 as the premium Hisense alternative and compare the complete experience.",say:"“This is a proper flagship comparison. Let's judge the picture, brightness, colour, gaming and sound side by side.”"}
+};
+
+let coachQuoteTech="RGB Mini LED";
+
+function selectCoachQuoteTech(tech){
+  coachQuoteTech=tech;
+  document.querySelectorAll("[data-qtech]").forEach(b=>b.classList.toggle("active",b.dataset.qtech===tech));
+  const sel=document.getElementById("coachQuoteModel");
+  sel.innerHTML=(COACH_QUOTE_MODELS[tech]||[]).map((x,i)=>`<option value="${i}">${x[0]} • ${x[1]}</option>`).join("");
+  renderCoachQuote();
+}
+function renderCoachQuote(){
+  const sel=document.getElementById("coachQuoteModel"), out=document.getElementById("coachQuoteResult");
+  const x=(COACH_QUOTE_MODELS[coachQuoteTech]||[])[Number(sel.value)||0];
+  if(!x){out.innerHTML="";return;}
+  out.innerHTML=`<b>${x[0]} • ${x[1]}</b><span>${x[2]}</span><br><span><strong>Sell it on:</strong> ${x[3]}</span>`;
+}
+function renderCoachCompetitor(){
+  const name=document.getElementById("coachQuoteCompetitor").value;
+  const out=document.getElementById("coachCompetitorResult");
+  const x=COACH_COMPETITORS[name];
+  if(!x){out.innerHTML="<span>Choose a competitor to see the Hisense model to put against it and how to position the conversation.</span>";return;}
+  out.innerHTML=`<b>${name}</b><span><strong>Type:</strong> ${x.type}</span><br><span><strong>Show:</strong> ${x.hisense}</span><br><span><strong>Where we compete:</strong> ${x.where}</span><br><span><strong>How to sell it:</strong> ${x.sell}</span><div class="quote-say">${x.say}</div>`;
+}
+document.addEventListener("DOMContentLoaded",function(){
+  if(document.getElementById("coachQuoteModel")){
+    selectCoachQuoteTech("RGB Mini LED");
+    renderCoachCompetitor();
+  }
+});
 </script>
 </body></html>
