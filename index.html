@@ -118,6 +118,14 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
 .weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
 </style>
+<style id="priceMatchFinderStyles">
+.price-match-finder{margin-bottom:14px}
+.pmf-input{width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:14px;margin:6px 0 8px}
+.pmf-btn{width:100%;padding:12px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;font-size:14px}
+.pmf-result{margin-top:10px;padding:12px;border-radius:14px;background:var(--soft);line-height:1.45}
+.pmf-good{font-weight:800}
+</style>
+
 <style id="salesQuoteCoachStyles">
 .sales-quote-coach{margin-bottom:14px}
 .quote-tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
@@ -235,6 +243,16 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 </section>
 
 <section class="screen" id="offers">
+<div class="card price-match-finder">
+  <h2>Price Match Finder</h2>
+  <p class="muted">Enter a Hisense model and the competitor's advertised price to see the price difference.</p>
+  <input id="pmfModel" class="pmf-input" list="pmfModels" placeholder="Enter or choose a Hisense model">
+  <datalist id="pmfModels"></datalist>
+  <input id="pmfCompetitor" class="pmf-input" inputmode="decimal" placeholder="Competitor price (£)">
+  <button class="pmf-btn" onclick="checkPriceMatch()">Check price match</button>
+  <div id="pmfResult" class="pmf-result">Enter the model and competitor price to check.</div>
+</div>
+
   <div class="card">
     <div class="section-title">Current offers</div>
     <div class="offer"><b>💷 Cashback</b><span class="muted">9 Sep 2026 – 27 Oct 2026. Search a model below for the exact cashback.</span></div>
@@ -1039,5 +1057,39 @@ document.addEventListener("DOMContentLoaded",function(){
     renderCoachCompetitor();
   }
 });
+</script>
+
+<script id="priceMatchFinderJS">
+function initPriceMatchFinder(){
+  const dl=document.getElementById("pmfModels");
+  if(!dl) return;
+  const source=(typeof TVs!=="undefined"?TVs:[]);
+  dl.innerHTML=[...new Set(source.map(x=>x[0]).filter(Boolean))]
+    .map(n=>`<option value="${n}"></option>`).join("");
+}
+function checkPriceMatch(){
+  const model=(document.getElementById("pmfModel")||{}).value?.trim().toUpperCase();
+  const raw=(document.getElementById("pmfCompetitor")||{}).value?.replace(/£/g,"").replace(/,/g,"").trim();
+  const out=document.getElementById("pmfResult"), price=Number(raw);
+  if(!model || !Number.isFinite(price) || price<=0){
+    out.innerHTML="Please enter a Hisense model and a valid competitor price.";
+    return;
+  }
+  const source=(typeof TVs!=="undefined"?TVs:[]);
+  const item=source.find(x=>String(x[0]).toUpperCase()===model);
+  if(!item || item[1]==null){
+    out.innerHTML="I can't find a current price for that model in the app catalogue.";
+    return;
+  }
+  const hisense=Number(item[1]), diff=hisense-price;
+  if(diff>0){
+    out.innerHTML=`<span class="pmf-good">Competitor is £${diff.toFixed(2)} cheaper.</span><br>Hisense: £${hisense.toFixed(2)} • Competitor: £${price.toFixed(2)}<br><span>Use the store's current Price Match policy/approval process before promising a match.</span>`;
+  }else if(diff<0){
+    out.innerHTML=`<span class="pmf-good">Hisense is £${Math.abs(diff).toFixed(2)} cheaper.</span><br>Hisense: £${hisense.toFixed(2)} • Competitor: £${price.toFixed(2)}<br><span>This is already a strong value conversation.</span>`;
+  }else{
+    out.innerHTML=`<span class="pmf-good">Same price.</span><br>Hisense: £${hisense.toFixed(2)} • Competitor: £${price.toFixed(2)}`;
+  }
+}
+document.addEventListener("DOMContentLoaded",initPriceMatchFinder);
 </script>
 </body></html>
