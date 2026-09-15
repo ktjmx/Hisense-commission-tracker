@@ -376,6 +376,8 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   <div class="card">
     <div class="section-title">Check a model's deal</div>
     <div class="field"><label>Model</label><input id="offerModel" list="modelList" placeholder="e.g. 65UR8STUK"></div>
+    <div class="muted" style="margin:10px 0 6px">Quick U7 STUK deals</div>
+    <div id="u7OfferQuick" style="display:grid;gap:8px"></div>
     <div id="offerResult"></div>
   </div>
 
@@ -763,6 +765,25 @@ function renderOffer(){
 }
 
 document.getElementById("offerModel").oninput=renderOffer;
+
+function renderU7OfferQuick(){
+ const box=document.getElementById("u7OfferQuick");
+ if(!box)return;
+ const models=TVs.filter(x=>/^\d+U7STUK(?: PRO)?$/i.test(String(x[0])));
+ box.innerHTML=models.map(x=>{
+   const d=deal(x[0],x[1]);
+   return `<button type="button" class="offer-match" style="text-align:left" data-u7-offer="${x[0]}"><b>${x[0]}</b><span class="muted">${x[1]==null?"Price TBC":money(x[1])} • Cashback ${money(d.cb)} • Trade-in ${money(d.trade)}</span></button>`;
+ }).join("");
+ box.querySelectorAll("[data-u7-offer]").forEach(b=>b.onclick=()=>{
+   const input=document.getElementById("offerModel");
+   input.value=b.dataset.u7Offer;
+   renderOffer();
+   input.scrollIntoView({behavior:"smooth",block:"center"});
+ });
+}
+
+fillModels();
+renderU7OfferQuick();
 const COACH={
 UR9:{
 pitch:"“If you want the picture to genuinely jump off the screen, this is the one I’d show you. The UR9 combines RGB colour technology with Mini LED control, so you’re getting incredibly vibrant colour, serious brightness and much tighter control over light and dark scenes. It’s not just a spec sheet — put sport, a film or a game on it and you can actually see what the technology is doing.”",
