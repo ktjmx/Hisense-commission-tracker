@@ -130,6 +130,11 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .coach-tab-panel .coach-card p{margin:7px 0 0;line-height:1.45}
 .coach-tab-panel .small{opacity:.8}
 </style>
+<style id="xboxOfferStyle">
+.xbox-offer{margin-top:10px;padding:11px 12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055);border-radius:12px}
+.xbox-offer b{display:block;margin-bottom:3px}
+.xbox-offer span{display:block;font-size:12px;opacity:.82;line-height:1.4}
+</style>
 </head>
 <body>
 <div class="app">
@@ -268,12 +273,10 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
        <button id="coachMainTab" class="coach-tab active" onclick="showCoachTab('main')">TV Sales Pitches</button>
        <button id="competitionCoachTab" class="coach-tab" onclick="showCoachTab('competition')">Beat the Competition</button>
        <button id="objectionsCoachTab" class="coach-tab" onclick="showCoachTab('objections')">Head-to-Head</button>
-       <button id="needsCoachTab" class="coach-tab" onclick="showCoachTab('needs')">Customer Wants X</button>
        <button id="soundbarCoachTab" class="coach-tab" onclick="showCoachTab('soundbars')">Soundbars</button>
      </div>
      <div id="competitionCoachPanel" class="coach-tab-panel" style="display:none;"></div>
      <div id="objectionsCoachPanel" class="coach-tab-panel" style="display:none;"></div>
-     <div id="needsCoachPanel" class="coach-tab-panel" style="display:none;"></div>
      <div id="soundbarCoachPanel" class="coach-tab-panel" style="display:none;">
   <div class="section-title">Soundbar Coach</div>
   <div class="section-subtitle">Choose a soundbar to see the key information and an easy customer pitch.</div>
@@ -598,7 +601,7 @@ function renderOffer(){
 
  if(matches.length===1 && norm(matches[0][0])===q){
    const m=matches[0][0],p=matches[0][1],d=deal(m,p);
-   box.innerHTML=`<div class="offer"><b>${m}</b><div>TV price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div>Trade-in: ${money(d.trade)} ${d.code?"• "+d.code:""}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div><div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
+   box.innerHTML=`<div class="offer"><b>${m}</b><div>TV price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div>Trade-in: ${money(d.trade)} ${d.code?"• "+d.code:""}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div>${(/(?:^|[A-Z])U\d|UR|UX/i.test(m))?`<div class="xbox-offer"><b>Xbox promotion</b><span>Free personalised Xbox Wireless Controller + 1 month Game Pass</span></div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
    return;
  }
 
@@ -741,14 +744,13 @@ function renderCustomerNeeds(){
  el.innerHTML=`<div class="coach-hero"><div class="eyebrow">CUSTOMER NEEDS</div><h2>Customer wants X → sell Y</h2><p>Use the customer's priority to decide which Hisense range to demonstrate first.</p></div><div class="coach-grid">${NEEDS_COACH.map(x=>`<div class="coach-card"><div class="coach-card-title">${x[0]}</div><div class="small"><b>Move to: ${x[1]}</b></div><p>${x[2]}</p><div class="small" style="margin-top:10px"><b>Close</b></div><p>“${x[3]}”</p></div>`).join("")}</div>`;
 }
 function showCoachTab(tab){
- const panels={main:"coachContent",competition:"competitionCoachPanel",objections:"objectionsCoachPanel",needs:"needsCoachPanel",soundbars:"soundbarCoachPanel"};
- const tabs={main:"coachMainTab",competition:"competitionCoachTab",objections:"objectionsCoachTab",needs:"needsCoachTab",soundbars:"soundbarCoachTab"};
+ const panels={main:"coachContent",competition:"competitionCoachPanel",objections:"objectionsCoachPanel",soundbars:"soundbarCoachPanel"};
+ const tabs={main:"coachMainTab",competition:"competitionCoachTab",objections:"objectionsCoachTab",soundbars:"soundbarCoachTab"};
  Object.keys(panels).forEach(k=>{const p=document.getElementById(panels[k]);if(p)p.style.display=(k===tab)?"block":"none";});
  Object.keys(tabs).forEach(k=>{const b=document.getElementById(tabs[k]);if(b)b.classList.toggle("active",k===tab);});
  if(tab==="soundbars"&&typeof renderSoundbars==="function")renderSoundbars();
  if(tab==="competition")renderCompetitionCoach();
  if(tab==="objections")renderObjectionCoach();
- if(tab==="needs")renderCustomerNeeds();
 }
 function renderCoach(){
  const el=document.getElementById("coachContent");
