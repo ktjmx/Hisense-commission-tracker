@@ -542,80 +542,24 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div id="coachSoundbarResult" class="coach-detail-card"><span>Choose a soundbar to see the current information and pitch.</span></div>
   </div>
 
+  
   <div id="coachPanelClosing" class="coach-panel" style="display:none">
-    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Closing the Sale</b><small>Turn a good conversation into a confident close</small></div></div>
-    <div class="closing-grid">
-      <div class="closing-card closing-card-hero">
-        <div class="coach-kicker">THE SIMPLE CLOSE</div>
-        <h3>Recommend → Check → Ask</h3>
-        <p><strong>Recommend:</strong> “Based on what you've told me, I'd go for this one because it gives you the brightness/colour/size you wanted.”</p>
-        <p><strong>Check:</strong> “How does that look compared with the other one?”</p>
-        <p><strong>Ask:</strong> “Shall we get this one sorted for you today?”</p>
-      </div>
+    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Closing the Sale</b><small>Pick a situation</small></div></div>
 
-      <div class="closing-card">
-        <div class="closing-title">1. Trial close</div>
-        <p>Use this before the final ask to see if the customer is ready.</p>
-        <div class="closing-quote">“If the price works for you, is this the TV you'd be happy taking home?”</div>
-        <div class="closing-tip">If they say yes, stop selling features and move towards completing the sale.</div>
-      </div>
+    <div class="close-choice-grid">
+      <button onclick="showCloseTip('ready')"><b>They're ready</b><small>Ask for the sale</small></button>
+      <button onclick="showCloseTip('trial')"><b>Trial close</b><small>Check they're ready</small></button>
+      <button onclick="showCloseTip('choice')"><b>Choice close</b><small>Two suitable options</small></button>
+      <button onclick="showCloseTip('think')"><b>“I'll think about it”</b><small>Find the real concern</small></button>
+      <button onclick="showCloseTip('price')"><b>Price / deal</b><small>Reconnect to value</small></button>
+      <button onclick="showCloseTip('add')"><b>TV + soundbar</b><small>Close the add-on</small></button>
+    </div>
 
-      <div class="closing-card">
-        <div class="closing-title">2. Summary close</div>
-        <p>Repeat the things the customer told you mattered.</p>
-        <div class="closing-quote">“So you've got the 75-inch size you wanted, strong brightness for the room, the colour you're after and the gaming features. Shall we go with this one?”</div>
-      </div>
-
-      <div class="closing-card">
-        <div class="closing-title">3. Choice close</div>
-        <p>Useful when the customer has narrowed it down to two TVs.</p>
-        <div class="closing-quote">“You've basically got these two. Do you want the extra picture performance of the U8Q, or keep the price down with the U7S?”</div>
-        <div class="closing-tip">Give a genuine choice between suitable options rather than reopening the whole range.</div>
-      </div>
-
-      <div class="closing-card">
-        <div class="closing-title">4. Objection → close</div>
-        <p>Answer the concern, then ask again.</p>
-        <div class="closing-quote">“That's fair — the price is the concern. Let's check the current offer and Price Match Finder. If we can get the numbers where you need them, are you happy with the TV?”</div>
-      </div>
-
-      <div class="closing-card">
-        <div class="closing-title">5. Price / deal close</div>
-        <p>Make the customer understand the whole deal, not just the ticket price.</p>
-        <div class="closing-quote">“Let's look at the actual cost after the current cashback, trade-in and any eligible offer. If that works for you, shall we get it ordered?”</div>
-      </div>
-
-      <div class="closing-card">
-        <div class="closing-title">6. Add-on close</div>
-        <p>Only recommend an add-on when it genuinely fits the customer's setup.</p>
-        <div class="closing-quote">“You've got the TV sorted. Do you want me to show you the soundbar that would make the most difference to your films and sport?”</div>
-      </div>
-
-      <div class="closing-card">
-        <div class="closing-title">7. When they keep saying “I'll think about it”</div>
-        <p>Find out what is actually stopping them.</p>
-        <div class="closing-quote">“Of course. Before you go, is it the TV itself, the price, or is there something else you're unsure about?”</div>
-        <div class="closing-tip">Their answer tells you what to deal with instead of continuing to throw features at them.</div>
-      </div>
-
-      <div class="closing-card closing-card-full">
-        <div class="closing-title">Quick closing phrases</div>
-        <div class="closing-phrases">
-          <span>“Shall we go with this one?”</span>
-          <span>“Does this tick all the boxes for you?”</span>
-          <span>“Are you happy with this as your choice?”</span>
-          <span>“Would you like me to get that sorted for you?”</span>
-          <span>“If we can sort the price, are you ready to go ahead?”</span>
-          <span>“Which of these two would you prefer?”</span>
-        </div>
-      </div>
-
-      <div class="closing-card closing-card-full closing-do">
-        <div class="closing-title">Remember</div>
-        <p><strong>Don't keep selling once the customer has bought in.</strong> Give a clear recommendation, answer the final concern, ask for the sale, then make it easy to complete.</p>
-      </div>
+    <div id="closingTip" class="coach-detail-card">
+      <span>Choose a situation above to see one short example.</span>
     </div>
   </div>
+
 </section>
 
 <section class="screen" id="stats">
@@ -1608,4 +1552,41 @@ document.addEventListener("DOMContentLoaded",function(){
   btn.addEventListener("click",function(){setTimeout(function(){window.scrollTo(0,0)},0)},false);
  });
 });
-</script></body></html>
+</script>
+<style id="closingSubsectionOnly">
+.close-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.close-choice-grid button{
+  min-height:70px;text-align:left;padding:12px;border-radius:15px;
+  border:1px solid #31585c;background:linear-gradient(145deg,#102a2e,#0b2023);
+  color:#f7faf9
+}
+.close-choice-grid button b{
+  display:block;font-family:"Manrope","DM Sans",sans-serif!important;
+  font-size:13px;font-weight:800;color:#f7faf9
+}
+.close-choice-grid button small{display:block;margin-top:4px;font-size:10px;color:#b9c8c9}
+.close-choice-grid button:active,.close-choice-grid button:hover{border-color:#16d5d1;background:#123237}
+#closingTip h3{margin:0 0 8px;font-family:"Manrope","DM Sans",sans-serif;font-size:18px}
+#closingTip .close-script{
+  margin:0 0 9px;font-family:"Manrope","DM Sans",sans-serif;
+  font-size:16px;line-height:1.45;font-weight:800;color:#f7faf9
+}
+#closingTip .close-tip{margin:0;font-size:12px;line-height:1.5;color:#b9c8c9}
+</style>
+<script id="closingSubsectionOnlyJS">
+const CLOSING_TIPS={
+ready:{title:"They're ready",say:"“That sounds like the right TV for you. Shall we get this one sorted today?”",tip:"Once they've decided, stop adding features and make the next step easy."},
+trial:{title:"Trial close",say:"“If we can get the price where you need it, is this the TV you'd be happy taking home?”",tip:"This helps uncover whether price is the final thing holding them back."},
+choice:{title:"Choice close",say:"“Would you prefer the 65-inch or the 75-inch?”",tip:"Use two suitable choices instead of reopening the whole range."},
+think:{title:"“I'll think about it”",say:"“Of course. Is it the TV itself, the price, or is there something else you're unsure about?”",tip:"Deal with the actual concern rather than continuing the product pitch."},
+price:{title:"Price / deal",say:"“If we can get the numbers where you need them, are you happy with this TV?”",tip:"Once they say yes, check the current offer, Price Match Finder or eligible options."},
+add:{title:"TV + soundbar",say:"“You've got the TV sorted. Would you like me to show you the soundbar that would make the biggest difference to your films and sport?”",tip:"Link the add-on to the customer's needs rather than simply asking if they want one."}
+};
+function showCloseTip(name){
+  const x=CLOSING_TIPS[name],out=document.getElementById("closingTip");
+  if(!x||!out)return;
+  out.innerHTML=`<h3>${x.title}</h3><p class="close-script">${x.say}</p><p class="close-tip"><strong>Tip:</strong> ${x.tip}</p>`;
+}
+</script>
+
+</body></html>
