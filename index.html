@@ -171,14 +171,14 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 </style>
 
 <style id="priceMatchFinderStyles">
-.price-match-finder{margin-bottom:14px}
+.price-match-finder{margin-bottom:14px;overflow:visible}
 .pmf-input{width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:14px;margin:6px 0 8px;color:inherit}
-.pmf-autocomplete,.commission-autocomplete{position:relative}
-.pmf-suggestions{position:absolute;left:0;right:0;top:calc(100% - 3px);z-index:30;display:none;max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:0 0 14px 14px;background:var(--card);box-shadow:0 12px 30px rgba(0,0,0,.16)}
-.pmf-suggestion{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;color:inherit;padding:12px 13px;font-size:14px;font-weight:750}
+.pmf-autocomplete,.commission-autocomplete{position:relative;z-index:10}
+.pmf-suggestions{position:relative;left:auto;right:auto;top:auto;z-index:20;display:none;max-height:260px;overflow-y:auto;overflow-x:hidden;margin-top:-8px;border:1px solid #3a666a;border-top:0;border-radius:0 0 14px 14px;background:#0b2023 !important;color:#f5f8f7;box-shadow:0 16px 30px rgba(0,0,0,.35)}
+.pmf-suggestion{display:block;width:100%;min-height:52px;text-align:left;border:0;border-bottom:1px solid #244448;background:#0b2023 !important;color:#f5f8f7 !important;padding:11px 13px;font-size:14px;font-weight:750;line-height:1.25}
 .pmf-suggestion:last-child{border-bottom:0}
-.pmf-suggestion small{display:block;margin-top:2px;font-size:11px;font-weight:500;opacity:.65}
-.pmf-suggestion:active,.pmf-suggestion:hover{background:var(--soft)}
+.pmf-suggestion small{display:block;margin-top:4px;font-size:11px;font-weight:600;color:#b8c9ca;opacity:1}
+.pmf-suggestion:active,.pmf-suggestion:hover{background:#15383b !important}
 .pmf-btn{width:100%;padding:12px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;font-size:14px}
 .pmf-result{margin-top:10px;padding:12px;border-radius:14px;background:var(--soft);line-height:1.45}
 .pmf-good{font-weight:800}
@@ -228,129 +228,54 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 </style>
 
 
-<style id="finalCosmeticFixes">
-/* Compact sale date field to match the other sale inputs */
-#sales #saleDate{
-  height:52px !important;
-  min-height:52px !important;
-  max-height:52px !important;
+<style id="sellFormMobileFix">
+/* Keep the Sell form inputs inside the card on iPhone */
+#sales .card{overflow:visible}
+#sales .field{min-width:0}
+#sales .autocomplete-wrap{min-width:0;width:100%}
+#sales input,#sales select{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0}
+#sales input[type="date"]{-webkit-appearance:auto;appearance:auto}
+</style>
+
+
+<style id="sellDateFinalFix">
+/* Final iPhone fix: keep the Date field completely inside the Log a sale card */
+#sales .card{
+  box-sizing:border-box;
+  width:100%;
+  max-width:100%;
+  overflow:hidden;
+}
+#sales .field,
+#sales .field > input,
+#sales .field > .autocomplete-wrap{
+  box-sizing:border-box;
+  min-width:0;
+  max-width:100%;
+}
+#sales .field > input[type="date"]{
+  display:block;
   width:100% !important;
-  padding:0 12px !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  inline-size:100% !important;
   box-sizing:border-box !important;
-  font-size:16px !important;
-  line-height:normal !important;
-  -webkit-appearance:none !important;
-  appearance:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  padding-left:12px;
+  padding-right:12px;
+  font-size:16px;
 }
-
-/* Cleaner, larger Sales Coach shortcut cards */
-#coach .coach-tile,
-#coach .coach-tile *{
-  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+@media (max-width: 600px){
+  #sales .card{
+    padding-left:16px;
+    padding-right:16px;
+  }
+  #sales .field > input[type="date"]{
+    width:100% !important;
+    max-width:100% !important;
+  }
 }
-#coach .coach-tile{
-  color:#f4f7f7 !important;
-  background:linear-gradient(145deg,#102a2e,#0b2023) !important;
-  border-color:#31575b !important;
-}
-#coach .coach-tile b{
-  color:#f7faf9 !important;
-  font-size:15px !important;
-  font-weight:800 !important;
-  letter-spacing:-.15px !important;
-}
-#coach .coach-tile small{
-  color:#b9c8c9 !important;
-  opacity:1 !important;
-  font-size:11.5px !important;
-  line-height:1.3 !important;
-  font-weight:600 !important;
-}
-#coach .coach-tile-icon,
-#coach .coach-tile>strong{
-  color:#e8f1f1 !important;
-}
-#coach .coach-tile-icon{
-  background:#16383c !important;
-  border:1px solid #31575b !important;
-}
-</style>
-
-<style id="technologyAndBackRefinement">
-/* Technology cards: current ranges */
-#coach .tech-choice-grid button{
-  color:#f4f8f7 !important;
-  background:linear-gradient(145deg,#102a2e,#0b2023) !important;
-  border:1px solid #31585c !important;
-}
-#coach .tech-choice-grid button b{
-  color:#f7faf9 !important;
-  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
-  font-size:14px !important;
-  font-weight:800 !important;
-}
-#coach .tech-choice-grid button small{
-  color:#b9c8c9 !important;
-  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
-  font-size:11px !important;
-}
-#coach .tech-choice-grid button:active,
-#coach .tech-choice-grid button:hover{
-  border-color:#16d5d1 !important;
-  background:#123237 !important;
-}
-
-/* Back button + panel headings */
-#coach .coach-panel-head button,
-#coach .coach-panel-head button *{
-  color:#f7faf9 !important;
-  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
-}
-#coach .coach-panel-head button{
-  font-size:14px !important;
-  font-weight:800 !important;
-  opacity:1 !important;
-}
-#coach .coach-panel-head b{
-  color:#f7faf9 !important;
-  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
-}
-#coach .coach-panel-head small{
-  color:#b9c8c9 !important;
-}
-</style>
-
-
-<style id="closingSaleCoachStyles">
-#coach .closing-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-#coach .closing-card{background:linear-gradient(145deg,#102a2e,#0b2023);border:1px solid #31585c;border-radius:17px;padding:14px;box-shadow:0 8px 22px #0006}
-#coach .closing-card-full{grid-column:1/-1}
-#coach .closing-card-hero{background:linear-gradient(145deg,#123b40,#0b2023);border-color:#3a7075}
-#coach .closing-card h3{margin:0 0 10px;font-family:"Manrope","DM Sans",sans-serif;font-size:19px;color:#f7faf9}
-#coach .closing-card p{margin:7px 0;color:#d3dfe0;font-size:12.5px;line-height:1.5}
-#coach .closing-title{font-family:"Manrope","DM Sans",sans-serif;font-size:14px;font-weight:800;color:#f7faf9;margin-bottom:5px}
-#coach .closing-quote{margin-top:9px;padding:10px 11px;border-left:3px solid #16d5d1;border-radius:8px;background:#0a1d20;color:#f3f7f6;font-size:12.5px;line-height:1.48;font-weight:700}
-#coach .closing-tip{margin-top:9px;padding:8px 10px;border-radius:8px;background:rgba(241,215,158,.06);color:#cbd9da;font-size:11px;line-height:1.45}
-#coach .closing-phrases{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
-#coach .closing-phrases span{display:block;padding:9px 10px;border:1px solid #2d5054;border-radius:10px;background:#0a1d20;color:#f4f8f7;font-size:11.5px;line-height:1.35;font-weight:700}
-#coach .closing-do{border-color:#496c58}
-@media(max-width:520px){#coach .closing-grid{grid-template-columns:1fr}#coach .closing-card-full{grid-column:auto}}
-</style>
-<style id="finalCosmeticFix">
-#sales #saleDate{
-  height:52px !important;
-  min-height:52px !important;
-  max-height:52px !important;
-  padding:0 12px !important;
-  box-sizing:border-box !important;
-}
-#coach .coach-tile,
-#coach .coach-tile *{
-  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
-}
-#coach .coach-tile b,
-#coach .coach-tile strong{color:#f7faf9 !important}
-#coach .coach-tile small{color:#b9c8c9 !important}
 </style>
 
 </head>
@@ -405,8 +330,8 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 <input id="saleModel" list="salesModelList" autocomplete="off" placeholder="Start typing a model…">
 <div id="saleModelPopup" class="autocomplete-popup"></div>
 </div>
-<div class="field"><label>Sale value (£)</label><input id="salePrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Enter selling price"></div>
 </div>
+<div class="field"><label>Sale value (£)</label><input id="salePrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Enter selling price"></div>
 <div id="saleRate" class="sale-rate-pop"></div>
 <datalist id="salesModelList"><option value="43A6STUK"></option><option value="50A6STUK"></option><option value="55A6STUK"></option><option value="65A6STUK"></option><option value="43Q7STUK"></option><option value="50Q7STUK"></option><option value="55Q7STUK"></option><option value="65Q7STUK"></option><option value="75Q7STUK"></option><option value="85Q7STUK"></option><option value="43E7STUK PRO"></option><option value="50E7STUK PRO"></option><option value="55E7STUK PRO"></option><option value="65E7STUK PRO"></option><option value="75E7STUK PRO"></option><option value="85E7STUK PRO"></option><option value="100E7STUK PRO"></option><option value="50U7STUK"></option><option value="55U7STUK"></option><option value="65U7STUK"></option><option value="75U7STUK"></option><option value="85U7STUK"></option><option value="100U7STUK"></option><option value="55U7STUK PRO"></option><option value="65U7STUK PRO"></option><option value="75U7STUK PRO"></option><option value="85U7STUK PRO"></option><option value="100U7STUK PRO"></option><option value="55U8QTUK"></option><option value="65U8QTUK"></option><option value="75U8QTUK"></option><option value="85U8QTUK"></option><option value="100U8QTUK"></option><option value="55UR8STUK"></option><option value="65UR8STUK"></option><option value="75UR8STUK"></option><option value="85UR8STUK"></option><option value="100UR8STUK"></option><option value="65UR9STUK"></option><option value="75UR9STUK"></option><option value="85UR9STUK"></option></datalist>
 <datalist id="modelList"></datalist>
@@ -497,28 +422,12 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     </button>
     <button class="coach-tile" onclick="showCoachPanel('closing')">
       <span class="coach-tile-icon">✓</span>
-      <span><b>Closing the Sale</b><small>Questions, phrases &amp; closing examples</small></span>
+      <span><b>Closing the Sale</b><small>Quick closing phrases &amp; examples</small></span>
       <strong>›</strong>
     </button>
   </div>
 
-  <div id="coachPanelClosing" class="coach-panel" style="display:none">
-    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Closing the Sale</b><small>Pick a situation</small></div></div>
-
-    <div class="close-choice-grid">
-      <button onclick="showCloseTip('ready')"><b>They're ready</b><small>Ask for the sale</small></button>
-      <button onclick="showCloseTip('trial')"><b>Trial close</b><small>Check they're ready</small></button>
-      <button onclick="showCloseTip('choice')"><b>Choice close</b><small>Two suitable options</small></button>
-      <button onclick="showCloseTip('think')"><b>“I'll think about it”</b><small>Find the real concern</small></button>
-      <button onclick="showCloseTip('price')"><b>Price / deal</b><small>Reconnect to value</small></button>
-      <button onclick="showCloseTip('add')"><b>TV + soundbar</b><small>Close the add-on</small></button>
-    </div>
-
-    <div id="closingTip" class="coach-detail-card">
-      <span>Choose a situation above to see one short example.</span>
-    </div>
-  </div>
-<div id="coachPanelTechnology" class="coach-panel" style="display:none">
+  <div id="coachPanelTechnology" class="coach-panel" style="display:none">
     <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Technology</b><small>Pick a technology</small></div></div>
     <div class="tech-choice-grid">
       <button onclick="showTechDetail('RGB Mini LED')"><b>RGB Mini LED</b><small>UR9 • UR8</small></button>
@@ -557,8 +466,18 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <select id="soundbarSelect" class="coach-select" onchange="renderSelectedSoundbar()"><option value="">Choose a soundbar…</option></select>
     <div id="coachSoundbarResult" class="coach-detail-card"><span>Choose a soundbar to see the current information and pitch.</span></div>
   </div>
-
-  
+  <div id="coachPanelClosing" class="coach-panel" style="display:none">
+    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Closing the Sale</b><small>Pick a situation</small></div></div>
+    <div class="close-choice-grid">
+      <button onclick="showCloseTip('ready')"><b>They're ready</b><small>Ask for the sale</small></button>
+      <button onclick="showCloseTip('trial')"><b>Trial close</b><small>Check they're ready</small></button>
+      <button onclick="showCloseTip('choice')"><b>Choice close</b><small>Two suitable options</small></button>
+      <button onclick="showCloseTip('think')"><b>“I'll think about it”</b><small>Find the real concern</small></button>
+      <button onclick="showCloseTip('price')"><b>Price / deal</b><small>Reconnect to value</small></button>
+      <button onclick="showCloseTip('add')"><b>TV + soundbar</b><small>Close the add-on</small></button>
+    </div>
+    <div id="closingTip" class="coach-detail-card"><span>Choose a situation above to see one short example.</span></div>
+  </div>
 </section>
 
 <section class="screen" id="stats">
@@ -832,6 +751,20 @@ function findTV(){
 
   out.innerHTML=`<div class="muted" style="margin-bottom:10px">${matches.length} TV${matches.length===1?"":"s"} match your filters</div>${cards}`;
 }
+
+
+/* Fix: the TV Finder's "View offers" buttons are rendered dynamically, so use
+   event delegation rather than binding once before those buttons exist. */
+document.addEventListener("click",function(e){
+  const btn=e.target.closest(".offer-btn");
+  if(!btn)return;
+  const model=btn.getAttribute("data-offer-model");
+  const input=document.getElementById("offerModel");
+  if(!input||!model)return;
+  input.value=model;
+  renderOffer();
+  input.scrollIntoView({behavior:"smooth",block:"center"});
+});
 
 
 function renderOffer(){
@@ -1329,12 +1262,19 @@ document.addEventListener("DOMContentLoaded",function(){
 let PMF_LIVE_DATA={};
 let PMF_LAST_UPDATED="";
 const PMF_DATA_URL="price-data.json";
+
 function pmfModelList(){
-  const source=(typeof TVs!=="undefined"?TVs:[]).map(x=>String(x[0]||"")).filter(Boolean);
-  const commission=(typeof R!=="undefined"?Object.keys(R):[]);
-  return [...new Set([...source,...commission])].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  const isCurrentModel=m=>{
+    const n=normaliseModel(m);
+    return Boolean(n) && !n.endsWith("QTUK");
+  };
+  const source=(typeof TVs!=="undefined"?TVs:[])
+    .map(x=>String(x[0]||""))
+    .filter(Boolean)
+    .filter(isCurrentModel);
+  return [...new Set(source)].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
 }
-function normaliseModel(v){return String(v||"").trim().toUpperCase();}
+function normaliseModel(v){return String(v||"").trim().toUpperCase().replace(/\s+/g," ");}
 function showPmfSuggestions(inputId,listId,onPick){
   const input=document.getElementById(inputId), box=document.getElementById(listId);
   if(!input||!box)return;
@@ -1358,6 +1298,7 @@ function setupModelAutocomplete(inputId,listId,onPick){
   input.addEventListener("keydown",e=>{if(e.key==="Escape")box.style.display="none";});
   document.addEventListener("click",e=>{if(!input.contains(e.target)&&!box.contains(e.target))box.style.display="none";});
 }
+
 const PMF_RETAILERS=[
   ["Currys","https://www.google.com/search?q=site%3Acurrys.co.uk+Hisense+MODEL"],
   ["AO","https://www.google.com/search?q=site%3Aao.com+Hisense+MODEL"],
@@ -1366,83 +1307,141 @@ const PMF_RETAILERS=[
   ["Argos","https://www.google.com/search?q=site%3Aargos.co.uk+Hisense+MODEL"],
   ["Hughes","https://www.google.com/search?q=site%3Ahughes.co.uk+Hisense+MODEL"],
   ["Marks Electrical","https://www.google.com/search?q=site%3Amarkselectrical.co.uk+Hisense+MODEL"],
-  ["Peter Tyson","https://www.google.com/search?q=site%3Apetertyson.co.uk+Hisense+MODEL"],
-  ["Amazon UK","https://www.google.com/search?q=site%3Aamazon.co.uk+Hisense+MODEL"]
+  ["Peter Tyson","https://petertyson.co.uk/hisense-MODEL"]
 ];
+
+/* Verified saved prices. Live price-data.json values override these when present. */
 const PMF_SNAPSHOT={
-  "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799,note:"Latest verified web snapshot: £2,799 at Currys, John Lewis and Richer Sounds."},
-  "65UR9STUK":{"Richer Sounds":1999,note:"Latest verified web snapshot: £1,999 at Richer Sounds."},
-  "55A6STUK":{"Amazon UK":399,"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399,note:"Latest verified web snapshot showed £399 at the listed retailers."},
-  "55U7STUK":{"Richer Sounds":899,note:"Latest verified web snapshot: £899 at Richer Sounds."},
-  "55Q7STUK":{"Richer Sounds":499,note:"Latest verified web snapshot: £499 at Richer Sounds."},
-  "65U7STUK":{"Currys":1199,note:"Latest verified web snapshot: £1,199 at Currys."},
-  "55U7STUK PRO":{"Peter Tyson":999,note:"Verified Peter Tyson price: £999."},
-  "65U7STUK PRO":{"Peter Tyson":1299,note:"Verified Peter Tyson price: £1,299."},
-  "85U7STUK PRO":{"Peter Tyson":1999,note:"Verified Peter Tyson price: £1,999."},
-  "100U7STUK PRO":{"Peter Tyson":3799,note:"Verified Peter Tyson price: £3,799."}
+  "43A6STUK":{"Currys":279,"Richer Sounds":279,"Hughes":329},
+  "50A6STUK":{"Currys":329,"Richer Sounds":329},
+  "55A6STUK":{"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399},
+  "65A6STUK":{"Currys":499,"Hughes":499,"Peter Tyson":499,"Richer Sounds":499},
+  "43Q7STUK":{"Currys":349,"Richer Sounds":349},
+  "50Q7STUK":{"Currys":429,"Hughes":429},
+  "55Q7STUK":{"Currys":499,"Hughes":499,"Richer Sounds":499},
+  "65Q7STUK":{"Currys":649,"Hughes":649},
+  "75Q7STUK":{"Currys":899,"Hughes":899,"John Lewis":899,"Peter Tyson":899,"Richer Sounds":899,"Marks Electrical":899},
+  "85Q7STUK":{"Currys":1299,"Hughes":1299},
+  "50U7STUK":{"Currys":699,"Hughes":699},
+  "55U7STUK":{"Currys":999,"Richer Sounds":899},
+  "65U7STUK":{"Currys":1199,"Hughes":1299},
+  "75U7STUK":{"Currys":1499,"Hughes":1499},
+  "85U7STUK":{"Currys":1999,"Hughes":1999},
+  "100U7STUK":{"Currys":3499,"Hughes":3499},
+  "43E7STUK PRO":{"Currys":499,"Hughes":499},
+  "50E7STUK PRO":{"Currys":599,"Hughes":599},
+  "55E7STUK PRO":{"Currys":699,"Hughes":699},
+  "65E7STUK PRO":{"Currys":899,"Hughes":899},
+  "75E7STUK PRO":{"Currys":1299,"Hughes":1299},
+  "85E7STUK PRO":{"Currys":1599,"Hughes":1599},
+  "100E7STUK PRO":{"Currys":2499,"Hughes":3599},
+  "55U7STUK PRO":{"AO":999,"Argos":999,"Currys":999,"Hughes":999,"John Lewis":999,"Marks Electrical":999,"Peter Tyson":999,"Richer Sounds":999},
+  "65U7STUK PRO":{"AO":1299,"Argos":1299,"Currys":1299,"Hughes":1299,"John Lewis":1299,"Peter Tyson":1299,"Richer Sounds":1299,"Marks Electrical":1799},
+  "75U7STUK PRO":{"Argos":1499,"Hughes":1499,"John Lewis":1499,"Marks Electrical":1499,"Peter Tyson":1499,"Richer Sounds":1499},
+  "85U7STUK PRO":{"Peter Tyson":1999,"Richer Sounds":1999},
+  "100U7STUK PRO":{"Peter Tyson":3799,"Richer Sounds":3799},
+  "55UR8STUK":{"Currys":1299,"John Lewis":1299,"Richer Sounds":1299},
+  "65UR8STUK":{"Currys":1699,"Hughes":1699},
+  "75UR8STUK":{"Currys":2299,"Hughes":2299},
+  "85UR8STUK":{"Currys":2999,"Hughes":2999},
+  "100UR8STUK":{"Currys":7999,"Hughes":7999},
+  "65UR9STUK":{"Currys":1999,"John Lewis":1999,"Richer Sounds":1999},
+  "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799},
+  "85UR9STUK":{"Currys":3499,"John Lewis":3499,"Richer Sounds":3499}
 };
-function retailerSearchUrl(template,model){return template.replace("MODEL",encodeURIComponent(model));}
+
+function retailerSearchUrl(template,model){
+  if(String(template).includes("petertyson.co.uk")){
+    const slug=String(model||"").trim().toLowerCase().replace(/\s+/g,"-");
+    return template.replace("MODEL",slug);
+  }
+  return template.replace("MODEL",encodeURIComponent(model));
+}
+
+function pmfFindLiveKey(model){
+  const wanted=normaliseModel(model);
+  return Object.keys(PMF_LIVE_DATA||{}).find(k=>normaliseModel(k)===wanted) || null;
+}
+
 async function loadPmfLiveData(){
-  // GitHub Pages serves the app as a static site. The daily feed uses
-  // {models:{MODEL:{prices:{Retailer:price}}}}. Older/simple feeds that
-  // contain retailer prices directly are also supported.
+  PMF_LIVE_DATA={};
+  PMF_LAST_UPDATED="";
   try{
     const res=await fetch(`${PMF_DATA_URL}?v=${Date.now()}`,{cache:"no-store"});
     if(!res.ok)throw new Error("price-data unavailable");
     const data=await res.json();
-    const models=data&&data.models&&typeof data.models==="object"?data.models:{};
-    const cleaned={};
-    Object.keys(models).forEach(model=>{
-      const entry=models[model];
-      if(!entry || typeof entry!=="object") return;
-      const prices=(entry.prices&&typeof entry.prices==="object")?entry.prices:entry;
-      const retailerPrices={};
-      Object.keys(prices).forEach(name=>{
-        const value=prices[name];
-        if(typeof value==="number" && Number.isFinite(value)) retailerPrices[name]=value;
-      });
-      cleaned[model]=retailerPrices;
-    });
-    PMF_LIVE_DATA=cleaned;
-    PMF_LAST_UPDATED=data.updatedAt||"";
+    const models=(data&&data.models&&typeof data.models==="object")?data.models:{};
+    const usable=Object.values(models).some(x=>x&&x.prices&&typeof x.prices==="object"&&Object.keys(x.prices).length);
+    if(usable){
+      PMF_LIVE_DATA=models;
+      PMF_LAST_UPDATED=data.updatedAt||"";
+    }
   }catch(e){
     PMF_LIVE_DATA={};
     PMF_LAST_UPDATED="";
   }
 }
+
+function pmfLivePrices(model){
+  const key=pmfFindLiveKey(model);
+  const live=key?PMF_LIVE_DATA[key]:null;
+  return live&&live.prices&&typeof live.prices==="object"?live.prices:{};
+}
+function pmfPriceForRetailer(prices,name){
+  if(prices[name]!=null)return Number(prices[name]);
+  const aliases={"Amazon UK":"Amazon.co.uk","Amazon.co.uk":"Amazon UK"};
+  const alias=aliases[name];
+  return alias&&prices[alias]!=null?Number(prices[alias]):null;
+}
 function pmfRetailerRows(model,snap){
-  const live=PMF_LIVE_DATA[model]||{};
-  const merged={...snap,...live};
-  const names=[...new Set([
-    ...Object.keys(snap).filter(k=>k!=="note"),
-    ...Object.keys(live),
-    ...PMF_RETAILERS.map(x=>x[0])
-  ])];
+  const livePrices=pmfLivePrices(model);
+  /* Always show every configured retailer except Amazon. A missing price is
+     shown as “Check live”; the retailer itself must not disappear. */
+  const merged={};
+  Object.entries(snap||{}).forEach(([name,price])=>{
+    if(name!=="Amazon UK"&&name!=="Amazon.co.uk"&&price!=null&&Number.isFinite(Number(price))) merged[name]=Number(price);
+  });
+  Object.entries(livePrices||{}).forEach(([name,price])=>{
+    if(name!=="Amazon UK"&&name!=="Amazon.co.uk"&&price!=null&&Number.isFinite(Number(price))) merged[name]=Number(price);
+  });
+  const names=PMF_RETAILERS.map(x=>x[0]).filter(name=>name!=="Amazon UK"&&name!=="Amazon.co.uk");
   return names.map(name=>{
-    const price=merged[name];
+    const shownPrice=merged[name];
     const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
-    const priceText=(typeof price==="number" && Number.isFinite(price))
-      ?`£${price.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`
-      :"Check live";
-    return `<div class="pmf-retailer"><span>${name}${priceText!=="Check live"?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
+    const priceText=shownPrice!=null?`£${shownPrice.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
+    return `<div class="pmf-retailer"><span>${name}${shownPrice!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
   }).join("");
 }
+
 function checkPriceMatch(){
   const input=document.getElementById("pmfModel"),out=document.getElementById("pmfResult");
+  if(!out)return;
   const model=normaliseModel(input&&input.value);
   if(!model){out.innerHTML="Please choose a Hisense model first.";return;}
-  const source=(typeof TVs!=="undefined"?TVs:[]),item=source.find(x=>normaliseModel(x[0])===model);
-  const hisense=item&&item[1]!=null?Number(item[1]):null;
+  if(model.endsWith("QTUK")||/Q(?:PRO)?$/.test(model)){
+    out.innerHTML="2025/QTUK and Q-series models are excluded from Price Match Finder. Please choose a current STUK model.";
+    return;
+  }
+  const source=(typeof TVs!=="undefined"?TVs:[]);
+  const item=source.find(x=>normaliseModel(x[0])===model);
+  if(!item){
+    out.innerHTML="That model is not in the current Price Match Finder catalogue. Please choose a current STUK model.";
+    return;
+  }
+  const hisense=item[1]!=null?Number(item[1]):null;
   const snap=PMF_SNAPSHOT[model]||{};
-  const live=PMF_LIVE_DATA[model]||{};
-  const merged={...snap,...live};
-  const verified=Object.entries(merged).filter(([k,v])=>k!=="note"&&typeof v==="number"&&Number.isFinite(v)).length;
+  const livePrices=pmfLivePrices(model);
+  const merged={...snap,...livePrices};
+  const verified=Object.values(merged).filter(v=>typeof v==="number"&&Number.isFinite(v)).length;
   const retailerRows=pmfRetailerRows(model,snap);
+  const liveKey=pmfFindLiveKey(model);
   const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>Hisense app price</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
   const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:(verified?"Using the latest saved retailer prices":"No saved retailer price found yet");
-  const feedNote=PMF_LAST_UPDATED?"Daily price feed loaded. Retailer stock, promotions and voucher prices can change, so confirm the retailer price before promising a match.":"This GitHub copy does not currently contain the optional daily price-data file. The retailer buttons below open live retailer searches; saved prices are shown where available.";
-  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div><div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
+  const feedNote=PMF_LAST_UPDATED?"Daily price feed loaded. Retailer stock, promotions and voucher prices can change, so confirm the retailer price before promising a match.":"Live feed unavailable — showing the latest saved retailer prices where available. Retailer buttons open live searches so you can confirm today's price.";
+  const baseNote=(liveKey&&normaliseModel(liveKey)!==model)?`<div class="pmf-note" style="margin-top:7px;opacity:.9"><strong>Price comparison matched to ${liveKey}</strong> — retailer feed model name differs slightly.</div>`:"";
+  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div>${baseNote}<div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
 }
+
 function initPriceMatchFinder(){
   setupModelAutocomplete("pmfModel","pmfSuggestions",()=>{});
   setupModelAutocomplete("commissionModel","commissionSuggestions",()=>renderCommissionSearch());
@@ -1468,9 +1467,9 @@ document.addEventListener("DOMContentLoaded",initPriceMatchFinder);
 <script id="coachShortcutJS">
 const TECHNOLOGY_INFO={
 "RGB Mini LED":{summary:"RGB Mini LED uses independently controlled red, green and blue LEDs in the backlight alongside Mini LED control of brightness and contrast.",why:"Customers get richer colour, high brightness and strong contrast. It is especially easy to demonstrate with sport, HDR films, colourful games and bright rooms. Selected RGB models also include anti-reflection/glare control, helping reduce distracting reflections in brighter rooms.",benefits:["Richer colour","High brightness","Strong contrast","HDR impact","Sport & gaming","Premium large screens"],models:"UR9 • UR8"},
-"Mini LED":{summary:"Mini LED uses many smaller LEDs in the backlight, allowing much finer control of bright and dark areas than conventional LED.",why:"Customers get a brighter, punchier picture with stronger contrast and HDR impact. It is particularly useful for sport, gaming, films and bright rooms. U7S Pro also adds Anti-Reflection & Glare-Free technology to reduce distracting reflections.",benefits:["High brightness","Better light control","Stronger contrast","HDR impact","Sport & gaming","Bright-room viewing"],models:"U8Q • U7S Pro • U7S"},
-"QLED":{summary:"QLED uses a quantum-dot layer to improve the colour performance of an LED/LCD display.",why:"Customers get richer, more vivid colour and a strong everyday picture for streaming, live TV and sport. It is a clear step up from basic LED without moving into the Mini LED price range.",benefits:["Vivid colour","Richer colour","Strong everyday picture","Streaming","Sport","Value"],models:"Q7S • E7S Pro"},
-"LED":{summary:"LED TVs use an LCD panel with an LED backlight. It is the straightforward entry point for customers who want reliable everyday TV without paying for advanced display technology.",why:"Customers get simple 4K smart-TV viewing for live TV, streaming and family entertainment while keeping the price down. It is also a useful baseline for explaining what the higher ranges add.",benefits:["4K","Reliable","Simple","Good value","Everyday viewing","Budget friendly"],models:"A6S"},
+"Mini LED":{summary:"Mini LED uses many smaller LEDs in the backlight, allowing finer control of bright and dark areas than conventional LED.",why:"Customers get a brighter, punchier picture with stronger contrast and HDR impact — especially useful for sport, gaming, films and bright rooms. The U7S Pro also has Anti-Reflection & Glare-Free technology to reduce reflections and surface shine.",benefits:["High brightness","Better light control","Stronger contrast","HDR impact","Sport","Gaming"],models:"U8Q • U7S Pro • U7S"},
+"QLED":{summary:"QLED uses a quantum-dot layer to improve the colour performance of an LED/LCD display.",why:"Customers get brighter, more vivid colour and a strong everyday picture for streaming, live TV and sport without paying for flagship technology.",benefits:["Vivid colour","Good brightness","Strong everyday picture","Streaming","Sport","Value"],models:"Q7S • E7S Pro"},
+"LED":{summary:"LED TVs use an LCD panel with an LED backlight. It is the straightforward option for customers who want reliable everyday TV.",why:"Customers get simple 4K smart-TV viewing for live TV, streaming and family entertainment while keeping the price down.",benefits:["4K","Reliable","Simple","Good value","Bedrooms","Budget friendly"],models:"A6S"},
 "OLED":{summary:"OLED gives superb blacks and contrast because each pixel can switch itself off.",why:"Why choose Hisense Mini LED/RGB instead: higher brightness can be a better fit for bright living rooms, sport and daytime viewing; U7S Pro has Anti-Reflection & Glare-Free technology; OLED can be susceptible to permanent screen burn/image retention from prolonged static content; and reflective OLED screens can show distracting reflections from windows and lights. If the customer has a bright room, watches lots of sport or has static logos/HUDs on screen for long periods, show them Mini LED or RGB.",benefits:["Higher brightness","Better bright-room option","U7S Pro anti-reflection","RGB colour","No OLED burn-in risk","Great for sport & daytime viewing"],models:"Use this comparison when the customer's room, viewing habits or static-content use make Mini LED/RGB a strong alternative"},
 "Matte Screens":{summary:"A matte or anti-reflection finish scatters reflected light rather than presenting it as a sharp mirror-like reflection.",why:"For customers with windows, lamps or strong daylight facing the TV, a matte/low-reflection screen can make the picture easier and more comfortable to view.",benefits:["Less distracting glare","Fewer sharp reflections","Better for bright rooms","More comfortable daytime viewing","Useful for windows/lights"],models:"U7 Pro • selected RGB models — verify exact size/model"}
 };const EXACT_COMPETITOR_SPECS={
@@ -1551,24 +1550,15 @@ document.addEventListener("DOMContentLoaded",function(){
   btn.addEventListener("click",function(){setTimeout(function(){window.scrollTo(0,0)},0)},false);
  });
 });
-</script><style id="closingSubsectionOnly">
+</script>
+<style id="closingSubsectionOnly">
 .close-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
-.close-choice-grid button{
-  min-height:70px;text-align:left;padding:12px;border-radius:15px;
-  border:1px solid #31585c;background:linear-gradient(145deg,#102a2e,#0b2023);
-  color:#f7faf9
-}
-.close-choice-grid button b{
-  display:block;font-family:"Manrope","DM Sans",sans-serif!important;
-  font-size:13px;font-weight:800;color:#f7faf9
-}
+.close-choice-grid button{min-height:70px;text-align:left;padding:12px;border-radius:15px;border:1px solid #31585c;background:linear-gradient(145deg,#102a2e,#0b2023);color:#f7faf9}
+.close-choice-grid button b{display:block;font-family:"Manrope","DM Sans",sans-serif!important;font-size:13px;font-weight:800;color:#f7faf9}
 .close-choice-grid button small{display:block;margin-top:4px;font-size:10px;color:#b9c8c9}
 .close-choice-grid button:active,.close-choice-grid button:hover{border-color:#16d5d1;background:#123237}
 #closingTip h3{margin:0 0 8px;font-family:"Manrope","DM Sans",sans-serif;font-size:18px}
-#closingTip .close-script{
-  margin:0 0 9px;font-family:"Manrope","DM Sans",sans-serif;
-  font-size:16px;line-height:1.45;font-weight:800;color:#f7faf9
-}
+#closingTip .close-script{margin:0 0 9px;font-family:"Manrope","DM Sans",sans-serif;font-size:16px;line-height:1.45;font-weight:800;color:#f7faf9}
 #closingTip .close-tip{margin:0;font-size:12px;line-height:1.5;color:#b9c8c9}
 </style>
 <script id="closingSubsectionOnlyJS">
@@ -1586,4 +1576,5 @@ function showCloseTip(name){
   out.innerHTML=`<h3>${x.title}</h3><p class="close-script">${x.say}</p><p class="close-tip"><strong>Tip:</strong> ${x.tip}</p>`;
 }
 </script>
+
 </body></html>
