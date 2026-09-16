@@ -31,8 +31,153 @@ RICHER_EXACT = {
 WHICH_BASE = "https://www.which.co.uk/reviews/televisions/hisense-"
 WHICH_RETAILERS = [
     "AO", "Argos", "Currys", "Hughes", "John Lewis",
-    "Marks Electrical", "Peter Tyson", "Richer Sounds", "Amazon UK", "Amazon.co.uk"
+    "Marks Electrical", "Peter Tyson", "Richer Sounds"
 ]
+
+# Direct retailer fallbacks. Price4 is excellent for standard STUK models,
+# but it does not index every current PRO model. When a retailer is missing
+# from Price4/Which?, search that retailer directly for the exact model and
+# then parse the product page. Amazon is deliberately excluded.
+DIRECT_RETAILERS = {
+    "Currys": "currys.co.uk",
+    "AO": "ao.com",
+    "John Lewis": "johnlewis.com",
+    "Richer Sounds": "richersounds.com",
+    "Argos": "argos.co.uk",
+    "Hughes": "hughes.co.uk",
+    "Marks Electrical": "markselectrical.co.uk",
+    "Peter Tyson": "petertyson.co.uk",
+}
+
+RETAILER_ALIASES = {
+    "marks electrical ltd": "Marks Electrical",
+    "marks electrical": "Marks Electrical",
+    "john lewis & partners": "John Lewis",
+    "john lewis": "John Lewis",
+    "richer sounds": "Richer Sounds",
+    "peter tyson": "Peter Tyson",
+    "ao.com": "AO",
+    "ao": "AO",
+    "argos": "Argos",
+    "hughes": "Hughes",
+    "currys": "Currys",
+}
+
+def canonical_retailer(name):
+    key = re.sub(r"\s+", " ", str(name or "").strip().lower())
+    return RETAILER_ALIASES.get(key, name)
+
+def extract_page_price(soup, model):
+    """Extract a current-looking product price from a retailer product page."""
+    candidates = []
+    # Structured product data first.
+    for tag in soup.find_all(attrs={"itemprop": re.compile(r"^price$", re.I)}):
+        value = tag.get("content") or tag.get_text(" ", strip=True)
+        try:
+            p = float(re.sub(r"[^0-9.]", "", str(value)))
+            if 100 <= p <= 20000:
+                candidates.append(p)
+        except Exception:
+            pass
+    for script in soup.find_all("script", type="application/ld+json"):
+        raw = script.string or script.get_text()
+        if not raw:
+            continue
+        try:
+            data = json.loads(raw)
+        except Exception:
+            continue
+        stack = data if isinstance(data, list) else [data]
+        while stack:
+            item = stack.pop()
+            if isinstance(item, list):
+                stack.extend(item)
+            elif isinstance(item, dict):
+                offers = item.get("offers")
+                if offers:
+                    stack.extend(offers if isinstance(offers, list) else [offers])
+                for key in ("price", "lowPrice"):
+                    value = item.get(key)
+                    if isinstance(value, (int, float, str)):
+                        try:
+                            p = float(str(value).replace(",", ""))
+                            if 100 <= p <= 20000:
+                                candidates.append(p)
+                        except Exception:
+                            pass
+    if candidates:
+        return round(min(candidates), 2)
+
+    # Text fallback: only inspect text close to the exact model, which avoids
+    # accidentally taking a comparison-table or recommendation price.
+    text = soup.get_text(" ", strip=True)
+    wanted = re.sub(r"\s+", " ", model).strip().lower()
+    pos = text.lower().find(wanted)
+    if pos < 0:
+        compact = norm(model)
+        low = norm(text)
+        pos2 = low.find(compact)
+        if pos2 < 0:
+            return None
+        # norm() removes spaces, so use a broad local window from the raw text.
+        pos = max(0, min(len(text), pos2))
+    window = text[max(0, pos-250):pos+1800]
+    vals = [v for v in money_values(window) if 100 <= v <= 20000]
+    return round(min(vals), 2) if vals else None
+
+def direct_retailer_price(model, retailer):
+    """Search one named retailer for the exact model, then fetch the product page."""
+    domain = DIRECT_RETAILERS.get(retailer)
+    if not domain:
+        return None, None
+    query = f'"{model}" site:{domain}'
+    search_urls = [
+        "https://www.google.com/search?q=" + requests.utils.quote(query),
+        "https://www.bing.com/search?q=" + requests.utils.quote(query),
+    ]
+    try:
+        urls = []
+        for search_url in search_urls:
+            try:
+                r = requests.get(
+                    search_url,
+                    headers={**HEADERS, "Accept-Language": "en-GB,en;q=0.9"},
+                    timeout=TIMEOUT,
+                )
+                if r.status_code != 200:
+                    continue
+                soup = BeautifulSoup(r.text, "html.parser")
+                for a in soup.find_all("a", href=True):
+                    href = a.get("href", "")
+                    if domain not in href.lower():
+                        continue
+                    if href.startswith("/url?q="):
+                        href = href.split("/url?q=", 1)[1].split("&", 1)[0]
+                    if not href.startswith("http"):
+                        continue
+                    if href not in urls:
+                        urls.append(href)
+            except Exception:
+                continue
+        for url in urls[:5]:
+            try:
+                page = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+                if page.status_code != 200:
+                    continue
+                psoup = BeautifulSoup(page.text, "html.parser")
+                title = psoup.title.get_text(" ", strip=True) if psoup.title else ""
+                body = psoup.get_text(" ", strip=True)
+                combined = norm(title + " " + body[:12000])
+                if norm(model) not in combined:
+                    continue
+                price = extract_page_price(psoup, model)
+                if price is not None:
+                    return price, url
+            except Exception:
+                continue
+    except Exception as exc:
+        print(f"{retailer} direct search skipped for {model}: {exc}")
+    return None, None
 
 def which_url_for(model):
     slug = re.sub(r"[^a-z0-9]+", "-", model.lower()).strip("-")
@@ -57,8 +202,7 @@ def parse_which(model):
             if m:
                 value = float(m.group(1).replace(",", ""))
                 if 100 <= value <= 20000:
-                    key = "Amazon UK" if retailer == "Amazon.co.uk" else retailer
-                    prices[key] = round(value, 2)
+                    prices[retailer] = round(value, 2)
         return prices, url
     except Exception as exc:
         print(f"Which? skipped for {model}: {exc}")
@@ -204,7 +348,11 @@ def parse_price4(url):
         if low.startswith("visit store") or "rrp" in low or len(store) > 80:
             continue
 
-        retailers[store] = round(prices[0], 2)
+        store = canonical_retailer(store)
+        # Keep only the retailer set used by the app; this prevents marketplace
+        # or unrelated comparison entries from polluting the PMF feed.
+        if store in DIRECT_RETAILERS:
+            retailers[store] = round(prices[0], 2)
 
     model_number = None
     mm = re.search(
@@ -343,7 +491,21 @@ def main():
             # Price4 so PRO/UR models get the wider retailer coverage.
             which_prices, which_url = parse_which(model)
             for retailer, price in which_prices.items():
-                prices[retailer] = price
+                retailer = canonical_retailer(retailer)
+                if retailer in DIRECT_RETAILERS:
+                    prices[retailer] = price
+
+            # Exact-model retailer fallback. This is the important part for
+            # current PRO models that Price4/Which? do not index. Only search
+            # retailers still missing after the aggregators, so we do not make
+            # hundreds of unnecessary searches for models already covered.
+            missing_retailers = [name for name in DIRECT_RETAILERS if name not in prices]
+            direct_urls = {}
+            for retailer in missing_retailers:
+                direct_price, direct_url = direct_retailer_price(model, retailer)
+                if direct_price is not None:
+                    prices[retailer] = direct_price
+                    direct_urls[retailer] = direct_url
 
             # Direct retailer fallback for models not covered by the aggregators.
             richer_price, richer_url = parse_richer(model)
@@ -378,6 +540,7 @@ def main():
                 "price4Url": price4_url,
                 "whichUrl": which_url,
                 "richerUrl": richer_url,
+                "directUrls": direct_urls,
             }
 
         with ThreadPoolExecutor(max_workers=8) as pool:
