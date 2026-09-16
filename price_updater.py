@@ -512,16 +512,33 @@ def main():
             if richer_price is not None:
                 prices["Richer Sounds"] = richer_price
 
-            # Never destroy a previously working price because a site timed out.
-            if not prices:
-                old = existing_models.get(model, {})
-                old_prices = old.get("prices") or {}
-                if isinstance(old_prices, dict) and old_prices:
-                    prices = old_prices.copy()
-                    price4_updated = old.get("price4Updated")
-                    model_number = old.get("price4ModelNumber")
-                    price4_url = old.get("price4Url") or old.get("sourceUrl")
-                    richer_url = old.get("richerUrl") or richer_url
+            # Preserve previously verified prices retailer-by-retailer.
+            # A temporary failure for one retailer must never erase its last
+            # verified price while successful fresh prices replace old values.
+            old = existing_models.get(model, {})
+            old_prices = old.get("prices") or {}
+            if isinstance(old_prices, dict):
+                for old_name, old_value in old_prices.items():
+                    name = canonical_retailer(old_name)
+                    if name in DIRECT_RETAILERS and name not in prices:
+                        if isinstance(old_value, (int, float)) and 100 <= float(old_value) <= 20000:
+                            prices[name] = float(old_value)
+
+            if not price4_updated:
+                price4_updated = old.get("price4Updated")
+            if not model_number:
+                model_number = old.get("price4ModelNumber")
+            if not price4_url:
+                price4_url = old.get("price4Url") or old.get("sourceUrl")
+            if not richer_url:
+                richer_url = old.get("richerUrl") or richer_url
+
+            # Amazon is deliberately excluded from the app's retailer set.
+            prices = {
+                name: value for name, value in prices.items()
+                if canonical_retailer(name) in DIRECT_RETAILERS
+                and canonical_retailer(name) not in {"Amazon", "Amazon UK", "Amazon.co.uk"}
+            }
 
             prices = dict(sorted(prices.items(), key=lambda x: (x[1], x[0].lower())))
             best = None
