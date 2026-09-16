@@ -1537,4 +1537,48 @@ document.addEventListener("DOMContentLoaded",function(){
   btn.addEventListener("click",function(){setTimeout(function(){window.scrollTo(0,0)},0)},false);
  });
 });
-</script></body></html>
+</script>
+
+<style>
+#sales #saleDate {
+  width: 100%;
+  max-width: 100%;
+  height: 44px;
+  padding: 8px 10px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+#coach,
+#coach button,
+#coach select {
+  font-family: "Manrope", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+#coach .coach-tab {
+  background: #16383c;
+  color: #b8cacc;
+  border: 1px solid #315b60;
+}
+
+#coach .coach-tab.active {
+  background: linear-gradient(135deg,#18c9c4,#0c777d);
+  color: #fff;
+  border-color: #24d9d4;
+  box-shadow: 0 5px 14px rgba(18,205,201,.22);
+}
+
+#coach .coach-shortcut,
+#coach .tech-choice-grid button {
+  background: linear-gradient(145deg,#14363a,#0d2528);
+  color: #f4f8f7;
+  border: 1px solid #315b60;
+}
+
+#coach .coach-shortcut.active {
+  border-color: #18c9c4;
+  box-shadow: 0 0 0 2px rgba(24,201,196,.12);
+}
+</style>
+
+</body></html>
