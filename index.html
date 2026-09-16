@@ -275,6 +275,69 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   border:1px solid #31575b !important;
 }
 </style>
+
+<style id="technologyAndBackRefinement">
+/* Technology cards: current ranges */
+#coach .tech-choice-grid button{
+  color:#f4f8f7 !important;
+  background:linear-gradient(145deg,#102a2e,#0b2023) !important;
+  border:1px solid #31585c !important;
+}
+#coach .tech-choice-grid button b{
+  color:#f7faf9 !important;
+  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+}
+#coach .tech-choice-grid button small{
+  color:#b9c8c9 !important;
+  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+  font-size:11px !important;
+}
+#coach .tech-choice-grid button:active,
+#coach .tech-choice-grid button:hover{
+  border-color:#16d5d1 !important;
+  background:#123237 !important;
+}
+
+/* Back button + panel headings */
+#coach .coach-panel-head button,
+#coach .coach-panel-head button *{
+  color:#f7faf9 !important;
+  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+}
+#coach .coach-panel-head button{
+  font-size:14px !important;
+  font-weight:800 !important;
+  opacity:1 !important;
+}
+#coach .coach-panel-head b{
+  color:#f7faf9 !important;
+  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+}
+#coach .coach-panel-head small{
+  color:#b9c8c9 !important;
+}
+</style>
+
+
+<style id="finalCosmeticFix">
+#sales #saleDate{
+  height:52px !important;
+  min-height:52px !important;
+  max-height:52px !important;
+  padding:0 12px !important;
+  box-sizing:border-box !important;
+}
+#coach .coach-tile,
+#coach .coach-tile *{
+  font-family:"Manrope","DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+}
+#coach .coach-tile b,
+#coach .coach-tile strong{color:#f7faf9 !important}
+#coach .coach-tile small{color:#b9c8c9 !important}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -423,9 +486,9 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Technology</b><small>Pick a technology</small></div></div>
     <div class="tech-choice-grid">
       <button onclick="showTechDetail('RGB Mini LED')"><b>RGB Mini LED</b><small>UR9 • UR8</small></button>
-      <button onclick="showTechDetail('Mini LED')"><b>Mini LED</b><small>U8 • U7 Pro • U7</small></button>
-      <button onclick="showTechDetail('QLED')"><b>QLED</b><small>Q7 • E7 Pro</small></button>
-      <button onclick="showTechDetail('LED')"><b>LED</b><small>A6</small></button>
+      <button onclick="showTechDetail('Mini LED')"><b>Mini LED</b><small>U8Q • U7S Pro • U7S</small></button>
+      <button onclick="showTechDetail('QLED')"><b>QLED</b><small>Q7S • E7S Pro</small></button>
+      <button onclick="showTechDetail('LED')"><b>LED</b><small>A6S</small></button>
       <button onclick="showTechDetail('OLED')"><b>OLED</b><small>Competitor technology</small></button>
     </div>
     <div id="technologyDetail" class="coach-detail-card"><span>Choose a technology above.</span></div>
@@ -1367,9 +1430,9 @@ document.addEventListener("DOMContentLoaded",initPriceMatchFinder);
 <script id="coachShortcutJS">
 const TECHNOLOGY_INFO={
 "RGB Mini LED":{summary:"RGB Mini LED uses independently controlled red, green and blue LEDs in the backlight alongside Mini LED control of brightness and contrast.",why:"Customers get richer colour, high brightness and strong contrast. It is especially easy to demonstrate with sport, HDR films, colourful games and bright rooms. Selected RGB models also include anti-reflection/glare control, helping reduce distracting reflections in brighter rooms.",benefits:["Richer colour","High brightness","Strong contrast","HDR impact","Sport & gaming","Premium large screens"],models:"UR9 • UR8"},
-"Mini LED":{summary:"Mini LED uses many smaller LEDs in the backlight, allowing finer control of bright and dark areas than conventional LED.",why:"Customers get a brighter, punchier picture with stronger contrast and HDR impact — especially useful for sport, gaming, films and bright rooms. The U7S Pro also has Anti-Reflection & Glare-Free technology to reduce reflections and surface shine.",benefits:["High brightness","Better light control","Stronger contrast","HDR impact","Sport","Gaming"],models:"U8 • U7 Pro • U7"},
-"QLED":{summary:"QLED uses a quantum-dot layer to improve the colour performance of an LED/LCD display.",why:"Customers get brighter, more vivid colour and a strong everyday picture for streaming, live TV and sport without paying for flagship technology.",benefits:["Vivid colour","Good brightness","Strong everyday picture","Streaming","Sport","Value"],models:"Q7 • E7 Pro"},
-"LED":{summary:"LED TVs use an LCD panel with an LED backlight. It is the straightforward option for customers who want reliable everyday TV.",why:"Customers get simple 4K smart-TV viewing for live TV, streaming and family entertainment while keeping the price down.",benefits:["4K","Reliable","Simple","Good value","Bedrooms","Budget friendly"],models:"A6"},
+"Mini LED":{summary:"Mini LED uses many smaller LEDs in the backlight, allowing much finer control of bright and dark areas than conventional LED.",why:"Customers get a brighter, punchier picture with stronger contrast and HDR impact. It is particularly useful for sport, gaming, films and bright rooms. U7S Pro also adds Anti-Reflection & Glare-Free technology to reduce distracting reflections.",benefits:["High brightness","Better light control","Stronger contrast","HDR impact","Sport & gaming","Bright-room viewing"],models:"U8Q • U7S Pro • U7S"},
+"QLED":{summary:"QLED uses a quantum-dot layer to improve the colour performance of an LED/LCD display.",why:"Customers get richer, more vivid colour and a strong everyday picture for streaming, live TV and sport. It is a clear step up from basic LED without moving into the Mini LED price range.",benefits:["Vivid colour","Richer colour","Strong everyday picture","Streaming","Sport","Value"],models:"Q7S • E7S Pro"},
+"LED":{summary:"LED TVs use an LCD panel with an LED backlight. It is the straightforward entry point for customers who want reliable everyday TV without paying for advanced display technology.",why:"Customers get simple 4K smart-TV viewing for live TV, streaming and family entertainment while keeping the price down. It is also a useful baseline for explaining what the higher ranges add.",benefits:["4K","Reliable","Simple","Good value","Everyday viewing","Budget friendly"],models:"A6S"},
 "OLED":{summary:"OLED gives superb blacks and contrast because each pixel can switch itself off.",why:"Why choose Hisense Mini LED/RGB instead: higher brightness can be a better fit for bright living rooms, sport and daytime viewing; U7S Pro has Anti-Reflection & Glare-Free technology; OLED can be susceptible to permanent screen burn/image retention from prolonged static content; and reflective OLED screens can show distracting reflections from windows and lights. If the customer has a bright room, watches lots of sport or has static logos/HUDs on screen for long periods, show them Mini LED or RGB.",benefits:["Higher brightness","Better bright-room option","U7S Pro anti-reflection","RGB colour","No OLED burn-in risk","Great for sport & daytime viewing"],models:"Use this comparison when the customer's room, viewing habits or static-content use make Mini LED/RGB a strong alternative"},
 "Matte Screens":{summary:"A matte or anti-reflection finish scatters reflected light rather than presenting it as a sharp mirror-like reflection.",why:"For customers with windows, lamps or strong daylight facing the TV, a matte/low-reflection screen can make the picture easier and more comfortable to view.",benefits:["Less distracting glare","Fewer sharp reflections","Better for bright rooms","More comfortable daytime viewing","Useful for windows/lights"],models:"U7 Pro • selected RGB models — verify exact size/model"}
 };const EXACT_COMPETITOR_SPECS={
