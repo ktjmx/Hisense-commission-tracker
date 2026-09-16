@@ -1290,21 +1290,20 @@ const PMF_RETAILERS=[
   ["Argos","https://www.google.com/search?q=site%3Aargos.co.uk+Hisense+MODEL"],
   ["Hughes","https://www.google.com/search?q=site%3Ahughes.co.uk+Hisense+MODEL"],
   ["Marks Electrical","https://www.google.com/search?q=site%3Amarkselectrical.co.uk+Hisense+MODEL"],
-  ["Peter Tyson","https://petertyson.co.uk/hisense-MODEL"],
-  ["Amazon UK","https://www.google.com/search?q=site%3Aamazon.co.uk+Hisense+MODEL"]
+  ["Peter Tyson","https://petertyson.co.uk/hisense-MODEL"]
 ];
 
 /* Verified saved prices. Live price-data.json values override these when present. */
 const PMF_SNAPSHOT={
   "43A6STUK":{"Currys":279,"Richer Sounds":279,"Hughes":329},
-  "50A6STUK":{"Currys":329,"Richer Sounds":329,"Amazon UK":329},
-  "55A6STUK":{"Amazon UK":399,"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399},
+  "50A6STUK":{"Currys":329,"Richer Sounds":329},
+  "55A6STUK":{"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399},
   "65A6STUK":{"Currys":499,"Hughes":499,"Peter Tyson":499,"Richer Sounds":499},
   "43Q7STUK":{"Currys":349,"Richer Sounds":349},
   "50Q7STUK":{"Currys":429,"Hughes":429},
   "55Q7STUK":{"Currys":499,"Hughes":499,"Richer Sounds":499},
   "65Q7STUK":{"Currys":649,"Hughes":649},
-  "75Q7STUK":{"Currys":899,"Hughes":899,"John Lewis":899,"Peter Tyson":899,"Richer Sounds":899,"Marks Electrical":1399},
+  "75Q7STUK":{"Currys":899,"Hughes":899,"John Lewis":899,"Peter Tyson":899,"Richer Sounds":899,"Marks Electrical":899},
   "85Q7STUK":{"Currys":1299,"Hughes":1299},
   "50U7STUK":{"Currys":699,"Hughes":699},
   "55U7STUK":{"Currys":999,"Richer Sounds":899},
@@ -1379,14 +1378,25 @@ function pmfPriceForRetailer(prices,name){
 }
 function pmfRetailerRows(model,snap){
   const livePrices=pmfLivePrices(model);
-  const names=[...new Set([...Object.keys(snap||{}),...Object.keys(livePrices),...PMF_RETAILERS.map(x=>x[0])])];
+  /* Only display retailers for which this exact model has a verified saved/live price.
+     The old version rendered a fixed retailer list and showed “Check live” for every
+     retailer missing from the feed, which made it look as though prices were missing. */
+  const merged={};
+  Object.entries(snap||{}).forEach(([name,price])=>{
+    if(price!=null&&Number.isFinite(Number(price))) merged[name]=Number(price);
+  });
+  Object.entries(livePrices||{}).forEach(([name,price])=>{
+    if(price!=null&&Number.isFinite(Number(price))) merged[name]=Number(price);
+  });
+  const names=Object.keys(merged);
+  if(!names.length){
+    return `<div class="pmf-note">No verified retailer prices are currently available for this exact model. Use the retailer search buttons below to check live availability.</div>`;
+  }
   return names.map(name=>{
-    const livePrice=pmfPriceForRetailer(livePrices,name);
-    const snapPrice=snap&&snap[name]!=null?Number(snap[name]):null;
-    const shownPrice=livePrice!=null?livePrice:snapPrice;
+    const shownPrice=merged[name];
     const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
-    const priceText=shownPrice!=null?`£${shownPrice.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
-    return `<div class="pmf-retailer"><span>${name}${shownPrice!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
+    const priceText=`£${shownPrice.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+    return `<div class="pmf-retailer"><span>${name} ✓</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
   }).join("");
 }
 

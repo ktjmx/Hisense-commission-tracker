@@ -96,6 +96,45 @@ def get(url, timeout=TIMEOUT):
     return r
 
 
+
+
+def collect_price4_links(models):
+    """Discover fresh Price4 product URLs for every current model.
+
+    Price4 paginates the Hisense catalogue. We crawl all five pages and only
+    accept an exact model-name match, so a base model can never accidentally
+    inherit a similarly named PRO page.
+    """
+    wanted = {norm(m): m for m in models}
+    found = {}
+    for page in range(1, 6):
+        url = BASE + "departments/televisions/brand/hisense" + (f"/{page}" if page > 1 else "")
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+            if r.status_code != 200:
+                continue
+            soup = BeautifulSoup(r.text, "html.parser")
+            for a in soup.find_all("a", href=True):
+                href = a.get("href", "")
+                if "/hisense-" not in href.lower():
+                    continue
+                text = a.get_text(" ", strip=True)
+                text_key = norm(text)
+                if text_key in wanted:
+                    found[wanted[text_key]] = urljoin(BASE, href)
+                    continue
+                # Fallback to the product slug only when it exactly matches.
+                slug = href.rsplit("/", 1)[-1].split("?")[0]
+                slug = re.sub(r"\.aspx$", "", slug, flags=re.I)
+                slug = re.sub(r"-\d+$", "", slug)
+                if slug.lower().startswith("hisense-"):
+                    slug_key = norm(slug[len("hisense-"):])
+                    if slug_key in wanted:
+                        found[wanted[slug_key]] = urljoin(BASE, href)
+        except Exception as exc:
+            print(f"Price4 catalogue page {page} skipped: {exc}")
+    return found
+
 def get_existing_price4_links(existing_models):
     links = {}
     for model, data in existing_models.items():
@@ -270,10 +309,12 @@ def main():
         except Exception:
             existing_models = {}
 
-        # IMPORTANT: do not crawl Price4's catalogue every day. That was the
-        # source of slow/failing runs. Refresh only the direct Price4 pages we
-        # already know, and use direct Richer Sounds pages for missing models.
-        price4_links = get_existing_price4_links(existing_models)
+        # Discover fresh Price4 pages every run, then fall back to any previously
+        # known URL. This ensures every current model is checked even when it was
+        # missing from an older price-data.json.
+        discovered_links = collect_price4_links(models)
+        old_links = get_existing_price4_links(existing_models)
+        price4_links = {m: discovered_links.get(m) or old_links.get(m) for m in models}
 
         result = {
             "updatedAt": datetime.now(timezone.utc).isoformat(),
