@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-16T11:28:26.614203+00:00",
+  "updatedAt": "2026-09-16T11:37:46.700649+00:00",
   "source": "Price4 UK price comparison + Richer Sounds direct fallback",
   "models": {
     "43A6STUK": {
@@ -19,7 +19,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-43a6stuk",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-43a6stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-43a6stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-43a6stuk/",
+      "directUrls": {}
     },
     "50A6STUK": {
       "status": "ok",
@@ -39,63 +40,54 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-50a6stuk",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-50a6stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-50a6stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-50a6stuk/",
+      "directUrls": {}
     },
     "55A6STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Argos",
         "price": 399.0
       },
-      "retailerCount": 12,
+      "retailerCount": 6,
       "prices": {
-        "Amazon.co.uk": 399.0,
-        "Amazon.co.uk Marketplace": 399.0,
         "Argos": 399.0,
         "Currys": 399.0,
-        "Electrical Discount UK": 399.0,
         "Hughes": 399.0,
         "Marks Electrical": 399.0,
         "Peter Tyson": 399.0,
-        "Richer Sounds": 399.0,
-        "eBay - Crampton and Moore": 449.0,
-        "Crampton and Moore": 579.0,
-        "PRC Direct": 579.0
+        "Richer Sounds": 399.0
       },
       "price4Updated": "15 September 2026 17:56 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-55a6stuk-61001.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-55a6stuk-61001.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-55a6stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-55a6stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-55a6stuk/",
+      "directUrls": {}
     },
     "65A6STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Argos",
         "price": 499.0
       },
-      "retailerCount": 12,
+      "retailerCount": 6,
       "prices": {
-        "Amazon.co.uk": 499.0,
-        "Amazon.co.uk Marketplace": 499.0,
         "Argos": 499.0,
         "Currys": 499.0,
-        "Electrical Discount UK": 499.0,
         "Hughes": 499.0,
         "Marks Electrical": 499.0,
         "Peter Tyson": 499.0,
-        "Richer Sounds": 499.0,
-        "Appliances Direct": 799.0,
-        "Crampton and Moore": 799.0,
-        "PRC Direct": 799.0
+        "Richer Sounds": 499.0
       },
       "price4Updated": "15 September 2026 12:06 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-65a6stuk-60979.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-65a6stuk-60979.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-65a6stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-65a6stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-65a6stuk/",
+      "directUrls": {}
     },
     "43Q7STUK": {
       "status": "not_found",
@@ -107,7 +99,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-43q7stuk",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-43q7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-43q7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-43q7stuk/",
+      "directUrls": {}
     },
     "50Q7STUK": {
       "status": "ok",
@@ -115,73 +108,65 @@
         "retailer": "Currys",
         "price": 429.0
       },
-      "retailerCount": 8,
+      "retailerCount": 5,
       "prices": {
         "Currys": 429.0,
-        "Electrical Discount UK": 429.0,
         "Hughes": 429.0,
         "Marks Electrical": 429.0,
         "Richer Sounds": 429.0,
-        "Crampton and Moore": 529.0,
-        "Peter Tyson": 529.0,
-        "PRC Direct": 599.0
+        "Peter Tyson": 529.0
       },
       "price4Updated": "15 September 2026 17:55 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-50q7stuk-60995.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-50q7stuk-60995.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-50q7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-50q7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-50q7stuk/",
+      "directUrls": {}
     },
     "55Q7STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Currys",
         "price": 499.0
       },
-      "retailerCount": 10,
+      "retailerCount": 5,
       "prices": {
-        "Amazon.co.uk": 499.0,
-        "Amazon.co.uk Marketplace": 499.0,
-        "Crampton and Moore": 499.0,
         "Currys": 499.0,
-        "Electrical Discount UK": 499.0,
         "Hughes": 499.0,
         "Marks Electrical": 499.0,
         "Richer Sounds": 499.0,
-        "Peter Tyson": 599.0,
-        "PRC Direct": 699.0
+        "Peter Tyson": 599.0
       },
       "price4Updated": "15 September 2026 17:55 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-55q7stuk-60994.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-55q7stuk-60994.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-55q7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-55q7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-55q7stuk/",
+      "directUrls": {}
     },
     "65Q7STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Crampton and Moore",
+        "retailer": "Currys",
         "price": 649.0
       },
-      "retailerCount": 8,
+      "retailerCount": 5,
       "prices": {
-        "Crampton and Moore": 649.0,
         "Currys": 649.0,
-        "Electrical Discount UK": 649.0,
         "Hughes": 649.0,
         "Marks Electrical": 649.0,
         "Peter Tyson": 699.0,
-        "Richer Sounds": 699.0,
-        "PRC Direct": 899.0
+        "Richer Sounds": 699.0
       },
       "price4Updated": "15 September 2026 17:55 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-65q7stuk-60996.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-65q7stuk-60996.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-65q7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-65q7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-65q7stuk/",
+      "directUrls": {}
     },
     "75Q7STUK": {
       "status": "not_found",
@@ -193,31 +178,30 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-75q7stuk",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-75q7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-75q7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-75q7stuk/",
+      "directUrls": {}
     },
     "85Q7STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Crampton and Moore",
+        "retailer": "Currys",
         "price": 1299.0
       },
-      "retailerCount": 8,
+      "retailerCount": 5,
       "prices": {
-        "Crampton and Moore": 1299.0,
         "Currys": 1299.0,
-        "Electrical Discount UK": 1299.0,
         "Hughes": 1299.0,
         "Marks Electrical": 1299.0,
         "Richer Sounds": 1299.0,
-        "Peter Tyson": 1599.0,
-        "PRC Direct": 1799.0
+        "Peter Tyson": 1599.0
       },
       "price4Updated": "15 September 2026 17:55 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-85q7stuk-60997.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-85q7stuk-60997.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-85q7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-85q7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-85q7stuk/",
+      "directUrls": {}
     },
     "43E7STUK PRO": {
       "status": "not_found",
@@ -229,7 +213,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-43e7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-43e7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-43e7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-43e7stuk-pro/",
+      "directUrls": {}
     },
     "50E7STUK PRO": {
       "status": "ok",
@@ -246,7 +231,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-50e7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-50e7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-50e7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-50e7stuk-pro/",
+      "directUrls": {}
     },
     "55E7STUK PRO": {
       "status": "ok",
@@ -263,7 +249,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-55e7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-55e7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-55e7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-55e7stuk-pro/",
+      "directUrls": {}
     },
     "65E7STUK PRO": {
       "status": "ok",
@@ -280,7 +267,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-65e7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-65e7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-65e7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-65e7stuk-pro/",
+      "directUrls": {}
     },
     "75E7STUK PRO": {
       "status": "ok",
@@ -297,7 +285,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-75e7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-75e7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-75e7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-75e7stuk-pro/",
+      "directUrls": {}
     },
     "85E7STUK PRO": {
       "status": "ok",
@@ -314,7 +303,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-85e7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-85e7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-85e7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-85e7stuk-pro/",
+      "directUrls": {}
     },
     "100E7STUK PRO": {
       "status": "ok",
@@ -331,42 +321,38 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-100e7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-100e7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-100e7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-100e7stuk-pro/",
+      "directUrls": {}
     },
     "50U7STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Crampton and Moore",
+        "retailer": "Currys",
         "price": 699.0
       },
-      "retailerCount": 7,
+      "retailerCount": 4,
       "prices": {
-        "Crampton and Moore": 699.0,
         "Currys": 699.0,
-        "Electrical Discount UK": 699.0,
         "Hughes": 699.0,
         "Marks Electrical": 699.0,
-        "Peter Tyson": 899.0,
-        "PRC Direct": 999.0
+        "Peter Tyson": 899.0
       },
       "price4Updated": "15 September 2026 17:50 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-50u7stuk-60988.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-50u7stuk-60988.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-50u7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-50u7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-50u7stuk/",
+      "directUrls": {}
     },
     "55U7STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Electrical Discount UK",
-        "price": 899.0
+        "retailer": "AO",
+        "price": 999.0
       },
-      "retailerCount": 13,
+      "retailerCount": 8,
       "prices": {
-        "Electrical Discount UK": 899.0,
-        "Amazon.co.uk": 999.0,
-        "Amazon.co.uk Marketplace": 999.0,
         "AO": 999.0,
         "Argos": 999.0,
         "Currys": 999.0,
@@ -374,16 +360,15 @@
         "John Lewis": 999.0,
         "Marks Electrical": 999.0,
         "Peter Tyson": 999.0,
-        "Richer Sounds": 999.0,
-        "PRC Direct": 1299.0,
-        "Crampton and Moore": 1499.0
+        "Richer Sounds": 999.0
       },
       "price4Updated": "15 September 2026 17:54 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-55u7stuk-60989.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-55u7stuk-60989.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-55u7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-55u7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-55u7stuk/",
+      "directUrls": {}
     },
     "65U7STUK": {
       "status": "ok",
@@ -391,28 +376,24 @@
         "retailer": "Currys",
         "price": 1199.0
       },
-      "retailerCount": 13,
+      "retailerCount": 8,
       "prices": {
         "Currys": 1199.0,
         "Hughes": 1199.0,
         "John Lewis": 1199.0,
         "Marks Electrical": 1199.0,
-        "Amazon.co.uk": 1299.0,
-        "Amazon.co.uk Marketplace": 1299.0,
         "AO": 1299.0,
         "Argos": 1299.0,
-        "Electrical Discount UK": 1299.0,
         "Peter Tyson": 1299.0,
-        "Richer Sounds": 1299.0,
-        "PRC Direct": 1599.0,
-        "Crampton and Moore": 1799.0
+        "Richer Sounds": 1299.0
       },
       "price4Updated": "15 September 2026 17:54 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-65u7stuk-60990.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-65u7stuk-60990.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-65u7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-65u7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-65u7stuk/",
+      "directUrls": {}
     },
     "75U7STUK": {
       "status": "ok",
@@ -420,23 +401,20 @@
         "retailer": "Argos",
         "price": 1499.0
       },
-      "retailerCount": 8,
+      "retailerCount": 4,
       "prices": {
         "Argos": 1499.0,
         "Currys": 1499.0,
-        "Electrical Discount UK": 1499.0,
         "Hughes": 1499.0,
-        "Richer Sounds": 1499.0,
-        "very.co.uk": 1499.0,
-        "PRC Direct": 1899.0,
-        "Crampton and Moore": 2099.0
+        "Richer Sounds": 1499.0
       },
       "price4Updated": "15 September 2026 17:54 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-75u7stuk-60991.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-75u7stuk-60991.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-75u7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-75u7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-75u7stuk/",
+      "directUrls": {}
     },
     "85U7STUK": {
       "status": "ok",
@@ -444,24 +422,21 @@
         "retailer": "Currys",
         "price": 1999.0
       },
-      "retailerCount": 9,
+      "retailerCount": 5,
       "prices": {
         "Currys": 1999.0,
-        "Electrical Discount UK": 1999.0,
         "Hughes": 1999.0,
         "Marks Electrical": 1999.0,
         "Richer Sounds": 1999.0,
-        "very.co.uk": 1999.0,
-        "Peter Tyson": 2499.0,
-        "PRC Direct": 2799.0,
-        "Crampton and Moore": 2999.0
+        "Peter Tyson": 2499.0
       },
       "price4Updated": "15 September 2026 17:54 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-85u7stuk-60992.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-85u7stuk-60992.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-85u7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-85u7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-85u7stuk/",
+      "directUrls": {}
     },
     "100U7STUK": {
       "status": "ok",
@@ -469,15 +444,12 @@
         "retailer": "Currys",
         "price": 3499.0
       },
-      "retailerCount": 8,
+      "retailerCount": 5,
       "prices": {
         "Currys": 3499.0,
-        "Electrical Discount UK": 3499.0,
         "Hughes": 3499.0,
         "Richer Sounds": 3499.0,
-        "Crampton and Moore": 3799.0,
         "Marks Electrical": 4298.0,
-        "PRC Direct": 4599.0,
         "Peter Tyson": 4799.0
       },
       "price4Updated": "15 September 2026 17:54 BST",
@@ -485,7 +457,8 @@
       "sourceUrl": "https://www.price4.co.uk/hisense-100u7stuk-60993.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-100u7stuk-60993.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-100u7stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-100u7stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-100u7stuk/",
+      "directUrls": {}
     },
     "55U7STUK PRO": {
       "status": "ok",
@@ -506,7 +479,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-55u7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-55u7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-55u7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-55u7stuk-pro/",
+      "directUrls": {}
     },
     "65U7STUK PRO": {
       "status": "ok",
@@ -530,7 +504,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-65u7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-65u7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-65u7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-65u7stuk-pro/",
+      "directUrls": {}
     },
     "75U7STUK PRO": {
       "status": "not_found",
@@ -542,7 +517,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-75u7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-75u7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-75u7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-75u7stuk-pro/",
+      "directUrls": {}
     },
     "85U7STUK PRO": {
       "status": "ok",
@@ -559,7 +535,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-85u7stuk-pro",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-85u7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-85u7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-85u7stuk-pro/",
+      "directUrls": {}
     },
     "100U7STUK PRO": {
       "status": "ok",
@@ -576,7 +553,8 @@
       "sourceUrl": "https://www.richersounds.com/hisense-100u7stuk-pro/",
       "price4Url": "https://www.richersounds.com/hisense-100u7stuk-pro/",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-100u7stuk-pro",
-      "richerUrl": "https://www.richersounds.com/hisense-100u7stuk-pro/"
+      "richerUrl": "https://www.richersounds.com/hisense-100u7stuk-pro/",
+      "directUrls": {}
     },
     "55UR8STUK": {
       "status": "not_found",
@@ -588,82 +566,74 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-55ur8stuk",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-55ur8stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-55ur8stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-55ur8stuk/",
+      "directUrls": {}
     },
     "65UR8STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Currys",
         "price": 1699.0
       },
-      "retailerCount": 9,
+      "retailerCount": 5,
       "prices": {
-        "Amazon.co.uk": 1699.0,
-        "Amazon.co.uk Marketplace": 1699.0,
         "Currys": 1699.0,
-        "Electrical Discount UK": 1699.0,
         "Hughes": 1699.0,
         "Marks Electrical": 1699.0,
         "Richer Sounds": 1699.0,
-        "Peter Tyson": 1999.0,
-        "PRC Direct": 2299.0
+        "Peter Tyson": 1999.0
       },
       "price4Updated": "15 September 2026 17:56 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-65ur8stuk-61000.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-65ur8stuk-61000.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-65ur8stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-65ur8stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-65ur8stuk/",
+      "directUrls": {}
     },
     "75UR8STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Currys",
         "price": 2299.0
       },
-      "retailerCount": 9,
+      "retailerCount": 5,
       "prices": {
-        "Amazon.co.uk": 2299.0,
-        "Amazon.co.uk Marketplace": 2299.0,
         "Currys": 2299.0,
-        "Electrical Discount UK": 2299.0,
         "Hughes": 2299.0,
         "Marks Electrical": 2299.0,
         "Richer Sounds": 2299.0,
-        "Peter Tyson": 2799.0,
-        "PRC Direct": 2999.0
+        "Peter Tyson": 2799.0
       },
       "price4Updated": "15 September 2026 17:56 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-75ur8stuk-60999.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-75ur8stuk-60999.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-75ur8stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-75ur8stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-75ur8stuk/",
+      "directUrls": {}
     },
     "85UR8STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Currys",
         "price": 2999.0
       },
-      "retailerCount": 9,
+      "retailerCount": 5,
       "prices": {
-        "Amazon.co.uk": 2999.0,
-        "Amazon.co.uk Marketplace": 2999.0,
         "Currys": 2999.0,
-        "Electrical Discount UK": 2999.0,
         "Hughes": 2999.0,
         "Marks Electrical": 2999.0,
         "Richer Sounds": 2999.0,
-        "Peter Tyson": 3499.0,
-        "PRC Direct": 3999.0
+        "Peter Tyson": 3499.0
       },
       "price4Updated": "15 September 2026 17:55 BST",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-85ur8stuk-60998.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-85ur8stuk-60998.aspx",
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-85ur8stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-85ur8stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-85ur8stuk/",
+      "directUrls": {}
     },
     "100UR8STUK": {
       "status": "ok",
@@ -680,7 +650,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-100ur8stuk",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-100ur8stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-100ur8stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-100ur8stuk/",
+      "directUrls": {}
     },
     "65UR9STUK": {
       "status": "ok",
@@ -697,7 +668,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-65ur9stuk",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-65ur9stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-65ur9stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-65ur9stuk/",
+      "directUrls": {}
     },
     "75UR9STUK": {
       "status": "ok",
@@ -716,7 +688,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-75ur9stuk",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-75ur9stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-75ur9stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-75ur9stuk/",
+      "directUrls": {}
     },
     "85UR9STUK": {
       "status": "not_found",
@@ -728,7 +701,8 @@
       "sourceUrl": "https://www.which.co.uk/reviews/televisions/hisense-85ur9stuk",
       "price4Url": null,
       "whichUrl": "https://www.which.co.uk/reviews/televisions/hisense-85ur9stuk",
-      "richerUrl": "https://www.richersounds.com/hisense-85ur9stuk/"
+      "richerUrl": "https://www.richersounds.com/hisense-85ur9stuk/",
+      "directUrls": {}
     }
   }
 }
