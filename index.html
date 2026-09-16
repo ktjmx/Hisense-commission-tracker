@@ -502,7 +502,23 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     </button>
   </div>
 
-  <div id="coachPanelTechnology" class="coach-panel" style="display:none">
+  <div id="coachPanelClosing" class="coach-panel" style="display:none">
+    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Closing the Sale</b><small>Pick a situation</small></div></div>
+
+    <div class="close-choice-grid">
+      <button onclick="showCloseTip('ready')"><b>They're ready</b><small>Ask for the sale</small></button>
+      <button onclick="showCloseTip('trial')"><b>Trial close</b><small>Check they're ready</small></button>
+      <button onclick="showCloseTip('choice')"><b>Choice close</b><small>Two suitable options</small></button>
+      <button onclick="showCloseTip('think')"><b>“I'll think about it”</b><small>Find the real concern</small></button>
+      <button onclick="showCloseTip('price')"><b>Price / deal</b><small>Reconnect to value</small></button>
+      <button onclick="showCloseTip('add')"><b>TV + soundbar</b><small>Close the add-on</small></button>
+    </div>
+
+    <div id="closingTip" class="coach-detail-card">
+      <span>Choose a situation above to see one short example.</span>
+    </div>
+  </div>
+<div id="coachPanelTechnology" class="coach-panel" style="display:none">
     <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Technology</b><small>Pick a technology</small></div></div>
     <div class="tech-choice-grid">
       <button onclick="showTechDetail('RGB Mini LED')"><b>RGB Mini LED</b><small>UR9 • UR8</small></button>
@@ -543,23 +559,6 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   </div>
 
   
-  <div id="coachPanelClosing" class="coach-panel" style="display:none">
-    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Closing the Sale</b><small>Pick a situation</small></div></div>
-
-    <div class="close-choice-grid">
-      <button onclick="showCloseTip('ready')"><b>They're ready</b><small>Ask for the sale</small></button>
-      <button onclick="showCloseTip('trial')"><b>Trial close</b><small>Check they're ready</small></button>
-      <button onclick="showCloseTip('choice')"><b>Choice close</b><small>Two suitable options</small></button>
-      <button onclick="showCloseTip('think')"><b>“I'll think about it”</b><small>Find the real concern</small></button>
-      <button onclick="showCloseTip('price')"><b>Price / deal</b><small>Reconnect to value</small></button>
-      <button onclick="showCloseTip('add')"><b>TV + soundbar</b><small>Close the add-on</small></button>
-    </div>
-
-    <div id="closingTip" class="coach-detail-card">
-      <span>Choose a situation above to see one short example.</span>
-    </div>
-  </div>
-
 </section>
 
 <section class="screen" id="stats">
@@ -1552,8 +1551,7 @@ document.addEventListener("DOMContentLoaded",function(){
   btn.addEventListener("click",function(){setTimeout(function(){window.scrollTo(0,0)},0)},false);
  });
 });
-</script>
-<style id="closingSubsectionOnly">
+</script><style id="closingSubsectionOnly">
 .close-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
 .close-choice-grid button{
   min-height:70px;text-align:left;padding:12px;border-radius:15px;
@@ -1588,5 +1586,4 @@ function showCloseTip(name){
   out.innerHTML=`<h3>${x.title}</h3><p class="close-script">${x.say}</p><p class="close-tip"><strong>Tip:</strong> ${x.tip}</p>`;
 }
 </script>
-
 </body></html>
