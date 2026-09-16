@@ -278,6 +278,49 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 }
 </style>
 
+<style id="finalCoachTextFix">
+/* Final Sales Coach text colours: keep the clean white/light text on the dark theme. */
+#coach,
+#coach .coach-panel,
+#coach .coach-panel *{
+  color:#f4f7f7;
+}
+#coach .coach-panel-head small,
+#coach .coach-hero p,
+#coach .coach-tile small,
+#coach .tech-choice-grid small,
+#coach .coach-detail-card span,
+#coach .coach-spec-row span,
+#coach .stat-label,
+#coach .stat-sub{
+  color:#9db0b1 !important;
+}
+#coach .coach-kicker{
+  color:#8fdce0 !important;
+}
+#coach .coach-detail-card p,
+#coach .coach-detail-card li,
+#coach .objection-card p,
+#coach .tech-info-card p,
+#coach .coach-soundbar,
+#coach .soundbar-meta,
+#coach .soundbar-pitch{
+  color:#d3dfe0 !important;
+}
+#coach .coach-detail-card h3,
+#coach .coach-detail-card b,
+#coach .coach-detail-card strong,
+#coach .coach-tile b,
+#coach .tech-choice-grid b,
+#coach .coach-panel-head b,
+#coach .coach-soundbar b{
+  color:#f4f7f7 !important;
+}
+#coach .coach-select{
+  color:#f4f7f7 !important;
+  background:#0d2528 !important;
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -1395,22 +1438,28 @@ function pmfPriceForRetailer(prices,name){
 }
 function pmfRetailerRows(model,snap){
   const livePrices=pmfLivePrices(model);
-  /* Always show every configured retailer except Amazon. A missing price is
-     shown as “Check live”; the retailer itself must not disappear. */
+  /* Only show retailers where this exact model has a real saved/live price.
+     Keep the full retailer configuration intact so coverage is not removed. */
   const merged={};
   Object.entries(snap||{}).forEach(([name,price])=>{
-    if(name!=="Amazon UK"&&name!=="Amazon.co.uk"&&price!=null&&Number.isFinite(Number(price))) merged[name]=Number(price);
+    if(name!=="Amazon UK"&&name!=="Amazon.co.uk"&&price!=null&&Number.isFinite(Number(price))&&Number(price)>0){
+      merged[name]=Number(price);
+    }
   });
   Object.entries(livePrices||{}).forEach(([name,price])=>{
-    if(name!=="Amazon UK"&&name!=="Amazon.co.uk"&&price!=null&&Number.isFinite(Number(price))) merged[name]=Number(price);
+    if(name!=="Amazon UK"&&name!=="Amazon.co.uk"&&price!=null&&Number.isFinite(Number(price))&&Number(price)>0){
+      merged[name]=Number(price);
+    }
   });
-  const names=PMF_RETAILERS.map(x=>x[0]).filter(name=>name!=="Amazon UK"&&name!=="Amazon.co.uk");
-  return names.map(name=>{
-    const shownPrice=merged[name];
-    const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
-    const priceText=shownPrice!=null?`£${shownPrice.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
-    return `<div class="pmf-retailer"><span>${name}${shownPrice!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
-  }).join("");
+
+  return Object.entries(merged)
+    .filter(([name])=>PMF_RETAILERS.some(x=>x[0]===name))
+    .sort((a,b)=>a[1]-b[1])
+    .map(([name,shownPrice])=>{
+      const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
+      const priceText=`£${shownPrice.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+      return `<div class="pmf-retailer"><span>${name} ✓</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
+    }).join("");
 }
 
 function checkPriceMatch(){
@@ -1439,7 +1488,8 @@ function checkPriceMatch(){
   const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:(verified?"Using the latest saved retailer prices":"No saved retailer price found yet");
   const feedNote=PMF_LAST_UPDATED?"Daily price feed loaded. Retailer stock, promotions and voucher prices can change, so confirm the retailer price before promising a match.":"Live feed unavailable — showing the latest saved retailer prices where available. Retailer buttons open live searches so you can confirm today's price.";
   const baseNote=(liveKey&&normaliseModel(liveKey)!==model)?`<div class="pmf-note" style="margin-top:7px;opacity:.9"><strong>Price comparison matched to ${liveKey}</strong> — retailer feed model name differs slightly.</div>`:"";
-  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div>${baseNote}<div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
+  const retailerContent=retailerRows || `<div class="pmf-note" style="margin-top:0">No UK retailer has a saved price for this exact model yet, so no retailer is shown.</div>`;
+  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div>${baseNote}<div class="pmf-retailers">${retailerContent}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
 }
 
 function initPriceMatchFinder(){
