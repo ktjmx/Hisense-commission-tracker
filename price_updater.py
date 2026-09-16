@@ -27,6 +27,43 @@ RICHER_EXACT = {
 }
 
 
+
+WHICH_BASE = "https://www.which.co.uk/reviews/televisions/hisense-"
+WHICH_RETAILERS = [
+    "AO", "Argos", "Currys", "Hughes", "John Lewis",
+    "Marks Electrical", "Peter Tyson", "Richer Sounds", "Amazon UK", "Amazon.co.uk"
+]
+
+def which_url_for(model):
+    slug = re.sub(r"[^a-z0-9]+", "-", model.lower()).strip("-")
+    return WHICH_BASE + slug
+
+def parse_which(model):
+    """Read Which?'s daily retailer comparison when available."""
+    url = which_url_for(model)
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+        if r.status_code != 200:
+            return {}, url
+        soup = BeautifulSoup(r.text, "html.parser")
+        text = soup.get_text(" ", strip=True)
+        start = text.lower().find("where to buy")
+        end = text.lower().find("best buys", start + 1) if start >= 0 else -1
+        section = text[start:end if end > start else len(text)] if start >= 0 else ""
+        prices = {}
+        for retailer in WHICH_RETAILERS:
+            pat = re.escape(retailer) + r"(?:\s+(?:In Stock|Unknown stock|Out of stock|Available))?\s*£\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)"
+            m = re.search(pat, section, re.I)
+            if m:
+                value = float(m.group(1).replace(",", ""))
+                if 100 <= value <= 20000:
+                    key = "Amazon UK" if retailer == "Amazon.co.uk" else retailer
+                    prices[key] = round(value, 2)
+        return prices, url
+    except Exception as exc:
+        print(f"Which? skipped for {model}: {exc}")
+        return {}, url
+
 def norm(s):
     return re.sub(r"[^a-z0-9]", "", str(s).lower())
 
@@ -261,8 +298,13 @@ def main():
                     print(f"Price4 skipped for {model}: {exc}")
                     prices = {}
 
-            # Direct retailer fallback. This is especially important for PRO,
-            # UR8 and UR9 models that Price4 does not consistently index.
+            # Which? publishes a daily retailer comparison. Merge it with
+            # Price4 so PRO/UR models get the wider retailer coverage.
+            which_prices, which_url = parse_which(model)
+            for retailer, price in which_prices.items():
+                prices[retailer] = price
+
+            # Direct retailer fallback for models not covered by the aggregators.
             richer_price, richer_url = parse_richer(model)
             if richer_price is not None:
                 prices["Richer Sounds"] = richer_price
@@ -291,8 +333,9 @@ def main():
                 "prices": prices,
                 "price4Updated": price4_updated,
                 "price4ModelNumber": model_number,
-                "sourceUrl": price4_url or richer_url,
+                "sourceUrl": price4_url or which_url or richer_url,
                 "price4Url": price4_url,
+                "whichUrl": which_url,
                 "richerUrl": richer_url,
             }
 
