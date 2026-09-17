@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-17T05:26:01.847563+00:00",
+  "updatedAt": "2026-09-17T10:38:07.323073+00:00",
   "source": "Price4 UK price comparison + Richer Sounds direct fallback",
   "models": {
     "43A6STUK": {
@@ -52,9 +52,9 @@
       "retailerCount": 6,
       "prices": {
         "Currys": 389.0,
+        "Hughes": 389.0,
         "Marks Electrical": 389.0,
         "Argos": 399.0,
-        "Hughes": 399.0,
         "Richer Sounds": 399.0,
         "Peter Tyson": 579.0
       },
@@ -550,9 +550,10 @@
         "retailer": "Peter Tyson",
         "price": 3799.0
       },
-      "retailerCount": 1,
+      "retailerCount": 2,
       "prices": {
-        "Peter Tyson": 3799.0
+        "Peter Tyson": 3799.0,
+        "Richer Sounds": 3799.0
       },
       "price4Updated": null,
       "price4ModelNumber": null,
