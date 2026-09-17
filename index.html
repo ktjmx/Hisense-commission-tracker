@@ -660,6 +660,22 @@ const R={
 "50U7QTUK":5,"55U7QTUK":5,"65U7QTUK":10,"75U7QTUK":10,"85U7QTUK":10,"100U7QTUK":20,"55U7Q PRO":10,"65U7Q PRO":10,"75U7Q PRO":10,"85U7Q PRO":20,"100U7Q PRO":30,
 "55A85Q":10,"65A85Q":10,"55 Canvas":10,"65 Canvas":10,"55U8Q":10,"65U8Q":10,"75U8Q":10,"85U8Q":20,"100U8Q":30
 ,"43A6STUK":0,"50A6STUK":0,"55A6STUK":0,"65A6STUK":0};
+const OLD_R={
+"100UR8STUK":150,"85UR8STUK":100,"75UR8STUK":80,"65UR8STUK":70,"55UR8STUK":50,
+"65UR9STUK":80,"75UR9STUK":120,"85UR9STUK":150,"116UXTUK":500,"110UXNTUK":200,"100UXTUK":200,
+"55U7STUK PRO":30,"65U7STUK PRO":40,"75U7STUK PRO":50,"85U7STUK PRO":70,"100U7STUK PRO":85,
+"50U7STUK":20,"55U7STUK":25,"65U7STUK":30,"75U7STUK":40,"85U7STUK":50,"100U7STUK":75,
+"55S7STUK":30,"65S7STUK":40,
+"85Q7STUK":30,"75Q7STUK":25,"65Q7STUK":15,"55Q7STUK":15,"50Q7STUK":10,"43Q7STUK":5,
+"100E7STUK PRO":60,"85E7STUK PRO":40,"75E7STUK PRO":30,"65E7STUK PRO":25,"55E7STUK PRO":20,"50E7STUK PRO":15,"43E7STUK PRO":15,
+"C2TUK":80,"M2TUK PRO":80,"PX3TUK":100,"PL2TUK":100,"C2TUK-ULTRA":120,
+"HS214":2,"HS2000":2,"HS2100":2,"HS3100":3,"AX3120Q":10,"AX5125H":10,"AX5100Q":10,"AX5140Q":15,"S5120GQ":10,"S5120Q":10,"HT SATURN":40,
+"43E7Q":5,"50E7Q":5,"55E7Q":5,"65E7Q":10,"75E7Q":10,"85E7Q":10,
+"43E7Q PRO":5,"50E7Q PRO":5,"55E7Q PRO":5,"65E7Q PRO":10,"75E7Q PRO":15,"85E7Q PRO":20,"100E7Q PRO":25,
+"50U7QTUK":5,"55U7QTUK":5,"65U7QTUK":10,"75U7QTUK":15,"85U7QTUK":10,"100U7QTUK":20,
+"55U7Q PRO":10,"65U7Q PRO":10,"75U7Q PRO":10,"85U7Q PRO":20,"100U7Q PRO":35,
+"55A85Q":10,"65A85Q":10,"55 Canvas":15,"65 Canvas":20,"55U8Q":15,"65U8Q":20,"75U8Q":25,"85U8Q":30,"100U8Q":40,
+"43A6STUK":0,"50A6STUK":0,"55A6STUK":0,"65A6STUK":0};
 const CB={"116UXQTUK":1000,"100UXQTUK":500,"85UR9STUK":300,"75UR9STUK":300,"65UR9STUK":200,"100UR8STUK":500,"85UR8STUK":300,"75UR8STUK":200,"65UR8STUK":200,"55UR8STUK":200,"100U7STUK":500,"85U7STUK":300,"75U7STUK":200,"65U7STUK":200,"55U7STUK":100,"50U7STUK":50,"85Q8STUK":300,"75Q8STUK":200,"65Q8STUK":200,"55Q8STUK":100,"50Q8STUK":50,"100E7STUK PRO":300,"85E7STUK PRO":300,"75E7STUK PRO":100,"65E7STUK PRO":100,"55E7STUK PRO":50,"50E7STUK PRO":50,"43E7STUK PRO":50,"85Q7STUK":100,"75Q7STUK":50,"65Q7STUK":50,"55Q7STUK":25,"50Q7STUK":25,"43Q7STUK":25,"L9QTUK PRO":200,"L9QTUK":200,"XR10TUK":200,"PX4TUK PRO":100,"P1TUK":50,"C3TUK ULTRA MAX":200,"C3TUK ULTRA":100,"C3TUK PRO":100};
 const TRADE=[
 {x:1999,off:300,code:"TRADERGB300",rgb:1},{x:1499,off:200,code:"TRADERGB200",rgb:1},{x:999,off:150,code:"TRADERGB150",rgb:1},
@@ -681,6 +697,13 @@ function norm(s){return String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"")}
 function rate(model){
  let n=norm(model),k=Object.keys(R).find(x=>norm(x)===n)||Object.keys(R).find(x=>norm(x).startsWith(n)||n.startsWith(norm(x)));
  return k?R[k]:null
+}
+function rateForDate(model,date){
+ const cutoff="2026-09-13";
+ const table=String(date||"")<cutoff?OLD_R:R;
+ const n=norm(model);
+ const k=Object.keys(table).find(x=>norm(x)===n)||Object.keys(table).find(x=>norm(x).startsWith(n)||n.startsWith(norm(x)));
+ return k?table[k]:null;
 }
 function priceOf(model){let n=norm(model);let x=TVs.find(t=>norm(t[0])===n);return x?x[1]:null}
 function trade(model,price){
@@ -854,7 +877,7 @@ function renderSalesLog(){
 }
 document.getElementById("addSale").onclick=()=>{
  const price=Number(document.getElementById("salePrice").value||0);
- let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rate(model);
+ let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rateForDate(model,date);
  if(!model){alert("Please enter a model.");return}
  if(r==null){alert("No commission rate found for this model.");return}
  if(price<=0){alert("Please enter the sale value (£).");return}
@@ -1914,6 +1937,28 @@ document.addEventListener("DOMContentLoaded",function(){
 })();
 </script>
 
+
+<script id="durable-storage-transfer">
+(function(){
+  window.exportHisenseSales=function(){
+    try{
+      var data=localStorage.getItem('hisenseSalesV2')||'[]';
+      var blob=new Blob([data],{type:'application/json'});
+      var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hisense-sales-backup.json';a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href)},1000);
+    }catch(e){alert('Could not create the backup file.');}
+  };
+  window.importHisenseSales=function(json){
+    try{
+      var data=typeof json==='string'?JSON.parse(json):json;
+      if(!Array.isArray(data))throw new Error('Invalid backup');
+      localStorage.setItem('hisenseSalesV2',JSON.stringify(data));
+      if(window.location.reload)window.location.reload();
+    }catch(e){alert('That backup file is not valid.');}
+  };
+})();
+</script>
+
 </body></html><style id="finalSalesLogFix">
 #saleDate{width:220px;max-width:220px;box-sizing:border-box}
 @media(max-width:520px){#saleDate{width:220px;max-width:220px}}
@@ -1945,7 +1990,7 @@ document.addEventListener("DOMContentLoaded",function(){
     // model has a known catalogue price use that as a sensible historical value.
     if(price===null && typeof priceOf==='function') price=priceOf(model);
     if(price===null) price=0;
-    const r=rate(model);
+    const r=rateForDate(model,date);
     const comm=r!=null ? Math.abs(r*qty) : Math.abs(n(s[3]));
     return [date,model,refund?-qty:qty,refund?-comm:comm,price,refund?'refund':'sale'];
   }
@@ -1964,8 +2009,34 @@ document.addEventListener("DOMContentLoaded",function(){
     sales.length=0; sales.push(...merged);
   }
   cleanSales();
-  function persist(){localStorage.setItem(KEY,JSON.stringify(sales));}
+  // Keep sales in both localStorage and IndexedDB. iPhone Home Screen web apps can
+  // have a separate storage container from Safari, so IndexedDB gives the installed
+  // app its own durable backup instead of relying on one storage mechanism.
+  const DB_NAME='hisenseSalesProDB', DB_STORE='sales';
+  function idbOpen(){return new Promise((resolve,reject)=>{try{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(DB_STORE))r.result.createObjectStore(DB_STORE)};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)}catch(e){reject(e)}})}
+  async function idbGet(){try{const db=await idbOpen();return await new Promise((resolve,reject)=>{const r=db.transaction(DB_STORE,'readonly').objectStore(DB_STORE).get(KEY);r.onsuccess=()=>resolve(Array.isArray(r.result)?r.result:null);r.onerror=()=>reject(r.error)})}catch(e){return null}}
+  async function idbPut(data){try{const db=await idbOpen();await new Promise((resolve,reject)=>{const r=db.transaction(DB_STORE,'readwrite').objectStore(DB_STORE).put(data,KEY);r.onsuccess=resolve;r.onerror=()=>reject(r.error)})}catch(e){}}
+  function persist(){
+    const data=JSON.stringify(sales);
+    try{localStorage.setItem(KEY,data)}catch(e){}
+    idbPut(sales).catch(()=>{});
+  }
+  async function restoreDurableSales(){
+    const saved=await idbGet();
+    if(!Array.isArray(saved)||!saved.length)return;
+    const merged=[];
+    [...sales,...saved].map(cleanRecord).filter(Boolean).forEach(r=>{
+      if(!merged.some(x=>sameRecord(x,r)))merged.push(r);
+    });
+    if(merged.length!==sales.length){sales.length=0;sales.push(...merged);persist();
+      if(typeof renderCalendar==='function')renderCalendar();
+      if(typeof renderHome==='function')renderHome();
+      if(typeof renderStats==='function')renderStats();
+      if(typeof renderSalesLog==='function')renderSalesLog();
+    }else{ idbPut(sales).catch(()=>{}); }
+  }
   window.save=persist;
+  restoreDurableSales().catch(()=>{});
   window.totalComm=()=>sales.reduce((a,s)=>a+n(s[3]),0);
   window.totalUnits=()=>sales.reduce((a,s)=>a+n(s[2]),0);
   window.totalSalesValue=()=>sales.reduce((a,s)=>a+n(s[4])*n(s[2]),0);
@@ -2043,7 +2114,7 @@ document.addEventListener("DOMContentLoaded",function(){
     const date=document.getElementById('saleDate').value||today();
     const price=n(document.getElementById('salePrice').value);
     const qty=Math.max(1,Math.abs(n(document.getElementById('saleQty').value)));
-    const r=rate(model);
+    const r=rateForDate(model,date);
     if(!model){alert('Please enter a model.');return;}
     if(r==null){alert('No commission rate found for this model.');return;}
     if(price<=0){alert('Please enter the sale value (£).');return;}
