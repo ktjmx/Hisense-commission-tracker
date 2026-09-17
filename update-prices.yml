@@ -2,7 +2,10 @@ name: Update UK TV Prices
 
 on:
   schedule:
-    - cron: "15 5 * * *"
+    # GitHub Actions cron is UTC. These two runs allow the workflow
+    # to fire at 10:00 UK time in both BST and GMT.
+    - cron: "0 9 * * *"
+    - cron: "0 10 * * *"
   workflow_dispatch:
 
 permissions:
@@ -16,20 +19,35 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Check UK local time
+        id: uk_time
+        run: |
+          hour=$(TZ=Europe/London date +%H)
+          echo "UK hour is $hour"
+          if [ "$hour" = "10" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Python
+        if: steps.uk_time.outputs.run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
       - name: Install price updater dependencies
+        if: steps.uk_time.outputs.run == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
       - name: Update UK TV prices
+        if: steps.uk_time.outputs.run == 'true'
         run: python price_updater.py
 
       - name: Save updated price data
+        if: steps.uk_time.outputs.run == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -40,3 +58,7 @@ jobs:
             git commit -m "Update UK TV prices"
             git push
           fi
+
+      - name: Skip non-10am run
+        if: steps.uk_time.outputs.run != 'true'
+        run: echo "Not 10:00 UK time, so no price update is needed."
