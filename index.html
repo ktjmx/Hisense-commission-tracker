@@ -288,6 +288,20 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .refund-badge{display:inline-block;padding:3px 8px;border-radius:999px;background:rgba(224,107,107,.16);color:#ff9d9d;font-size:11px;font-weight:900;margin-left:6px}
 .refund-minus{color:#ff8f8f!important}
 </style>
+
+<style id="finalSalesLogPolish">
+/* Keep the compact date field requested for the Sell page. */
+#sales .field > input[type="date"]{width:220px !important;max-width:220px !important;min-width:0 !important;inline-size:220px !important;box-sizing:border-box !important;font-size:16px !important;padding:10px 12px !important;}
+@media (max-width:600px){#sales .field > input[type="date"]{width:220px !important;max-width:220px !important;inline-size:220px !important;}}
+/* Restore the clean white Sales Coach typography/icons. */
+#coach,#coach .coach-panel,#coach .coach-panel *{color:#f4f7f7;}
+#coach .coach-panel-head small,#coach .coach-hero p,#coach .coach-tile small,#coach .tech-choice-grid small,#coach .coach-detail-card span,#coach .coach-spec-row span,#coach .stat-label,#coach .stat-sub{color:#9db0b1 !important;}
+#coach .coach-kicker{color:#8fdce0 !important;}
+#coach .coach-detail-card p,#coach .coach-detail-card li,#coach .objection-card p,#coach .tech-info-card p,#coach .coach-soundbar,#coach .soundbar-meta,#coach .soundbar-pitch{color:#d3dfe0 !important;}
+#coach .coach-detail-card h3,#coach .coach-detail-card b,#coach .coach-detail-card strong,#coach .coach-tile b,#coach .tech-choice-grid b,#coach .coach-panel-head b,#coach .coach-soundbar b{color:#f4f7f7 !important;}
+#coach svg,#coach svg *{stroke:#f4f7f7 !important;color:#f4f7f7 !important;}
+#coach svg path,#coach svg line,#coach svg polyline,#coach svg circle{stroke:#f4f7f7 !important;}
+</style>
 </head>
 <body>
 <div class="app">
@@ -693,7 +707,8 @@ function beginEditSale(index){
  document.getElementById("saleDate").value=s[0]||today();
  document.getElementById("saleModel").value=s[1]||"";
  document.getElementById("salePrice").value=(s[4]!=null?Number(s[4]):"");
- document.getElementById("saleQty").value=String(s[2]||1);
+ document.getElementById("saleQty").value=String(Math.abs(Number(s[2]||1)));
+ setType(s[5]==="refund" || Number(s[2])<0 ? "refund" : "sale");
  updateSaleRate();
  document.getElementById("editSaleBanner").classList.add("show");
  addSaleButton.textContent="Save Changes";
@@ -715,7 +730,9 @@ function renderSalesLog(){
  out.innerHTML=entries.map(({s,i})=>{
    const price=s[4]!=null?money(s[4]):"Price not recorded";
    const comm=money(s[3]);
-   return `<div class="sales-log-row"><div class="sales-log-main"><div><div class="sales-log-model">${String(s[1]||"").replace(/</g,"&lt;")} ×${Number(s[2]||0)}</div><div class="sales-log-meta">${new Date(s[0]+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})} · Sale value ${price}</div></div><div class="sales-log-price"><div>${comm}</div><div class="sales-log-commission">commission</div></div></div><div class="sales-log-actions"><button type="button" data-edit-sale="${i}">✎ Edit</button><button type="button" class="delete-sale" data-delete-sale="${i}">Delete</button></div></div>`;
+   const isRefund=s[5]==="refund" || Number(s[2])<0;
+   const entryLabel=isRefund?"Refund":"Sale";
+   return `<div class="sales-log-row"><div class="sales-log-main"><div><div class="sales-log-model">${String(s[1]||"").replace(/</g,"&lt;")} ×${Number(s[2]||0)}</div><div class="sales-log-meta">${new Date(s[0]+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})} · ${entryLabel} value ${price}</div></div><div class="sales-log-price"><div><span class="${isRefund?'refund-minus':''}">${comm}</span></div><div class="sales-log-commission">${entryLabel.toLowerCase()} commission</div></div></div><div class="sales-log-actions"><button type="button" data-edit-sale="${i}">✎ Edit</button><button type="button" class="delete-sale" data-delete-sale="${i}">Delete</button></div></div>`;
  }).join("");
  out.querySelectorAll("[data-edit-sale]").forEach(b=>b.onclick=()=>beginEditSale(Number(b.dataset.editSale)));
  out.querySelectorAll("[data-delete-sale]").forEach(b=>b.onclick=()=>deleteSale(Number(b.dataset.deleteSale)));
@@ -726,7 +743,10 @@ document.getElementById("addSale").onclick=()=>{
  if(!model){alert("Please enter a model.");return}
  if(r==null){alert("No commission rate found for this model.");return}
  if(price<=0){alert("Please enter the sale value (£).");return}
- const record=[date,model,qty,r*qty,price];
+ const isRefund=window.__salesEntryType==="refund";
+ const signedQty=isRefund?-Math.abs(qty):Math.abs(qty);
+ const signedComm=isRefund?-Math.abs(r*qty):Math.abs(r*qty);
+ const record=[date,model,signedQty,signedComm,price,isRefund?"refund":"sale"];
  if(editingSaleIndex!==null){sales[editingSaleIndex]=record; alert("Sale updated.");}else{sales.push(record); alert("Sale added.");}
  save(); resetSaleForm(); renderCalendar();
 renderSalesLog(); renderHome(); renderStats(); renderSalesLog(); updateHomeTotalVAL();
@@ -1599,8 +1619,9 @@ document.addEventListener("DOMContentLoaded",function(){
   const saleBtn=document.getElementById("saleTypeSale");
   const refundBtn=document.getElementById("saleTypeRefund");
   let entryType="sale";
+  window.__salesEntryType="sale";
   function setType(t){
-    entryType=t;
+    entryType=t; window.__salesEntryType=t;
     if(saleBtn) saleBtn.classList.toggle("active",t==="sale");
     if(refundBtn) refundBtn.classList.toggle("active",t==="refund");
     const saveBtn=document.getElementById("saveSale");
