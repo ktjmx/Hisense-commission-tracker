@@ -1698,7 +1698,77 @@ document.addEventListener("DOMContentLoaded",function(){
     return s;
   };
 })();
-</script></body></html><style id="finalSalesLogFix">
+</script>
+<script id="weeklyMainValueFix">
+(function(){
+  function weekBounds(){
+    const now=new Date();
+    const start=new Date(now);
+    start.setHours(0,0,0,0);
+    start.setDate(start.getDate()-start.getDay()); // Sunday
+    const end=new Date(start);
+    end.setDate(end.getDate()+6);
+    end.setHours(23,59,59,999);
+    return {start,end};
+  }
+  function localDate(s){
+    const p=String(s||"").split("-");
+    return p.length===3 ? new Date(Number(p[0]),Number(p[1])-1,Number(p[2])) : new Date(s);
+  }
+  function weeklyValue(){
+    const {start,end}=weekBounds();
+    return (window.sales||[]).reduce((total,s)=>{
+      const d=localDate(s[0]);
+      if(d<start || d>end) return total;
+      const qty=Number(s[2]||0);
+      const price=Number(s.salePrice!=null?s.salePrice:(s[5]!=null?s[5]:0));
+      return total + (price * qty);
+    },0);
+  }
+  function money(n){
+    return "£"+Number(n||0).toLocaleString("en-GB",{minimumFractionDigits:0,maximumFractionDigits:2});
+  }
+  function update(){
+    // Prefer the existing main-page Total VAL element by its text/nearby value.
+    const candidates=[...document.querySelectorAll("body *")].filter(el=>{
+      const t=(el.textContent||"").trim();
+      return t==="Total VAL" || t==="TOTAL VAL";
+    });
+    candidates.forEach(label=>{
+      let parent=label.parentElement;
+      if(!parent) return;
+      let value=parent.querySelector(".big,.money,[id*='SalesValue'],[id*='salesValue'],[id*='TotalVal'],[id*='totalVal']");
+      if(!value) {
+        const els=[...parent.querySelectorAll("*")];
+        value=els.find(x=>/£[\d,]+(?:\.\d+)?/.test(x.textContent||""));
+      }
+      if(value) value.textContent=money(weeklyValue());
+    });
+  }
+  window.weeklyMainSalesValue=weeklyValue;
+  window.updateWeeklyMainValue=update;
+  document.addEventListener("DOMContentLoaded",()=>setTimeout(update,100));
+  const oldRenderHome=window.renderHome;
+  if(typeof oldRenderHome==="function"){
+    window.renderHome=function(){
+      const r=oldRenderHome.apply(this,arguments);
+      setTimeout(update,0);
+      return r;
+    };
+  }
+  const oldRenderStats=window.renderStats;
+  if(typeof oldRenderStats==="function"){
+    window.renderStats=function(){
+      const r=oldRenderStats.apply(this,arguments);
+      setTimeout(update,0);
+      return r;
+    };
+  }
+  setInterval(update,1500);
+})();
+</script>
+
+</body></html><style id="finalSalesLogFix">
 #saleDate{width:220px;max-width:220px;box-sizing:border-box}
 @media(max-width:520px){#saleDate{width:220px;max-width:220px}}
 </style>
