@@ -117,6 +117,8 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .home-total-val{background:#101d20;border:1px solid #20383b;border-radius:14px;padding:14px}.home-total-val .stat-label{font-size:12px;color:#9eb0b2;font-weight:800}.home-total-val .stat-value{font-size:30px;font-weight:900;margin-top:3px}.home-total-val .stat-sub{font-size:11px;color:#789092;margin-top:2px}
 .weekly-top-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.weekly-top-stat{background:#0d191b;border:1px solid #254043;border-radius:14px;padding:14px}.weekly-top-stat span{display:block;color:#8ea3a5;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.weekly-top-stat strong{display:block;font-size:27px;font-weight:900;margin-top:4px}
 .weekly-sales-breakdown,.weekly-percentages{margin-top:10px}.weekly-sales-breakdown .mix-item b{font-size:20px}.weekly-percentages{border-top:1px solid #20383b;padding-top:10px}
+
+.sales-log-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.sales-log-row{padding:12px 0;border-bottom:1px solid #264447}.sales-log-row:last-child{border-bottom:0}.sales-log-main{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.sales-log-model{font-weight:850;font-family:Manrope,sans-serif}.sales-log-meta{font-size:11px;color:var(--muted);margin-top:4px}.sales-log-price{text-align:right;font-weight:850}.sales-log-commission{font-size:11px;color:var(--gold2);margin-top:3px}.sales-log-actions{display:flex;gap:7px;margin-top:9px}.sales-log-actions button{flex:1;padding:8px 10px;border-radius:10px;border:1px solid #35585c;background:#102b2e;color:#f4f8f7;font-weight:800}.sales-log-actions .delete-sale{border-color:#6a3039;color:#ffb6bf;background:#2a171b}.edit-sale-banner{display:none;margin:-2px 0 12px;padding:10px 12px;border:1px solid #8b7349;background:#2a2519;border-radius:12px;color:#f1d79e;font-size:12px;font-weight:750}.edit-sale-banner.show{display:block}.edit-sale-banner button{float:right;border:0;background:none;color:#fff;font-weight:900;font-size:16px}.sales-log-empty{padding:12px 0;color:var(--muted);font-size:12px}
 </style><style id="comparisonTableStyles">
 .comparison-table{margin-top:12px;border:1px solid #31575b;border-radius:14px;overflow:hidden}
 .compare-header,.compare-row{display:grid;grid-template-columns:105px minmax(0,1fr) minmax(0,1fr);gap:0}
@@ -255,10 +257,10 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 }
 #sales .field > input[type="date"]{
   display:block;
-  width:220px !important;
+  width:100% !important;
   max-width:100% !important;
   min-width:0 !important;
-  inline-size:220px !important;
+  inline-size:100% !important;
   box-sizing:border-box !important;
   margin-left:0 !important;
   margin-right:0 !important;
@@ -272,92 +274,19 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     padding-right:16px;
   }
   #sales .field > input[type="date"]{
-    width:220px !important;
+    width:100% !important;
     max-width:100% !important;
-    inline-size:220px !important;
   }
 }
 </style>
 
-<style id="finalCoachTextFix">
-/* Final Sales Coach text colours: keep the clean white/light text on the dark theme. */
-#coach,
-#coach .coach-panel,
-#coach .coach-panel *{
-  color:#f4f7f7;
-}
-#coach .coach-panel-head small,
-#coach .coach-hero p,
-#coach .coach-tile small,
-#coach .tech-choice-grid small,
-#coach .coach-detail-card span,
-#coach .coach-spec-row span,
-#coach .stat-label,
-#coach .stat-sub{
-  color:#9db0b1 !important;
-}
-#coach .coach-kicker{
-  color:#8fdce0 !important;
-}
-#coach .coach-detail-card p,
-#coach .coach-detail-card li,
-#coach .objection-card p,
-#coach .tech-info-card p,
-#coach .coach-soundbar,
-#coach .soundbar-meta,
-#coach .soundbar-pitch{
-  color:#d3dfe0 !important;
-}
-#coach .coach-detail-card h3,
-#coach .coach-detail-card b,
-#coach .coach-detail-card strong,
-#coach .coach-tile b,
-#coach .tech-choice-grid b,
-#coach .coach-panel-head b,
-#coach .coach-soundbar b{
-  color:#f4f7f7 !important;
-}
-#coach .coach-select{
-  color:#f4f7f7 !important;
-  background:#0d2528 !important;
-}
-</style>
 
-<style id="finalDateAndCoachIconFix">
-/* Final iPhone polish: make the sale Date field compact again. */
-#sales .field > input[type="date"]{
-  height:44px !important;
-  min-height:44px !important;
-  max-height:44px !important;
-  line-height:44px !important;
-  padding-top:0 !important;
-  padding-bottom:0 !important;
-  border-radius:12px !important;
-}
-
-/* Keep every Sales Coach icon, arrow and back control white/light. */
-#coach .coach-tile,
-#coach .coach-tile-icon,
-#coach .coach-tile > strong,
-#coach .coach-tile svg,
-#coach .coach-panel-head button,
-#coach .coach-panel-head button svg,
-#coach .coach-shortcut,
-#coach .coach-shortcut svg,
-#coach .tech-choice-grid button,
-#coach .tech-choice-grid button svg{
-  color:#f4f7f7 !important;
-}
-#coach .coach-tile-icon{
-  color:#f4f7f7 !important;
-}
-#coach .coach-tile > strong{
-  color:#f4f7f7 !important;
-  opacity:.9 !important;
-}
-#coach .coach-panel-head button{
-  color:#f4f7f7 !important;
-}
+<style id="refundLogStyles">
+.typeBtn{border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px 12px;background:#10282b;color:#dce9ea;font-weight:800}
+.typeBtn.active{background:#0f6f75;color:#fff;border-color:#39b8bf}
+.refund-entry{border-left:4px solid #e06b6b!important}
+.refund-badge{display:inline-block;padding:3px 8px;border-radius:999px;background:rgba(224,107,107,.16);color:#ff9d9d;font-size:11px;font-weight:900;margin-left:6px}
+.refund-minus{color:#ff8f8f!important}
 </style>
 </head>
 <body>
@@ -404,6 +333,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   
   <div class="card">
     <div class="section-title">Log a sale</div>
+    <div class="edit-sale-banner" id="editSaleBanner">Editing sale <button type="button" id="cancelEditSale">×</button></div>
     <div class="field"><label>Date</label><input type="date" id="saleDate"></div>
     <div class="field">
 <label>Model</label>
@@ -416,7 +346,12 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 <div id="saleRate" class="sale-rate-pop"></div>
 <datalist id="salesModelList"><option value="43A6STUK"></option><option value="50A6STUK"></option><option value="55A6STUK"></option><option value="65A6STUK"></option><option value="43Q7STUK"></option><option value="50Q7STUK"></option><option value="55Q7STUK"></option><option value="65Q7STUK"></option><option value="75Q7STUK"></option><option value="85Q7STUK"></option><option value="43E7STUK PRO"></option><option value="50E7STUK PRO"></option><option value="55E7STUK PRO"></option><option value="65E7STUK PRO"></option><option value="75E7STUK PRO"></option><option value="85E7STUK PRO"></option><option value="100E7STUK PRO"></option><option value="50U7STUK"></option><option value="55U7STUK"></option><option value="65U7STUK"></option><option value="75U7STUK"></option><option value="85U7STUK"></option><option value="100U7STUK"></option><option value="55U7STUK PRO"></option><option value="65U7STUK PRO"></option><option value="75U7STUK PRO"></option><option value="85U7STUK PRO"></option><option value="100U7STUK PRO"></option><option value="55U8QTUK"></option><option value="65U8QTUK"></option><option value="75U8QTUK"></option><option value="85U8QTUK"></option><option value="100U8QTUK"></option><option value="55UR8STUK"></option><option value="65UR8STUK"></option><option value="75UR8STUK"></option><option value="85UR8STUK"></option><option value="100UR8STUK"></option><option value="65UR9STUK"></option><option value="75UR9STUK"></option><option value="85UR9STUK"></option></datalist>
 <datalist id="modelList"></datalist>
-    <div class="field"><label>Quantity</label><select id="saleQty"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    <div class="field"><label>Entry type</label>
+<div style="display:flex;gap:8px;margin:8px 0 12px">
+  <button type="button" id="saleTypeSale" class="typeBtn active" style="flex:1">Sale</button>
+  <button type="button" id="saleTypeRefund" class="typeBtn" style="flex:1">Refund</button>
+</div>
+<label>Quantity</label><select id="saleQty"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
     <button class="primary" id="addSale">Add Sale</button>
   </div>
   <div class="card">
@@ -424,6 +359,11 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="cal" id="calendar"></div>
     <div class="muted" style="margin-top:9px">Tap a day to see the sales logged on that date.</div>
     <div id="daySales"></div>
+  </div>
+  <div class="card sales-log-card">
+    <div class="sales-log-head"><div><div class="section-title" style="margin-bottom:3px">Sales log</div><div class="muted">Edit a sale, change the model/price/quantity, or delete it.</div></div><span class="pill" id="salesLogCount">0 sales</span></div>
+    <div class="field" style="margin-top:12px;margin-bottom:8px"><input id="salesLogSearch" placeholder="Search model or date…" autocomplete="off"></div>
+    <div id="salesLog"></div>
   </div>
 </section>
 
@@ -501,20 +441,15 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
       <span><b>Soundbars</b><small>Models, features &amp; pitches</small></span>
       <strong>›</strong>
     </button>
-    <button class="coach-tile" onclick="showCoachPanel('closing')">
-      <span class="coach-tile-icon">✓</span>
-      <span><b>Closing the Sale</b><small>Quick closing phrases &amp; examples</small></span>
-      <strong>›</strong>
-    </button>
   </div>
 
   <div id="coachPanelTechnology" class="coach-panel" style="display:none">
     <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Technology</b><small>Pick a technology</small></div></div>
     <div class="tech-choice-grid">
       <button onclick="showTechDetail('RGB Mini LED')"><b>RGB Mini LED</b><small>UR9 • UR8</small></button>
-      <button onclick="showTechDetail('Mini LED')"><b>Mini LED</b><small>U8Q • U7S Pro • U7S</small></button>
-      <button onclick="showTechDetail('QLED')"><b>QLED</b><small>Q7S • E7S Pro</small></button>
-      <button onclick="showTechDetail('LED')"><b>LED</b><small>A6S</small></button>
+      <button onclick="showTechDetail('Mini LED')"><b>Mini LED</b><small>U8 • U7 Pro • U7</small></button>
+      <button onclick="showTechDetail('QLED')"><b>QLED</b><small>Q7 • E7 Pro</small></button>
+      <button onclick="showTechDetail('LED')"><b>LED</b><small>A6</small></button>
       <button onclick="showTechDetail('OLED')"><b>OLED</b><small>Competitor technology</small></button>
     </div>
     <div id="technologyDetail" class="coach-detail-card"><span>Choose a technology above.</span></div>
@@ -546,18 +481,6 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Soundbars</b><small>Choose a model</small></div></div>
     <select id="soundbarSelect" class="coach-select" onchange="renderSelectedSoundbar()"><option value="">Choose a soundbar…</option></select>
     <div id="coachSoundbarResult" class="coach-detail-card"><span>Choose a soundbar to see the current information and pitch.</span></div>
-  </div>
-  <div id="coachPanelClosing" class="coach-panel" style="display:none">
-    <div class="coach-panel-head"><button onclick="closeCoachPanel()">‹ Back</button><div><b>Closing the Sale</b><small>Pick a situation</small></div></div>
-    <div class="close-choice-grid">
-      <button onclick="showCloseTip('ready')"><b>They're ready</b><small>Ask for the sale</small></button>
-      <button onclick="showCloseTip('trial')"><b>Trial close</b><small>Check they're ready</small></button>
-      <button onclick="showCloseTip('choice')"><b>Choice close</b><small>Two suitable options</small></button>
-      <button onclick="showCloseTip('think')"><b>“I'll think about it”</b><small>Find the real concern</small></button>
-      <button onclick="showCloseTip('price')"><b>Price / deal</b><small>Reconnect to value</small></button>
-      <button onclick="showCloseTip('add')"><b>TV + soundbar</b><small>Close the add-on</small></button>
-    </div>
-    <div id="closingTip" class="coach-detail-card"><span>Choose a situation above to see one short example.</span></div>
   </div>
 </section>
 
@@ -602,9 +525,9 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 function viewOffers(model){
   const input=document.getElementById("offerModel");
   if(input) input.value=model;
-  if(typeof showTab==="function") showTab("offers");
-  if(typeof renderOffers==="function") renderOffers();
-  const target=document.getElementById("offerResults") || document.getElementById("offersResults");
+  if(typeof go==="function") go("offers");
+  if(typeof renderOffer==="function") renderOffer();
+  const target=document.getElementById("offerResult");
   if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
@@ -713,7 +636,8 @@ function renderCalendar(){
  document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>showDay(b.dataset.day));
 }
 function showDay(key){
- let ss=sales.filter(s=>s[0]===key);document.getElementById("daySales").innerHTML=`<div class="section-title" style="margin-top:12px">${new Date(key+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</div>`+(ss.length?ss.map(s=>`<div class="sale-row"><span>${s[1]} ×${s[2]}</span><b>${money(s[3])}</b></div>`).join(""):`<div class="muted">No sales logged.</div>`);
+ let matches=sales.map((s,i)=>({s,i})).filter(x=>x.s[0]===key);
+ document.getElementById("daySales").innerHTML=`<div class="section-title" style="margin-top:12px">${new Date(key+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</div>`+(matches.length?matches.map(({s,i})=>`<div class="sale-row"><span><b>${s[1]}</b> ×${s[2]}<small class="sales-log-meta">${s[4]!=null?"Sale value "+money(s[4]):"Sale value not recorded"}</small></span><span style="text-align:right"><b>${money(s[3])}</b><small class="sales-log-meta">commission</small><br><button type="button" class="secondary" style="margin-top:6px;padding:6px 9px" onclick="beginEditSale(${i})">Edit</button> <button type="button" class="secondary" style="margin-top:6px;padding:6px 9px" onclick="deleteSale(${i})">Delete</button></span></div>`).join(""):`<div class="muted">No sales logged.</div>`);
 }
 document.getElementById("prevMonth").onclick=()=>{window.calDate=new Date(window.calDate.getFullYear(),window.calDate.getMonth()-1,1);renderCalendar()}
 document.getElementById("nextMonth").onclick=()=>{window.calDate=new Date(window.calDate.getFullYear(),window.calDate.getMonth()+1,1);renderCalendar()}
@@ -750,16 +674,66 @@ function updateSaleRate(){
 saleModelInput.addEventListener("input",()=>{updateSaleRate();showSaleModelPopup()});
 saleModelInput.addEventListener("focus",()=>showSaleModelPopup());
 saleModelInput.addEventListener("blur",()=>setTimeout(hideSaleModelPopup,180));
+let editingSaleIndex=null;
+const addSaleButton=document.getElementById("addSale");
+function resetSaleForm(){
+ editingSaleIndex=null;
+ document.getElementById("editSaleBanner").classList.remove("show");
+ addSaleButton.textContent="Add Sale";
+ document.getElementById("saleModel").value="";
+ document.getElementById("salePrice").value="";
+ document.getElementById("saleQty").value="1";
+ document.getElementById("saleRate").textContent="";
+ document.getElementById("saleRate").classList.remove("show");
+ hideSaleModelPopup();
+}
+function beginEditSale(index){
+ const s=sales[index]; if(!s)return;
+ editingSaleIndex=index;
+ document.getElementById("saleDate").value=s[0]||today();
+ document.getElementById("saleModel").value=s[1]||"";
+ document.getElementById("salePrice").value=(s[4]!=null?Number(s[4]):"");
+ document.getElementById("saleQty").value=String(s[2]||1);
+ updateSaleRate();
+ document.getElementById("editSaleBanner").classList.add("show");
+ addSaleButton.textContent="Save Changes";
+ document.getElementById("saleModel").scrollIntoView({behavior:"smooth",block:"center"});
+}
+function deleteSale(index){
+ const s=sales[index]; if(!s)return;
+ if(!confirm(`Delete ${s[1]} ×${s[2]} from ${new Date(s[0]+"T12:00:00").toLocaleDateString("en-GB")}?`))return;
+ sales.splice(index,1); save();
+ if(editingSaleIndex===index)resetSaleForm();
+ renderCalendar(); renderHome(); renderStats(); renderSalesLog();
+}
+function renderSalesLog(){
+ const out=document.getElementById("salesLog"), q=norm(document.getElementById("salesLogSearch")?.value||"");
+ if(!out)return;
+ const entries=sales.map((s,i)=>({s,i})).filter(({s})=>!q || norm(s[1]).includes(q) || String(s[0]).includes(q)).sort((a,b)=>String(b.s[0]).localeCompare(String(a.s[0]))||b.i-a.i);
+ const count=document.getElementById("salesLogCount"); if(count)count.textContent=`${sales.length} ${sales.length===1?"sale":"sales"}`;
+ if(!entries.length){out.innerHTML='<div class="sales-log-empty">No sales match your search.</div>';return}
+ out.innerHTML=entries.map(({s,i})=>{
+   const price=s[4]!=null?money(s[4]):"Price not recorded";
+   const comm=money(s[3]);
+   return `<div class="sales-log-row"><div class="sales-log-main"><div><div class="sales-log-model">${String(s[1]||"").replace(/</g,"&lt;")} ×${Number(s[2]||0)}</div><div class="sales-log-meta">${new Date(s[0]+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})} · Sale value ${price}</div></div><div class="sales-log-price"><div>${comm}</div><div class="sales-log-commission">commission</div></div></div><div class="sales-log-actions"><button type="button" data-edit-sale="${i}">✎ Edit</button><button type="button" class="delete-sale" data-delete-sale="${i}">Delete</button></div></div>`;
+ }).join("");
+ out.querySelectorAll("[data-edit-sale]").forEach(b=>b.onclick=()=>beginEditSale(Number(b.dataset.editSale)));
+ out.querySelectorAll("[data-delete-sale]").forEach(b=>b.onclick=()=>deleteSale(Number(b.dataset.deleteSale)));
+}
 document.getElementById("addSale").onclick=()=>{
  const price=Number(document.getElementById("salePrice").value||0);
  let model=document.getElementById("saleModel").value.trim(),date=document.getElementById("saleDate").value||today(),qty=Number(document.getElementById("saleQty").value),r=rate(model);
  if(!model){alert("Please enter a model.");return}
+ if(r==null){alert("No commission rate found for this model.");return}
  if(price<=0){alert("Please enter the sale value (£).");return}
- sales.push([date,model,qty,r*qty,price]);save();document.getElementById("saleModel").value="";
- document.getElementById("salePrice").value="";document.getElementById("saleRate").textContent="";document.getElementById("saleRate").classList.remove("show");hideSaleModelPopup();renderCalendar();renderHome();renderStats();alert("Sale added.");
-
- updateHomeTotalVAL();
+ const record=[date,model,qty,r*qty,price];
+ if(editingSaleIndex!==null){sales[editingSaleIndex]=record; alert("Sale updated.");}else{sales.push(record); alert("Sale added.");}
+ save(); resetSaleForm(); renderCalendar();
+renderSalesLog(); renderHome(); renderStats(); renderSalesLog(); updateHomeTotalVAL();
 };
+document.getElementById("cancelEditSale").onclick=resetSaleForm;
+document.getElementById("salesLogSearch").addEventListener("input",renderSalesLog);
+
 function findTV(){
   const q=norm(document.getElementById("tvSearch")?.value||"");
   const b=document.getElementById("budget")?.value||"";
@@ -834,20 +808,6 @@ function findTV(){
 }
 
 
-/* Fix: the TV Finder's "View offers" buttons are rendered dynamically, so use
-   event delegation rather than binding once before those buttons exist. */
-document.addEventListener("click",function(e){
-  const btn=e.target.closest(".offer-btn");
-  if(!btn)return;
-  const model=btn.getAttribute("data-offer-model");
-  const input=document.getElementById("offerModel");
-  if(!input||!model)return;
-  input.value=model;
-  renderOffer();
-  input.scrollIntoView({behavior:"smooth",block:"center"});
-});
-
-
 function renderOffer(){
  const input=document.getElementById("offerModel");
  const box=document.getElementById("offerResult");
@@ -875,6 +835,21 @@ function renderOffer(){
 }
 
 document.getElementById("offerModel").oninput=renderOffer;
+
+// View-offers buttons are created dynamically by TV Finder, so use one
+// delegated handler rather than binding only to the initial DOM.
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-offer-model]");
+  if(!b)return;
+  const model=b.dataset.offerModel;
+  if(!model)return;
+  e.preventDefault();
+  viewOffers(model);
+});
+
+// Populate the Offers model picker once the TV catalogue is defined.
+fillModels();
+
 const COACH={
 UR9:{
 pitch:"“If you want the picture to genuinely jump off the screen, this is the one I’d show you. The UR9 combines RGB colour technology with Mini LED control, so you’re getting incredibly vibrant colour, serious brightness and much tighter control over light and dark scenes. It’s not just a spec sheet — put sport, a film or a game on it and you can actually see what the technology is doing.”",
@@ -1343,8 +1318,9 @@ document.addEventListener("DOMContentLoaded",function(){
 let PMF_LIVE_DATA={};
 let PMF_LAST_UPDATED="";
 const PMF_DATA_URL="price-data.json";
-
 function pmfModelList(){
+  // Price Match Finder uses the current TV catalogue only.
+  // Do not pull from R (commission history), which contains legacy models.
   const isCurrentModel=m=>{
     const n=normaliseModel(m);
     return Boolean(n) && !n.endsWith("QTUK");
@@ -1355,7 +1331,7 @@ function pmfModelList(){
     .filter(isCurrentModel);
   return [...new Set(source)].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
 }
-function normaliseModel(v){return String(v||"").trim().toUpperCase().replace(/\s+/g," ");}
+function normaliseModel(v){return String(v||"").trim().toUpperCase();}
 function showPmfSuggestions(inputId,listId,onPick){
   const input=document.getElementById(inputId), box=document.getElementById(listId);
   if(!input||!box)return;
@@ -1379,7 +1355,6 @@ function setupModelAutocomplete(inputId,listId,onPick){
   input.addEventListener("keydown",e=>{if(e.key==="Escape")box.style.display="none";});
   document.addEventListener("click",e=>{if(!input.contains(e.target)&&!box.contains(e.target))box.style.display="none";});
 }
-
 const PMF_RETAILERS=[
   ["Currys","https://www.google.com/search?q=site%3Acurrys.co.uk+Hisense+MODEL"],
   ["AO","https://www.google.com/search?q=site%3Aao.com+Hisense+MODEL"],
@@ -1388,148 +1363,115 @@ const PMF_RETAILERS=[
   ["Argos","https://www.google.com/search?q=site%3Aargos.co.uk+Hisense+MODEL"],
   ["Hughes","https://www.google.com/search?q=site%3Ahughes.co.uk+Hisense+MODEL"],
   ["Marks Electrical","https://www.google.com/search?q=site%3Amarkselectrical.co.uk+Hisense+MODEL"],
-  ["Peter Tyson","https://petertyson.co.uk/hisense-MODEL"]
+  ["Peter Tyson","https://petertyson.co.uk/hisense-MODEL"],
+  ["Amazon UK","https://www.google.com/search?q=site%3Aamazon.co.uk+Hisense+MODEL"]
 ];
-
-/* Verified saved prices. Live price-data.json values override these when present. */
 const PMF_SNAPSHOT={
-  "43A6STUK":{"Currys":279,"Richer Sounds":279,"Hughes":329},
-  "50A6STUK":{"Currys":329,"Richer Sounds":329},
-  "55A6STUK":{"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399},
-  "65A6STUK":{"Currys":499,"Hughes":499,"Peter Tyson":499,"Richer Sounds":499},
-  "43Q7STUK":{"Currys":349,"Richer Sounds":349},
-  "50Q7STUK":{"Currys":429,"Hughes":429},
-  "55Q7STUK":{"Currys":499,"Hughes":499,"Richer Sounds":499},
-  "65Q7STUK":{"Currys":649,"Hughes":649},
-  "75Q7STUK":{"Currys":899,"Hughes":899,"John Lewis":899,"Peter Tyson":899,"Richer Sounds":899,"Marks Electrical":899},
-  "85Q7STUK":{"Currys":1299,"Hughes":1299},
-  "50U7STUK":{"Currys":699,"Hughes":699},
-  "55U7STUK":{"Currys":999,"Richer Sounds":899},
-  "65U7STUK":{"Currys":1199,"Hughes":1299},
-  "75U7STUK":{"Currys":1499,"Hughes":1499},
-  "85U7STUK":{"Currys":1999,"Hughes":1999},
-  "100U7STUK":{"Currys":3499,"Hughes":3499},
-  "43E7STUK PRO":{"Currys":499,"Hughes":499},
-  "50E7STUK PRO":{"Currys":599,"Hughes":599},
-  "55E7STUK PRO":{"Currys":699,"Hughes":699},
-  "65E7STUK PRO":{"Currys":899,"Hughes":899},
-  "75E7STUK PRO":{"Currys":1299,"Hughes":1299},
-  "85E7STUK PRO":{"Currys":1599,"Hughes":1599},
-  "100E7STUK PRO":{"Currys":2499,"Hughes":3599},
-  "55U7STUK PRO":{"AO":999,"Argos":999,"Currys":999,"Hughes":999,"John Lewis":999,"Marks Electrical":999,"Peter Tyson":999,"Richer Sounds":999},
-  "65U7STUK PRO":{"AO":1299,"Argos":1299,"Currys":1299,"Hughes":1299,"John Lewis":1299,"Peter Tyson":1299,"Richer Sounds":1299,"Marks Electrical":1799},
-  "75U7STUK PRO":{"Argos":1499,"Hughes":1499,"John Lewis":1499,"Marks Electrical":1499,"Peter Tyson":1499,"Richer Sounds":1499},
-  "85U7STUK PRO":{"Peter Tyson":1999,"Richer Sounds":1999},
-  "100U7STUK PRO":{"Peter Tyson":3799,"Richer Sounds":3799},
-  "55UR8STUK":{"Currys":1299,"John Lewis":1299,"Richer Sounds":1299},
-  "65UR8STUK":{"Currys":1699,"Hughes":1699},
-  "75UR8STUK":{"Currys":2299,"Hughes":2299},
-  "85UR8STUK":{"Currys":2999,"Hughes":2999},
-  "100UR8STUK":{"Currys":7999,"Hughes":7999},
-  "65UR9STUK":{"Currys":1999,"John Lewis":1999,"Richer Sounds":1999},
-  "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799},
-  "85UR9STUK":{"Currys":3499,"John Lewis":3499,"Richer Sounds":3499}
+  "75UR9STUK":{"Currys":2799,"John Lewis":2799,"Richer Sounds":2799,note:"Latest verified web snapshot: £2,799 at Currys, John Lewis and Richer Sounds."},
+  "65UR9STUK":{"Richer Sounds":1999,note:"Latest verified web snapshot: £1,999 at Richer Sounds."},
+  "55A6STUK":{"Amazon UK":399,"Currys":399,"Hughes":399,"Marks Electrical":399,"Peter Tyson":399,"Richer Sounds":399,note:"Latest verified web snapshot showed £399 at the listed retailers."},
+  "55U7STUK":{"Richer Sounds":899,note:"Latest verified web snapshot: £899 at Richer Sounds."},
+  "55Q7STUK":{"Richer Sounds":499,note:"Latest verified web snapshot: £499 at Richer Sounds."},
+  "65U7STUK":{"Currys":1199,note:"Latest verified web snapshot: £1,199 at Currys."},
+  "55U7STUK PRO":{"AO":999,"Argos":999,"Currys":999,"Hughes":999,"John Lewis":999,"Marks Electrical":999,"Peter Tyson":999,"Richer Sounds":999,note:"Verified retailer snapshot: £999 at the listed UK retailers."},
+  "65U7STUK PRO":{"AO":1299,"Argos":1299,"Currys":1299,"Hughes":1299,"John Lewis":1299,"Marks Electrical":1799,"Peter Tyson":1299,"Richer Sounds":1299,note:"Verified retailer snapshot: £1,299 at most listed retailers; Marks Electrical £1,799."},
+  "75U7STUK PRO":{"Argos":1499,"Hughes":1499,"John Lewis":1499,"Marks Electrical":1499,"Peter Tyson":1499,"Richer Sounds":1499,note:"Verified retailer snapshot: £1,499 at the listed UK retailers."},
+  "85U7STUK PRO":{"Peter Tyson":1999,"Richer Sounds":1999,note:"Verified retailer snapshot: £1,999 at the listed retailers."},
+  "100U7STUK PRO":{"Peter Tyson":3799,"Richer Sounds":3799,note:"Verified retailer snapshot: £3,799 at the listed retailers."}
 };
-
 function retailerSearchUrl(template,model){
-  if(String(template).includes("petertyson.co.uk")){
+  if(template.includes("petertyson.co.uk")){
     const slug=String(model||"").trim().toLowerCase().replace(/\s+/g,"-");
     return template.replace("MODEL",slug);
   }
   return template.replace("MODEL",encodeURIComponent(model));
 }
-
-function pmfFindLiveKey(model){
-  const wanted=normaliseModel(model);
-  return Object.keys(PMF_LIVE_DATA||{}).find(k=>normaliseModel(k)===wanted) || null;
-}
-
 async function loadPmfLiveData(){
-  PMF_LIVE_DATA={};
-  PMF_LAST_UPDATED="";
+  // GitHub Pages serves the app as a static site. If the optional daily
+  // price-data.json file has not been uploaded alongside index.html, fall
+  // back to the built-in verified snapshots instead of showing an empty feed.
   try{
     const res=await fetch(`${PMF_DATA_URL}?v=${Date.now()}`,{cache:"no-store"});
     if(!res.ok)throw new Error("price-data unavailable");
     const data=await res.json();
-    const models=(data&&data.models&&typeof data.models==="object")?data.models:{};
-    const usable=Object.values(models).some(x=>x&&x.prices&&typeof x.prices==="object"&&Object.keys(x.prices).length);
-    if(usable){
-      PMF_LIVE_DATA=models;
-      PMF_LAST_UPDATED=data.updatedAt||"";
-    }
+    const liveModels=data.models||{};
+    // Keep the built-in verified retailer snapshot as the fallback for any
+    // retailer missing from the optional daily feed. Live feed values win.
+    PMF_LIVE_DATA={};
+    const allModels=new Set([...Object.keys(PMF_SNAPSHOT||{}),...Object.keys(liveModels)]);
+    allModels.forEach(k=>{
+      const snapModel=PMF_SNAPSHOT[k]||{};
+      const liveModel=liveModels[k]||{};
+      const snapPrices={...(snapModel||{})};
+      delete snapPrices.note;
+      PMF_LIVE_DATA[k]={...liveModel,prices:{...snapPrices,...(liveModel.prices||{})}};
+    });
+    PMF_LAST_UPDATED=data.updatedAt||"";
   }catch(e){
     PMF_LIVE_DATA={};
     PMF_LAST_UPDATED="";
   }
 }
-
+function pmfBaseModel(model){
+  const exact=PMF_LIVE_DATA[model];
+  if(exact && exact.prices && typeof exact.prices==="object" && Object.keys(exact.prices).length) return model;
+  // Some current catalogue entries are labelled "PRO" while Price4 lists the
+  // same underlying retail model without the PRO suffix. Only use this fallback
+  // when the exact base model has real retailer prices in the feed.
+  const base=normaliseModel(model).replace(/\\s+PRO$/,"").trim();
+  const candidate=PMF_LIVE_DATA[base];
+  if(candidate && candidate.prices && typeof candidate.prices==="object" && Object.keys(candidate.prices).length) return base;
+  return model;
+}
 function pmfLivePrices(model){
-  const key=pmfFindLiveKey(model);
-  const live=key?PMF_LIVE_DATA[key]:null;
-  return live&&live.prices&&typeof live.prices==="object"?live.prices:{};
+  const key=pmfBaseModel(model);
+  const live=PMF_LIVE_DATA[key]||{};
+  return (live.prices && typeof live.prices === "object") ? live.prices : {};
 }
 function pmfPriceForRetailer(prices,name){
-  if(prices[name]!=null)return Number(prices[name]);
+  if(prices[name]!=null) return Number(prices[name]);
   const aliases={"Amazon UK":"Amazon.co.uk","Amazon.co.uk":"Amazon UK"};
   const alias=aliases[name];
-  return alias&&prices[alias]!=null?Number(prices[alias]):null;
+  return alias && prices[alias]!=null ? Number(prices[alias]) : null;
 }
 function pmfRetailerRows(model,snap){
   const livePrices=pmfLivePrices(model);
-  /* Only show retailers where this exact model has a real saved/live price.
-     Keep the full retailer configuration intact so coverage is not removed. */
-  const merged={};
-  Object.entries(snap||{}).forEach(([name,price])=>{
-    if(name!=="Amazon UK"&&name!=="Amazon.co.uk"&&price!=null&&Number.isFinite(Number(price))&&Number(price)>0){
-      merged[name]=Number(price);
-    }
-  });
-  Object.entries(livePrices||{}).forEach(([name,price])=>{
-    if(name!=="Amazon UK"&&name!=="Amazon.co.uk"&&price!=null&&Number.isFinite(Number(price))&&Number(price)>0){
-      merged[name]=Number(price);
-    }
-  });
-
-  return Object.entries(merged)
-    .filter(([name])=>PMF_RETAILERS.some(x=>x[0]===name))
-    .sort((a,b)=>a[1]-b[1])
-    .map(([name,shownPrice])=>{
-      const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
-      const priceText=`£${shownPrice.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-      return `<div class="pmf-retailer"><span>${name} ✓</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
-    }).join("");
+  const names=[...new Set([...Object.keys(livePrices),...PMF_RETAILERS.map(x=>x[0])])];
+  return names.map(name=>{
+    const price=pmfPriceForRetailer(livePrices,name);
+    const snapPrice=snap[name]!=null?Number(snap[name]):null;
+    const shownPrice=price!=null?price:snapPrice;
+    const href=(PMF_RETAILERS.find(x=>x[0]===name)||[name,"https://www.google.com/search?q="+encodeURIComponent(name+" "+model)])[1];
+    const priceText=shownPrice!=null?`£${shownPrice.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2})}`:"Check live";
+    return `<div class="pmf-retailer"><span>${name}${shownPrice!=null?" ✓":""}</span><span>${priceText} · <a href="${retailerSearchUrl(href,model)}" target="_blank" rel="noopener">Open</a></span></div>`;
+  }).join("");
 }
-
 function checkPriceMatch(){
   const input=document.getElementById("pmfModel"),out=document.getElementById("pmfResult");
-  if(!out)return;
   const model=normaliseModel(input&&input.value);
   if(!model){out.innerHTML="Please choose a Hisense model first.";return;}
   if(model.endsWith("QTUK")||/Q(?:PRO)?$/.test(model)){
     out.innerHTML="2025/QTUK and Q-series models are excluded from Price Match Finder. Please choose a current STUK model.";
     return;
   }
-  const source=(typeof TVs!=="undefined"?TVs:[]);
-  const item=source.find(x=>normaliseModel(x[0])===model);
-  if(!item){
+  const source=(typeof TVs!=="undefined"?TVs:[]),item=source.find(x=>normaliseModel(x[0])===model);
+  if(!item || model.endsWith("QTUK")){
     out.innerHTML="That model is not in the current Price Match Finder catalogue. Please choose a current STUK model.";
     return;
   }
-  const hisense=item[1]!=null?Number(item[1]):null;
+  const hisense=item&&item[1]!=null?Number(item[1]):null;
   const snap=PMF_SNAPSHOT[model]||{};
+  const liveKey=pmfBaseModel(model);
   const livePrices=pmfLivePrices(model);
   const merged={...snap,...livePrices};
-  const verified=Object.values(merged).filter(v=>typeof v==="number"&&Number.isFinite(v)).length;
+  const verified=Object.values(merged).filter(v=>typeof v==="number" && Number.isFinite(v)).length;
   const retailerRows=pmfRetailerRows(model,snap);
-  const liveKey=pmfFindLiveKey(model);
+  const baseNote=(liveKey!==model)?`<div class="pmf-note" style="margin-top:7px;opacity:.9"><strong>Price comparison matched to ${liveKey}</strong> — Price4 lists this retail model without the PRO label.</div>`:"";
   const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>Hisense app price</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
   const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:(verified?"Using the latest saved retailer prices":"No saved retailer price found yet");
-  const feedNote=PMF_LAST_UPDATED?"Daily price feed loaded. Retailer stock, promotions and voucher prices can change, so confirm the retailer price before promising a match.":"Live feed unavailable — showing the latest saved retailer prices where available. Retailer buttons open live searches so you can confirm today's price.";
-  const baseNote=(liveKey&&normaliseModel(liveKey)!==model)?`<div class="pmf-note" style="margin-top:7px;opacity:.9"><strong>Price comparison matched to ${liveKey}</strong> — retailer feed model name differs slightly.</div>`:"";
-  const retailerContent=retailerRows || `<div class="pmf-note" style="margin-top:0">No UK retailer has a saved price for this exact model yet, so no retailer is shown.</div>`;
-  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div>${baseNote}<div class="pmf-retailers">${retailerContent}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
+  const feedNote=PMF_LAST_UPDATED?"Daily price feed loaded. Retailer stock, promotions and voucher prices can change, so confirm the retailer price before promising a match.":"This GitHub copy does not currently contain the optional daily price-data file. The retailer buttons below open live retailer searches; saved prices are shown where available.";
+  out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div>${baseNote}<div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
 }
-
 function initPriceMatchFinder(){
   setupModelAutocomplete("pmfModel","pmfSuggestions",()=>{});
   setupModelAutocomplete("commissionModel","commissionSuggestions",()=>renderCommissionSearch());
@@ -1555,9 +1497,9 @@ document.addEventListener("DOMContentLoaded",initPriceMatchFinder);
 <script id="coachShortcutJS">
 const TECHNOLOGY_INFO={
 "RGB Mini LED":{summary:"RGB Mini LED uses independently controlled red, green and blue LEDs in the backlight alongside Mini LED control of brightness and contrast.",why:"Customers get richer colour, high brightness and strong contrast. It is especially easy to demonstrate with sport, HDR films, colourful games and bright rooms. Selected RGB models also include anti-reflection/glare control, helping reduce distracting reflections in brighter rooms.",benefits:["Richer colour","High brightness","Strong contrast","HDR impact","Sport & gaming","Premium large screens"],models:"UR9 • UR8"},
-"Mini LED":{summary:"Mini LED uses many smaller LEDs in the backlight, allowing finer control of bright and dark areas than conventional LED.",why:"Customers get a brighter, punchier picture with stronger contrast and HDR impact — especially useful for sport, gaming, films and bright rooms. The U7S Pro also has Anti-Reflection & Glare-Free technology to reduce reflections and surface shine.",benefits:["High brightness","Better light control","Stronger contrast","HDR impact","Sport","Gaming"],models:"U8Q • U7S Pro • U7S"},
-"QLED":{summary:"QLED uses a quantum-dot layer to improve the colour performance of an LED/LCD display.",why:"Customers get brighter, more vivid colour and a strong everyday picture for streaming, live TV and sport without paying for flagship technology.",benefits:["Vivid colour","Good brightness","Strong everyday picture","Streaming","Sport","Value"],models:"Q7S • E7S Pro"},
-"LED":{summary:"LED TVs use an LCD panel with an LED backlight. It is the straightforward option for customers who want reliable everyday TV.",why:"Customers get simple 4K smart-TV viewing for live TV, streaming and family entertainment while keeping the price down.",benefits:["4K","Reliable","Simple","Good value","Bedrooms","Budget friendly"],models:"A6S"},
+"Mini LED":{summary:"Mini LED uses many smaller LEDs in the backlight, allowing finer control of bright and dark areas than conventional LED.",why:"Customers get a brighter, punchier picture with stronger contrast and HDR impact — especially useful for sport, gaming, films and bright rooms. The U7S Pro also has Anti-Reflection & Glare-Free technology to reduce reflections and surface shine.",benefits:["High brightness","Better light control","Stronger contrast","HDR impact","Sport","Gaming"],models:"U8 • U7 Pro • U7"},
+"QLED":{summary:"QLED uses a quantum-dot layer to improve the colour performance of an LED/LCD display.",why:"Customers get brighter, more vivid colour and a strong everyday picture for streaming, live TV and sport without paying for flagship technology.",benefits:["Vivid colour","Good brightness","Strong everyday picture","Streaming","Sport","Value"],models:"Q7 • E7 Pro"},
+"LED":{summary:"LED TVs use an LCD panel with an LED backlight. It is the straightforward option for customers who want reliable everyday TV.",why:"Customers get simple 4K smart-TV viewing for live TV, streaming and family entertainment while keeping the price down.",benefits:["4K","Reliable","Simple","Good value","Bedrooms","Budget friendly"],models:"A6"},
 "OLED":{summary:"OLED gives superb blacks and contrast because each pixel can switch itself off.",why:"Why choose Hisense Mini LED/RGB instead: higher brightness can be a better fit for bright living rooms, sport and daytime viewing; U7S Pro has Anti-Reflection & Glare-Free technology; OLED can be susceptible to permanent screen burn/image retention from prolonged static content; and reflective OLED screens can show distracting reflections from windows and lights. If the customer has a bright room, watches lots of sport or has static logos/HUDs on screen for long periods, show them Mini LED or RGB.",benefits:["Higher brightness","Better bright-room option","U7S Pro anti-reflection","RGB colour","No OLED burn-in risk","Great for sport & daytime viewing"],models:"Use this comparison when the customer's room, viewing habits or static-content use make Mini LED/RGB a strong alternative"},
 "Matte Screens":{summary:"A matte or anti-reflection finish scatters reflected light rather than presenting it as a sharp mirror-like reflection.",why:"For customers with windows, lamps or strong daylight facing the TV, a matte/low-reflection screen can make the picture easier and more comfortable to view.",benefits:["Less distracting glare","Fewer sharp reflections","Better for bright rooms","More comfortable daytime viewing","Useful for windows/lights"],models:"U7 Pro • selected RGB models — verify exact size/model"}
 };const EXACT_COMPETITOR_SPECS={
@@ -1638,31 +1580,96 @@ document.addEventListener("DOMContentLoaded",function(){
   btn.addEventListener("click",function(){setTimeout(function(){window.scrollTo(0,0)},0)},false);
  });
 });
-</script>
-<style id="closingSubsectionOnly">
-.close-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
-.close-choice-grid button{min-height:70px;text-align:left;padding:12px;border-radius:15px;border:1px solid #31585c;background:linear-gradient(145deg,#102a2e,#0b2023);color:#f7faf9}
-.close-choice-grid button b{display:block;font-family:"Manrope","DM Sans",sans-serif!important;font-size:13px;font-weight:800;color:#f7faf9}
-.close-choice-grid button small{display:block;margin-top:4px;font-size:10px;color:#b9c8c9}
-.close-choice-grid button:active,.close-choice-grid button:hover{border-color:#16d5d1;background:#123237}
-#closingTip h3{margin:0 0 8px;font-family:"Manrope","DM Sans",sans-serif;font-size:18px}
-#closingTip .close-script{margin:0 0 9px;font-family:"Manrope","DM Sans",sans-serif;font-size:16px;line-height:1.45;font-weight:800;color:#f7faf9}
-#closingTip .close-tip{margin:0;font-size:12px;line-height:1.5;color:#b9c8c9}
-</style>
-<script id="closingSubsectionOnlyJS">
-const CLOSING_TIPS={
-ready:{title:"They're ready",say:"“That sounds like the right TV for you. Shall we get this one sorted today?”",tip:"Once they've decided, stop adding features and make the next step easy."},
-trial:{title:"Trial close",say:"“If we can get the price where you need it, is this the TV you'd be happy taking home?”",tip:"This helps uncover whether price is the final thing holding them back."},
-choice:{title:"Choice close",say:"“Would you prefer the 65-inch or the 75-inch?”",tip:"Use two suitable choices instead of reopening the whole range."},
-think:{title:"“I'll think about it”",say:"“Of course. Is it the TV itself, the price, or is there something else you're unsure about?”",tip:"Deal with the actual concern rather than continuing the product pitch."},
-price:{title:"Price / deal",say:"“If we can get the numbers where you need them, are you happy with this TV?”",tip:"Once they say yes, check the current offer, Price Match Finder or eligible options."},
-add:{title:"TV + soundbar",say:"“You've got the TV sorted. Would you like me to show you the soundbar that would make the biggest difference to your films and sport?”",tip:"Link the add-on to the customer's needs rather than simply asking if they want one."}
-};
-function showCloseTip(name){
-  const x=CLOSING_TIPS[name],out=document.getElementById("closingTip");
-  if(!x||!out)return;
-  out.innerHTML=`<h3>${x.title}</h3><p class="close-script">${x.say}</p><p class="close-tip"><strong>Tip:</strong> ${x.tip}</p>`;
-}
-</script>
 
-</body></html>
+/* Refund support: refunds are stored as negative quantities/commission and
+   therefore automatically reduce units, sales value and commission totals. */
+(function(){
+  const OLD_KEY="hisenseSalesV2";
+  function ensureRefundFlag(){
+    if(!Array.isArray(window.sales)) return;
+    window.sales=window.sales.map(s=>{
+      if(!Array.isArray(s)) return s;
+      if(s.length<5) s.push("sale");
+      if(!s[4]) s[4]="sale";
+      return s;
+    });
+  }
+  ensureRefundFlag();
+
+  const saleBtn=document.getElementById("saleTypeSale");
+  const refundBtn=document.getElementById("saleTypeRefund");
+  let entryType="sale";
+  function setType(t){
+    entryType=t;
+    if(saleBtn) saleBtn.classList.toggle("active",t==="sale");
+    if(refundBtn) refundBtn.classList.toggle("active",t==="refund");
+    const saveBtn=document.getElementById("saveSale");
+    if(saveBtn) saveBtn.textContent=t==="refund"?"Save refund":"Save sale";
+  }
+  saleBtn && (saleBtn.onclick=()=>setType("sale"));
+  refundBtn && (refundBtn.onclick=()=>setType("refund"));
+
+  // Patch save so a refund is recorded as negative quantity and commission.
+  const saveBtn=document.getElementById("saveSale");
+  if(saveBtn){
+    saveBtn.addEventListener("click",function(){
+      setTimeout(()=>{
+        if(!Array.isArray(window.sales)) return;
+        const last=window.sales[window.sales.length-1];
+        if(!Array.isArray(last)) return;
+        if(entryType==="refund"){
+          last[2]=-Math.abs(Number(last[2]||1));
+          last[3]=-Math.abs(Number(last[3]||0));
+          last[4]="refund";
+        }else{
+          last[2]=Math.abs(Number(last[2]||1));
+          last[3]=Math.abs(Number(last[3]||0));
+          last[4]="sale";
+        }
+        localStorage.setItem(OLD_KEY,JSON.stringify(window.sales));
+        if(typeof window.renderCalendar==="function") window.renderCalendar();
+        if(typeof window.renderStats==="function") window.renderStats();
+        if(typeof window.renderHome==="function") window.renderHome();
+        if(typeof window.updateHomeSalesValue==="function") window.updateHomeSalesValue();
+      },20);
+    },true);
+  }
+
+  // Make totals explicitly net of refunds.
+  const oldTotalComm=window.totalComm;
+  window.totalComm=function(){
+    return (window.sales||[]).reduce((a,s)=>a+Number(s[3]||0),0);
+  };
+  const oldTotalUnits=window.totalUnits;
+  window.totalUnits=function(){
+    return (window.sales||[]).reduce((a,s)=>a+Number(s[2]||0),0);
+  };
+
+  // Add refund visual treatment to history after each render.
+  const history=document.getElementById("history");
+  if(history){
+    const obs=new MutationObserver(()=>{
+      history.querySelectorAll("[data-sale-index]").forEach(el=>{
+        const i=Number(el.getAttribute("data-sale-index"));
+        const s=window.sales && window.sales[i];
+        if(s && Number(s[2])<0){
+          el.classList.add("refund-entry");
+          const title=el.querySelector("b");
+          if(title && !title.querySelector(".refund-badge"))
+            title.insertAdjacentHTML("beforeend",'<span class="refund-badge">REFUND</span>');
+        }
+      });
+    });
+    obs.observe(history,{childList:true,subtree:true});
+  }
+
+  // Expose helper for any existing edit form: preserve refund status when edited.
+  window.applyRefundSign=function(s){
+    if(!Array.isArray(s)) return s;
+    const isRefund=s[4]==="refund";
+    s[2]=(isRefund?-1:1)*Math.abs(Number(s[2]||1));
+    s[3]=(isRefund?-1:1)*Math.abs(Number(s[3]||0));
+    return s;
+  };
+})();
+</script></body></html>
