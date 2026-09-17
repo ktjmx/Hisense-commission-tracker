@@ -302,6 +302,11 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 #coach svg,#coach svg *{stroke:#f4f7f7 !important;color:#f4f7f7 !important;}
 #coach svg path,#coach svg line,#coach svg polyline,#coach svg circle{stroke:#f4f7f7 !important;}
 </style>
+<style id="salesDataIntegrityFix">
+#salePrice{width:180px;max-width:100%;box-sizing:border-box}
+.sales-log-actions button{cursor:pointer}
+.sales-log-actions .delete-sale{color:#ff9b9b!important}
+</style>
 </head>
 <body>
 <div class="app">
@@ -1700,117 +1705,143 @@ document.addEventListener("DOMContentLoaded",function(){
 <script id="finalSalesLogRefundFix">
 (function(){
   const KEY='hisenseSalesV2';
-  function num(v){const n=Number(v);return Number.isFinite(n)?n:0}
-  function normalise(){
-    if(!Array.isArray(window.sales)) window.sales=[];
-    window.sales=window.sales.map(s=>{
-      if(!Array.isArray(s)) return null;
-      const date=s[0]||today();
-      const model=String(s[1]||'').trim();
-      let qty=num(s[2]); if(!qty) qty=1;
-      let comm=num(s[3]);
-      let price=s[4];
-      let type=s[5];
-      // Old four-column records had no price. Use the catalogue price as a
-      // sensible migration value so historic entries contribute to Total VAL.
-      if(typeof price!=='number' && (typeof price!=='string' || !price.trim() || price==='sale' || price==='refund')){
-        price=priceOf(model);
-        if(type!=='refund' && (s[4]==='refund'||s[4]==='sale')) type=s[4];
-      }
-      price=num(price);
-      if(type!=='refund' && type!=='sale') type=qty<0?'refund':'sale';
-      qty=Math.abs(qty)*(type==='refund'?-1:1);
-      // Commission is based on the stored model rate and signed quantity.
-      const r=rate(model);
-      if(r!=null) comm=Math.abs(r*num(qty))*(type==='refund'?-1:1);
-      else comm=Math.abs(comm)*(type==='refund'?-1:1);
-      return [date,model,qty,comm,price,type];
-    }).filter(Boolean);
-    localStorage.setItem(KEY,JSON.stringify(window.sales));
+  const n=v=>{const x=Number(v);return Number.isFinite(x)?x:0};
+  const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  // IMPORTANT: use the existing top-level `sales` array. Do not replace it
+  // with window.sales, because top-level `let sales` is not a window property.
+  const embeddedSales = [
+    ["2026-09-03","50E7Q",1,5],["2026-09-03","75UR8S",1,80],
+    ["2026-09-04","43A6Q",3,0],["2026-09-04","43E7Q",3,15],["2026-09-04","50U7S",2,40],["2026-09-04","55UR8S",1,50],["2026-09-04","65E7Q PRO",1,10],["2026-09-04","65UR9S",1,80],["2026-09-04","85E7Q PRO",2,40],
+    ["2026-09-05","100U7Q PRO",1,35],["2026-09-05","HT SATURN",1,40],
+    ["2026-09-06","43E7Q",1,5],["2026-09-06","50U7Q",1,5],["2026-09-06","55A6Q",1,0],["2026-09-06","55E7Q PRO",1,5],["2026-09-06","55UR8S",1,50],["2026-09-06","65E7Q PRO",1,10],["2026-09-06","65UR9S",1,80],
+    ["2026-09-11","65Q7STUK",1,15],["2026-09-12","100E7STUK PRO",1,60],["2026-09-12","HT SATURN",1,40],["2026-09-12","43E7Q",1,5],["2026-09-12","55UR8STUK",1,50],["2026-09-12","55UR8STUK",1,50],["2026-09-13","55UR8STUK",1,50],["2026-09-13","43E7Q",1,5],["2026-09-13","50U7STUK",1,20]
+  ];
+  function cleanRecord(s){
+    if(!Array.isArray(s)) return null;
+    const date=String(s[0]||today());
+    const model=String(s[1]||'').trim();
+    if(!model) return null;
+    const rawQty=n(s[2]);
+    const qty=rawQty===0?1:Math.abs(rawQty);
+    const refund=s[5]==='refund'||rawQty<0;
+    let price=(s[4]!==undefined && s[4]!==null && s[4]!=='' && s[4]!=='sale' && s[4]!=='refund')?n(s[4]):null;
+    // Legacy records did not store selling price. Keep them, and where the
+    // model has a known catalogue price use that as a sensible historical value.
+    if(price===null && typeof priceOf==='function') price=priceOf(model);
+    if(price===null) price=0;
+    const r=rate(model);
+    const comm=r!=null ? Math.abs(r*qty) : Math.abs(n(s[3]));
+    return [date,model,refund?-qty:qty,refund?-comm:comm,price,refund?'refund':'sale'];
   }
-  normalise();
-
-  window.save=function(){localStorage.setItem(KEY,JSON.stringify(window.sales||[]))};
-
-  window.totalComm=function(){return (window.sales||[]).reduce((a,s)=>a+num(s[3]),0)};
-  window.totalUnits=function(){return (window.sales||[]).reduce((a,s)=>a+num(s[2]),0)};
-  window.updateHomeSalesValue=function(){
-    const total=(window.sales||[]).reduce((a,s)=>a+num(s[4])*num(s[2]),0);
-    const e=document.getElementById('homeSalesValue');if(e)e.textContent=money(total);
-  };
-  window.updateHomeTotalVAL=window.updateHomeSalesValue;
+  function sameRecord(a,b){
+    return a[0]===b[0] && norm(a[1])===norm(b[1]) && Number(a[2])===Number(b[2]) && Number(a[3])===Number(b[3]) && Number(a[4])===Number(b[4]) && (a[5]||'sale')===(b[5]||'sale');
+  }
+  function cleanSales(){
+    // Merge the sales already bundled in the app with whatever is in localStorage.
+    // This prevents replacing the new HTML file from wiping the last two weeks.
+    const current = Array.isArray(sales) ? sales.map(cleanRecord).filter(Boolean) : [];
+    const old = (()=>{ try { const x=JSON.parse(localStorage.getItem(KEY)||'null'); return Array.isArray(x)?x.map(cleanRecord).filter(Boolean):[]; } catch(e){ return []; } })();
+    const merged=[];
+    [...embeddedSales.map(cleanRecord).filter(Boolean), ...old, ...current].forEach(r=>{
+      if(!merged.some(x=>sameRecord(x,r))) merged.push(r);
+    });
+    sales.length=0; sales.push(...merged);
+  }
+  cleanSales();
+  function persist(){localStorage.setItem(KEY,JSON.stringify(sales));}
+  window.save=persist;
+  window.totalComm=()=>sales.reduce((a,s)=>a+n(s[3]),0);
+  window.totalUnits=()=>sales.reduce((a,s)=>a+n(s[2]),0);
+  window.totalSalesValue=()=>sales.reduce((a,s)=>a+n(s[4])*n(s[2]),0);
+  function refresh(){
+    persist();
+    if(typeof renderCalendar==='function')renderCalendar();
+    if(typeof renderHome==='function')renderHome();
+    if(typeof renderStats==='function')renderStats();
+    if(typeof renderSalesLog==='function')renderSalesLog();
+    const total=window.totalSalesValue();
+    ['homeSalesValue','homeTotalVAL'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=money(total)});
+  }
 
   let editingSaleIndex=null;
+  function setEntryType(t){
+    window.__salesEntryType=t;
+    document.getElementById('saleTypeSale')?.classList.toggle('active',t==='sale');
+    document.getElementById('saleTypeRefund')?.classList.toggle('active',t==='refund');
+    const b=document.getElementById('addSale');
+    if(b)b.textContent=editingSaleIndex!==null?'Save Changes':(t==='refund'?'Save Refund':'Add Sale');
+  }
   window.beginEditSale=function(index){
-    const s=window.sales[index];if(!s)return;
+    const s=sales[index];if(!s)return;
     editingSaleIndex=index;
-    const date=document.getElementById('saleDate'),model=document.getElementById('saleModel'),price=document.getElementById('salePrice'),qty=document.getElementById('saleQty'),banner=document.getElementById('editSaleBanner'),btn=document.getElementById('addSale');
-    if(date)date.value=s[0]||today();
-    if(model)model.value=s[1]||'';
-    if(price)price.value=(s[4]!=null?String(s[4]):'');
-    if(qty)qty.value=String(Math.abs(num(s[2]))||1);
-    if(typeof window.__salesEntryType!=='undefined')window.__salesEntryType=s[5]==='refund'?'refund':'sale';
-    document.getElementById('saleTypeSale')?.classList.toggle('active',s[5]!=='refund');
-    document.getElementById('saleTypeRefund')?.classList.toggle('active',s[5]==='refund');
+    document.getElementById('saleDate').value=s[0]||today();
+    document.getElementById('saleModel').value=s[1]||'';
+    document.getElementById('salePrice').value=String(n(s[4]));
+    document.getElementById('saleQty').value=String(Math.max(1,Math.abs(n(s[2]))));
+    setEntryType(s[5]==='refund' || n(s[2])<0?'refund':'sale');
     if(typeof updateSaleRate==='function')updateSaleRate();
-    if(banner)banner.classList.add('show');
-    if(btn)btn.textContent='Save Changes';
-    model?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('editSaleBanner')?.classList.add('show');
+    const b=document.getElementById('addSale');if(b)b.textContent='Save Changes';
+    document.getElementById('saleModel')?.scrollIntoView({behavior:'smooth',block:'center'});
   };
   window.deleteSale=function(index){
-    if(!Number.isInteger(index)||!window.sales[index])return;
-    const s=window.sales[index];
-    if(!confirm(`Delete ${s[1]} ×${Math.abs(num(s[2]))} from ${new Date(s[0]+'T12:00:00').toLocaleDateString('en-GB')}?`))return;
-    window.sales.splice(index,1);editingSaleIndex=null;window.save();
-    if(typeof resetSaleForm==='function')resetSaleForm();
-    renderCalendar();renderSalesLog();renderHome();renderStats();updateHomeSalesValue();
+    if(!Number.isInteger(index)||!sales[index])return;
+    const s=sales[index];
+    if(!confirm(`Delete ${s[1]} ×${Math.abs(n(s[2]))} from ${new Date(s[0]+'T12:00:00').toLocaleDateString('en-GB')}?`))return;
+    sales.splice(index,1);
+    if(editingSaleIndex===index)editingSaleIndex=null;
+    refresh();
   };
-
-  function setEntryType(t){window.__salesEntryType=t;document.getElementById('saleTypeSale')?.classList.toggle('active',t==='sale');document.getElementById('saleTypeRefund')?.classList.toggle('active',t==='refund');const b=document.getElementById('addSale');if(b)b.textContent=editingSaleIndex!==null?'Save Changes':(t==='refund'?'Save Refund':'Add Sale')}
-  document.getElementById('saleTypeSale')?.addEventListener('click',()=>setEntryType('sale'));
-  document.getElementById('saleTypeRefund')?.addEventListener('click',()=>setEntryType('refund'));
-
-  const add=document.getElementById('addSale');
-  if(add){
-    add.onclick=function(){
-      const model=document.getElementById('saleModel').value.trim();
-      const date=document.getElementById('saleDate').value||today();
-      const price=num(document.getElementById('salePrice').value);
-      const qty=Math.abs(num(document.getElementById('saleQty').value))||1;
-      const r=rate(model);
-      if(!model){alert('Please enter a model.');return}
-      if(r==null){alert('No commission rate found for this model.');return}
-      if(price<=0){alert('Please enter the sale value (£).');return}
-      const refund=window.__salesEntryType==='refund';
-      const record=[date,model,refund?-qty:qty,refund?-(r*qty):(r*qty),price,refund?'refund':'sale'];
-      if(editingSaleIndex!==null){window.sales[editingSaleIndex]=record;editingSaleIndex=null;alert(refund?'Refund updated.':'Sale updated.')}else{window.sales.push(record);alert(refund?'Refund added.':'Sale added.')}
-      window.save();
-      if(typeof resetSaleForm==='function')resetSaleForm();
-      setEntryType('sale');
-      renderCalendar();renderSalesLog();renderHome();renderStats();updateHomeSalesValue();
-    };
-  }
-
   window.renderSalesLog=function(){
     const out=document.getElementById('salesLog');if(!out)return;
     const q=norm(document.getElementById('salesLogSearch')?.value||'');
-    const entries=window.sales.map((s,i)=>({s,i})).filter(({s})=>!q||norm(s[1]).includes(q)||String(s[0]).includes(q)).sort((a,b)=>String(b.s[0]).localeCompare(String(a.s[0]))||b.i-a.i);
-    const count=document.getElementById('salesLogCount');if(count)count.textContent=`${window.sales.length} ${window.sales.length===1?'entry':'entries'}`;
-    if(!entries.length){out.innerHTML='<div class="sales-log-empty">No entries match your search.</div>';return}
+    const entries=sales.map((s,i)=>({s,i})).filter(({s})=>!q||norm(s[1]).includes(q)||String(s[0]).includes(q))
+      .sort((a,b)=>String(b.s[0]).localeCompare(String(a.s[0]))||b.i-a.i);
+    const count=document.getElementById('salesLogCount');if(count)count.textContent=`${entries.length} ${entries.length===1?'entry':'entries'} · ${sales.reduce((a,s)=>a+n(s[2]),0)} net units`;
+    if(!entries.length){out.innerHTML='<div class="sales-log-empty">No sales match your search.</div>';return;}
     out.innerHTML=entries.map(({s,i})=>{
-      const refund=s[5]==='refund'||num(s[2])<0;
-      const label=refund?'REFUND':'SALE';
-      const q=Math.abs(num(s[2]));
-      const value=num(s[4])*q*(refund?-1:1);
-      const comm=num(s[3]);
-      return `<div class="sales-log-row ${refund?'refund-entry':''}"><div class="sales-log-main"><div><div class="sales-log-model">${String(s[1]||'').replace(/</g,'&lt;')} ×${q} <span class="${refund?'refund-badge':''}">${label}</span></div><div class="sales-log-meta">${new Date(s[0]+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})} · ${refund?'Refund':'Sale'} value <b class="${refund?'refund-minus':''}">${money(value)}</b></div></div><div class="sales-log-price"><div class="${refund?'refund-minus':''}">${money(comm)}</div><div class="sales-log-commission">${refund?'refund':'sale'} commission</div></div></div><div class="sales-log-actions"><button type="button" data-edit-sale="${i}">✎ Edit</button><button type="button" class="delete-sale" data-delete-sale="${i}">Delete</button></div></div>`;
+      const refund=s[5]==='refund'||n(s[2])<0, qn=Math.abs(n(s[2]));
+      const value=n(s[4])*qn*(refund?-1:1), comm=n(s[3]);
+      return `<div class="sales-log-row ${refund?'refund-entry':''}">
+        <div class="sales-log-main"><div><div class="sales-log-model">${esc(s[1])} ×${qn} ${refund?'<span class="refund-badge">REFUND</span>':''}</div>
+        <div class="sales-log-meta">${new Date(s[0]+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})} · ${refund?'Refund':'Sale'} value ${money(value)}</div></div>
+        <div class="sales-log-price"><div class="${refund?'refund-minus':''}">${money(comm)}</div><div class="sales-log-commission">${refund?'refund':'sale'} commission</div></div></div>
+        <div class="sales-log-actions"><button type="button" data-edit-sale="${i}">✎ Edit</button><button type="button" class="delete-sale" data-delete-sale="${i}">Delete</button></div>
+      </div>`;
     }).join('');
     out.querySelectorAll('[data-edit-sale]').forEach(b=>b.onclick=()=>window.beginEditSale(Number(b.dataset.editSale)));
     out.querySelectorAll('[data-delete-sale]').forEach(b=>b.onclick=()=>window.deleteSale(Number(b.dataset.deleteSale)));
   };
-
-  document.getElementById('cancelEditSale')?.addEventListener('click',()=>{editingSaleIndex=null;if(typeof resetSaleForm==='function')resetSaleForm();setEntryType('sale')});
+  document.getElementById('saleTypeSale')?.addEventListener('click',()=>setEntryType('sale'));
+  document.getElementById('saleTypeRefund')?.addEventListener('click',()=>setEntryType('refund'));
+  document.getElementById('cancelEditSale')?.addEventListener('click',()=>{
+    editingSaleIndex=null;
+    document.getElementById('editSaleBanner')?.classList.remove('show');
+    const b=document.getElementById('addSale');if(b)b.textContent='Add Sale';
+    setEntryType('sale');
+    document.getElementById('saleModel').value='';document.getElementById('salePrice').value='';document.getElementById('saleQty').value='1';
+  });
+  const add=document.getElementById('addSale');
+  if(add)add.onclick=function(){
+    const model=document.getElementById('saleModel').value.trim();
+    const date=document.getElementById('saleDate').value||today();
+    const price=n(document.getElementById('salePrice').value);
+    const qty=Math.max(1,Math.abs(n(document.getElementById('saleQty').value)));
+    const r=rate(model);
+    if(!model){alert('Please enter a model.');return;}
+    if(r==null){alert('No commission rate found for this model.');return;}
+    if(price<=0){alert('Please enter the sale value (£).');return;}
+    const refund=window.__salesEntryType==='refund';
+    const record=[date,model,refund?-qty:qty,refund?-(Math.abs(r*qty)):Math.abs(r*qty),price,refund?'refund':'sale'];
+    if(editingSaleIndex!==null){sales[editingSaleIndex]=record;alert(refund?'Refund updated.':'Sale updated.');}
+    else{sales.push(record);alert(refund?'Refund added.':'Sale added.');}
+    editingSaleIndex=null;
+    document.getElementById('editSaleBanner')?.classList.remove('show');
+    document.getElementById('saleModel').value='';document.getElementById('salePrice').value='';document.getElementById('saleQty').value='1';
+    setEntryType('sale');
+    refresh();
+  };
   document.getElementById('salesLogSearch')?.addEventListener('input',window.renderSalesLog);
-  document.addEventListener('DOMContentLoaded',()=>{normalise();window.renderSalesLog();updateHomeSalesValue();setEntryType('sale')});
+  refresh();
 })();
 </script>
