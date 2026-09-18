@@ -1317,20 +1317,23 @@ function renderSoundbarDetail(){
 
 
 function getSalesMix(list){
- const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","S5120GQ","S5120Q","HT SATURN"];
+ const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"];
  const isSoundbar=m=>soundbarModels.some(x=>norm(x)===norm(m));
- let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0;
+ let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0,tvValue=0;
  list.forEach(s=>{
    const m=String(s[1]||"").toUpperCase(),q=Number(s[2]||0);
    if(isSoundbar(m)){soundbars+=q;return}
+   const price=Number(s[4]||0);
+   const value=price*q;
    tvUnits+=q;
-   if(/UR8|UR9|UXT|UXQ/.test(m)) rgb+=q;
-   else if(/U7|U8/.test(m)) mini+=q;
-   else if(/Q7|Q8|E7/.test(m)) qled+=q;
-   else led+=q;
+   tvValue+=value;
+   if(/UR8|UR9|UXT|UXQ/.test(m)) rgb+=value;
+   else if(/U7|U8/.test(m)) mini+=value;
+   else if(/Q7|Q8|E7/.test(m)) qled+=value;
+   else led+=value;
  });
- const p=n=>tvUnits?Math.round(n/tvUnits*100):0;
- return {led,qled,mini,rgb,soundbars,tvUnits,p};
+ const p=value=>tvValue?Math.round(value/tvValue*100):0;
+ return {led,qled,mini,rgb,soundbars,tvUnits,tvValue,p};
 }
 
 function isoWeekNumber(dateString){
