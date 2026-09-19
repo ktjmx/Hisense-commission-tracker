@@ -712,8 +712,12 @@ function trade(model,price){
  return list.find(x=>price>=x.x)||null
 }
 function deal(model,price){
- let cb=CB[Object.keys(CB).find(x=>norm(x)===norm(model))]||0, t=trade(model,price);
- return {cb,trade:t?t.off:0,code:t?t.code:"",effective:price!=null?Math.max(0,price-cb-(t?t.off:0)):null}
+ const n=norm(model);
+ const u7={"50U7STUK":{cb:50,trade:50,code:"TRADETV50"},"55U7STUK":{cb:100,trade:50,code:"TRADETV50"},"65U7STUK":{cb:200,trade:100,code:"TRADETV100"},"75U7STUK":{cb:200,trade:100,code:"TRADETV100"},"85U7STUK":{cb:300,trade:250,code:"TRADETV250"},"100U7STUK":{cb:500,trade:250,code:"TRADETV250"}};
+ const key=Object.keys(u7).find(x=>norm(x)===n);
+ if(key){const d=u7[key];return {cb:d.cb,trade:d.trade,code:d.code,effective:price!=null?Math.max(0,price-d.cb-d.trade):null};}
+ let cb=CB[Object.keys(CB).find(x=>norm(x)===n)]||0, t=trade(model,price);
+ return {cb,trade:t?t.off:0,code:t?t.code:"",effective:price!=null?Math.max(0,price-cb-(t?t.off:0)):null};
 }
 function money(n){return n==null?"—":"£"+Number(n).toLocaleString("en-GB")}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -892,10 +896,37 @@ renderSalesLog(); renderHome(); renderStats(); renderSalesLog(); updateHomeTotal
 document.getElementById("cancelEditSale").onclick=resetSaleForm;
 document.getElementById("salesLogSearch").addEventListener("input",renderSalesLog);
 
+// Live Currys pricing: price-data.json is refreshed by the GitHub Actions price updater.
+// The app uses the exact Currys price when the daily feed contains one, with the
+// catalogue value only as a fallback.
+let LIVE_PRICE_DATA=null;
+let LIVE_PRICE_READY=false;
+function currentCurrysPrice(model,fallback){
+  const entry=LIVE_PRICE_DATA?.models?.[model];
+  const p=entry?.prices?.Currys;
+  return Number.isFinite(Number(p)) ? Number(p) : Number(fallback);
+}
+function currentEffectiveCost(model,fallback){
+  const price=currentCurrysPrice(model,fallback);
+  const d=typeof deal==="function"?deal(model,price):{effective:price};
+  return Number.isFinite(Number(d.effective))?Number(d.effective):price;
+}
+async function loadLiveCurrysPrices(){
+  try{
+    const r=await fetch("price-data.json?ts="+Date.now(),{cache:"no-store"});
+    if(!r.ok)throw new Error("price data unavailable");
+    LIVE_PRICE_DATA=await r.json();
+    LIVE_PRICE_READY=true;
+    if(typeof findTV==="function" && document.getElementById("tvResult")) findTV();
+    if(typeof renderOffer==="function" && document.getElementById("offerModel")?.value.trim()) renderOffer();
+  }catch(e){ LIVE_PRICE_READY=false; }
+}
+document.addEventListener("DOMContentLoaded",()=>loadLiveCurrysPrices());
+
 function findTV(){
   const q=norm(document.getElementById("tvSearch")?.value||"");
   const b=document.getElementById("budget")?.value||"";
-  const s=document.getElementById("size")?.value||"";
+  const sz=document.getElementById("size")?.value||"";
   const n=document.getElementById("need")?.value||"";
   const t=document.getElementById("tech")?.value||"";
   const out=document.getElementById("tvResult");
@@ -908,17 +939,16 @@ function findTV(){
 
   const matches=TVs.filter(x=>{
     const model=String(x[0]||"");
-    const price=Number(x[1]);
+    const fallback=Number(x[1]);
+    const price=currentCurrysPrice(model,fallback);
     const type=String(x[2]||"");
-    if(q && !norm(model).includes(q)) return false;
+    if(q && !norm(model).includes(q) && !norm(model.replace(/STUK(?:PRO)?$/i,"")).includes(q)) return false;
     if(b && (!Number.isFinite(price) || price>Number(b))) return false;
-    if(s && getSize(model)!==String(s)) return false;
+    if(sz && getSize(model)!==String(sz)) return false;
     if(t && type!==String(t)) return false;
     return Number.isFinite(price);
   });
 
-  // Keep the customer's "need" as a ranking preference only. Never use it
-  // to hide otherwise matching TVs.
   const rank=m=>{
     const model=String(m[0]||"");
     if(n==="gaming") return /U7|U8|UR8|UR9/i.test(model)?0:1;
@@ -926,7 +956,12 @@ function findTV(){
     if(n==="picture"||n==="brightness") return /UR8|UR9|U8/i.test(model)?0:1;
     return 0;
   };
-  matches.sort((a,z)=>rank(a)-rank(z)||Number(z[1])-Number(a[1]));
+
+  matches.sort((a,z)=>{
+    const ea=currentEffectiveCost(a[0],a[1]);
+    const ez=currentEffectiveCost(z[0],z[1]);
+    return rank(a)-rank(z)||ea-ez;
+  });
 
   if(!matches.length){
     out.innerHTML=`<div class="card"><b>No TVs match those filters.</b>
@@ -934,9 +969,9 @@ function findTV(){
     return;
   }
 
-  const cards=matches.map((x,i)=>{
+  out.innerHTML=matches.map((x,i)=>{
     const model=String(x[0]);
-    const price=Number(x[1]);
+    const price=currentCurrysPrice(model,Number(x[1]));
     const type=String(x[2]||"TV");
     const d=typeof deal==="function"?deal(model,price):{trade:0,cb:0,effective:price};
     const r=typeof rate==="function"?rate(model):null;
@@ -946,7 +981,8 @@ function findTV(){
     return `<div class="result" style="margin-top:${i?10:0}px">
       ${i===0?`<div class="muted" style="margin-bottom:4px">Best match</div>`:""}
       <h3>${model}</h3>
-      <div class="price">${money(price)}</div>
+      <div class="price">Effective cost: ${money(effective)}</div>
+      <div class="muted">Currys price: ${money(price)}</div>
       <div class="pills">
         <span class="pill">${type}</span>
         <span class="pill">${getSize(model)}" screen</span>
@@ -954,38 +990,49 @@ function findTV(){
       </div>
       <div class="offer">
         <b>Customer deal</b>
-        <div>Trade-in: <strong>${money(trade)}</strong>${d.code?` (${d.code})`:""}</div>
+        <div>Trade-in: <strong>${money(trade)}</strong>${d.code?` • ${d.code}`:""}</div>
         <div>Cashback: <strong>${money(cb)}</strong></div>
         <div class="saving">Effective cost: ${money(effective)}</div>
-        <button class="offer-btn" data-offer-model="${model.replace(/"/g,'&quot;')}">View offers</button>
       </div>
+      <button class="secondary" style="width:100%;margin-top:9px" type="button" data-offer-model="${model}">View offers</button>
     </div>`;
   }).join("");
 
-  out.innerHTML=`<div class="muted" style="margin-bottom:10px">${matches.length} TV${matches.length===1?"":"s"} match your filters</div>${cards}`;
+  out.querySelectorAll("[data-offer-model]").forEach(btn=>btn.onclick=()=>viewOffers(btn.dataset.offerModel));
 }
-
-
 function renderOffer(){
  const input=document.getElementById("offerModel");
  const box=document.getElementById("offerResult");
- const q=norm(input.value.trim());
+ const raw=input.value.trim();
+ const q=norm(raw);
  if(!q){box.innerHTML="";return}
 
- const matches=TVs.filter(x=>norm(x[0]).includes(q)).slice(0,12);
+ // Accept full model codes, shortened codes such as 65U7S, and range searches such as U7S.
+ const matches=TVs.filter(x=>{
+   const model=String(x[0]||"");
+   const aliases=[
+     norm(model),
+     norm(model.replace(/STUK(?:PRO)?$/i,"")),
+     norm(model.replace(/^\d+/,"")),
+     norm(model.replace(/STUK(?:PRO)?$/i,"").replace(/^\d+/,""))
+   ];
+   return aliases.some(a=>a.includes(q)||q.includes(a));
+ }).slice(0,20);
+
  if(!matches.length){
-   box.innerHTML=`<div class="muted" style="padding:10px 2px">No TV models found. Try a model such as 65UR8STUK, 75U8Q or 55E7STUK PRO.</div>`;
+   box.innerHTML=`<div class="muted" style="padding:10px 2px">No TV models found. Try 50U7S, 65U7S, 75U7S or 65UR8STUK.</div>`;
    return;
  }
 
- if(matches.length===1 && norm(matches[0][0])===q){
-   const m=matches[0][0],p=matches[0][1],d=deal(m,p);
-   box.innerHTML=`<div class="offer"><b>${m}</b><div>TV price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div>Trade-in: ${money(d.trade)} ${d.code?"• "+d.code:""}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div>${(/(?:^|[A-Z])U\d|UR|UX/i.test(m))?`<div class="xbox-offer"><b>Xbox promotion</b><span>Free personalised Xbox Wireless Controller + 1 month Game Pass</span></div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
+ if(matches.length===1 || matches.some(x=>norm(x[0])===q)){
+   const exact=matches.find(x=>norm(x[0])===q)||matches[0];
+   const m=exact[0],p=currentCurrysPrice(m,exact[1]),d=deal(m,p);
+   box.innerHTML=`<div class="offer"><b>${m}</b><div>Currys price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div>Trade-in: ${money(d.trade)} ${d.code?"• "+d.code:""}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div>${(/(?:^|[A-Z])U\d|UR|UX/i.test(m))?`<div class="xbox-offer"><b>Xbox promotion</b><span>Free personalised Xbox Wireless Controller + 1 month Game Pass</span></div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
    return;
  }
 
  box.innerHTML=`<div class="muted" style="margin:8px 0">TV models matching “${input.value.trim()}”</div>`+
-   matches.map(x=>`<div class="offer-match"><b>${x[0]}</b><span class="muted">${x[1]==null?"Price TBC":money(x[1])}</span><br><button type="button" data-offer-model="${x[0]}">View offers</button></div>`).join("");
+   matches.map(x=>`<div class="offer-match"><b>${x[0]}</b><span class="muted">Currys ${x[1]==null?"Price TBC":money(currentCurrysPrice(x[0],x[1]))}</span><br><button type="button" data-offer-model="${x[0]}">View offers</button></div>`).join("");
  box.querySelectorAll("[data-offer-model]").forEach(b=>b.onclick=()=>{
    input.value=b.dataset.offerModel;
    renderOffer();
@@ -1317,23 +1364,20 @@ function renderSoundbarDetail(){
 
 
 function getSalesMix(list){
- const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"];
+ const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","S5120GQ","S5120Q","HT SATURN"];
  const isSoundbar=m=>soundbarModels.some(x=>norm(x)===norm(m));
- let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0,tvValue=0;
+ let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0;
  list.forEach(s=>{
    const m=String(s[1]||"").toUpperCase(),q=Number(s[2]||0);
    if(isSoundbar(m)){soundbars+=q;return}
-   const price=Number(s[4]||0);
-   const value=price*q;
    tvUnits+=q;
-   tvValue+=value;
-   if(/UR8|UR9|UXT|UXQ/.test(m)) rgb+=value;
-   else if(/U7|U8/.test(m)) mini+=value;
-   else if(/Q7|Q8|E7/.test(m)) qled+=value;
-   else led+=value;
+   if(/UR8|UR9|UXT|UXQ/.test(m)) rgb+=q;
+   else if(/U7|U8/.test(m)) mini+=q;
+   else if(/Q7|Q8|E7/.test(m)) qled+=q;
+   else led+=q;
  });
- const p=value=>tvValue?Math.round(value/tvValue*100):0;
- return {led,qled,mini,rgb,soundbars,tvUnits,tvValue,p};
+ const p=n=>tvUnits?Math.round(n/tvUnits*100):0;
+ return {led,qled,mini,rgb,soundbars,tvUnits,p};
 }
 
 function isoWeekNumber(dateString){
@@ -1625,15 +1669,19 @@ function checkPriceMatch(){
     out.innerHTML="That model is not in the current Price Match Finder catalogue. Please choose a current STUK model.";
     return;
   }
-  const hisense=item&&item[1]!=null?Number(item[1]):null;
   const snap=PMF_SNAPSHOT[model]||{};
   const liveKey=pmfBaseModel(model);
   const livePrices=pmfLivePrices(model);
   const merged={...snap,...livePrices};
+  // App Price must mirror the current Currys price whenever the daily
+  // retailer feed has a Currys value. Fall back to the catalogue price only
+  // when no Currys price is available in the feed yet.
+  const currysPrice=pmfPriceForRetailer(merged,"Currys");
+  const hisense=currysPrice!=null?currysPrice:(item&&item[1]!=null?Number(item[1]):null);
   const verified=Object.values(merged).filter(v=>typeof v==="number" && Number.isFinite(v)).length;
   const retailerRows=pmfRetailerRows(model,snap);
   const baseNote=(liveKey!==model)?`<div class="pmf-note" style="margin-top:7px;opacity:.9"><strong>Price comparison matched to ${liveKey}</strong> — Price4 lists this retail model without the PRO label.</div>`:"";
-  const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>Hisense app price</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
+  const priceBlock=hisense!=null?`<div class="pmf-price-card"><div class="pmf-price-head"><b>App Price (Currys)</b><span class="pmf-price-value">£${hisense.toLocaleString("en-GB")}</span></div></div>`:"";
   const updated=PMF_LAST_UPDATED?`Updated ${new Date(PMF_LAST_UPDATED).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}`:(verified?"Using the latest saved retailer prices":"No saved retailer price found yet");
   const feedNote=PMF_LAST_UPDATED?"Daily price feed loaded. Retailer stock, promotions and voucher prices can change, so confirm the retailer price before promising a match.":"This GitHub copy does not currently contain the optional daily price-data file. The retailer buttons below open live retailer searches; saved prices are shown where available.";
   out.innerHTML=`<div><strong>${model}</strong></div>${priceBlock}<div class="pmf-price-card"><div class="pmf-price-head"><b>UK retailer prices</b><span>${verified} priced</span></div>${baseNote}<div class="pmf-retailers">${retailerRows}</div><div class="pmf-live"><strong>${updated}</strong><button class="pmf-live-btn" onclick="loadPmfLiveData().then(()=>checkPriceMatch())">Refresh</button></div><div class="pmf-note">${feedNote}</div></div>`;
