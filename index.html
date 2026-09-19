@@ -963,7 +963,7 @@ function findTV(){
   matches.sort((a,z)=>{
     const ea=currentEffectiveCost(a[0],a[1]);
     const ez=currentEffectiveCost(z[0],z[1]);
-    return rank(a)-rank(z)||ea-ez;
+    return rank(a)-rank(z)||ez-ea;
   });
 
   if(!matches.length){
