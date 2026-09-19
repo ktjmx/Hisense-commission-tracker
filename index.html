@@ -149,7 +149,11 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 #coach{scroll-margin-top:0}
 #coach .coach-panel{position:relative;top:auto;transform:none;margin-top:0}
 #coach .coach-panel-head{position:relative}
-</style><style id="statsStyles">
+</style>
+<style id="valShareStyles">
+.valshare-tab{margin:0 0 14px;display:flex;gap:8px}.valshare-tab button{border:1px solid #31575b;background:#0d191b;color:#dce7e7;border-radius:12px;padding:10px 14px;font-weight:900;cursor:pointer}.valshare-tab button.active{background:#dce7e7;color:#0d191b}.valshare-panel{display:none}.valshare-panel.active{display:block}.valshare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.valshare-input label{display:block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#9db0b1;margin-bottom:6px}.valshare-input input{width:100%;box-sizing:border-box;background:#0d191b;border:1px solid #31575b;color:#f4f7f7;border-radius:12px;padding:13px;font-size:17px;font-weight:800}.valshare-result{margin-top:12px;padding:16px;border-radius:16px;background:#0d191b;border:1px solid #31575b}.valshare-result .big{font-size:34px;font-weight:950;color:#f1d79e}.valshare-result .sub{margin-top:5px;color:#9db0b1;font-size:12px}.valshare-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.valshare-actions button{border:0;border-radius:12px;padding:11px 15px;font-weight:900;cursor:pointer}.valshare-calc{background:#dce7e7;color:#0d191b}.valshare-reset{background:#1a292b;color:#dce7e7;border:1px solid #31575b!important}@media(max-width:520px){.valshare-grid{grid-template-columns:1fr}}
+</style>
+<style id="statsStyles">
 .stats-hero{margin-bottom:14px}.stats-hero .eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;opacity:.65}.stats-hero h1{margin:3px 0}.stats-hero p{margin:4px 0 0;opacity:.7}.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.stat-card{padding:16px;border-radius:18px;background:var(--card,#fff);border:1px solid var(--line,#ddd);box-shadow:0 6px 18px rgba(0,0,0,.05)}.stat-card span{display:block;font-size:11px;opacity:.65}.stat-card strong{display:block;font-size:24px;margin-top:5px}.pay-estimate{padding:14px 0;border-bottom:1px solid var(--line,#ddd)}.pay-estimate:last-child{border-bottom:0}.pay-head{display:flex;justify-content:space-between;gap:10px}.pay-date{font-weight:800}.pay-sub{font-size:11px;opacity:.65}.pay-amount{font-size:20px;font-weight:900}.section-title{display:flex;justify-content:space-between;align-items:end;gap:8px}.section-title h2{margin:0}.section-title span{font-size:11px;opacity:.6}@media(max-width:390px){.stats-grid{grid-template-columns:1fr 1fr}.stat-card strong{font-size:20px}}
 </style><style id="coachComparisonGrid">.comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.comparison-grid>div{border:1px solid var(--line);border-radius:13px;padding:10px}.comparison-grid h4{margin:0 0 7px;font-size:13px}.coach-spec-row{font-size:11px}@media(max-width:390px){.comparison-grid{grid-template-columns:1fr}}</style>
 <style id="polishedCoachStyles">
@@ -616,6 +620,21 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="section-title"><h2>Paydays</h2><span>Commission by pay period</span></div>
     <div id="payday"><div class="muted">Loading your pay periods…</div></div>
   </div>
+
+  <div class="valshare-tab">
+    <button id="valShareTab" type="button" onclick="toggleValShare()">VAL SHARE</button>
+  </div>
+  <div id="valSharePanel" class="card valshare-panel">
+    <div class="section-title"><h2>VAL SHARE</h2><span>Value share calculator</span></div>
+    <p class="muted">Enter the total Hisense sales value and the total competitor sales value.</p>
+    <div class="valshare-grid">
+      <div class="valshare-input"><label for="valShareHisense">Hisense VAL</label><input id="valShareHisense" inputmode="decimal" type="number" min="0" step="0.01" placeholder="£0"></div>
+      <div class="valshare-input"><label for="valShareCompetitors">Competitor VAL</label><input id="valShareCompetitors" inputmode="decimal" type="number" min="0" step="0.01" placeholder="£0"></div>
+    </div>
+    <div class="valshare-actions"><button class="valshare-calc" type="button" onclick="calculateValShare()">Calculate VAL SHARE</button><button class="valshare-reset" type="button" onclick="resetValShare()">Reset</button></div>
+    <div id="valShareResult" class="valshare-result" aria-live="polite"><div class="big">0%</div><div class="sub">Enter both values to calculate Hisense share of total value.</div></div>
+  </div>
+
   <div class="card commission-search-card">
     <div class="section-title"><h2>Commission Search</h2><span>Current rates</span></div>
     <p class="muted">Pick a model to instantly see the current commission value.</p>
@@ -2014,6 +2033,38 @@ document.addEventListener("DOMContentLoaded",function(){
 })();
 </script>
 
+
+<script id="valShareCalculator">
+(function(){
+  const KEY="hisenseValShare";
+  function el(id){return document.getElementById(id)}
+  function num(id){const n=Number(el(id)?.value);return Number.isFinite(n)&&n>=0?n:0}
+  window.toggleValShare=function(){
+    const panel=el("valSharePanel"),tab=el("valShareTab");
+    if(!panel||!tab)return;
+    const open=!panel.classList.contains("active");
+    panel.classList.toggle("active",open);
+    tab.classList.toggle("active",open);
+    if(open)calculateValShare();
+  };
+  window.calculateValShare=function(){
+    const h=num("valShareHisense"),c=num("valShareCompetitors"),total=h+c;
+    const share=total>0?(h/total)*100:0;
+    const r=el("valShareResult");
+    if(r)r.innerHTML=`<div class="big">${share.toFixed(1)}%</div><div class="sub">Hisense ${money(h)} of ${money(total)} total value</div>`;
+    try{localStorage.setItem(KEY,JSON.stringify({h,c}))}catch(e){}
+  };
+  window.resetValShare=function(){
+    if(el("valShareHisense"))el("valShareHisense").value="";
+    if(el("valShareCompetitors"))el("valShareCompetitors").value="";
+    const r=el("valShareResult");if(r)r.innerHTML='<div class="big">0%</div><div class="sub">Enter both values to calculate Hisense share of total value.</div>';
+    try{localStorage.removeItem(KEY)}catch(e){}
+  };
+  document.addEventListener("DOMContentLoaded",function(){
+    try{const d=JSON.parse(localStorage.getItem(KEY)||"null");if(d){el("valShareHisense").value=d.h??"";el("valShareCompetitors").value=d.c??"";calculateValShare()}}catch(e){}
+  });
+})();
+</script>
 </body></html><style id="finalSalesLogFix">
 #saleDate{width:220px;max-width:220px;box-sizing:border-box}
 @media(max-width:520px){#saleDate{width:220px;max-width:220px}}
