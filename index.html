@@ -904,7 +904,9 @@ let LIVE_PRICE_READY=false;
 function currentCurrysPrice(model,fallback){
   const entry=LIVE_PRICE_DATA?.models?.[model];
   const p=entry?.prices?.Currys;
-  return Number.isFinite(Number(p)) ? Number(p) : Number(fallback);
+  if(p!==undefined && p!==null && p!=="" && Number.isFinite(Number(p)) && Number(p)>0) return Number(p);
+  const fb=Number(fallback);
+  return Number.isFinite(fb) && fb>0 ? fb : null;
 }
 function currentEffectiveCost(model,fallback){
   const price=currentCurrysPrice(model,fallback);
@@ -943,7 +945,8 @@ function findTV(){
     const price=currentCurrysPrice(model,fallback);
     const type=String(x[2]||"");
     if(q && !norm(model).includes(q) && !norm(model.replace(/STUK(?:PRO)?$/i,"")).includes(q)) return false;
-    if(b && (!Number.isFinite(price) || price>Number(b))) return false;
+    const effective=currentEffectiveCost(model,fallback);
+    if(b && (!Number.isFinite(Number(effective)) || Number(effective)>Number(b))) return false;
     if(sz && getSize(model)!==String(sz)) return false;
     if(t && type!==String(t)) return false;
     return Number.isFinite(price);
@@ -973,6 +976,7 @@ function findTV(){
     const model=String(x[0]);
     const price=currentCurrysPrice(model,Number(x[1]));
     const type=String(x[2]||"TV");
+    if(!Number.isFinite(Number(price))) return "";
     const d=typeof deal==="function"?deal(model,price):{trade:0,cb:0,effective:price};
     const r=typeof rate==="function"?rate(model):null;
     const trade=Number(d.trade)||0, cb=Number(d.cb)||0;
