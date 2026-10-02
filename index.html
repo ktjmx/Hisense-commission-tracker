@@ -1016,6 +1016,7 @@ function findTV(){
         <b>Customer deal</b>
         <div>Cashback: <strong>${money(cb)}</strong></div>
         <div class="saving">Effective cost: ${money(effective)}</div>
+        ${promoForModel(model)?`<div style="margin-top:7px"><strong>PERKS Save £${promoForModel(model).amount}</strong> • ${promoForModel(model).code}</div>`:""}
       </div>
       <button class="secondary" style="width:100%;margin-top:9px" type="button" data-offer-model="${model}">View offers</button>
     </div>`;
@@ -1023,6 +1024,24 @@ function findTV(){
 
   out.querySelectorAll("[data-offer-model]").forEach(btn=>btn.onclick=()=>viewOffers(btn.dataset.offerModel));
 }
+
+// Current Perks promo barcodes from the supplied Currys barcode sheet.
+// These are used directly by "Find a TV's deal".
+const NEW_PROMO_BARCODES=[
+  {amount:500,code:"TVPERKS500",barcode:"200055340410648",models:["116UHQ TUK","100UHQ TUK","110UHQ TUK"]},
+  {amount:300,code:"TVPERKS300",barcode:"200055339835979",models:["100UR8STUK","100U7STUK"]},
+  {amount:200,code:"TVPERKS200",barcode:"200055339835979",models:["75UR9STUK","85UR9STUK","75UR8STUK","85UR8STUK","100U7STUK PRO","100E7STUK PRO"]},
+  {amount:150,code:"TVPERKS150",barcode:"200055340033531",models:["85U7STUK"]},
+  {amount:100,code:"TVPERKS100",barcode:"200055340194705",models:["65UR9STUK","55UR8STUK","65UR8STUK","55U7STUK PRO","65U7STUK PRO","75U7STUK PRO","85U7STUK PRO","75U7STUK","55S7STUK","75E7STUK PRO","85E7STUK PRO"]},
+  {amount:50,code:"TVPERKS50",barcode:"200055340385761",models:["50U7STUK"]}
+];
+
+function promoForModel(model){
+  const n=norm(model);
+  if(!n)return null;
+  return NEW_PROMO_BARCODES.find(p=>p.models.some(m=>norm(m)===n))||null;
+}
+
 function renderOffer(){
  const input=document.getElementById("offerModel");
  const box=document.getElementById("offerResult");
@@ -1033,11 +1052,14 @@ function renderOffer(){
  // Accept full model codes, shortened codes such as 65U7S, and range searches such as U7S.
  const matches=TVs.filter(x=>{
    const model=String(x[0]||"");
+   const base=model.replace(/STUK/gi,"").replace(/PRO/gi,"").replace(/[^A-Z0-9 ]/gi,"");
    const aliases=[
      norm(model),
      norm(model.replace(/STUK(?:PRO)?$/i,"")),
      norm(model.replace(/^\d+/,"")),
-     norm(model.replace(/STUK(?:PRO)?$/i,"").replace(/^\d+/,""))
+     norm(model.replace(/STUK(?:PRO)?$/i,"").replace(/^\d+/,"")),
+     norm(base),
+     norm(base.replace(/^\d+/,""))
    ];
    return aliases.some(a=>a.includes(q)||q.includes(a));
  }).slice(0,20);
@@ -1050,14 +1072,14 @@ function renderOffer(){
  if(matches.length===1 || matches.some(x=>norm(x[0])===q)){
    const exact=matches.find(x=>norm(x[0])===q)||matches[0];
    const m=exact[0],p=currentCurrysPrice(m,exact[1]),d=deal(m,p);
-   const promo=NEW_PROMO_BARCODES.find(x=>x.models.some(mm=>norm(mm)===norm(m)));
+   const promo=typeof promoForModel==="function"?promoForModel(m):null;
    const promoHtml=promo?`<div class="barcode-card" style="margin-top:10px"><div class="barcode-top"><div class="barcode-title">PERKS Save £${promo.amount}</div><div class="barcode-amount">${promo.code}</div></div><div class="barcode-number">Barcode: ${promo.barcode}</div><div class="barcode-models">Use this barcode for <strong>${m}</strong>.</div></div>`:"";
    box.innerHTML=`<div class="offer"><b>${m}</b><div>Currys price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div>${promoHtml}${(/(?:^|[A-Z])U\d|UR|UX/i.test(m))?`<div class="xbox-offer"><b>Xbox promotion</b><span>Free personalised Xbox Wireless Controller + 1 month Game Pass</span></div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
    return;
  }
 
  box.innerHTML=`<div class="muted" style="margin:8px 0">TV models matching “${input.value.trim()}”</div>`+
-   matches.map(x=>{const promo=NEW_PROMO_BARCODES.find(y=>y.models.some(mm=>norm(mm)===norm(x[0])));return `<div class="offer-match"><b>${x[0]}</b><span class="muted">Currys ${x[1]==null?"Price TBC":money(currentCurrysPrice(x[0],x[1]))}</span>${promo?`<div class="muted" style="margin-top:4px">PERKS Save £${promo.amount} • ${promo.code}</div>`:""}<br><button type="button" data-offer-model="${x[0]}">View offers</button></div>`}).join("");
+   matches.map(x=>{const promo=typeof promoForModel==="function"?promoForModel(x[0]):null;return `<div class="offer-match"><b>${x[0]}</b><span class="muted">Currys ${x[1]==null?"Price TBC":money(currentCurrysPrice(x[0],x[1]))}</span>${promo?`<div class="muted" style="margin-top:4px">PERKS Save £${promo.amount} • ${promo.code}</div>`:""}<br><button type="button" data-offer-model="${x[0]}">View offers</button></div>`}).join("");
  box.querySelectorAll("[data-offer-model]").forEach(b=>b.onclick=()=>{
    input.value=b.dataset.offerModel;
    renderOffer();
