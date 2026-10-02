@@ -391,6 +391,18 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 }
 </style>
 
+
+<style id="promoBarcodeStyles">
+.barcode-card{background:#0d2023;border:1px solid #294b4f;border-radius:14px;padding:13px;margin-top:10px}
+.barcode-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.barcode-title{font-weight:900;font-size:15px}
+.barcode-amount{font-weight:900;color:#f1d79e;white-space:nowrap}
+.barcode-code{margin-top:5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:800;color:#fff}
+.barcode-number{margin-top:4px;color:#9eb0b2;font-size:11px;word-break:break-all}
+.barcode-models{margin-top:8px;color:#dce7e7;font-size:11px;line-height:1.45}
+.barcode-search{width:100%;padding:13px;border-radius:12px;border:1px solid #294246;background:#0d1719;color:#fff;font:inherit;font-weight:700}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -444,7 +456,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   <div class="grid">
     <button class="action" data-go="sales"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="actionCopy"><b>Log a Sale</b><small>Add your commission</small></span></span></button>
     <button class="action" data-go="hub"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="13" rx="1.5"/><path d="M9 21h6M12 18v3"/></svg></span><span class="actionCopy"><b>Find a TV</b><small>Match the customer to the right model</small></span></span></button>
-    <button class="action" data-go="offers"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><path d="m20.2 11.5-8.7 8.7-7.7-7.7L5.3 4h8.1z"/><circle cx="9" cy="8.3" r="1.1"/></svg></span><span class="actionCopy"><b>Latest Offers</b><small>Cashback, trade-in &amp; bundles</small></span></span></button>
+    <button class="action" data-go="offers"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><path d="m20.2 11.5-8.7 8.7-7.7-7.7L5.3 4h8.1z"/><circle cx="9" cy="8.3" r="1.1"/></svg></span><span class="actionCopy"><b>Latest Offers</b><small>Cashback &amp; bundles</small></span></span></button>
     <button class="action" data-go="coach"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><path d="m3 9 9-4 9 4-9 4-9-4Z"/><path d="M7 11.2v4.2c2.9 2.1 7.1 2.1 10 0v-4.2"/><path d="M21 9v6"/></svg></span><span class="actionCopy"><b>Sales Coach</b><small>Get the perfect pitch</small></span></span></button>
   </div>
 </section>
@@ -510,10 +522,24 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   <div class="card">
     <div class="section-title">Current offers</div>
     <div class="offer"><b>💷 Cashback</b><span class="muted">9 Sep 2026 – 27 Oct 2026. Search a model below for the exact cashback.</span></div>
-    <div class="offer"><b>🔄 Trade-in</b><span class="muted">19 Aug 2026 – 29 Sep 2026. Eligible TVs can receive up to £300 off.</span></div>
     <div class="offer"><b>🎮 Xbox bundle</b><span class="muted">Selected Mini LED TVs include a free personalised Xbox controller + 1 month Game Pass.</span></div>
     <div class="offer"><b>◫ 50% off selected soundbars</b><span class="muted">Buy a selected soundbar with <strong>any Hisense TV</strong> — all Hisense TV models qualify.</span></div>
   </div>
+
+  <div class="card" id="promoBarcodesCard">
+    <div class="section-title">New promo barcodes <span>01 Oct 2026 – 24 Feb 2027</span></div>
+    <p class="muted">Use these if the barcode does not scan. Search a model to find the matching Perks code.</p>
+    <input id="barcodeModelSearch" class="barcode-search" type="search" placeholder="Search model e.g. 65U7STUK">
+    <div id="promoBarcodeResults"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Vision promo codes <span>04 Sep 2026 – 27 Oct 2026</span></div>
+    <div class="barcode-card"><div class="barcode-top"><div class="barcode-title">£100 off P1TUK</div><div class="barcode-amount">VISION1000FF</div></div><div class="barcode-number">Barcode: 200055001286030</div></div>
+    <div class="barcode-card"><div class="barcode-top"><div class="barcode-title">£150 off PX3TUK</div><div class="barcode-amount">VISION1500FF</div></div><div class="barcode-number">Barcode: 200033466791992</div></div>
+    <div class="barcode-card"><div class="barcode-top"><div class="barcode-title">Marked-price offer — 43E7QTUK</div><div class="barcode-amount">643519</div></div><div class="barcode-number">Barcode: 200049841754042</div></div>
+  </div>
+
   <div class="card">
     <div class="section-title">Check a model's deal</div>
     <div class="field"><label>Model</label><input id="offerModel" list="modelList" placeholder="e.g. 65UR8STUK"></div>
@@ -696,9 +722,6 @@ const OLD_R={
 "55A85Q":10,"65A85Q":10,"55 Canvas":15,"65 Canvas":20,"55U8Q":15,"65U8Q":20,"75U8Q":25,"85U8Q":30,"100U8Q":40,
 "43A6STUK":0,"50A6STUK":0,"55A6STUK":0,"65A6STUK":0};
 const CB={"116UXQTUK":1000,"100UXQTUK":500,"85UR9STUK":300,"75UR9STUK":300,"65UR9STUK":200,"100UR8STUK":500,"85UR8STUK":300,"75UR8STUK":200,"65UR8STUK":200,"55UR8STUK":200,"100U7STUK":500,"85U7STUK":300,"75U7STUK":200,"65U7STUK":200,"55U7STUK":100,"50U7STUK":50,"85Q8STUK":300,"75Q8STUK":200,"65Q8STUK":200,"55Q8STUK":100,"50Q8STUK":50,"100E7STUK PRO":300,"85E7STUK PRO":300,"75E7STUK PRO":100,"65E7STUK PRO":100,"55E7STUK PRO":50,"50E7STUK PRO":50,"43E7STUK PRO":50,"85Q7STUK":100,"75Q7STUK":50,"65Q7STUK":50,"55Q7STUK":25,"50Q7STUK":25,"43Q7STUK":25,"L9QTUK PRO":200,"L9QTUK":200,"XR10TUK":200,"PX4TUK PRO":100,"P1TUK":50,"C3TUK ULTRA MAX":200,"C3TUK ULTRA":100,"C3TUK PRO":100};
-const TRADE=[
-{x:1999,off:300,code:"TRADERGB300",rgb:1},{x:1499,off:200,code:"TRADERGB200",rgb:1},{x:999,off:150,code:"TRADERGB150",rgb:1},
-{x:1999,off:250,code:"TRADETV250"},{x:1499,off:150,code:"TRADETV150"},{x:999,off:100,code:"TRADETV100"},{x:649,off:50,code:"TRADETV50"}];
 const TVs=[
 ["43A6STUK",279,"QLED"],["50A6STUK",329,"QLED"],["55A6STUK",399,"QLED"],["65A6STUK",499,"QLED"],
 ["43Q7STUK",349,"QLED"],["50Q7STUK",429,"QLED"],["55Q7STUK",499,"QLED"],["65Q7STUK",649,"QLED"],["75Q7STUK",899,"QLED"],["85Q7STUK",1299,"QLED"],
@@ -725,18 +748,10 @@ function rateForDate(model,date){
  return k?table[k]:null;
 }
 function priceOf(model){let n=norm(model);let x=TVs.find(t=>norm(t[0])===n);return x?x[1]:null}
-function trade(model,price){
- let rgb=/UR8|UR9|UXT|UXQ/i.test(model);
- let list=TRADE.filter(x=>!!x.rgb===rgb).sort((a,b)=>b.x-a.x);
- return list.find(x=>price>=x.x)||null
-}
 function deal(model,price){
  const n=norm(model);
- const u7={"50U7STUK":{cb:50,trade:50,code:"TRADETV50"},"55U7STUK":{cb:100,trade:50,code:"TRADETV50"},"65U7STUK":{cb:200,trade:100,code:"TRADETV100"},"75U7STUK":{cb:200,trade:100,code:"TRADETV100"},"85U7STUK":{cb:300,trade:250,code:"TRADETV250"},"100U7STUK":{cb:500,trade:250,code:"TRADETV250"}};
- const key=Object.keys(u7).find(x=>norm(x)===n);
- if(key){const d=u7[key];return {cb:d.cb,trade:d.trade,code:d.code,effective:price!=null?Math.max(0,price-d.cb-d.trade):null};}
- let cb=CB[Object.keys(CB).find(x=>norm(x)===n)]||0, t=trade(model,price);
- return {cb,trade:t?t.off:0,code:t?t.code:"",effective:price!=null?Math.max(0,price-cb-(t?t.off:0)):null};
+ const cb=CB[Object.keys(CB).find(x=>norm(x)===n)]||0;
+ return {cb,trade:0,code:"",effective:price!=null?Math.max(0,price-cb):null};
 }
 function money(n){return n==null?"—":"£"+Number(n).toLocaleString("en-GB")}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -998,8 +1013,8 @@ function findTV(){
     if(!Number.isFinite(Number(price))) return "";
     const d=typeof deal==="function"?deal(model,price):{trade:0,cb:0,effective:price};
     const r=typeof rate==="function"?rate(model):null;
-    const trade=Number(d.trade)||0, cb=Number(d.cb)||0;
-    const effective=Number.isFinite(Number(d.effective))?Number(d.effective):price-trade-cb;
+    const cb=Number(d.cb)||0;
+    const effective=Number.isFinite(Number(d.effective))?Number(d.effective):price-cb;
 
     return `<div class="result" style="margin-top:${i?10:0}px">
       ${i===0?`<div class="muted" style="margin-bottom:4px">Best match</div>`:""}
@@ -1013,7 +1028,6 @@ function findTV(){
       </div>
       <div class="offer">
         <b>Customer deal</b>
-        <div>Trade-in: <strong>${money(trade)}</strong>${d.code?` • ${d.code}`:""}</div>
         <div>Cashback: <strong>${money(cb)}</strong></div>
         <div class="saving">Effective cost: ${money(effective)}</div>
       </div>
@@ -1050,7 +1064,7 @@ function renderOffer(){
  if(matches.length===1 || matches.some(x=>norm(x[0])===q)){
    const exact=matches.find(x=>norm(x[0])===q)||matches[0];
    const m=exact[0],p=currentCurrysPrice(m,exact[1]),d=deal(m,p);
-   box.innerHTML=`<div class="offer"><b>${m}</b><div>Currys price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div>Trade-in: ${money(d.trade)} ${d.code?"• "+d.code:""}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div>${(/(?:^|[A-Z])U\d|UR|UX/i.test(m))?`<div class="xbox-offer"><b>Xbox promotion</b><span>Free personalised Xbox Wireless Controller + 1 month Game Pass</span></div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
+   box.innerHTML=`<div class="offer"><b>${m}</b><div>Currys price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div>${(/(?:^|[A-Z])U\d|UR|UX/i.test(m))?`<div class="xbox-offer"><b>Xbox promotion</b><span>Free personalised Xbox Wireless Controller + 1 month Game Pass</span></div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
    return;
  }
 
@@ -1761,7 +1775,7 @@ const OBJECTIONS={
 "“TCL has better Mini LED.”":{response:"“TCL makes very good Mini LED TVs. The good thing is Hisense is right in that conversation — and with the UR range we can take it further with RGB Mini LED. Let's compare the same content.”",solution:"Against C7K show U7 Pro/U8. Against C8K show UR8/U8. Against X11L show UR9. Demonstrate brightness, contrast, colour and gaming."},
 "“OLED is better.”":{response:"“If perfect black levels in a darker room are your priority, OLED is fantastic. But I'd still show you the Hisense because Mini LED/RGB can give you very high brightness with premium colour and contrast. If you watch sport, daytime TV or HDR, that can make a real difference.”",solution:"Ask about their room and viewing. Demo bright sport/HDR on UR9/UR8 and link brightness directly to their use."},
 "“Hisense isn't as good.”":{response:"“I understand why you'd say that if you've always bought the big-name brands. Give me 30 seconds to show you this model properly. If you don't think the picture and features stack up, don't buy it.”",solution:"Demonstrate first, then link RGB colour, brightness, gaming, sound, size and value to their needs. Let the picture do the selling."},
-"“I've seen it cheaper elsewhere.”":{response:"“That's worth checking. Tell me the exact model and price and I'll check our Price Match Finder. If we can match it, you can still get the Hisense here with our current offers and support.”",solution:"Use Price Match Finder in Offers, verify exact model/retailer, then check cashback, trade-in and bundle promotions before closing."}
+"“I've seen it cheaper elsewhere.”":{response:"“That's worth checking. Tell me the exact model and price and I'll check our Price Match Finder. If we can match it, you can still get the Hisense here with our current offers and support.”",solution:"Use Price Match Finder in Offers, verify exact model/retailer, then check cashback and bundle promotions before closing."}
 };
 function showCoachPanel(panel){
  document.querySelectorAll(".coach-panel").forEach(x=>x.style.display="none");
@@ -2033,6 +2047,39 @@ document.addEventListener("DOMContentLoaded",function(){
 })();
 </script>
 
+
+
+<script id="newPromoBarcodes">
+const NEW_PROMO_BARCODES=[
+ {amount:500,code:"TVPERKS500",barcode:"200055340410648",models:["116UHQ TUK","100UHQ TUK","110UHNQ TUK"]},
+ {amount:300,code:"TVPERKS300",barcode:"200055339835979",models:["100UR8STUK","100U7STUK"]},
+ {amount:200,code:"TVPERKS200",barcode:"200055339835979",models:["75UR9STUK","85UR9STUK","75UR8STUK","85UR8STUK","100U7STUK PRO","100E7STUK PRO"]},
+ {amount:150,code:"TVPERKS150",barcode:"200055340033531",models:["85U7STUK"]},
+ {amount:100,code:"TVPERKS100",barcode:"200055340194705",models:["65UR9STUK","55UR8STUK","65UR8STUK","55U7STUK PRO","65U7STUK PRO","75U7STUK PRO","85U7STUK PRO","75U7STUK","55U7STUK","75E7STUK PRO","85E7STUK PRO"]},
+ {amount:50,code:"TVPERKS50",barcode:"200055340385761",models:["50U7STUK"]}
+];
+function renderPromoBarcodes(){
+ const box=document.getElementById("promoBarcodeResults");
+ if(!box)return;
+ const input=(document.getElementById("barcodeModelSearch")?.value||"").trim().toUpperCase().replace(/[^A-Z0-9]/g,"");
+ const list=input
+   ? NEW_PROMO_BARCODES.filter(x=>x.models.some(m=>m.toUpperCase().replace(/[^A-Z0-9]/g,"").includes(input)))
+   : NEW_PROMO_BARCODES;
+ box.innerHTML=list.length ? list.map(x=>`
+   <div class="barcode-card">
+     <div class="barcode-top">
+       <div class="barcode-title">PERKS Save £${x.amount}</div>
+       <div class="barcode-amount">${x.models.length} models</div>
+     </div>
+     <div class="barcode-code">${x.code}</div>
+     <div class="barcode-number">Barcode: ${x.barcode}</div>
+     <div class="barcode-models"><strong>Models:</strong> ${x.models.join(", ")}</div>
+   </div>`).join("")
+   : '<div class="muted" style="padding:12px 2px">No new promo barcode found for that model.</div>';
+}
+document.getElementById("barcodeModelSearch")?.addEventListener("input",renderPromoBarcodes);
+renderPromoBarcodes();
+</script>
 
 <script id="valShareCalculator">
 (function(){
