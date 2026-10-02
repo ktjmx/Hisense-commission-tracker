@@ -623,10 +623,10 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <p>Commission, units and pay-period progress.</p>
   </div>
   <div class="stats-grid">
-    <div class="stat-card"><span>Total commission</span><strong id="statsTotalCommission">£0.00</strong></div>
+    <div class="stat-card"><span>This pay period</span><strong id="statsTotalCommission">£0.00</strong></div>
     <div class="stat-card"><span>Units sold</span><strong id="statsCommissionUnits">0</strong></div>
     <div class="stat-card"><span>Sales entries</span><strong id="statsCommissionEntries">0</strong></div>
-    <div class="stat-card"><span>Average commission</span><strong id="statsAverageCommission">£0.00</strong></div>
+    <div class="stat-card"><span>Average this period</span><strong id="statsAverageCommission">£0.00</strong></div>
   </div>
   <div class="card">
     <div class="section-title"><h2>Paydays</h2><span>Commission by pay period</span></div>
@@ -1413,18 +1413,24 @@ function renderSoundbarDetail(){
 function getSalesMix(list){
  const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","S5120GQ","S5120Q","HT SATURN"];
  const isSoundbar=m=>soundbarModels.some(x=>norm(x)===norm(m));
- let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0;
+ let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0,tvValue=0;
  list.forEach(s=>{
    const m=String(s[1]||"").toUpperCase(),q=Number(s[2]||0);
    if(isSoundbar(m)){soundbars+=q;return}
    tvUnits+=q;
-   if(/UR8|UR9|UXT|UXQ/.test(m)) rgb+=q;
-   else if(/U7|U8/.test(m)) mini+=q;
-   else if(/Q7|Q8|E7/.test(m)) qled+=q;
-   else led+=q;
+   // Use the actual logged sale value when available. Legacy sales without a
+   // stored value fall back to the app's model price so the percentages still work.
+   const unitValue=Number(s[4]);
+   const fallback=typeof priceOf==="function"?Number(priceOf(m)):0;
+   const value=(Number.isFinite(unitValue)&&unitValue>0?unitValue:fallback)*q;
+   tvValue+=value;
+   if(/UR8|UR9|UXT|UXQ/.test(m)) rgb+=value;
+   else if(/U7|U8/.test(m)) mini+=value;
+   else if(/Q7|Q8|E7/.test(m)) qled+=value;
+   else led+=value;
  });
- const p=n=>tvUnits?Math.round(n/tvUnits*100):0;
- return {led,qled,mini,rgb,soundbars,tvUnits,p};
+ const p=n=>tvValue?Math.round(n/tvValue*100):0;
+ return {led,qled,mini,rgb,soundbars,tvUnits,tvValue,p};
 }
 
 function isoWeekNumber(dateString){
@@ -1453,8 +1459,13 @@ function updateHomeTotalVAL(){
 }
 
 function renderStats(){
- const total=typeof totalComm==="function"?totalComm():sales.reduce((a,s)=>a+Number(s[3]||0),0);
- const units=typeof totalUnits==="function"?totalUnits():sales.reduce((a,s)=>a+Number(s[2]||0),0);
+ const currentPeriodStart=40, currentPeriodEnd=44;
+ const currentPeriodSales=sales.filter(s=>{
+   const w=isoWeekNumber(s[0]);
+   return w>=currentPeriodStart && w<=currentPeriodEnd;
+ });
+ const total=currentPeriodSales.reduce((a,s)=>a+Number(s[3]||0),0);
+ const units=currentPeriodSales.reduce((a,s)=>a+Number(s[2]||0),0);
  const avg=units?total/units:0;
  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
  set("statsTotalCommission",money(total));
