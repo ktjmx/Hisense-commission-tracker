@@ -526,20 +526,6 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="offer"><b>◫ 50% off selected soundbars</b><span class="muted">Buy a selected soundbar with <strong>any Hisense TV</strong> — all Hisense TV models qualify.</span></div>
   </div>
 
-  <div class="card" id="promoBarcodesCard">
-    <div class="section-title">New promo barcodes <span>01 Oct 2026 – 24 Feb 2027</span></div>
-    <p class="muted">Use these if the barcode does not scan. Search a model to find the matching Perks code.</p>
-    <input id="barcodeModelSearch" class="barcode-search" type="search" placeholder="Search model e.g. 65U7STUK">
-    <div id="promoBarcodeResults"></div>
-  </div>
-
-  <div class="card">
-    <div class="section-title">Vision promo codes <span>04 Sep 2026 – 27 Oct 2026</span></div>
-    <div class="barcode-card"><div class="barcode-top"><div class="barcode-title">£100 off P1TUK</div><div class="barcode-amount">VISION1000FF</div></div><div class="barcode-number">Barcode: 200055001286030</div></div>
-    <div class="barcode-card"><div class="barcode-top"><div class="barcode-title">£150 off PX3TUK</div><div class="barcode-amount">VISION1500FF</div></div><div class="barcode-number">Barcode: 200033466791992</div></div>
-    <div class="barcode-card"><div class="barcode-top"><div class="barcode-title">Marked-price offer — 43E7QTUK</div><div class="barcode-amount">643519</div></div><div class="barcode-number">Barcode: 200049841754042</div></div>
-  </div>
-
   <div class="card">
     <div class="section-title">Check a model's deal</div>
     <div class="field"><label>Model</label><input id="offerModel" list="modelList" placeholder="e.g. 65UR8STUK"></div>
@@ -1064,12 +1050,14 @@ function renderOffer(){
  if(matches.length===1 || matches.some(x=>norm(x[0])===q)){
    const exact=matches.find(x=>norm(x[0])===q)||matches[0];
    const m=exact[0],p=currentCurrysPrice(m,exact[1]),d=deal(m,p);
-   box.innerHTML=`<div class="offer"><b>${m}</b><div>Currys price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div>${(/(?:^|[A-Z])U\d|UR|UX/i.test(m))?`<div class="xbox-offer"><b>Xbox promotion</b><span>Free personalised Xbox Wireless Controller + 1 month Game Pass</span></div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
+   const promo=NEW_PROMO_BARCODES.find(x=>x.models.some(mm=>norm(mm)===norm(m)));
+   const promoHtml=promo?`<div class="barcode-card" style="margin-top:10px"><div class="barcode-top"><div class="barcode-title">PERKS Save £${promo.amount}</div><div class="barcode-amount">${promo.code}</div></div><div class="barcode-number">Barcode: ${promo.barcode}</div><div class="barcode-models">Use this barcode for <strong>${m}</strong>.</div></div>`:"";
+   box.innerHTML=`<div class="offer"><b>${m}</b><div>Currys price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div>${promoHtml}${(/(?:^|[A-Z])U\d|UR|UX/i.test(m))?`<div class="xbox-offer"><b>Xbox promotion</b><span>Free personalised Xbox Wireless Controller + 1 month Game Pass</span></div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
    return;
  }
 
  box.innerHTML=`<div class="muted" style="margin:8px 0">TV models matching “${input.value.trim()}”</div>`+
-   matches.map(x=>`<div class="offer-match"><b>${x[0]}</b><span class="muted">Currys ${x[1]==null?"Price TBC":money(currentCurrysPrice(x[0],x[1]))}</span><br><button type="button" data-offer-model="${x[0]}">View offers</button></div>`).join("");
+   matches.map(x=>{const promo=NEW_PROMO_BARCODES.find(y=>y.models.some(mm=>norm(mm)===norm(x[0])));return `<div class="offer-match"><b>${x[0]}</b><span class="muted">Currys ${x[1]==null?"Price TBC":money(currentCurrysPrice(x[0],x[1]))}</span>${promo?`<div class="muted" style="margin-top:4px">PERKS Save £${promo.amount} • ${promo.code}</div>`:""}<br><button type="button" data-offer-model="${x[0]}">View offers</button></div>`}).join("");
  box.querySelectorAll("[data-offer-model]").forEach(b=>b.onclick=()=>{
    input.value=b.dataset.offerModel;
    renderOffer();
@@ -2049,37 +2037,6 @@ document.addEventListener("DOMContentLoaded",function(){
 
 
 
-<script id="newPromoBarcodes">
-const NEW_PROMO_BARCODES=[
- {amount:500,code:"TVPERKS500",barcode:"200055340410648",models:["116UHQ TUK","100UHQ TUK","110UHNQ TUK"]},
- {amount:300,code:"TVPERKS300",barcode:"200055339835979",models:["100UR8STUK","100U7STUK"]},
- {amount:200,code:"TVPERKS200",barcode:"200055339835979",models:["75UR9STUK","85UR9STUK","75UR8STUK","85UR8STUK","100U7STUK PRO","100E7STUK PRO"]},
- {amount:150,code:"TVPERKS150",barcode:"200055340033531",models:["85U7STUK"]},
- {amount:100,code:"TVPERKS100",barcode:"200055340194705",models:["65UR9STUK","55UR8STUK","65UR8STUK","55U7STUK PRO","65U7STUK PRO","75U7STUK PRO","85U7STUK PRO","75U7STUK","55U7STUK","75E7STUK PRO","85E7STUK PRO"]},
- {amount:50,code:"TVPERKS50",barcode:"200055340385761",models:["50U7STUK"]}
-];
-function renderPromoBarcodes(){
- const box=document.getElementById("promoBarcodeResults");
- if(!box)return;
- const input=(document.getElementById("barcodeModelSearch")?.value||"").trim().toUpperCase().replace(/[^A-Z0-9]/g,"");
- const list=input
-   ? NEW_PROMO_BARCODES.filter(x=>x.models.some(m=>m.toUpperCase().replace(/[^A-Z0-9]/g,"").includes(input)))
-   : NEW_PROMO_BARCODES;
- box.innerHTML=list.length ? list.map(x=>`
-   <div class="barcode-card">
-     <div class="barcode-top">
-       <div class="barcode-title">PERKS Save £${x.amount}</div>
-       <div class="barcode-amount">${x.models.length} models</div>
-     </div>
-     <div class="barcode-code">${x.code}</div>
-     <div class="barcode-number">Barcode: ${x.barcode}</div>
-     <div class="barcode-models"><strong>Models:</strong> ${x.models.join(", ")}</div>
-   </div>`).join("")
-   : '<div class="muted" style="padding:12px 2px">No new promo barcode found for that model.</div>';
-}
-document.getElementById("barcodeModelSearch")?.addEventListener("input",renderPromoBarcodes);
-renderPromoBarcodes();
-</script>
 
 <script id="valShareCalculator">
 (function(){
