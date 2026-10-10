@@ -2102,6 +2102,69 @@ document.addEventListener("DOMContentLoaded",function(){
   });
 })();
 </script>
+
+<script id="salesPersistenceSafetyFix">
+(function(){
+  const KEY = "hisenseSalesV2";
+  function writeSales(){
+    try {
+      // `sales` is the app's top-level array, shared by the sales form and calendar.
+      if (Array.isArray(sales)) {
+        const snapshot = JSON.stringify(sales);
+        localStorage.setItem(KEY, snapshot);
+        try {
+          const request = indexedDB.open("hisenseSalesProDB", 1);
+          request.onupgradeneeded = function(){
+            if(!request.result.objectStoreNames.contains("sales")) request.result.createObjectStore("sales");
+          };
+          request.onsuccess = function(){
+            const db = request.result;
+            try {
+              const tx = db.transaction("sales","readwrite");
+              tx.objectStore("sales").put(sales, KEY);
+              tx.oncomplete = function(){ db.close(); };
+              tx.onerror = function(){ db.close(); };
+            } catch(e) { try{db.close()}catch(_){} }
+          };
+        } catch(e) {}
+      }
+    } catch(e) {}
+  }
+
+  // Save immediately after the sale/refund form is used, after app handlers finish.
+  document.addEventListener("click", function(event){
+    const button = event.target && event.target.closest && event.target.closest("#addSale");
+    if(button) setTimeout(writeSales, 80);
+  }, true);
+
+  // Save when iOS suspends or closes the Home Screen app / Safari tab.
+  window.addEventListener("pagehide", writeSales);
+  window.addEventListener("beforeunload", writeSales);
+  document.addEventListener("visibilitychange", function(){
+    if(document.visibilityState === "hidden") writeSales();
+  });
+
+  // Restore the localStorage snapshot on startup before the app is used.
+  // This never replaces a non-empty current list with an empty one.
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+    if(Array.isArray(saved) && saved.length && Array.isArray(sales)) {
+      const signature = r => JSON.stringify(r);
+      const seen = new Set(sales.map(signature));
+      saved.forEach(r => {
+        const k = signature(r);
+        if(!seen.has(k)){ sales.push(r); seen.add(k); }
+      });
+      if(typeof save === "function") save();
+      if(typeof renderCalendar === "function") renderCalendar();
+      if(typeof renderHome === "function") renderHome();
+      if(typeof renderStats === "function") renderStats();
+      if(typeof renderSalesLog === "function") renderSalesLog();
+    }
+  } catch(e) {}
+})();
+</script>
+
 </body></html><style id="finalSalesLogFix">
 #saleDate{width:220px;max-width:220px;box-sizing:border-box}
 @media(max-width:520px){#saleDate{width:220px;max-width:220px}}
