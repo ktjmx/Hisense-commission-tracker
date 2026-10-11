@@ -727,12 +727,37 @@ function rate(model){
  return k?R[k]:null
 }
 function rateForDate(model,date){
+ const d=String(date||"");
  const cutoff="2026-09-13";
- const table=String(date||"")<cutoff?OLD_R:R;
+ const table=d<cutoff?OLD_R:R;
  const n=norm(model);
  const k=Object.keys(table).find(x=>norm(x)===n)||Object.keys(table).find(x=>norm(x).startsWith(n)||n.startsWith(norm(x)));
- return k?table[k]:null;
+ if(!k) return null;
+ // Temporary RGB commission boost: 11–24 October 2026 inclusive.
+ if(d>="2026-10-11" && d<="2026-10-24"){
+   const temporary={"55UR8STUK":50,"65UR8STUK":60,"75UR8STUK":70};
+   const tk=Object.keys(temporary).find(x=>norm(x)===n)||Object.keys(temporary).find(x=>norm(x)===norm(k));
+   if(tk) return temporary[tk];
+ }
+ return table[k];
 }
+// Recalculate already-logged sales dated 11 October 2026 for the temporary UR8 rates.
+(function applyTodaysTemporaryUR8Rates(){
+ const d="2026-10-11";
+ const temporary={"55UR8STUK":50,"65UR8STUK":60,"75UR8STUK":70};
+ if(!Array.isArray(sales)) return;
+ let changed=false;
+ sales.forEach(s=>{
+   if(!Array.isArray(s)||String(s[0])!==d) return;
+   const n=norm(s[1]);
+   const key=Object.keys(temporary).find(k=>norm(k)===n || norm(k).replace(/STUK$/,'S')===n);
+   if(!key) return;
+   const qty=Number(s[2]||0);
+   const amount=temporary[key]*Math.abs(qty)*(qty<0?-1:1);
+   if(Number(s[3])!==amount){s[3]=amount;changed=true;}
+ });
+ if(changed && typeof save==='function') save();
+})();
 function priceOf(model){let n=norm(model);let x=TVs.find(t=>norm(t[0])===n);return x?x[1]:null}
 function deal(model,price){
  const n=norm(model);
