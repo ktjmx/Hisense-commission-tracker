@@ -2190,7 +2190,8 @@ document.addEventListener("DOMContentLoaded",function(){
 })();
 </script>
 
-</body></html><style id="finalSalesLogFix">
+
+<style id="finalSalesLogFix">
 #saleDate{width:220px;max-width:220px;box-sizing:border-box}
 @media(max-width:520px){#saleDate{width:220px;max-width:220px}}
 </style>
@@ -2363,3 +2364,89 @@ document.addEventListener("DOMContentLoaded",function(){
   refresh();
 })();
 </script>
+
+<!-- Firebase account and cloud-sales layer -->
+<style>
+#firebaseGate{position:fixed;inset:0;z-index:999999;background:#061114;color:#f8faf9;display:flex;align-items:center;justify-content:center;padding:22px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:auto}
+#firebaseGate .fg-card{width:min(100%,430px);background:#102a2e;border:1px solid #28666b;border-radius:22px;padding:24px;box-shadow:0 20px 60px #0009}
+#firebaseGate h1{font-size:25px;margin:0 0 8px}#firebaseGate p{color:#c4d3d3;line-height:1.45;font-size:14px}
+#firebaseGate input{display:block;width:100%;padding:14px;margin:10px 0;border-radius:10px;border:1px solid #41666a;background:#07191c;color:white;font-size:16px;box-sizing:border-box}
+#firebaseGate button{width:100%;padding:14px;margin-top:9px;border:0;border-radius:11px;background:#16bfc0;color:#041718;font-size:15px;font-weight:800}
+#firebaseGate button.secondary{background:#1b4145;color:#fff;border:1px solid #3b666a}#firebaseGate .fg-error{color:#ffb4b4;white-space:pre-wrap}#firebaseGate .fg-small{font-size:12px;color:#a7bcbc}
+#fgLogout{position:fixed;right:12px;top:12px;z-index:999990;width:auto;padding:9px 12px;margin:0;background:#1b4145;color:#fff;border:1px solid #3b666a;border-radius:10px;font-size:12px}
+body.firebase-locked .app{visibility:hidden}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<button id="fgLogout" hidden>Sign out</button>
+<div id="firebaseGate" role="dialog" aria-modal="true" aria-label="Hisense Sales Pro sign in">
+ <div class="fg-card">
+  <h1>Hisense Sales Pro</h1><p id="fgIntro">Sign in to access your private sales and commission. Your account only sees its own sales.</p>
+  <div id="fgAuthForm"><input id="fgEmail" type="email" autocomplete="email" placeholder="Email address"><input id="fgPassword" type="password" autocomplete="current-password" placeholder="Password (at least 6 characters)"><button id="fgSignIn">Sign in</button><button class="secondary" id="fgCreate">Create account</button><p class="fg-small">Use your own email and password. Keep your password private.</p></div>
+  <div id="fgImportChoice" hidden><p id="fgChoiceText">This account has no saved sales yet. Would you like to import the sales currently on this device, or start with an empty account?</p><button id="fgImport">Import existing sales from this device</button><button class="secondary" id="fgFresh">Start with an empty account</button></div>
+  <p id="fgStatus" aria-live="polite"></p><p id="fgError" class="fg-error" aria-live="polite"></p>
+ </div>
+</div>
+<script id="firebasePrivateSales">
+(function(){
+ 'use strict';
+ const KEY='hisenseSalesV2';
+ const firebaseConfig={apiKey:'AIzaSyB743_cMpviOMzmUlyc0COkt87ClHsjjBU',authDomain:'hisense-sales-pro.firebaseapp.com',projectId:'hisense-sales-pro',storageBucket:'hisense-sales-pro.firebasestorage.app',messagingSenderId:'320116006580',appId:'1:320116006580:web:e88a12c90206f0a8ad81e1',measurementId:'G-WSD1ML0QWE'};
+ const gate=document.getElementById('firebaseGate'), intro=document.getElementById('fgIntro'), form=document.getElementById('fgAuthForm'), choice=document.getElementById('fgImportChoice'), status=document.getElementById('fgStatus'), error=document.getElementById('fgError');
+ document.body.classList.add('firebase-locked');
+ let auth,db,user=null,ready=false,applyingRemote=false,syncTimer=null;
+ const setStatus=t=>{status.textContent=t||''}; const setError=e=>{error.textContent=e||''};
+ function message(e){const c=e&&e.code;const map={'auth/invalid-email':'Please enter a valid email address.','auth/weak-password':'Choose a password with at least 6 characters.','auth/email-already-in-use':'An account already exists for this email. Try signing in.','auth/invalid-credential':'Email or password is incorrect.','auth/user-not-found':'No account found. Choose Create account if you are new.','auth/wrong-password':'Email or password is incorrect.','auth/too-many-requests':'Too many attempts. Please wait a little and try again.','permission-denied':'Firebase blocked access. The Firestore rules need checking.'};return map[c]||((e&&e.message)||'Something went wrong. Please try again.');}
+ function records(){try{return Array.isArray(sales)?sales.map(x=>Array.isArray(x)?x.slice():x):[]}catch(e){return []}}
+ function render(){try{if(typeof renderCalendar==='function')renderCalendar();if(typeof renderHome==='function')renderHome();if(typeof renderStats==='function')renderStats();if(typeof renderSalesLog==='function')renderSalesLog();if(typeof updateHomeSalesValue==='function')updateHomeSalesValue()}catch(e){console.warn('Refresh after cloud sync',e)}}
+ function showAuth(){user=null;ready=false;document.getElementById('fgLogout').hidden=true;document.body.classList.add('firebase-locked');gate.style.display='flex';form.hidden=false;choice.hidden=true;intro.textContent='Sign in to access your private sales and commission. Your account only sees its own sales.';setStatus('');setError('');}
+ function showChoice(){form.hidden=true;choice.hidden=false;intro.textContent='Your account is signed in.';setStatus('No cloud sales found for this account.');setError('');}
+ let cloudSaveQueue=Promise.resolve();
+ async function writeInChunks(items,makeWrite){
+   for(let start=0;start<items.length;start+=400){
+     const batch=db.batch();
+     items.slice(start,start+400).forEach(item=>makeWrite(batch,item));
+     await batch.commit();
+   }
+ }
+ function saveCloud(){
+   if(!user||!ready||applyingRemote)return Promise.resolve();
+   clearTimeout(syncTimer);
+   return new Promise(resolve=>{syncTimer=setTimeout(()=>{
+     const uid=user&&user.uid;
+     const data=records();
+     cloudSaveQueue=cloudSaveQueue.then(async()=>{
+       if(!uid||!user||user.uid!==uid||!ready)return;
+       const col=db.collection('users').doc(uid).collection('sales');
+       // Write the current snapshot first. Only remove stale rows after every new row is saved.
+       const docs=data.map((record,index)=>({ref:col.doc('row_'+String(index).padStart(6,'0')),record,index}));
+       await writeInChunks(docs,(batch,item)=>batch.set(item.ref,{record:item.record,index:item.index}));
+       const snap=await col.get();
+       const keep=new Set(docs.map(item=>item.ref.id));
+       const stale=snap.docs.filter(doc=>!keep.has(doc.id));
+       await writeInChunks(stale,(batch,doc)=>batch.delete(doc.ref));
+       setStatus('All changes saved online.');
+     }).catch(e=>{setError('Could not save sales online: '+message(e));}).finally(resolve);
+   },250)});
+ }
+ async function loadCloud(u){user=u;ready=false;setStatus('Loading your private sales…');setError('');try{const snap=await db.collection('users').doc(u.uid).collection('sales').get();if(snap.empty){showChoice();return;}applyingRemote=true;sales.length=0;snap.docs.sort((a,b)=>(a.data().index||0)-(b.data().index||0)).forEach(d=>{const r=d.data().record;if(Array.isArray(r))sales.push(r)});localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;render();form.hidden=true;choice.hidden=true;intro.textContent='Signed in as '+u.email;gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');setStatus('');}catch(e){applyingRemote=false;showAuth();setError('Could not load your cloud sales: '+message(e));}}
+ async function finishEmpty(importOld){try{setError('');setStatus(importOld?'Importing sales…':'Setting up your empty account…');applyingRemote=true;if(!importOld){sales.length=0;}localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;await saveCloud();if(error.textContent){ready=false;return;}gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');render();setStatus('');}catch(e){applyingRemote=false;ready=false;setError(message(e));}}
+ try{firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();}catch(e){setError('Firebase could not start: '+message(e));}
+ document.getElementById('fgSignIn').onclick=async()=>{setError('');setStatus('Signing in…');try{await auth.signInWithEmailAndPassword(document.getElementById('fgEmail').value.trim(),document.getElementById('fgPassword').value)}catch(e){setStatus('');setError(message(e))}};
+ document.getElementById('fgCreate').onclick=async()=>{setError('');setStatus('Creating your account…');try{await auth.createUserWithEmailAndPassword(document.getElementById('fgEmail').value.trim(),document.getElementById('fgPassword').value)}catch(e){setStatus('');setError(message(e))}};
+ document.getElementById('fgImport').onclick=()=>finishEmpty(true);document.getElementById('fgFresh').onclick=()=>finishEmpty(false);document.getElementById('fgLogout').onclick=()=>{if(auth)auth.signOut()};
+ // The first login must explicitly choose whether to import this device's old sales.
+ auth&&auth.onAuthStateChanged(async u=>{if(!u){
+   // Clear the previous account's local cache on sign-out; cloud sales remain stored under that UID.
+   try{applyingRemote=true;localStorage.setItem(KEY,JSON.stringify([]));}catch(_){}finally{applyingRemote=false;}
+   showAuth();return;
+  }await loadCloud(u)});
+ // Existing app save routines use this key. Intercept writes and upload only after login.
+ const originalSet=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){const result=originalSet.call(this,k,v);if(k===KEY&&!applyingRemote&&ready&&user)saveCloud();return result};
+ document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('#addSale,#saveSale,[data-delete-sale]'))setTimeout(()=>{if(user&&ready){try{localStorage.setItem(KEY,JSON.stringify(sales))}catch(_){}saveCloud()}},300)},true);
+ window.addEventListener('pagehide',()=>{if(user&&ready){try{localStorage.setItem(KEY,JSON.stringify(sales))}catch(_){}saveCloud()}});
+})();
+</script>
+
+</body></html>
