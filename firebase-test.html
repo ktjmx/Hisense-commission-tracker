@@ -1,0 +1,62 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hisense Firebase Test</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<style>
+body{background:#071417;color:white;font:17px system-ui;padding:24px}
+main{max-width:500px;margin:40px auto;background:#102d30;padding:24px;border-radius:18px}
+input,button{box-sizing:border-box;width:100%;padding:14px;margin:8px 0;border-radius:10px}
+input{background:#071a1c;color:white;border:1px solid #477579}
+button{background:#16c6c7;font-weight:bold}
+#status{overflow-wrap:anywhere}
+</style>
+</head>
+<body><main>
+<h1>Hisense Sales Pro</h1>
+<p>Safe test of Firebase sign-in. No sales data is changed.</p>
+<input id="email" type="email" placeholder="Email address">
+<input id="password" type="password" placeholder="Password (6+ characters)">
+<button id="create">Create test account</button>
+<button id="login">Sign in</button>
+<p id="status">Ready to test.</p>
+</main>
+<script>
+const config={
+apiKey:"AIzaSyB743_cMpviOMzmUlyc0COkt87ClHsjjBU",
+authDomain:"hisense-sales-pro.firebaseapp.com",
+projectId:"hisense-sales-pro",
+storageBucket:"hisense-sales-pro.firebasestorage.app",
+messagingSenderId:"320116006580",
+appId:"1:320116006580:web:e88a12c90206f0a8ad81e1"
+};
+const status=document.getElementById("status");
+try{firebase.initializeApp(config)}catch(e){status.textContent=e.message}
+const auth=firebase.auth();
+document.getElementById("create").onclick=async()=>{
+status.textContent="Creating account…";
+try{
+await auth.createUserWithEmailAndPassword(
+document.getElementById("email").value.trim(),
+document.getElementById("password").value
+);
+status.textContent="Account created successfully!";
+}catch(e){status.textContent=e.code+": "+e.message}
+};
+document.getElementById("login").onclick=async()=>{
+status.textContent="Signing in…";
+try{
+await auth.signInWithEmailAndPassword(
+document.getElementById("email").value.trim(),
+document.getElementById("password").value
+);
+status.textContent="Sign-in successful!";
+}catch(e){status.textContent=e.code+": "+e.message}
+};
+</script>
+</body>
+</html>
