@@ -1,17 +1,15 @@
 {
-  "updatedAt": "2026-10-23T10:02:47.680946+00:00",
+  "updatedAt": "2026-10-24T09:31:35.831234+00:00",
   "source": "Price4 UK price comparison + Richer Sounds direct fallback",
   "models": {
     "43A6STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Appliances Direct",
         "price": 259.0
       },
-      "retailerCount": 13,
+      "retailerCount": 11,
       "prices": {
-        "Amazon.co.uk": 259.0,
-        "Amazon.co.uk Marketplace": 259.0,
         "Appliances Direct": 259.0,
         "Crampton and Moore": 259.0,
         "Currys": 259.0,
@@ -34,13 +32,11 @@
     "50A6STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Appliances Direct",
         "price": 319.0
       },
-      "retailerCount": 13,
+      "retailerCount": 11,
       "prices": {
-        "Amazon.co.uk": 319.0,
-        "Amazon.co.uk Marketplace": 319.0,
         "Appliances Direct": 319.0,
         "Argos": 319.0,
         "Crampton and Moore": 319.0,
@@ -63,13 +59,11 @@
     "55A6STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Argos",
         "price": 389.0
       },
-      "retailerCount": 13,
+      "retailerCount": 11,
       "prices": {
-        "Amazon.co.uk": 389.0,
-        "Amazon.co.uk Marketplace": 389.0,
         "Argos": 389.0,
         "Crampton and Moore": 389.0,
         "Currys": 389.0,
@@ -165,13 +159,11 @@
     "55Q7STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Crampton and Moore",
         "price": 479.0
       },
-      "retailerCount": 11,
+      "retailerCount": 9,
       "prices": {
-        "Amazon.co.uk": 479.0,
-        "Amazon.co.uk Marketplace": 479.0,
         "Crampton and Moore": 479.0,
         "Currys": 479.0,
         "Electrical Discount UK": 479.0,
@@ -406,14 +398,14 @@
       "retailerCount": 9,
       "prices": {
         "Crampton and Moore": 699.0,
-        "Currys": 699.0,
         "Electrical Discount UK": 699.0,
         "Hughes": 699.0,
         "John Lewis": 699.0,
         "Marks Electrical": 699.0,
         "Peter Tyson": 699.0,
         "PRC Direct": 699.0,
-        "Richer Sounds": 699.0
+        "Richer Sounds": 699.0,
+        "Currys": 799.0
       },
       "price4Updated": "23 October 2026 07:01 BST",
       "price4ModelNumber": null,
@@ -428,16 +420,14 @@
         "retailer": "Electrical Discount UK",
         "price": 799.0
       },
-      "retailerCount": 13,
+      "retailerCount": 11,
       "prices": {
         "Electrical Discount UK": 799.0,
+        "Marks Electrical": 799.0,
         "PRC Direct": 799.0,
         "Richer Sounds": 799.0,
-        "Amazon.co.uk": 899.0,
-        "Amazon.co.uk Marketplace": 899.0,
         "AO": 899.0,
         "John Lewis": 899.0,
-        "Marks Electrical": 899.0,
         "Argos": 999.0,
         "Currys": 999.0,
         "Hughes": 999.0,
@@ -457,7 +447,7 @@
         "retailer": "Currys",
         "price": 999.0
       },
-      "retailerCount": 13,
+      "retailerCount": 11,
       "prices": {
         "Currys": 999.0,
         "Electrical Discount UK": 999.0,
@@ -467,8 +457,6 @@
         "Peter Tyson": 999.0,
         "PRC Direct": 999.0,
         "Richer Sounds": 999.0,
-        "Amazon.co.uk": 1099.0,
-        "Amazon.co.uk Marketplace": 1099.0,
         "AO": 1299.0,
         "Argos": 1299.0,
         "Crampton and Moore": 1799.0
@@ -512,11 +500,9 @@
         "retailer": "very.co.uk",
         "price": 1699.0
       },
-      "retailerCount": 11,
+      "retailerCount": 9,
       "prices": {
         "very.co.uk": 1699.0,
-        "Amazon.co.uk": 1999.0,
-        "Amazon.co.uk Marketplace": 1999.0,
         "Currys": 1999.0,
         "Electrical Discount UK": 1999.0,
         "Hughes": 1999.0,
@@ -539,7 +525,7 @@
         "retailer": "Electrical Discount UK",
         "price": 2499.0
       },
-      "retailerCount": 10,
+      "retailerCount": 8,
       "prices": {
         "Electrical Discount UK": 2499.0,
         "Hughes": 2499.0,
@@ -548,8 +534,6 @@
         "Richer Sounds": 2499.0,
         "Currys": 2999.0,
         "Crampton and Moore": 3299.0,
-        "Amazon.co.uk": 3629.0,
-        "Amazon.co.uk Marketplace": 3629.0,
         "Peter Tyson": 4799.0
       },
       "price4Updated": "23 October 2026 07:06 BST",
@@ -679,13 +663,11 @@
     "65UR8STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Currys",
         "price": 1699.0
       },
-      "retailerCount": 10,
+      "retailerCount": 8,
       "prices": {
-        "Amazon.co.uk": 1699.0,
-        "Amazon.co.uk Marketplace": 1699.0,
         "Currys": 1699.0,
         "Electrical Discount UK": 1699.0,
         "Hughes": 1699.0,
@@ -705,13 +687,11 @@
     "75UR8STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Currys",
         "price": 2299.0
       },
-      "retailerCount": 9,
+      "retailerCount": 7,
       "prices": {
-        "Amazon.co.uk": 2299.0,
-        "Amazon.co.uk Marketplace": 2299.0,
         "Currys": 2299.0,
         "Electrical Discount UK": 2299.0,
         "Hughes": 2299.0,
@@ -730,13 +710,11 @@
     "85UR8STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
+        "retailer": "Currys",
         "price": 2999.0
       },
-      "retailerCount": 9,
+      "retailerCount": 7,
       "prices": {
-        "Amazon.co.uk": 2999.0,
-        "Amazon.co.uk Marketplace": 2999.0,
         "Currys": 2999.0,
         "Electrical Discount UK": 2999.0,
         "Hughes": 2999.0,
