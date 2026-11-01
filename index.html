@@ -1480,11 +1480,14 @@ function getSalesMix(list){
  return {led,qled,mini,rgb,soundbars,tvUnits,tvValue,p};
 }
 
+// Currys trading weeks run Sunday–Saturday.
+// WK45: 1–7 Nov 2026; WK46: 8–14 Nov; WK47: 15–21 Nov;
+// WK48: 22–28 Nov. All sales dated 1–28 Nov 2026 belong to December pay.
 function isoWeekNumber(dateString){
- const d=new Date(dateString+"T12:00:00"),day=d.getDay()||7;
- d.setDate(d.getDate()+4-day);
- const y=new Date(d.getFullYear(),0,1);
- return Math.ceil((((d-y)/86400000)+1)/7);
+ const d=new Date(dateString+"T12:00:00");
+ const anchor=new Date("2025-12-28T12:00:00"); // Sunday, start of Currys WK1
+ d.setHours(12,0,0,0);
+ return Math.floor((d-anchor)/604800000)+1;
 }
 function payPeriodCommission(a,b){
  return sales.filter(s=>{const w=isoWeekNumber(s[0]);return w>=a&&w<=b})
@@ -1506,7 +1509,7 @@ function updateHomeTotalVAL(){
 }
 
 function renderStats(){
- const currentPeriodStart=40, currentPeriodEnd=44;
+ const currentPeriodStart=45, currentPeriodEnd=48; // December pay: WK45–WK48 inclusive
  const currentPeriodSales=sales.filter(s=>{
    const w=isoWeekNumber(s[0]);
    return w>=currentPeriodStart && w<=currentPeriodEnd;
@@ -1524,13 +1527,13 @@ function renderStats(){
   {a:32,b:35,date:"25 September 2026"},
   {a:36,b:39,date:"23 October 2026"},
   {a:40,b:44,date:"25 November 2026"},
-  {a:45,b:48,date:"TBC"},
+  {a:45,b:48,date:"December 2026 (WK45–WK48; pay date TBC)"},
   {a:49,b:52,date:"25 January 2027"}
  ];
  const week=d=>isoWeekNumber(d);
  const comm=(a,b)=>sales.filter(s=>{let w=week(s[0]);return w>=a&&w<=b;}).reduce((n,s)=>n+Number(s[3]||0),0);
  const qty=(a,b)=>sales.filter(s=>{let w=week(s[0]);return w>=a&&w<=b;}).reduce((n,s)=>n+Number(s[2]||0),0);
- const current=week(new Date().toISOString().slice(0,10));
+ const now=new Date(); const localToday=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");\n const current=week(localToday);
  const box=document.getElementById("payday");
  if(!box)return;
  box.innerHTML=periods.map((x,i)=>{
