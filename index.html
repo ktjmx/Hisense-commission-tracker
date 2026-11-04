@@ -1533,7 +1533,8 @@ function renderStats(){
  const week=d=>isoWeekNumber(d);
  const comm=(a,b)=>sales.filter(s=>{let w=week(s[0]);return w>=a&&w<=b;}).reduce((n,s)=>n+Number(s[3]||0),0);
  const qty=(a,b)=>sales.filter(s=>{let w=week(s[0]);return w>=a&&w<=b;}).reduce((n,s)=>n+Number(s[2]||0),0);
- const now=new Date(); const localToday=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");\n const current=week(localToday);
+ const now=new Date(); const localToday=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
+ const current=week(localToday);
  const box=document.getElementById("payday");
  if(!box)return;
  box.innerHTML=periods.map((x,i)=>{
@@ -2455,7 +2456,22 @@ body.firebase-locked .app{visibility:hidden}
      }).catch(e=>{setError('Could not save sales online: '+message(e));}).finally(resolve);
    },250)});
  }
- async function loadCloud(u){user=u;ready=false;setStatus('Loading your private sales…');setError('');try{const snap=await db.collection('users').doc(u.uid).collection('sales').get();if(snap.empty){showChoice();return;}applyingRemote=true;sales.length=0;snap.docs.sort((a,b)=>(a.data().index||0)-(b.data().index||0)).forEach(d=>{const r=d.data().record;if(Array.isArray(r))sales.push(r)});localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;render();form.hidden=true;choice.hidden=true;intro.textContent='Signed in as '+u.email;gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');setStatus('');}catch(e){applyingRemote=false;showAuth();setError('Could not load your cloud sales: '+message(e));}}
+ async function loadCloud(u){user=u;ready=false;setStatus('Checking your private sales and recovery records…');setError('');try{const ownCol=db.collection('users').doc(u.uid).collection('sales');let snap=await ownCol.get();
+   // One-time safe recovery: if this account has no sales, copy the old orphaned rows
+   // from the known former UID. Original records are read only and are never deleted.
+   const formerUid='5OK3rAnb2pYZ4dYXXmTqYbdtYhN2';
+   if(snap.empty && u.uid!==(formerUid)){
+     const oldSnap=await db.collection('users').doc(formerUid).collection('sales').get();
+     if(!oldSnap.empty){
+       setStatus('Recovering '+oldSnap.size+' existing sales into your account…');
+       const rows=oldSnap.docs.map(d=>({id:d.id,data:d.data()}));
+       await writeInChunks(rows,(batch,item)=>batch.set(ownCol.doc(item.id),item.data));
+       snap=await ownCol.get();
+     }
+   }
+   if(snap.empty){showChoice();return;}
+   applyingRemote=true;sales.length=0;snap.docs.sort((a,b)=>(a.data().index||0)-(b.data().index||0)).forEach(d=>{const r=d.data().record;if(Array.isArray(r))sales.push(r)});localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;render();form.hidden=true;choice.hidden=true;intro.textContent='Signed in as '+u.email;gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');setStatus('');
+  }catch(e){applyingRemote=false;showAuth();setError('Could not load or recover your cloud sales: '+message(e));}}
  async function finishEmpty(importOld){try{setError('');setStatus(importOld?'Importing sales…':'Setting up your empty account…');applyingRemote=true;if(!importOld){sales.length=0;}localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;await saveCloud();if(error.textContent){ready=false;return;}gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');render();setStatus('');}catch(e){applyingRemote=false;ready=false;setError(message(e));}}
  try{firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();}catch(e){setError('Firebase could not start: '+message(e));}
  document.getElementById('fgSignIn').onclick=async()=>{setError('');setStatus('Signing in…');try{await auth.signInWithEmailAndPassword(document.getElementById('fgEmail').value.trim(),document.getElementById('fgPassword').value)}catch(e){setStatus('');setError(message(e))}};
