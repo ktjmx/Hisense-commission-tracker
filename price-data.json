@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-04T12:59:10.242936+00:00",
+  "updatedAt": "2026-11-05T13:11:14.374244+00:00",
   "source": "Price4 UK price comparison + Richer Sounds direct fallback",
   "models": {
     "43A6STUK": {
@@ -25,7 +25,7 @@
         "eBay - Buy It Direct Discounts": 278.97,
         "Smiths TV": 279.0
       },
-      "price4Updated": "03 November 2026 12:20 GMT",
+      "price4Updated": "04 November 2026 14:02 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-43a6stuk-61211.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-43a6stuk-61211.aspx",
@@ -54,7 +54,7 @@
         "PRC Direct": 319.0,
         "eBay - Buy It Direct Discounts": 334.97
       },
-      "price4Updated": "03 November 2026 12:19 GMT",
+      "price4Updated": "04 November 2026 14:02 GMT",
       "price4ModelNumber": "50A6STUK",
       "sourceUrl": "https://www.price4.co.uk/hisense-50a6stuk-61210.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-50a6stuk-61210.aspx",
@@ -85,7 +85,7 @@
         "eBay - Buy It Direct Discounts": 390.97,
         "Peter Tyson": 579.0
       },
-      "price4Updated": "03 November 2026 16:02 GMT",
+      "price4Updated": "04 November 2026 17:59 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-55a6stuk-61001.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-55a6stuk-61001.aspx",
@@ -116,7 +116,7 @@
         "eBay - Buy It Direct Discounts": 514.97,
         "Peter Tyson": 799.0
       },
-      "price4Updated": "04 November 2026 11:42 GMT",
+      "price4Updated": "05 November 2026 12:56 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-65a6stuk-60979.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-65a6stuk-60979.aspx",
@@ -148,25 +148,25 @@
     "50Q7STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "John Lewis",
+        "retailer": "Currys",
         "price": 349.0
       },
       "retailerCount": 12,
       "prices": {
+        "Currys": 349.0,
+        "Electrical Discount UK": 349.0,
         "John Lewis": 349.0,
         "Marks Electrical": 349.0,
+        "Richer Sounds": 349.0,
         "Appliances Direct": 379.0,
-        "Currys": 379.0,
-        "Electrical Discount UK": 379.0,
+        "Crampton and Moore": 379.0,
         "Hughes": 379.0,
         "Peter Tyson": 379.0,
-        "Richer Sounds": 379.0,
         "Smiths TV": 389.0,
-        "eBay - Buy It Direct Discounts": 424.97,
-        "PRC Direct": 429.0,
-        "Crampton and Moore": 529.0
+        "eBay - Buy It Direct Discounts": 390.97,
+        "PRC Direct": 429.0
       },
-      "price4Updated": "03 November 2026 16:01 GMT",
+      "price4Updated": "04 November 2026 17:57 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-50q7stuk-60995.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-50q7stuk-60995.aspx",
@@ -176,11 +176,12 @@
     "55Q7STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "Amazon.co.uk",
-        "price": 399.0
+        "retailer": "Peter Tyson",
+        "price": 349.0
       },
       "retailerCount": 13,
       "prices": {
+        "Peter Tyson": 349.0,
         "Amazon.co.uk": 399.0,
         "Amazon.co.uk Marketplace": 399.0,
         "Appliances Direct": 399.0,
@@ -190,12 +191,11 @@
         "Hughes": 399.0,
         "John Lewis": 399.0,
         "Marks Electrical": 399.0,
-        "Peter Tyson": 399.0,
         "Smiths TV": 399.0,
         "eBay - Buy It Direct Discounts": 446.97,
         "PRC Direct": 479.0
       },
-      "price4Updated": "03 November 2026 16:00 GMT",
+      "price4Updated": "04 November 2026 17:57 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-55q7stuk-60994.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-55q7stuk-60994.aspx",
@@ -205,25 +205,25 @@
     "65Q7STUK": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "John Lewis",
+        "retailer": "Crampton and Moore",
         "price": 549.0
       },
       "retailerCount": 12,
       "prices": {
+        "Crampton and Moore": 549.0,
+        "Currys": 549.0,
+        "Electrical Discount UK": 549.0,
         "John Lewis": 549.0,
         "Marks Electrical": 549.0,
+        "Peter Tyson": 549.0,
+        "Richer Sounds": 549.0,
         "Appliances Direct": 599.0,
-        "Crampton and Moore": 599.0,
-        "Currys": 599.0,
-        "Electrical Discount UK": 599.0,
         "Hughes": 599.0,
-        "Peter Tyson": 599.0,
-        "Richer Sounds": 599.0,
         "Smiths TV": 599.0,
-        "PRC Direct": 649.0,
-        "eBay - Buy It Direct Discounts": 670.97
+        "eBay - Buy It Direct Discounts": 614.97,
+        "PRC Direct": 649.0
       },
-      "price4Updated": "03 November 2026 16:01 GMT",
+      "price4Updated": "04 November 2026 17:58 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-65q7stuk-60996.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-65q7stuk-60996.aspx",
@@ -272,7 +272,7 @@
         "PRC Direct": 1199.0,
         "Peter Tyson": 1599.0
       },
-      "price4Updated": "03 November 2026 16:01 GMT",
+      "price4Updated": "04 November 2026 17:58 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-85q7stuk-60997.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-85q7stuk-60997.aspx",
@@ -285,13 +285,12 @@
         "retailer": "Currys",
         "price": 429.0
       },
-      "retailerCount": 5,
+      "retailerCount": 4,
       "prices": {
         "Currys": 429.0,
         "Hughes": 429.0,
         "John Lewis": 429.0,
-        "Marks Electrical": 429.0,
-        "Richer Sounds": 429.0
+        "Marks Electrical": 429.0
       },
       "price4Updated": null,
       "price4ModelNumber": null,
@@ -303,16 +302,16 @@
     "50E7STUK PRO": {
       "status": "ok",
       "bestPrice": {
-        "retailer": "John Lewis",
+        "retailer": "Currys",
         "price": 449.0
       },
       "retailerCount": 5,
       "prices": {
+        "Currys": 449.0,
         "John Lewis": 449.0,
         "Marks Electrical": 449.0,
-        "Currys": 499.0,
-        "Hughes": 499.0,
-        "Richer Sounds": 499.0
+        "Richer Sounds": 449.0,
+        "Hughes": 499.0
       },
       "price4Updated": null,
       "price4ModelNumber": null,
@@ -331,9 +330,9 @@
       "prices": {
         "John Lewis": 499.0,
         "Marks Electrical": 499.0,
-        "Hughes": 549.0,
-        "Peter Tyson": 549.0,
-        "Richer Sounds": 549.0
+        "Peter Tyson": 499.0,
+        "Richer Sounds": 499.0,
+        "Hughes": 549.0
       },
       "price4Updated": null,
       "price4ModelNumber": null,
@@ -434,7 +433,7 @@
         "Currys": 699.0,
         "PRC Direct": 699.0
       },
-      "price4Updated": "03 November 2026 15:55 GMT",
+      "price4Updated": "04 November 2026 17:52 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-50u7stuk-60988.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-50u7stuk-60988.aspx",
@@ -465,7 +464,7 @@
         "Richer Sounds": 799.0,
         "Spatial": 799.0
       },
-      "price4Updated": "03 November 2026 15:59 GMT",
+      "price4Updated": "04 November 2026 17:56 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-55u7stuk-60989.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-55u7stuk-60989.aspx",
@@ -497,7 +496,7 @@
         "Spatial": 999.0,
         "very.co.uk": 999.0
       },
-      "price4Updated": "03 November 2026 16:00 GMT",
+      "price4Updated": "04 November 2026 17:56 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-65u7stuk-60990.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-65u7stuk-60990.aspx",
@@ -528,7 +527,7 @@
         "Amazon.co.uk": 1589.0,
         "Amazon.co.uk Marketplace": 1589.0
       },
-      "price4Updated": "03 November 2026 16:00 GMT",
+      "price4Updated": "04 November 2026 17:57 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-75u7stuk-60991.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-75u7stuk-60991.aspx",
@@ -557,7 +556,7 @@
         "PRC Direct": 1999.0,
         "Peter Tyson": 2499.0
       },
-      "price4Updated": "03 November 2026 16:00 GMT",
+      "price4Updated": "04 November 2026 17:57 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-85u7stuk-60992.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-85u7stuk-60992.aspx",
@@ -570,14 +569,13 @@
         "retailer": "Crampton and Moore",
         "price": 1999.0
       },
-      "retailerCount": 13,
+      "retailerCount": 12,
       "prices": {
         "Crampton and Moore": 1999.0,
         "Currys": 1999.0,
         "Electrical Discount UK": 1999.0,
         "Hughes": 1999.0,
         "Marks Electrical": 1999.0,
-        "Richer Sounds": 1999.0,
         "Smiths TV": 1999.0,
         "Spatial": 1999.0,
         "PRC Direct": 2499.0,
@@ -586,7 +584,7 @@
         "Amazon.co.uk Marketplace": 3629.0,
         "Peter Tyson": 4799.0
       },
-      "price4Updated": "03 November 2026 16:00 GMT",
+      "price4Updated": "04 November 2026 17:57 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-100u7stuk-60993.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-100u7stuk-60993.aspx",
@@ -599,14 +597,13 @@
         "retailer": "AO",
         "price": 799.0
       },
-      "retailerCount": 6,
+      "retailerCount": 5,
       "prices": {
         "AO": 799.0,
         "Argos": 799.0,
         "Currys": 799.0,
         "Hughes": 799.0,
-        "John Lewis": 799.0,
-        "Richer Sounds": 799.0
+        "John Lewis": 799.0
       },
       "price4Updated": null,
       "price4ModelNumber": null,
@@ -731,7 +728,7 @@
         "PRC Direct": 1699.0,
         "Peter Tyson": 1999.0
       },
-      "price4Updated": "03 November 2026 16:02 GMT",
+      "price4Updated": "04 November 2026 17:59 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-65ur8stuk-61000.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-65ur8stuk-61000.aspx",
@@ -742,23 +739,23 @@
       "status": "ok",
       "bestPrice": {
         "retailer": "Amazon.co.uk",
-        "price": 1899.0
+        "price": 1699.0
       },
       "retailerCount": 11,
       "prices": {
-        "Amazon.co.uk": 1899.0,
-        "Amazon.co.uk Marketplace": 1899.0,
+        "Amazon.co.uk": 1699.0,
+        "Amazon.co.uk Marketplace": 1699.0,
+        "Electrical Discount UK": 1699.0,
+        "Marks Electrical": 1699.0,
+        "Richer Sounds": 1699.0,
         "Currys": 1899.0,
-        "Electrical Discount UK": 1899.0,
         "Hughes": 1899.0,
-        "Marks Electrical": 1899.0,
-        "Richer Sounds": 1899.0,
         "Smiths TV": 1899.0,
         "Spatial": 1899.0,
         "PRC Direct": 2299.0,
         "Peter Tyson": 2799.0
       },
-      "price4Updated": "03 November 2026 16:01 GMT",
+      "price4Updated": "04 November 2026 17:58 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-75ur8stuk-60999.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-75ur8stuk-60999.aspx",
@@ -785,7 +782,7 @@
         "PRC Direct": 2999.0,
         "Peter Tyson": 3499.0
       },
-      "price4Updated": "03 November 2026 16:01 GMT",
+      "price4Updated": "04 November 2026 17:58 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-85ur8stuk-60998.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-85ur8stuk-60998.aspx",
@@ -811,7 +808,7 @@
         "PRC Direct": 5999.0,
         "Peter Tyson": 7999.0
       },
-      "price4Updated": "03 November 2026 15:54 GMT",
+      "price4Updated": "04 November 2026 17:51 GMT",
       "price4ModelNumber": null,
       "sourceUrl": "https://www.price4.co.uk/hisense-100ur8stuk-60933.aspx",
       "price4Url": "https://www.price4.co.uk/hisense-100ur8stuk-60933.aspx",
