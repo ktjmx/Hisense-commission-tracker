@@ -2435,7 +2435,7 @@ body.firebase-locked .app{visibility:hidden}
  function render(){try{if(typeof renderCalendar==='function')renderCalendar();if(typeof renderHome==='function')renderHome();if(typeof renderStats==='function')renderStats();if(typeof renderSalesLog==='function')renderSalesLog();if(typeof updateHomeSalesValue==='function')updateHomeSalesValue()}catch(e){console.warn('Refresh after cloud sync',e)}}
  function showAuth(){showSync('idle','');user=null;ready=false;document.getElementById('fgLogout').hidden=true;document.body.classList.add('firebase-locked');gate.style.display='flex';form.hidden=false;choice.hidden=true;intro.textContent='Sign in to access your private sales and commission. Your account only sees its own sales.';setStatus('');setError('');}
  function showChoice(){form.hidden=true;choice.hidden=false;intro.textContent='Your account is signed in.';setStatus('No cloud sales found for this account.');setError('');}
- let cloudSaveQueue=Promise.resolve();
+ let cloudBaseline=null, pendingSave=null, saveAgain=false;
  async function writeInChunks(items,makeWrite){
    for(let start=0;start<items.length;start+=400){
      const batch=db.batch();
@@ -2443,35 +2443,42 @@ body.firebase-locked .app{visibility:hidden}
      await batch.commit();
    }
  }
- // Save immediately. A debounce timer can be suspended by iOS when the app closes.
+ function timeout(p,ms){return Promise.race([p,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Firebase did not confirm the save within 20 seconds. Check your connection and try again.')),ms))]);}
+ // Only write changed rows. Never delete cloud rows during ordinary saves.
+ // This protects historic records if an upload is interrupted.
  function saveCloud(){
    if(!user||!ready||applyingRemote)return Promise.resolve(false);
+   if(pendingSave){saveAgain=true;return pendingSave;}
    const uid=user.uid;
-   const data=records();
-   showSync('saving','Saving '+data.length+' sales online…');
-   const task=cloudSaveQueue.then(async()=>{
-     if(!uid||!user||user.uid!==uid||!ready)return false;
-     const col=db.collection('users').doc(uid).collection('sales');
-     const docs=data.map((record,index)=>({ref:col.doc('row_'+String(index).padStart(6,'0')),record,index}));
-     // Complete all writes before removing any old rows.
-     await writeInChunks(docs,(batch,item)=>batch.set(item.ref,{record:item.record,index:item.index}));
-     const snap=await col.get();
-     const keep=new Set(docs.map(item=>item.ref.id));
-     const stale=snap.docs.filter(doc=>!keep.has(doc.id));
-     await writeInChunks(stale,(batch,doc)=>batch.delete(doc.ref));
-     setError('');
-     setStatus('All changes saved online.');
-     showSync('saved','✓ Saved online');
-     return true;
-   });
-   cloudSaveQueue=task.catch(e=>{
-     const detail=message(e);
-     setError('Could not save sales online: '+detail);
-     setStatus('Your latest changes may not be saved online yet.');
-     showSync('error','⚠ Save failed: '+detail);
-     return false;
-   });
-   return cloudSaveQueue;
+   pendingSave=(async()=>{
+     let ok=true;
+     do{
+       saveAgain=false;
+       if(!user||user.uid!==uid||!ready)return false;
+       const data=records(), serialized=data.map(x=>JSON.stringify(x));
+       const changes=serialized.map((v,i)=>({i,v,record:data[i]})).filter(x=>!cloudBaseline||cloudBaseline[x.i]!==x.v);
+       if(!changes.length){showSync('saved','✓ Saved online');return ok;}
+       showSync('saving','Saving '+changes.length+' changed sale'+(changes.length===1?'':'s')+' online…');
+       try{
+         const col=db.collection('users').doc(uid).collection('sales');
+         await timeout(writeInChunks(changes,(batch,item)=>batch.set(col.doc('row_'+String(item.i).padStart(6,'0')),{record:item.record,index:item.i})),20000);
+         // Firestore batch.commit may resolve from a local cache while offline;
+         // the network check must also finish before we claim success.
+         await timeout(db.waitForPendingWrites(),20000);
+         if(!cloudBaseline)cloudBaseline=[];
+         changes.forEach(x=>{cloudBaseline[x.i]=x.v});
+         setError('');setStatus('All changes saved online.');showSync('saved','✓ Saved online');
+       }catch(e){
+         ok=false;const detail=message(e);
+         setError('Could not save sales online: '+detail);
+         setStatus('Your latest changes may not be saved online yet.');
+         showSync('error','⚠ Save failed: '+detail);
+         return false;
+       }
+     }while(saveAgain);
+     return ok;
+   })().finally(()=>{pendingSave=null});
+   return pendingSave;
  }
  window.__hisenseSaveCloud=saveCloud;
  async function loadCloud(u){user=u;ready=false;setStatus('Checking your private sales and recovery records…');setError('');try{const ownCol=db.collection('users').doc(u.uid).collection('sales');let snap=await ownCol.get();
@@ -2488,9 +2495,9 @@ body.firebase-locked .app{visibility:hidden}
      }
    }
    if(snap.empty){showChoice();return;}
-   applyingRemote=true;sales.length=0;snap.docs.sort((a,b)=>(a.data().index||0)-(b.data().index||0)).forEach(d=>{const r=d.data().record;if(Array.isArray(r))sales.push(r)});localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;render();form.hidden=true;choice.hidden=true;intro.textContent='Signed in as '+u.email;gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');setStatus('');showSync('saved','✓ Synced from online account');
+   applyingRemote=true;sales.length=0;snap.docs.sort((a,b)=>(a.data().index||0)-(b.data().index||0)).forEach(d=>{const r=d.data().record;if(Array.isArray(r))sales.push(r)});localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;cloudBaseline=records().map(x=>JSON.stringify(x));ready=true;render();form.hidden=true;choice.hidden=true;intro.textContent='Signed in as '+u.email;gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');setStatus('');showSync('saved','✓ Synced from online account');
   }catch(e){applyingRemote=false;showAuth();setError('Could not load or recover your cloud sales: '+message(e));}}
- async function finishEmpty(importOld){try{setError('');setStatus(importOld?'Importing sales…':'Setting up your empty account…');applyingRemote=true;if(!importOld){sales.length=0;}localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;await saveCloud();if(error.textContent){ready=false;return;}gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');render();setStatus('');}catch(e){applyingRemote=false;ready=false;setError(message(e));}}
+ async function finishEmpty(importOld){try{setError('');setStatus(importOld?'Importing sales…':'Setting up your empty account…');applyingRemote=true;if(!importOld){sales.length=0;}localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;cloudBaseline=importOld?null:[];ready=true;await saveCloud();if(error.textContent){ready=false;return;}gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');render();setStatus('');}catch(e){applyingRemote=false;ready=false;setError(message(e));}}
  try{firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();}catch(e){setError('Firebase could not start: '+message(e));}
  document.getElementById('fgSignIn').onclick=async()=>{setError('');setStatus('Signing in…');try{await auth.signInWithEmailAndPassword(document.getElementById('fgEmail').value.trim(),document.getElementById('fgPassword').value)}catch(e){setStatus('');setError(message(e))}};
  document.getElementById('fgCreate').onclick=async()=>{setError('');setStatus('Creating your account…');try{await auth.createUserWithEmailAndPassword(document.getElementById('fgEmail').value.trim(),document.getElementById('fgPassword').value)}catch(e){setStatus('');setError(message(e))}};
