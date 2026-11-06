@@ -2436,25 +2436,31 @@ body.firebase-locked .app{visibility:hidden}
      await batch.commit();
    }
  }
+ // Save immediately. A debounce timer can be suspended by iOS when the app closes.
  function saveCloud(){
-   if(!user||!ready||applyingRemote)return Promise.resolve();
-   clearTimeout(syncTimer);
-   return new Promise(resolve=>{syncTimer=setTimeout(()=>{
-     const uid=user&&user.uid;
-     const data=records();
-     cloudSaveQueue=cloudSaveQueue.then(async()=>{
-       if(!uid||!user||user.uid!==uid||!ready)return;
-       const col=db.collection('users').doc(uid).collection('sales');
-       // Write the current snapshot first. Only remove stale rows after every new row is saved.
-       const docs=data.map((record,index)=>({ref:col.doc('row_'+String(index).padStart(6,'0')),record,index}));
-       await writeInChunks(docs,(batch,item)=>batch.set(item.ref,{record:item.record,index:item.index}));
-       const snap=await col.get();
-       const keep=new Set(docs.map(item=>item.ref.id));
-       const stale=snap.docs.filter(doc=>!keep.has(doc.id));
-       await writeInChunks(stale,(batch,doc)=>batch.delete(doc.ref));
-       setStatus('All changes saved online.');
-     }).catch(e=>{setError('Could not save sales online: '+message(e));}).finally(resolve);
-   },250)});
+   if(!user||!ready||applyingRemote)return Promise.resolve(false);
+   const uid=user.uid;
+   const data=records();
+   const task=cloudSaveQueue.then(async()=>{
+     if(!uid||!user||user.uid!==uid||!ready)return false;
+     const col=db.collection('users').doc(uid).collection('sales');
+     const docs=data.map((record,index)=>({ref:col.doc('row_'+String(index).padStart(6,'0')),record,index}));
+     // Complete all writes before removing any old rows.
+     await writeInChunks(docs,(batch,item)=>batch.set(item.ref,{record:item.record,index:item.index}));
+     const snap=await col.get();
+     const keep=new Set(docs.map(item=>item.ref.id));
+     const stale=snap.docs.filter(doc=>!keep.has(doc.id));
+     await writeInChunks(stale,(batch,doc)=>batch.delete(doc.ref));
+     setError('');
+     setStatus('All changes saved online.');
+     return true;
+   });
+   cloudSaveQueue=task.catch(e=>{
+     setError('Could not save sales online: '+message(e));
+     setStatus('Your latest changes may not be saved online yet.');
+     return false;
+   });
+   return cloudSaveQueue;
  }
  async function loadCloud(u){user=u;ready=false;setStatus('Checking your private sales and recovery records…');setError('');try{const ownCol=db.collection('users').doc(u.uid).collection('sales');let snap=await ownCol.get();
    // One-time safe recovery: if this account has no sales, copy the old orphaned rows
@@ -2484,9 +2490,23 @@ body.firebase-locked .app{visibility:hidden}
    showAuth();return;
   }await loadCloud(u)});
  // Existing app save routines use this key. Intercept writes and upload only after login.
- const originalSet=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){const result=originalSet.call(this,k,v);if(k===KEY&&!applyingRemote&&ready&&user)saveCloud();return result};
- document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('#addSale,#saveSale,[data-delete-sale]'))setTimeout(()=>{if(user&&ready){try{localStorage.setItem(KEY,JSON.stringify(sales))}catch(_){}saveCloud()}},300)},true);
- window.addEventListener('pagehide',()=>{if(user&&ready){try{localStorage.setItem(KEY,JSON.stringify(sales))}catch(_){}saveCloud()}});
+ const originalSet=Storage.prototype.setItem;
+ Storage.prototype.setItem=function(k,v){
+   const result=originalSet.call(this,k,v);
+   if(k===KEY&&!applyingRemote&&ready&&user)saveCloud();
+   return result;
+ };
+ // Sync immediately after sale actions and when the app is backgrounded.
+ document.addEventListener('click',e=>{
+   if(e.target&&e.target.closest&&e.target.closest('#addSale,#saveSale,[data-delete-sale]')){
+     setTimeout(()=>{if(user&&ready)saveCloud()},0);
+   }
+ },true);
+ document.addEventListener('visibilitychange',()=>{
+   if(document.visibilityState==='hidden'&&user&&ready)saveCloud();
+ });
+ window.addEventListener('pagehide',()=>{if(user&&ready)saveCloud()});
+ window.addEventListener('beforeunload',()=>{if(user&&ready)saveCloud()});
 })();
 </script>
 
