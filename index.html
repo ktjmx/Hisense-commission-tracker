@@ -405,6 +405,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 
 </head>
 <body>
+<div id="cloudSyncBadge" role="status" aria-live="polite">Checking online save…</div>
 <div class="app">
 <header><div class="brandline"><div class="logoMark">H</div><div class="brand">HISENSE • SALES PRO</div></div><div class="title" id="pageTitle">Home</div></header>
 
@@ -2367,7 +2368,7 @@ document.addEventListener("DOMContentLoaded",function(){
     document.getElementById('saleModel').value='';document.getElementById('salePrice').value='';document.getElementById('saleQty').value='1';
   });
   const add=document.getElementById('addSale');
-  if(add)add.onclick=function(){
+  if(add)add.onclick=async function(){
     const model=document.getElementById('saleModel').value.trim();
     const date=document.getElementById('saleDate').value||today();
     const price=n(document.getElementById('salePrice').value);
@@ -2378,13 +2379,17 @@ document.addEventListener("DOMContentLoaded",function(){
     if(price<=0){alert('Please enter the sale value (£).');return;}
     const refund=window.__salesEntryType==='refund';
     const record=[date,model,refund?-qty:qty,refund?-(Math.abs(r*qty)):Math.abs(r*qty),price,refund?'refund':'sale'];
-    if(editingSaleIndex!==null){sales[editingSaleIndex]=record;alert(refund?'Refund updated.':'Sale updated.');}
-    else{sales.push(record);alert(refund?'Refund added.':'Sale added.');}
+    const wasEditing=editingSaleIndex!==null;
+    if(wasEditing){sales[editingSaleIndex]=record;}else{sales.push(record);}
     editingSaleIndex=null;
     document.getElementById('editSaleBanner')?.classList.remove('show');
     document.getElementById('saleModel').value='';document.getElementById('salePrice').value='';document.getElementById('saleQty').value='1';
     setEntryType('sale');
     refresh();
+    // Wait for the actual Firestore write before telling the user the sale is safely saved.
+    const saved=window.__hisenseSaveCloud?await window.__hisenseSaveCloud():false;
+    if(saved){alert(wasEditing?(refund?'Refund updated and saved online.':'Sale updated and saved online.'):(refund?'Refund added and saved online.':'Sale added and saved online.'));}
+    else{alert('The sale is visible on this device, but could not be confirmed as saved online. Check the sync message at the top before closing the app.');}
   };
   document.getElementById('salesLogSearch')?.addEventListener('input',window.renderSalesLog);
   refresh();
@@ -2399,7 +2404,7 @@ document.addEventListener("DOMContentLoaded",function(){
 #firebaseGate input{display:block;width:100%;padding:14px;margin:10px 0;border-radius:10px;border:1px solid #41666a;background:#07191c;color:white;font-size:16px;box-sizing:border-box}
 #firebaseGate button{width:100%;padding:14px;margin-top:9px;border:0;border-radius:11px;background:#16bfc0;color:#041718;font-size:15px;font-weight:800}
 #firebaseGate button.secondary{background:#1b4145;color:#fff;border:1px solid #3b666a}#firebaseGate .fg-error{color:#ffb4b4;white-space:pre-wrap}#firebaseGate .fg-small{font-size:12px;color:#a7bcbc}
-#fgLogout{position:fixed;right:12px;top:12px;z-index:999990;width:auto;padding:9px 12px;margin:0;background:#1b4145;color:#fff;border:1px solid #3b666a;border-radius:10px;font-size:12px}
+#cloudSyncBadge{position:fixed;top:82px;right:12px;z-index:999980;max-width:calc(100vw - 24px);padding:7px 11px;border-radius:999px;background:#18383b;border:1px solid #3b666a;color:#d9eeee;font:600 11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 4px 14px #0006;display:none}#cloudSyncBadge[data-state="saving"]{display:block;color:#ffe0a3;border-color:#9a7135}#cloudSyncBadge[data-state="saved"]{display:block;color:#a8f0c4;border-color:#287b55}#cloudSyncBadge[data-state="error"]{display:block;color:#ffb4b4;border-color:#a64b4b;white-space:normal}#fgLogout{position:fixed;right:12px;top:12px;z-index:999990;width:auto;padding:9px 12px;margin:0;background:#1b4145;color:#fff;border:1px solid #3b666a;border-radius:10px;font-size:12px}
 body.firebase-locked .app{visibility:hidden}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -2420,13 +2425,15 @@ body.firebase-locked .app{visibility:hidden}
  const KEY='hisenseSalesV2';
  const firebaseConfig={apiKey:'AIzaSyB743_cMpviOMzmUlyc0COkt87ClHsjjBU',authDomain:'hisense-sales-pro.firebaseapp.com',projectId:'hisense-sales-pro',storageBucket:'hisense-sales-pro.firebasestorage.app',messagingSenderId:'320116006580',appId:'1:320116006580:web:e88a12c90206f0a8ad81e1',measurementId:'G-WSD1ML0QWE'};
  const gate=document.getElementById('firebaseGate'), intro=document.getElementById('fgIntro'), form=document.getElementById('fgAuthForm'), choice=document.getElementById('fgImportChoice'), status=document.getElementById('fgStatus'), error=document.getElementById('fgError');
+ const syncBadge=document.getElementById('cloudSyncBadge');
+ function showSync(state,text){if(!syncBadge)return;syncBadge.dataset.state=state;syncBadge.textContent=text;syncBadge.style.display=state==='idle'?'none':'block';}
  document.body.classList.add('firebase-locked');
  let auth,db,user=null,ready=false,applyingRemote=false,syncTimer=null;
  const setStatus=t=>{status.textContent=t||''}; const setError=e=>{error.textContent=e||''};
  function message(e){const c=e&&e.code;const map={'auth/invalid-email':'Please enter a valid email address.','auth/weak-password':'Choose a password with at least 6 characters.','auth/email-already-in-use':'An account already exists for this email. Try signing in.','auth/invalid-credential':'Email or password is incorrect.','auth/user-not-found':'No account found. Choose Create account if you are new.','auth/wrong-password':'Email or password is incorrect.','auth/too-many-requests':'Too many attempts. Please wait a little and try again.','permission-denied':'Firebase blocked access. The Firestore rules need checking.'};return map[c]||((e&&e.message)||'Something went wrong. Please try again.');}
  function records(){try{return Array.isArray(sales)?sales.map(x=>Array.isArray(x)?x.slice():x):[]}catch(e){return []}}
  function render(){try{if(typeof renderCalendar==='function')renderCalendar();if(typeof renderHome==='function')renderHome();if(typeof renderStats==='function')renderStats();if(typeof renderSalesLog==='function')renderSalesLog();if(typeof updateHomeSalesValue==='function')updateHomeSalesValue()}catch(e){console.warn('Refresh after cloud sync',e)}}
- function showAuth(){user=null;ready=false;document.getElementById('fgLogout').hidden=true;document.body.classList.add('firebase-locked');gate.style.display='flex';form.hidden=false;choice.hidden=true;intro.textContent='Sign in to access your private sales and commission. Your account only sees its own sales.';setStatus('');setError('');}
+ function showAuth(){showSync('idle','');user=null;ready=false;document.getElementById('fgLogout').hidden=true;document.body.classList.add('firebase-locked');gate.style.display='flex';form.hidden=false;choice.hidden=true;intro.textContent='Sign in to access your private sales and commission. Your account only sees its own sales.';setStatus('');setError('');}
  function showChoice(){form.hidden=true;choice.hidden=false;intro.textContent='Your account is signed in.';setStatus('No cloud sales found for this account.');setError('');}
  let cloudSaveQueue=Promise.resolve();
  async function writeInChunks(items,makeWrite){
@@ -2441,6 +2448,7 @@ body.firebase-locked .app{visibility:hidden}
    if(!user||!ready||applyingRemote)return Promise.resolve(false);
    const uid=user.uid;
    const data=records();
+   showSync('saving','Saving '+data.length+' sales online…');
    const task=cloudSaveQueue.then(async()=>{
      if(!uid||!user||user.uid!==uid||!ready)return false;
      const col=db.collection('users').doc(uid).collection('sales');
@@ -2453,15 +2461,19 @@ body.firebase-locked .app{visibility:hidden}
      await writeInChunks(stale,(batch,doc)=>batch.delete(doc.ref));
      setError('');
      setStatus('All changes saved online.');
+     showSync('saved','✓ Saved online');
      return true;
    });
    cloudSaveQueue=task.catch(e=>{
-     setError('Could not save sales online: '+message(e));
+     const detail=message(e);
+     setError('Could not save sales online: '+detail);
      setStatus('Your latest changes may not be saved online yet.');
+     showSync('error','⚠ Save failed: '+detail);
      return false;
    });
    return cloudSaveQueue;
  }
+ window.__hisenseSaveCloud=saveCloud;
  async function loadCloud(u){user=u;ready=false;setStatus('Checking your private sales and recovery records…');setError('');try{const ownCol=db.collection('users').doc(u.uid).collection('sales');let snap=await ownCol.get();
    // One-time safe recovery: if this account has no sales, copy the old orphaned rows
    // from the known former UID. Original records are read only and are never deleted.
@@ -2476,7 +2488,7 @@ body.firebase-locked .app{visibility:hidden}
      }
    }
    if(snap.empty){showChoice();return;}
-   applyingRemote=true;sales.length=0;snap.docs.sort((a,b)=>(a.data().index||0)-(b.data().index||0)).forEach(d=>{const r=d.data().record;if(Array.isArray(r))sales.push(r)});localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;render();form.hidden=true;choice.hidden=true;intro.textContent='Signed in as '+u.email;gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');setStatus('');
+   applyingRemote=true;sales.length=0;snap.docs.sort((a,b)=>(a.data().index||0)-(b.data().index||0)).forEach(d=>{const r=d.data().record;if(Array.isArray(r))sales.push(r)});localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;render();form.hidden=true;choice.hidden=true;intro.textContent='Signed in as '+u.email;gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');setStatus('');showSync('saved','✓ Synced from online account');
   }catch(e){applyingRemote=false;showAuth();setError('Could not load or recover your cloud sales: '+message(e));}}
  async function finishEmpty(importOld){try{setError('');setStatus(importOld?'Importing sales…':'Setting up your empty account…');applyingRemote=true;if(!importOld){sales.length=0;}localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;await saveCloud();if(error.textContent){ready=false;return;}gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');render();setStatus('');}catch(e){applyingRemote=false;ready=false;setError(message(e));}}
  try{firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();}catch(e){setError('Firebase could not start: '+message(e));}
