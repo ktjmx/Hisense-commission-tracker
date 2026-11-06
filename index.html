@@ -2332,11 +2332,26 @@ document.addEventListener("DOMContentLoaded",function(){
   };
   window.deleteSale=function(index){
     if(!Number.isInteger(index)||!sales[index])return;
-    const s=sales[index];
-    if(!confirm(`Delete ${s[1]} ×${Math.abs(n(s[2]))} from ${new Date(s[0]+'T12:00:00').toLocaleDateString('en-GB')}?`))return;
-    sales.splice(index,1);
-    if(editingSaleIndex===index)editingSaleIndex=null;
-    refresh();
+    // In-page confirmation works reliably in iPhone Safari and Home Screen apps.
+    let dialog=document.getElementById('hisenseDeleteConfirm');
+    if(!dialog){
+      dialog=document.createElement('div');dialog.id='hisenseDeleteConfirm';
+      dialog.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;padding:22px';
+      dialog.innerHTML='<div style="width:100%;max-width:390px;background:#102b2e;border:1px solid #3b666b;border-radius:20px;padding:22px;color:#f8faf9;box-shadow:0 20px 60px #000b"><div style="font-size:19px;font-weight:850;margin-bottom:10px">Delete this sale?</div><div id="hisenseDeleteText" style="color:#c3d3d3;font-size:14px;line-height:1.5;margin-bottom:20px"></div><div style="display:flex;gap:10px"><button type="button" id="hisenseDeleteCancel" style="flex:1;padding:13px;border-radius:12px;border:1px solid #456368;background:#17383c;color:#fff;font-weight:800">Cancel</button><button type="button" id="hisenseDeleteConfirmBtn" style="flex:1;padding:13px;border-radius:12px;border:1px solid #9d2636;background:#c51d35;color:#fff;font-weight:850">Delete sale</button></div></div>';
+      document.body.appendChild(dialog);
+    }
+    const s=sales[index];dialog.dataset.index=String(index);
+    dialog.querySelector('#hisenseDeleteText').textContent=`${s[1]} ×${Math.abs(n(s[2]))} · ${new Date(s[0]+'T12:00:00').toLocaleDateString('en-GB')}. This will remove the sale from your records.`;
+    dialog.style.display='flex';
+    dialog.querySelector('#hisenseDeleteCancel').onclick=()=>{dialog.style.display='none';};
+    dialog.querySelector('#hisenseDeleteConfirmBtn').onclick=()=>{
+      const i=Number(dialog.dataset.index);dialog.style.display='none';
+      if(!Number.isInteger(i)||!sales[i])return;
+      sales.splice(i,1);
+      if(editingSaleIndex===i)editingSaleIndex=null;
+      refresh();
+      if(window.__hisenseSaveCloud)window.__hisenseSaveCloud();
+    };
   };
   window.renderSalesLog=function(){
     const out=document.getElementById('salesLog');if(!out)return;
@@ -2457,16 +2472,18 @@ body.firebase-locked .app{visibility:hidden}
        if(!user||user.uid!==uid||!ready)return false;
        const data=records(), serialized=data.map(x=>JSON.stringify(x));
        const changes=serialized.map((v,i)=>({i,v,record:data[i]})).filter(x=>!cloudBaseline||cloudBaseline[x.i]!==x.v);
-       if(!changes.length){showSync('saved','✓ Saved online');return ok;}
-       showSync('saving','Saving '+changes.length+' changed sale'+(changes.length===1?'':'s')+' online…');
+       const removed=[];
+       if(cloudBaseline&&cloudBaseline.length>data.length){for(let i=data.length;i<cloudBaseline.length;i++)removed.push(i);}
+       if(!changes.length&&!removed.length){showSync('saved','✓ Saved online');return ok;}
+       showSync('saving','Saving '+changes.length+' changed sale'+(changes.length===1?'':'s')+(removed.length?' and deleting '+removed.length:'')+' online…');
        try{
          const col=db.collection('users').doc(uid).collection('sales');
          await timeout(writeInChunks(changes,(batch,item)=>batch.set(col.doc('row_'+String(item.i).padStart(6,'0')),{record:item.record,index:item.i})),20000);
+         if(removed.length)await timeout(writeInChunks(removed,(batch,i)=>batch.delete(col.doc('row_'+String(i).padStart(6,'0')))),20000);
          // Firestore batch.commit may resolve from a local cache while offline;
          // the network check must also finish before we claim success.
          await timeout(db.waitForPendingWrites(),20000);
-         if(!cloudBaseline)cloudBaseline=[];
-         changes.forEach(x=>{cloudBaseline[x.i]=x.v});
+         cloudBaseline=serialized.slice();
          setError('');setStatus('All changes saved online.');showSync('saved','✓ Saved online');
        }catch(e){
          ok=false;const detail=message(e);
