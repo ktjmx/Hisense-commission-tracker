@@ -2222,6 +2222,17 @@ document.addEventListener("DOMContentLoaded",function(){
 #saleDate{width:220px;max-width:220px;box-sizing:border-box}
 @media(max-width:520px){#saleDate{width:220px;max-width:220px}}
 </style>
+<script id="octoberWorkdayFilterGlobal">
+// Shared helper used by the Firebase sign-in/recovery flow and local sales merge.
+function isNonWorkdayOctoberRecord(r){
+  if(!Array.isArray(r)) return false;
+  const d=String(r[0]||'');
+  if(!/^2026-10-\d{2}$/.test(d)) return false;
+  const day=new Date(d+'T12:00:00').getDay();
+  return day===1||day===2||day===3;
+}
+</script>
+
 <script id="finalSalesLogRefundFix">
 (function(){
   const KEY='hisenseSalesV2';
