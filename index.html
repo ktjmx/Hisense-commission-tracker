@@ -2236,6 +2236,14 @@ document.addEventListener("DOMContentLoaded",function(){
     ["2026-09-06","43E7Q",1,5],["2026-09-06","50U7Q",1,5],["2026-09-06","55A6Q",1,0],["2026-09-06","55E7Q PRO",1,5],["2026-09-06","55UR8S",1,50],["2026-09-06","65E7Q PRO",1,10],["2026-09-06","65UR9S",1,80],
     ["2026-09-11","65Q7STUK",1,15],["2026-09-12","100E7STUK PRO",1,60],["2026-09-12","HT SATURN",1,40],["2026-09-12","43E7Q",1,5],["2026-09-12","55UR8STUK",1,50],["2026-09-12","55UR8STUK",1,50],["2026-09-13","55UR8STUK",1,50],["2026-09-13","43E7Q",1,5],["2026-09-13","50U7STUK",1,20]
   ];
+  // Remove imported/shared October 2026 records from Monday, Tuesday and Wednesday only.
+  function isNonWorkdayOctoberRecord(r){
+    if(!Array.isArray(r)) return false;
+    const d=String(r[0]||'');
+    if(!/^2026-10-\d{2}$/.test(d)) return false;
+    const day=new Date(d+'T12:00:00').getDay();
+    return day===1||day===2||day===3;
+  }
   function cleanRecord(s){
     if(!Array.isArray(s)) return null;
     const date=String(s[0]||today());
@@ -2263,7 +2271,7 @@ document.addEventListener("DOMContentLoaded",function(){
     const old = (()=>{ try { const x=JSON.parse(localStorage.getItem(KEY)||'null'); return Array.isArray(x)?x.map(cleanRecord).filter(Boolean):[]; } catch(e){ return []; } })();
     const merged=[];
     [...embeddedSales.map(cleanRecord).filter(Boolean), ...old, ...current].forEach(r=>{
-      if(!merged.some(x=>sameRecord(x,r))) merged.push(r);
+      if(!isNonWorkdayOctoberRecord(r) && !merged.some(x=>sameRecord(x,r))) merged.push(r);
     });
     sales.length=0; sales.push(...merged);
   }
@@ -2285,7 +2293,7 @@ document.addEventListener("DOMContentLoaded",function(){
     if(!Array.isArray(saved)||!saved.length)return;
     const merged=[];
     [...sales,...saved].map(cleanRecord).filter(Boolean).forEach(r=>{
-      if(!merged.some(x=>sameRecord(x,r)))merged.push(r);
+      if(!isNonWorkdayOctoberRecord(r) && !merged.some(x=>sameRecord(x,r)))merged.push(r);
     });
     if(merged.length!==sales.length){sales.length=0;sales.push(...merged);persist();
       if(typeof renderCalendar==='function')renderCalendar();
@@ -2512,7 +2520,16 @@ body.firebase-locked .app{visibility:hidden}
      }
    }
    if(snap.empty){showChoice();return;}
-   applyingRemote=true;sales.length=0;snap.docs.sort((a,b)=>(a.data().index||0)-(b.data().index||0)).forEach(d=>{const r=d.data().record;if(Array.isArray(r))sales.push(r)});localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;cloudBaseline=records().map(x=>JSON.stringify(x));ready=true;render();form.hidden=true;choice.hidden=true;intro.textContent='Signed in as '+u.email;gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');setStatus('');showSync('saved','✓ Synced from online account');
+   applyingRemote=true;sales.length=0;snap.docs.sort((a,b)=>(a.data().index||0)-(b.data().index||0)).forEach(d=>{const r=d.data().record;if(Array.isArray(r))sales.push(r)});
+   // Keep the full remote baseline so saveCloud can overwrite shifted rows and delete the old tail.
+   cloudBaseline=records().map(x=>JSON.stringify(x));
+   const beforeCount=sales.length;
+   for(let i=sales.length-1;i>=0;i--)if(isNonWorkdayOctoberRecord(sales[i]))sales.splice(i,1);
+   const removedCount=beforeCount-sales.length;
+   localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;ready=true;render();form.hidden=true;choice.hidden=true;intro.textContent='Signed in as '+u.email;gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');
+   if(removedCount){setStatus('Removing '+removedCount+' Monday–Wednesday October 2026 records…');await saveCloud();}
+   else setStatus('');
+   showSync('saved',removedCount?'✓ October non-working-day records removed':'✓ Synced from online account');
   }catch(e){applyingRemote=false;showAuth();setError('Could not load or recover your cloud sales: '+message(e));}}
  async function finishEmpty(importOld){try{setError('');setStatus(importOld?'Importing sales…':'Setting up your empty account…');applyingRemote=true;if(!importOld){sales.length=0;}localStorage.setItem(KEY,JSON.stringify(sales));applyingRemote=false;cloudBaseline=importOld?null:[];ready=true;await saveCloud();if(error.textContent){ready=false;return;}gate.style.display='none';document.getElementById('fgLogout').hidden=false;document.body.classList.remove('firebase-locked');render();setStatus('');}catch(e){applyingRemote=false;ready=false;setError(message(e));}}
  try{firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();}catch(e){setError('Firebase could not start: '+message(e));}
