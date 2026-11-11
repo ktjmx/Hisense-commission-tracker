@@ -457,7 +457,7 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
   <div class="grid">
     <button class="action" data-go="sales"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="actionCopy"><b>Log a Sale</b><small>Add your commission</small></span></span></button>
     <button class="action" data-go="hub"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="13" rx="1.5"/><path d="M9 21h6M12 18v3"/></svg></span><span class="actionCopy"><b>Find a TV</b><small>Match the customer to the right model</small></span></span></button>
-    <button class="action" data-go="offers"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><path d="m20.2 11.5-8.7 8.7-7.7-7.7L5.3 4h8.1z"/><circle cx="9" cy="8.3" r="1.1"/></svg></span><span class="actionCopy"><b>Latest Offers</b><small>Cashback &amp; bundles</small></span></span></button>
+    <button class="action" data-go="offers"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><path d="m20.2 11.5-8.7 8.7-7.7-7.7L5.3 4h8.1z"/><circle cx="9" cy="8.3" r="1.1"/></svg></span><span class="actionCopy"><b>Latest Offers</b><small>Current Hisense offers</small></span></span></button>
     <button class="action" data-go="coach"><span class="actionIcon"><span class="quickIcon"><svg viewBox="0 0 24 24"><path d="m3 9 9-4 9 4-9 4-9-4Z"/><path d="M7 11.2v4.2c2.9 2.1 7.1 2.1 10 0v-4.2"/><path d="M21 9v6"/></svg></span><span class="actionCopy"><b>Sales Coach</b><small>Get the perfect pitch</small></span></span></button>
   </div>
 </section>
@@ -522,9 +522,8 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 
   <div class="card">
     <div class="section-title">Current offers</div>
-    <div class="offer"><b>💷 Cashback</b><span class="muted">9 Sep 2026 – 27 Oct 2026. Search a model below for the exact cashback.</span></div>
-    <div class="offer"><b>🎮 Xbox bundle</b><span class="muted">Selected Mini LED TVs include a free personalised Xbox controller + 1 month Game Pass.</span></div>
     <div class="offer"><b>◫ 50% off selected soundbars</b><span class="muted">Buy a selected soundbar with <strong>any Hisense TV</strong> — all Hisense TV models qualify.</span></div>
+    <div class="offer"><b>🚚 Free delivery</b><span class="muted">Free delivery on all Hisense TVs 50 inches and above.</span></div>
   </div>
 
   <div class="card">
@@ -689,12 +688,8 @@ const R={
 "100E7STUK PRO":40,"85E7STUK PRO":25,"75E7STUK PRO":20,"65E7STUK PRO":15,"55E7STUK PRO":10,"50E7STUK PRO":5,"43E7STUK PRO":5,
 "C2TUK":40,"M2TUK PRO":50,"PX3TUK":60,"PL2TUK":30,"C2TUK-ULTRA":60,"L9QTUK":120,
 "HS214":2,"HS2000":2,"HS2100":2,"HS3100":2,"AX3120Q":5,"AX5125H":5,"AX5100Q":3,"AX5140Q":10,"S5120GQ":10,"S5120Q":10,"HT SATURN":25,
-"100E7Q PRO":10,"100U7QTUK":15,"100U7Q PRO":20,"100U8Q":25,
+"100U7QTUK":15,"100U8Q":25,
 "55A85Q":20,"65A85Q":20,"65U8Q":40,
-"43E7Q":5,"50E7Q":5,"55E7Q":5,"65E7Q":10,"75E7Q":10,"85E7Q":10,
-"43E7Q PRO":5,"50E7Q PRO":5,"55E7Q PRO":5,"65E7Q PRO":10,"75E7Q PRO":10,"85E7Q PRO":15,
-"50U7QTUK":5,"55U7QTUK":5,"65U7QTUK":10,"75U7QTUK":10,"85U7QTUK":10,
-"55U7Q PRO":10,"65U7Q PRO":10,"75U7Q PRO":10,"85U7Q PRO":20,"100U7Q PRO":30,
 "55U8Q":10,"75U8Q":10,"85U8Q":20,"100U8Q":30,
 "43A6STUK":0,"50A6STUK":0,"55A6STUK":0,"65A6STUK":0
 };
@@ -729,7 +724,7 @@ const OLD_R={
 "55U7Q PRO":10,"65U7Q PRO":10,"75U7Q PRO":10,"85U7Q PRO":20,"100U7Q PRO":35,
 "55A85Q":10,"65A85Q":10,"55 Canvas":15,"65 Canvas":20,"55U8Q":15,"65U8Q":20,"75U8Q":25,"85U8Q":30,"100U8Q":40,
 "43A6STUK":0,"50A6STUK":0,"55A6STUK":0,"65A6STUK":0};
-const CB={"116UXQTUK":1000,"100UXQTUK":500,"85UR9STUK":300,"75UR9STUK":300,"65UR9STUK":200,"100UR8STUK":500,"85UR8STUK":300,"75UR8STUK":200,"65UR8STUK":200,"55UR8STUK":200,"100U7STUK":500,"85U7STUK":300,"75U7STUK":200,"65U7STUK":200,"55U7STUK":100,"50U7STUK":50,"85Q8STUK":300,"75Q8STUK":200,"65Q8STUK":200,"55Q8STUK":100,"50Q8STUK":50,"100E7STUK PRO":300,"85E7STUK PRO":300,"75E7STUK PRO":100,"65E7STUK PRO":100,"55E7STUK PRO":50,"50E7STUK PRO":50,"43E7STUK PRO":50,"85Q7STUK":100,"75Q7STUK":50,"65Q7STUK":50,"55Q7STUK":25,"50Q7STUK":25,"43Q7STUK":25,"L9QTUK PRO":200,"L9QTUK":200,"XR10TUK":200,"PX4TUK PRO":100,"P1TUK":50,"C3TUK ULTRA MAX":200,"C3TUK ULTRA":100,"C3TUK PRO":100};
+const CB={};
 const TVs=[
 ["43A6STUK",279,"QLED"],["50A6STUK",329,"QLED"],["55A6STUK",399,"QLED"],["65A6STUK",499,"QLED"],
 ["43Q7STUK",349,"QLED"],["50Q7STUK",429,"QLED"],["55Q7STUK",499,"QLED"],["65Q7STUK",649,"QLED"],["75Q7STUK",899,"QLED"],["85Q7STUK",1299,"QLED"],
@@ -966,15 +961,14 @@ document.getElementById("salesLogSearch").addEventListener("input",renderSalesLo
 
 // Live Currys pricing: price-data.json is refreshed by the GitHub Actions price updater.
 // The app uses the exact Currys price when the daily feed contains one, with the
-// catalogue value only as a fallback.
+// no catalogue fallback: never label an old price as a current Currys price.
 let LIVE_PRICE_DATA=null;
 let LIVE_PRICE_READY=false;
 function currentCurrysPrice(model,fallback){
   const entry=LIVE_PRICE_DATA?.models?.[model];
   const p=entry?.prices?.Currys;
   if(p!==undefined && p!==null && p!=="" && Number.isFinite(Number(p)) && Number(p)>0) return Number(p);
-  const fb=Number(fallback);
-  return Number.isFinite(fb) && fb>0 ? fb : null;
+  return null;
 }
 function currentEffectiveCost(model,fallback){
   const price=currentCurrysPrice(model,fallback);
@@ -1035,8 +1029,8 @@ function findTV(){
   });
 
   if(!matches.length){
-    out.innerHTML=`<div class="card"><b>No TVs match those filters.</b>
-      <div class="muted" style="margin-top:6px">Try widening the budget or screen-size filter.</div></div>`;
+    out.innerHTML=`<div class="card"><b>${LIVE_PRICE_READY?"No TVs with a verified Currys price match those filters.":"Current Currys prices are not available right now."}</b>
+      <div class="muted" style="margin-top:6px">The finder will only show a price when the live price feed contains a Currys price. Please try again later or check Currys directly.</div></div>`;
     return;
   }
 
@@ -1062,9 +1056,9 @@ function findTV(){
       </div>
       <div class="offer">
         <b>Customer deal</b>
-        <div>Cashback: <strong>${money(cb)}</strong></div>
-        <div class="saving">Effective cost: ${money(effective)}</div>
-        ${promoForModel(model)?`<div style="margin-top:7px"><strong>PERKS Save £${promoForModel(model).amount}</strong> • ${promoForModel(model).code}</div>`:""}
+        <div class="saving">Current Currys price verified in live feed</div>
+        ${Number(getSize(model))>=50?`<div>Free delivery on Hisense TVs 50 inches and above</div>`:""}
+        <div>50% off selected soundbars with any Hisense TV</div>
       </div>
       <button class="secondary" style="width:100%;margin-top:9px" type="button" data-offer-model="${model}">View offers</button>
     </div>`;
@@ -1075,20 +1069,8 @@ function findTV(){
 
 // Current Perks promo barcodes from the supplied Currys barcode sheet.
 // These are used directly by "Find a TV's deal".
-const NEW_PROMO_BARCODES=[
-  {amount:500,code:"TVPERKS500",barcode:"200055340410648",models:["116UHQ TUK","100UHQ TUK","110UHQ TUK"]},
-  {amount:300,code:"TVPERKS300",barcode:"200055339835979",models:["100UR8STUK","100U7STUK"]},
-  {amount:200,code:"TVPERKS200",barcode:"200055339835979",models:["75UR9STUK","85UR9STUK","75UR8STUK","85UR8STUK","100U7STUK PRO","100E7STUK PRO"]},
-  {amount:150,code:"TVPERKS150",barcode:"200055340033531",models:["85U7STUK"]},
-  {amount:100,code:"TVPERKS100",barcode:"200055340194705",models:["65UR9STUK","55UR8STUK","65UR8STUK","55U7STUK PRO","65U7STUK PRO","75U7STUK PRO","85U7STUK PRO","75U7STUK","55S7STUK","75E7STUK PRO","85E7STUK PRO"]},
-  {amount:50,code:"TVPERKS50",barcode:"200055340385761",models:["50U7STUK"]}
-];
+function promoForModel(model){ return null; }
 
-function promoForModel(model){
-  const n=norm(model);
-  if(!n)return null;
-  return NEW_PROMO_BARCODES.find(p=>p.models.some(m=>norm(m)===n))||null;
-}
 
 function renderOffer(){
  const input=document.getElementById("offerModel");
@@ -1096,44 +1078,23 @@ function renderOffer(){
  const raw=input.value.trim();
  const q=norm(raw);
  if(!q){box.innerHTML="";return}
-
- // Accept full model codes, shortened codes such as 65U7S, and range searches such as U7S.
  const matches=TVs.filter(x=>{
    const model=String(x[0]||"");
    const base=model.replace(/STUK/gi,"").replace(/PRO/gi,"").replace(/[^A-Z0-9 ]/gi,"");
-   const aliases=[
-     norm(model),
-     norm(model.replace(/STUK(?:PRO)?$/i,"")),
-     norm(model.replace(/^\d+/,"")),
-     norm(model.replace(/STUK(?:PRO)?$/i,"").replace(/^\d+/,"")),
-     norm(base),
-     norm(base.replace(/^\d+/,""))
-   ];
+   const aliases=[norm(model),norm(model.replace(/STUK(?:PRO)?$/i,"")),norm(model.replace(/^\d+/,"")),norm(model.replace(/STUK(?:PRO)?$/i,"").replace(/^\d+/,"")),norm(base),norm(base.replace(/^\d+/,""))];
    return aliases.some(a=>a.includes(q)||q.includes(a));
  }).slice(0,20);
-
- if(!matches.length){
-   box.innerHTML=`<div class="muted" style="padding:10px 2px">No TV models found. Try 50U7S, 65U7S, 75U7S or 65UR8STUK.</div>`;
-   return;
- }
-
+ if(!matches.length){box.innerHTML=`<div class="muted" style="padding:10px 2px">No TV models found. Try a model or range such as 65U7S or UR8.</div>`;return;}
  if(matches.length===1 || matches.some(x=>norm(x[0])===q)){
    const exact=matches.find(x=>norm(x[0])===q)||matches[0];
-   const m=exact[0],p=currentCurrysPrice(m,exact[1]),d=deal(m,p);
-   const promo=typeof promoForModel==="function"?promoForModel(m):null;
-   const promoHtml=promo?`<div class="barcode-card" style="margin-top:10px"><div class="barcode-top"><div class="barcode-title">PERKS Save £${promo.amount}</div><div class="barcode-amount">${promo.code}</div></div><div class="barcode-number">Barcode: ${promo.barcode}</div><div class="barcode-models">Use this barcode for <strong>${m}</strong>.</div></div>`:"";
-   box.innerHTML=`<div class="offer"><b>${m}</b><div>Currys price: ${money(p)}</div><div>Cashback: ${money(d.cb)}</div><div class="saving">Customer effective cost: ${money(d.effective)}</div>${promoHtml}${(/(?:^|[A-Z])U\d|UR|UX/i.test(m))?`<div class="xbox-offer"><b>Xbox promotion</b><span>Free personalised Xbox Wireless Controller + 1 month Game Pass</span></div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
+   const m=exact[0],p=currentCurrysPrice(m),size=Number((String(m).match(/^(\d+)/)||[])[1]||0);
+   box.innerHTML=`<div class="offer"><b>${m}</b><div>Currys price: ${p==null?"Not currently verified":money(p)}</div>${size>=50?`<div>Free delivery on Hisense TVs 50 inches and above</div>`:""}<div style="margin-top:9px;color:#f1d79e;font-weight:800">50% off selected soundbars with any Hisense TV</div></div>`;
    return;
  }
-
  box.innerHTML=`<div class="muted" style="margin:8px 0">TV models matching “${input.value.trim()}”</div>`+
-   matches.map(x=>{const promo=typeof promoForModel==="function"?promoForModel(x[0]):null;return `<div class="offer-match"><b>${x[0]}</b><span class="muted">Currys ${x[1]==null?"Price TBC":money(currentCurrysPrice(x[0],x[1]))}</span>${promo?`<div class="muted" style="margin-top:4px">PERKS Save £${promo.amount} • ${promo.code}</div>`:""}<br><button type="button" data-offer-model="${x[0]}">View offers</button></div>`}).join("");
- box.querySelectorAll("[data-offer-model]").forEach(b=>b.onclick=()=>{
-   input.value=b.dataset.offerModel;
-   renderOffer();
- });
+   matches.map(x=>{const p=currentCurrysPrice(x[0]);return `<div class="offer-match"><b>${x[0]}</b><span class="muted">Currys ${p==null?"price not verified":money(p)}</span><br><button type="button" data-offer-model="${x[0]}">View offers</button></div>`}).join("");
+ box.querySelectorAll("[data-offer-model]").forEach(b=>b.onclick=()=>{input.value=b.dataset.offerModel;renderOffer();});
 }
-
 document.getElementById("offerModel").oninput=renderOffer;
 
 // View-offers buttons are created dynamically by TV Finder, so use one
