@@ -419,6 +419,17 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 @media(max-width:390px){.all-week-grid,.all-week-mix{gap:4px}.all-week-metric{padding:7px 4px}.all-week-metric span{font-size:8px}.all-week-metric b{font-size:11px}}
 </style>
 
+<style id="weeklySummariesAccordionStyles">
+.weekly-summaries-accordion{margin:0 0 14px;border:1px solid var(--line,#294246);border-radius:16px;background:var(--card,#fff);overflow:hidden}
+.weekly-summaries-accordion>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;cursor:pointer;user-select:none}
+.weekly-summaries-accordion>summary::-webkit-details-marker{display:none}
+.weekly-summaries-label{display:flex;flex-direction:column;gap:3px;min-width:0}
+.weekly-summaries-label strong{font-size:15px;font-weight:900}
+.weekly-summaries-label small{font-size:11px;color:var(--muted,#8b9a9a)}
+.weekly-summaries-chevron{font-size:22px;line-height:1;transition:transform .18s ease;color:var(--muted,#8b9a9a)}
+.weekly-summaries-accordion[open] .weekly-summaries-chevron{transform:rotate(180deg)}
+.weekly-summaries-accordion .all-weeks-card{border:0;border-top:1px solid var(--line,#294246);border-radius:0;margin:0;box-shadow:none;padding:14px}
+</style>
 </head>
 <body>
 <div id="cloudSyncBadge" role="status" aria-live="polite">Checking online save…</div>
@@ -644,11 +655,16 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="stat-card"><span>Sales entries</span><strong id="statsCommissionEntries">0</strong></div>
     <div class="stat-card"><span>Average this period</span><strong id="statsAverageCommission">£0.00</strong></div>
   </div>
-  <div class="card all-weeks-card">
-    <div class="section-title"><h2>Weekly sales summary</h2><span>Every Currys week · Sunday–Saturday</span></div>
-    <p class="muted all-weeks-intro">Your full sales history, with TV and soundbar totals separated and TV technology mix shown as a percentage of TV sales value.</p>
-    <div id="allWeeklySummaries"><div class="muted">Loading weekly summaries…</div></div>
-  </div>
+  <details class="weekly-summaries-accordion">
+    <summary>
+      <span class="weekly-summaries-label"><strong>Weekly summaries</strong><small>Every Currys week · Sunday–Saturday</small></span>
+      <span class="weekly-summaries-chevron" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="card all-weeks-card">
+      <p class="muted all-weeks-intro">Your full sales history, with TV and soundbar totals separated and TV technology mix shown as a percentage of TV sales value.</p>
+      <div id="allWeeklySummaries"><div class="muted">Loading weekly summaries…</div></div>
+    </div>
+  </details>
   <div class="card">
     <div class="section-title"><h2>Paydays</h2><span>Commission by pay period</span></div>
     <div id="payday"><div class="muted">Loading your pay periods…</div></div>
