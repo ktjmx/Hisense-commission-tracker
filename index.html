@@ -403,6 +403,22 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
 .barcode-search{width:100%;padding:13px;border-radius:12px;border:1px solid #294246;background:#0d1719;color:#fff;font:inherit;font-weight:700}
 </style>
 
+
+<style id="allWeeksSummaryStyles">
+.all-weeks-card{margin-bottom:14px}.all-weeks-intro{font-size:12px;line-height:1.45;margin:6px 0 12px}
+.all-week-row{padding:13px 0;border-top:1px solid var(--line,#294246)}.all-week-row:first-child{border-top:0;padding-top:2px}
+.all-week-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.all-week-title{font-weight:900;font-size:14px}.all-week-dates{font-size:11px;opacity:.65;margin-top:2px}
+.all-week-total{font-size:13px;font-weight:900;text-align:right;white-space:nowrap}
+.all-week-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.all-week-metric{background:var(--soft,rgba(128,150,150,.09));border:1px solid var(--line,#294246);border-radius:10px;padding:8px 6px;min-width:0}
+.all-week-metric span{display:block;font-size:9px;opacity:.65;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.all-week-metric b{display:block;font-size:13px;margin-top:3px;overflow-wrap:anywhere}
+.all-week-mix{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:7px}
+.all-week-mix .all-week-metric b{font-size:12px}
+@media(max-width:390px){.all-week-grid,.all-week-mix{gap:4px}.all-week-metric{padding:7px 4px}.all-week-metric span{font-size:8px}.all-week-metric b{font-size:11px}}
+</style>
+
 </head>
 <body>
 <div id="cloudSyncBadge" role="status" aria-live="polite">Checking online save…</div>
@@ -627,6 +643,11 @@ button.secondary{border:1px solid #35585c;border-radius:12px;background:#102b2e;
     <div class="stat-card"><span>Units sold</span><strong id="statsCommissionUnits">0</strong></div>
     <div class="stat-card"><span>Sales entries</span><strong id="statsCommissionEntries">0</strong></div>
     <div class="stat-card"><span>Average this period</span><strong id="statsAverageCommission">£0.00</strong></div>
+  </div>
+  <div class="card all-weeks-card">
+    <div class="section-title"><h2>Weekly sales summary</h2><span>Every Currys week · Sunday–Saturday</span></div>
+    <p class="muted all-weeks-intro">Your full sales history, with TV and soundbar totals separated and TV technology mix shown as a percentage of TV sales value.</p>
+    <div id="allWeeklySummaries"><div class="muted">Loading weekly summaries…</div></div>
   </div>
   <div class="card">
     <div class="section-title"><h2>Paydays</h2><span>Commission by pay period</span></div>
@@ -1420,7 +1441,7 @@ function renderSoundbarDetail(){
 
 
 function getSalesMix(list){
- const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","S5120GQ","S5120Q","HT SATURN"];
+ const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"];
  const isSoundbar=m=>soundbarModels.some(x=>norm(x)===norm(m));
  let led=0,qled=0,mini=0,rgb=0,soundbars=0,tvUnits=0,tvValue=0;
  list.forEach(s=>{
@@ -1513,6 +1534,56 @@ function renderStats(){
     <div class="pay-sub" style="margin-top:6px">${q} units • Commission earned for this pay period</div>
    </div>`;
  }).join("");
+ renderAllWeeklySummaries();
+
+function renderAllWeeklySummaries(){
+ const host=document.getElementById("allWeeklySummaries");
+ if(!host) return;
+ if(!Array.isArray(sales)||!sales.length){host.innerHTML='<div class="muted">No sales have been logged yet.</div>';return;}
+ const localDate=value=>{const a=String(value||"").split("-").map(Number);return a.length===3?new Date(a[0],a[1]-1,a[2],12):null;};
+ const keyOf=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+ const sunday=d=>{const x=new Date(d);x.setHours(12,0,0,0);x.setDate(x.getDate()-x.getDay());return x;};
+ const valid=sales.map(s=>({s,d:localDate(s&&s[0])})).filter(x=>x.d&&!Number.isNaN(x.d.getTime()));
+ if(!valid.length){host.innerHTML='<div class="muted">No dated sales are available to summarize.</div>';return;}
+ let first=sunday(valid.reduce((a,x)=>x.d<a?x.d:a,valid[0].d));
+ const now=new Date();now.setHours(12,0,0,0);
+ let last=sunday(valid.reduce((a,x)=>x.d>a?x.d:a,now));
+ const soundbarModels=["HS214","HS2000","HS2100","HS3100","AX3120Q","AX5125H","AX5100Q","AX5140Q","S5120GQ","S5120Q","HT SATURN"];
+ const isSoundbar=m=>soundbarModels.some(x=>norm(x)===norm(m));
+ const money2=n=>"£"+Number(n||0).toLocaleString("en-GB",{minimumFractionDigits:0,maximumFractionDigits:2});
+ const fmt=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"short"});
+ const rows=[];
+ for(let start=new Date(first);start<=last;start.setDate(start.getDate()+7)){
+   const st=new Date(start),en=new Date(start);en.setDate(en.getDate()+6);
+   const a=keyOf(st),b=keyOf(en);
+   const weekSales=valid.filter(x=>x.s[0]>=a&&x.s[0]<=b).map(x=>x.s);
+   const tv=weekSales.filter(x=>!isSoundbar(x[1]));
+   const sb=weekSales.filter(x=>isSoundbar(x[1]));
+   const units=list=>list.reduce((n,x)=>n+Number(x[2]||0),0);
+   // Sale value is the entered per-unit selling price. Older records without a
+   // stored price are shown as £0 rather than guessing from an old catalogue.
+   const value=list=>list.reduce((n,x)=>{const raw=x[4];const price=(raw!==null&&raw!==undefined&&raw!==""&&Number.isFinite(Number(raw)))?Number(raw):0;return n+price*Number(x[2]||0);},0);
+   const tvValue=value(tv),sbValue=value(sb),mix=getSalesMix(weekSales);
+   const wk=isoWeekNumber(a);
+   rows.push(`<div class="all-week-row">
+    <div class="all-week-head"><div><div class="all-week-title">WK${wk}</div><div class="all-week-dates">${fmt(st)} – ${fmt(en)}${weekSales.length?"":" · No sales"}</div></div><div class="all-week-total">${money2(tvValue+sbValue)}<div class="all-week-dates">Total sales value</div></div></div>
+    <div class="all-week-grid">
+      <div class="all-week-metric"><span>TV units</span><b>${units(tv)}</b></div>
+      <div class="all-week-metric"><span>Soundbar units</span><b>${units(sb)}</b></div>
+      <div class="all-week-metric"><span>TV value</span><b>${money2(tvValue)}</b></div>
+      <div class="all-week-metric"><span>Soundbar value</span><b>${money2(sbValue)}</b></div>
+    </div>
+    <div class="all-week-mix">
+      <div class="all-week-metric"><span>LED</span><b>${mix.p(mix.led)}%</b></div>
+      <div class="all-week-metric"><span>QLED</span><b>${mix.p(mix.qled)}%</b></div>
+      <div class="all-week-metric"><span>Mini LED</span><b>${mix.p(mix.mini)}%</b></div>
+      <div class="all-week-metric"><span>RGB</span><b>${mix.p(mix.rgb)}%</b></div>
+    </div>
+   </div>`);
+ }
+ host.innerHTML=rows.reverse().join("");
+}
+
 }showCoachTab("main");renderCoach();
 renderSoundbars();
 renderStats();
